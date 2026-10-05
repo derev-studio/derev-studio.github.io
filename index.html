@@ -14,34 +14,81 @@
 <meta property="og:url" content="https://derev-studio.github.io/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌳</text></svg>">
 <style>
+:root{
+  --bg:#0b1016; --bg2:#0f1620; --panel:rgba(255,255,255,.045); --panel2:rgba(255,255,255,.07);
+  --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.22);
+  --txt:#eaf1f8; --muted:#93a4b8; --dim:#6c7d92;
+  --gold:#ffcc7a; --gold2:#ff9f43; --blue:#6cb6ff;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(#f7f2e9,#eef3f8);color:#17202a}
-.wrap{max-width:1120px;margin:auto;padding:22px 18px 80px}
-.hero,.story{background:#fff;border:1px solid #e2e8ee;border-radius:26px}
-.hero{padding:48px;background:linear-gradient(135deg,#fffdf8,#f8ecd6,#eaf2fb)}
-h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.2}
-h1{font-size:44px;margin:0 0 10px}
-.lead,.story p{color:#5d6b7a;line-height:1.65;font-size:17px}
-.nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
-.nav a{display:inline-block;text-decoration:none;border-radius:999px;padding:9px 15px;font-weight:700;font-size:14px;background:#fff;border:1px solid #dbe2e9;color:#31506f;transition:.15s}
-.nav a:hover{background:#315f9f;color:#fff;border-color:#315f9f}
-.section-title{font-size:30px;margin:42px 0 6px}
-.section-note{color:#77879a;margin:0 0 16px;font-size:15px}
-.story{padding:28px;margin-top:24px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-a.card{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:inherit;background:#fff;border:1px solid #e2e8ee;border-radius:20px;padding:20px 20px 18px;transition:.16s}
-a.card:hover{border-color:#315f9f;transform:translateY(-2px);box-shadow:0 8px 22px rgba(49,95,159,.12)}
-a.card h3{margin:0;font-size:21px;color:#183049}
-a.card p{margin:0;color:#65758a;line-height:1.55;font-size:15px}
-a.card .go{margin-top:auto;padding-top:10px;color:#315f9f;font-weight:700;font-size:14px}
-a.card .go::after{content:" →"}
-a.card:hover .go{text-decoration:underline}
-a.card.host{background:#f4f7fa}
-.badge{font-size:11px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:#8a6a2f;background:#f8eed7;border-radius:999px;padding:4px 10px;align-self:flex-start}
-footer{margin-top:46px;color:#8795a6;font-size:14px;text-align:center}
-footer a{color:#315f9f;text-decoration:none}
-footer a:hover{text-decoration:underline}
-@media(max-width:620px){h1{font-size:33px}.hero{padding:30px}.section-title{font-size:25px}}
+html{scroll-behavior:smooth}
+body{margin:0;background:
+   radial-gradient(1100px 600px at 12% -8%, rgba(255,170,80,.13), transparent 60%),
+   radial-gradient(900px 520px at 92% 4%, rgba(90,140,255,.14), transparent 62%),
+   linear-gradient(180deg,var(--bg),var(--bg2) 60%,#0a0f15);
+  color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.55;min-height:100vh}
+.wrap{max-width:1160px;margin:auto;padding:26px 20px 90px}
+
+/* ——— hero ——— */
+.hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:30px;padding:64px 52px;
+  background:linear-gradient(140deg,rgba(255,255,255,.075),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05));
+  backdrop-filter:blur(14px)}
+.hero::before{content:"";position:absolute;inset:-40% -10% auto -10%;height:320px;
+  background:radial-gradient(closest-side,rgba(255,190,110,.20),transparent 75%);filter:blur(10px);pointer-events:none}
+.eyebrow{display:inline-block;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);
+  border:1px solid rgba(255,204,122,.35);border-radius:999px;padding:6px 14px;margin-bottom:20px}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(34px,5.2vw,62px);line-height:1.06;margin:0 0 18px;
+  background:linear-gradient(100deg,#ffffff 12%,var(--gold) 62%,var(--blue) 108%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:clamp(16px,1.5vw,19px);max-width:720px;margin:0}
+.nav{display:flex;gap:9px;flex-wrap:wrap;margin-top:30px;position:relative}
+.nav a{text-decoration:none;font-size:14px;font-weight:600;color:var(--txt);padding:9px 16px;border-radius:999px;
+  border:1px solid var(--line);background:var(--panel);transition:.22s}
+.nav a:hover{color:#0c1218;background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:transparent;
+  box-shadow:0 6px 22px rgba(255,159,67,.35);transform:translateY(-1px)}
+
+/* ——— заголовки разделов ——— */
+.section-title{font-family:Georgia,serif;font-weight:400;font-size:clamp(24px,3vw,34px);margin:58px 0 4px;position:relative;display:inline-block}
+.section-title::after{content:"";position:absolute;left:0;right:-28px;bottom:-9px;height:1px;
+  background:linear-gradient(90deg,var(--gold),rgba(255,204,122,0))}
+.section-note{color:var(--dim);margin:16px 0 20px;font-size:15px}
+
+/* ——— стеклянные карточки ——— */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:16px}
+a.card{position:relative;display:flex;flex-direction:column;gap:9px;text-decoration:none;color:inherit;
+  padding:22px;border-radius:22px;border:1px solid var(--line);background:var(--panel);
+  backdrop-filter:blur(12px);overflow:hidden;transition:transform .25s cubic-bezier(.2,.7,.3,1),border-color .25s,box-shadow .25s,background .25s;
+  opacity:0;transform:translateY(14px)}
+a.card.in{opacity:1;transform:none}
+a.card::after{content:"";position:absolute;inset:0;border-radius:22px;pointer-events:none;opacity:0;transition:.3s;
+  background:radial-gradient(320px 180px at var(--mx,50%) var(--my,0%),rgba(255,204,122,.16),transparent 70%)}
+a.card:hover{transform:translateY(-4px);border-color:rgba(255,204,122,.45);background:var(--panel2);
+  box-shadow:0 18px 40px rgba(0,0,0,.45),0 0 0 1px rgba(255,204,122,.18) inset}
+a.card:hover::after{opacity:1}
+a.card h3{margin:0;font-family:Georgia,serif;font-weight:400;font-size:21px;color:#fff;transition:.25s}
+a.card:hover h3{color:var(--gold);text-shadow:0 0 22px rgba(255,190,110,.45)}
+a.card p{margin:0;color:var(--muted);font-size:15px}
+a.card .go{margin-top:auto;padding-top:12px;font-size:13.5px;font-weight:700;letter-spacing:.02em;color:var(--blue);transition:.25s}
+a.card .go::after{content:" →";display:inline-block;transition:transform .25s}
+a.card:hover .go{color:var(--gold)}
+a.card:hover .go::after{transform:translateX(5px)}
+.badge{align-self:flex-start;font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);background:rgba(255,204,122,.10);border:1px solid rgba(255,204,122,.28);border-radius:999px;padding:4px 11px}
+a.card.host{background:rgba(255,255,255,.03)}
+a.card.host h3{color:#dbe6f2}
+
+/* ——— биография ——— */
+.story{margin-top:26px;padding:30px 32px;border-radius:26px;border:1px solid var(--line);
+  background:linear-gradient(120deg,rgba(255,255,255,.05),rgba(255,255,255,.015));backdrop-filter:blur(12px)}
+.story h2{font-family:Georgia,serif;font-weight:400;margin:0 0 14px;font-size:26px}
+.story p{color:var(--muted);margin:0 0 12px;font-size:16.5px}
+.story p:last-child{margin-bottom:0}
+
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:var(--dim);font-size:14px;text-align:center}
+footer a{color:var(--blue);text-decoration:none}
+footer a:hover{color:var(--gold)}
+@media(max-width:640px){.hero{padding:36px 26px}.wrap{padding:18px 16px 70px}}
+@media(prefers-reduced-motion:reduce){a.card{opacity:1;transform:none;transition:none}}
 </style>
 <script defer src="https://derev-studio.github.io/photo-gallery/analytics-client.js"></script>
 </head>
@@ -49,26 +96,27 @@ footer a:hover{text-decoration:underline}
 <main class="wrap">
 
   <section class="hero">
+    <span class="eyebrow">Писатель · фотограф · исследователь</span>
     <h1>Империя Александра Деревяшкина</h1>
-    <p class="lead">Карта моей жизни, книг, фотографии, статей, сайтов и проектов. Нажмите на любую карточку — откроется нужная страница.</p>
+    <p class="lead">Карта моей жизни, книг, фотографии, статей и проектов. Нажмите на любую карточку — она откроет нужную страницу.</p>
     <nav class="nav">
       <a href="#life">Мой путь</a>
       <a href="#books">Книги</a>
       <a href="#photo">Фотография</a>
-      <a href="#friends">Сайты для друзей</a>
+      <a href="#friends">Для друзей</a>
       <a href="#projects">Проекты</a>
       <a href="#archive">Архив</a>
     </nav>
   </section>
 
   <section class="story" id="life">
-    <h2 style="margin-top:0">Мой путь</h2>
+    <h2>Мой путь</h2>
     <p>Я родился в Днепропетровске, детство прошло в Крыму. Потом были армия и Вильнюс, позже — Крым, пожарная охрана, работа, дороги, люди и десятки историй, которые со временем превратились в книги и рассказы.</p>
     <p>Жизнь продолжилась в Израиле, у Кинерета. Я пишу, фотографирую и исследую прошлое и будущее, космос и историю, психологию, природу живых существ и смысл человеческой жизни. Эта Империя собирает всё созданное в одном месте.</p>
   </section>
 
   <h2 class="section-title" id="books">Книги и творчество</h2>
-  <p class="section-note">Главный сайт писателя и книжные площадки.</p>
+  <p class="section-note">Главный сайт писателя, книжные площадки и новый рассказ.</p>
   <section class="grid">
     <a class="card" href="yaniv.html">
       <span class="badge">новый рассказ</span>
@@ -79,12 +127,12 @@ footer a:hover{text-decoration:underline}
     <a class="card" target="_blank" rel="noopener" href="https://derev-studio.github.io/derevyashkin-writer/">
       <span class="badge">главный сайт</span>
       <h3>Александр Деревяшкин — писатель</h3>
-      <p>Основной авторский сайт: книги, видео, аудиокниги, поддержка.</p>
+      <p>Книги и серии, видеоверсии, аудиокниги, свободное чтение и поддержка автора.</p>
       <span class="go">Открыть сайт</span>
     </a>
     <a class="card" target="_blank" rel="noopener" href="https://ridero.ru/books/priklyucheniya_derevyashkina/">
       <h3>«Приключения Деревяшкина»</h3>
-      <p>Печатные экземпляры книги направлены через Ridero в крупнейшие библиотеки России, в том числе в Ленинку.</p>
+      <p>Печатные экземпляры направлены через Ridero в крупнейшие библиотеки России, в том числе в Ленинку.</p>
       <span class="go">Открыть на Ridero</span>
     </a>
     <a class="card" target="_blank" rel="noopener" href="https://www.litres.ru/author/aleksandr-derevyashkin-32679463/">
@@ -99,7 +147,7 @@ footer a:hover{text-decoration:underline}
     </a>
     <a class="card" href="articles.html">
       <h3>Статьи и исследования</h3>
-      <p>Эссе, техника, безопасность и размышления о Вселенной.</p>
+      <p>Фотография, техника, безопасность, история и гипотеза о Мыслящей Вселенной.</p>
       <span class="go">Читать статьи</span>
     </a>
   </section>
@@ -229,5 +277,24 @@ footer a:hover{text-decoration:underline}
   </footer>
 
 </main>
+<script>
+(function(){
+  var cards=document.querySelectorAll('a.card');
+  if(!('IntersectionObserver' in window)){cards.forEach(function(c){c.classList.add('in')});return;}
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e,i){
+      if(e.isIntersecting){setTimeout(function(){e.target.classList.add('in')}, (i%6)*60); io.unobserve(e.target);}
+    });
+  },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  cards.forEach(function(c){io.observe(c)});
+  cards.forEach(function(c){
+    c.addEventListener('pointermove',function(ev){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--mx',(ev.clientX-r.left)+'px');
+      c.style.setProperty('--my',(ev.clientY-r.top)+'px');
+    });
+  });
+})();
+</script>
 </body>
 </html>
