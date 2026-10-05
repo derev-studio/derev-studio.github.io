@@ -30,6 +30,14 @@ body{margin:0;background:
   -webkit-font-smoothing:antialiased;line-height:1.55;min-height:100vh}
 .wrap{max-width:1160px;margin:auto;padding:26px 20px 90px}
 
+/* ——— «прожектор»: страница светлеет под курсором ——— */
+#spot{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(520px circle at var(--sx,50%) var(--sy,0%),
+    rgba(255,214,150,.115),rgba(255,190,110,.05) 42%,transparent 68%);
+  opacity:0;transition:opacity .45s ease;mix-blend-mode:screen}
+body.lit #spot{opacity:1}
+.wrap{position:relative;z-index:1}
+
 /* ——— hero ——— */
 .hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:30px;padding:64px 52px;
   background:linear-gradient(140deg,rgba(255,255,255,.075),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05));
@@ -93,6 +101,7 @@ footer a:hover{color:var(--gold)}
 <script defer src="https://derev-studio.github.io/photo-gallery/analytics-client.js"></script>
 </head>
 <body>
+<div id="spot" aria-hidden="true"></div>
 <main class="wrap">
 
   <section class="hero">
@@ -294,6 +303,26 @@ footer a:hover{color:var(--gold)}
       c.style.setProperty('--my',(ev.clientY-r.top)+'px');
     });
   });
+
+  /* прожектор по всей странице */
+  var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  var calm = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(fine && !calm){
+    var raf=0, px=0, py=0;
+    var root=document.documentElement;
+    function draw(){
+      raf=0;
+      root.style.setProperty('--sx',px+'px');
+      root.style.setProperty('--sy',py+'px');
+    }
+    window.addEventListener('pointermove',function(e){
+      if(e.pointerType!=='mouse') return;
+      px=e.clientX; py=e.clientY;
+      document.body.classList.add('lit');
+      if(!raf) raf=requestAnimationFrame(draw);
+    },{passive:true});
+    document.addEventListener('mouseleave',function(){document.body.classList.remove('lit')});
+  }
 })();
 </script>
 </body>
