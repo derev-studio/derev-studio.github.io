@@ -14,51 +14,108 @@
 <meta property="og:url" content="https://derev-studio.github.io/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌳</text></svg>">
 <style>
-:root{
+/* ——— темы ——— */
+:root,html[data-theme="dark"]{
   --bg:#0b1016; --bg2:#0f1620; --panel:rgba(255,255,255,.045); --panel2:rgba(255,255,255,.07);
   --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.22);
   --txt:#eaf1f8; --muted:#93a4b8; --dim:#6c7d92;
   --gold:#ffcc7a; --gold2:#ff9f43; --blue:#6cb6ff;
+  --hero1:rgba(255,255,255,.075); --hero2:rgba(255,255,255,.02); --hero3:rgba(255,255,255,.05);
+  --halo:rgba(255,190,110,.20); --glow:rgba(255,204,122,.16); --ring:rgba(255,204,122,.45);
+  --accent-ink:#0c1218; --card-shadow:rgba(0,0,0,.5); --body3:#0a0f15;
+  --spot-a:rgba(255,214,150,.13); --spot-b:rgba(255,190,110,.06); --spot-blend:screen;
+  --h1a:#ffffff; --h1b:var(--gold); --h1c:var(--blue);
+  --btn-glow:rgba(255,159,67,.35); --host:rgba(255,255,255,.03);
+}
+html[data-theme="light"]{
+  --bg:#eef1f5; --bg2:#f7f9fb; --panel:rgba(255,255,255,.75); --panel2:#ffffff;
+  --line:rgba(20,35,55,.10); --line2:rgba(20,35,55,.2);
+  --txt:#152033; --muted:#5a6b80; --dim:#7d8da0;
+  --gold:#b8791f; --gold2:#e0972f; --blue:#1f6fb8;
+  --hero1:rgba(255,255,255,.9); --hero2:rgba(255,255,255,.6); --hero3:rgba(255,255,255,.8);
+  --halo:rgba(255,170,80,.18); --glow:rgba(184,121,31,.14); --ring:rgba(184,121,31,.4);
+  --accent-ink:#fff; --card-shadow:rgba(20,40,70,.18); --body3:#e6ebf2;
+  --spot-a:rgba(255,196,120,.28); --spot-b:rgba(255,224,180,.13); --spot-blend:normal;
+  --h1a:#183049; --h1b:var(--gold2); --h1c:var(--blue);
+  --btn-glow:rgba(224,151,47,.35); --host:#f2f5f9;
+}
+html[data-theme="beige"]{
+  --bg:#f3ece1; --bg2:#faf5ec; --panel:rgba(255,255,255,.72); --panel2:#fffdf8;
+  --line:rgba(90,70,40,.14); --line2:rgba(90,70,40,.26);
+  --txt:#33291c; --muted:#6f6250; --dim:#8c7f6c;
+  --gold:#a5732a; --gold2:#cf9440; --blue:#2f6f8f;
+  --hero1:rgba(255,255,255,.92); --hero2:rgba(255,250,240,.6); --hero3:rgba(255,255,255,.8);
+  --halo:rgba(220,160,90,.22); --glow:rgba(165,115,42,.14); --ring:rgba(165,115,42,.4);
+  --accent-ink:#fff; --card-shadow:rgba(90,70,40,.18); --body3:#ece4d8;
+  --spot-a:rgba(255,186,96,.30); --spot-b:rgba(255,220,170,.14); --spot-blend:normal;
+  --h1a:#3a2d1d; --h1b:var(--gold2); --h1c:var(--blue);
+  --btn-glow:rgba(207,148,64,.35); --host:#f6efe4;
+}
+html[data-theme="green"]{
+  --bg:#07130f; --bg2:#0a1d17; --panel:rgba(160,255,220,.05); --panel2:rgba(160,255,220,.09);
+  --line:rgba(150,240,210,.13); --line2:rgba(150,240,210,.26);
+  --txt:#e3f4ec; --muted:#8fb3a5; --dim:#6f9384;
+  --gold:#8fe3b8; --gold2:#43c98d; --blue:#7fd4e0;
+  --hero1:rgba(160,255,220,.07); --hero2:rgba(160,255,220,.02); --hero3:rgba(160,255,220,.05);
+  --halo:rgba(90,230,170,.20); --glow:rgba(120,235,180,.16); --ring:rgba(120,235,180,.42);
+  --accent-ink:#04140f; --card-shadow:rgba(0,0,0,.5); --body3:#06120e;
+  --spot-a:rgba(150,255,215,.12); --spot-b:rgba(90,230,170,.06); --spot-blend:screen;
+  --h1a:#ffffff; --h1b:var(--gold); --h1c:var(--blue);
+  --btn-glow:rgba(67,201,141,.35); --host:rgba(160,255,220,.035);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:
-   radial-gradient(1100px 600px at 12% -8%, rgba(255,170,80,.13), transparent 60%),
-   radial-gradient(900px 520px at 92% 4%, rgba(90,140,255,.14), transparent 62%),
-   linear-gradient(180deg,var(--bg),var(--bg2) 60%,#0a0f15);
+   radial-gradient(1100px 600px at 12% -8%, var(--halo), transparent 60%),
+   radial-gradient(900px 520px at 92% 4%, rgba(90,140,255,.12), transparent 62%),
+   linear-gradient(180deg,var(--bg),var(--bg2) 60%,var(--body3));
   color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
-  -webkit-font-smoothing:antialiased;line-height:1.55;min-height:100vh}
+  -webkit-font-smoothing:antialiased;line-height:1.55;min-height:100vh;
+  transition:background .35s ease,color .35s ease}
 .wrap{max-width:1160px;margin:auto;padding:26px 20px 90px}
+
+/* ——— переключатель тем ——— */
+.themes{position:fixed;top:16px;right:16px;z-index:50;display:flex;gap:6px;padding:6px;border-radius:999px;
+  border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(12px);box-shadow:0 8px 26px var(--card-shadow)}
+.themes button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line2);cursor:pointer;padding:0;
+  transition:transform .18s,box-shadow .18s}
+.themes button:hover{transform:scale(1.12)}
+.themes button.on{box-shadow:0 0 0 2px var(--gold),0 0 14px var(--glow)}
+.t-dark{background:linear-gradient(135deg,#0d141c,#243040)}
+.t-light{background:linear-gradient(135deg,#ffffff,#dfe6ee)}
+.t-beige{background:linear-gradient(135deg,#f7efe2,#e2c79b)}
+.t-green{background:linear-gradient(135deg,#0a1f18,#3fc98f)}
+@media(max-width:620px){.themes{top:auto;bottom:14px;right:14px}}
 
 /* ——— «прожектор»: страница светлеет под курсором ——— */
 #spot{position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(520px circle at var(--sx,50%) var(--sy,0%),
-    rgba(255,214,150,.115),rgba(255,190,110,.05) 42%,transparent 68%);
-  opacity:0;transition:opacity .45s ease;mix-blend-mode:screen}
+    var(--spot-a),var(--spot-b) 42%,transparent 68%);
+  opacity:0;transition:opacity .45s ease;mix-blend-mode:var(--spot-blend)}
 body.lit #spot{opacity:1}
 .wrap{position:relative;z-index:1}
 
 /* ——— hero ——— */
 .hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:30px;padding:64px 52px;
-  background:linear-gradient(140deg,rgba(255,255,255,.075),rgba(255,255,255,.02) 55%,rgba(255,255,255,.05));
+  background:linear-gradient(140deg,var(--hero1),var(--hero2) 55%,var(--hero3));
   backdrop-filter:blur(14px)}
 .hero::before{content:"";position:absolute;inset:-40% -10% auto -10%;height:320px;
-  background:radial-gradient(closest-side,rgba(255,190,110,.20),transparent 75%);filter:blur(10px);pointer-events:none}
+  background:radial-gradient(closest-side,var(--halo),transparent 75%);filter:blur(10px);pointer-events:none}
 .eyebrow{display:inline-block;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);
-  border:1px solid rgba(255,204,122,.35);border-radius:999px;padding:6px 14px;margin-bottom:20px}
+  border:1px solid var(--ring);border-radius:999px;padding:6px 14px;margin-bottom:20px}
 h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(34px,5.2vw,62px);line-height:1.06;margin:0 0 18px;
-  background:linear-gradient(100deg,#ffffff 12%,var(--gold) 62%,var(--blue) 108%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  background:linear-gradient(100deg,var(--h1a) 12%,var(--h1b) 62%,var(--h1c) 108%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{color:var(--muted);font-size:clamp(16px,1.5vw,19px);max-width:720px;margin:0}
 .nav{display:flex;gap:9px;flex-wrap:wrap;margin-top:30px;position:relative}
 .nav a{text-decoration:none;font-size:14px;font-weight:600;color:var(--txt);padding:9px 16px;border-radius:999px;
   border:1px solid var(--line);background:var(--panel);transition:.22s}
-.nav a:hover{color:#0c1218;background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:transparent;
-  box-shadow:0 6px 22px rgba(255,159,67,.35);transform:translateY(-1px)}
+.nav a:hover{color:var(--accent-ink);background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:transparent;
+  box-shadow:0 6px 22px var(--btn-glow);transform:translateY(-1px)}
 
 /* ——— заголовки разделов ——— */
 .section-title{font-family:Georgia,serif;font-weight:400;font-size:clamp(24px,3vw,34px);margin:58px 0 4px;position:relative;display:inline-block}
 .section-title::after{content:"";position:absolute;left:0;right:-28px;bottom:-9px;height:1px;
-  background:linear-gradient(90deg,var(--gold),rgba(255,204,122,0))}
+  background:linear-gradient(90deg,var(--gold),transparent)}
 .section-note{color:var(--dim);margin:16px 0 20px;font-size:15px}
 
 /* ——— стеклянные карточки ——— */
@@ -69,9 +126,9 @@ a.card{position:relative;display:flex;flex-direction:column;gap:9px;text-decorat
   opacity:0;transform:translateY(14px)}
 a.card.in{opacity:1;transform:none}
 a.card::after{content:"";position:absolute;inset:0;border-radius:22px;pointer-events:none;opacity:0;transition:.3s;
-  background:radial-gradient(320px 180px at var(--mx,50%) var(--my,0%),rgba(255,204,122,.16),transparent 70%)}
-a.card:hover{transform:translateY(-4px);border-color:rgba(255,204,122,.45);background:var(--panel2);
-  box-shadow:0 18px 40px rgba(0,0,0,.45),0 0 0 1px rgba(255,204,122,.18) inset}
+  background:radial-gradient(320px 180px at var(--mx,50%) var(--my,0%),var(--glow),transparent 70%)}
+a.card:hover{transform:translateY(-4px);border-color:var(--ring);background:var(--panel2);
+  box-shadow:0 18px 40px var(--card-shadow),0 0 0 1px var(--glow) inset}
 a.card:hover::after{opacity:1}
 a.card h3{margin:0;font-family:Georgia,serif;font-weight:400;font-size:21px;color:#fff;transition:.25s}
 a.card:hover h3{color:var(--gold);text-shadow:0 0 22px rgba(255,190,110,.45)}
@@ -81,13 +138,13 @@ a.card .go::after{content:" →";display:inline-block;transition:transform .25s}
 a.card:hover .go{color:var(--gold)}
 a.card:hover .go::after{transform:translateX(5px)}
 .badge{align-self:flex-start;font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--gold);background:rgba(255,204,122,.10);border:1px solid rgba(255,204,122,.28);border-radius:999px;padding:4px 11px}
-a.card.host{background:rgba(255,255,255,.03)}
-a.card.host h3{color:#dbe6f2}
+  color:var(--gold);background:var(--glow);border:1px solid var(--ring);border-radius:999px;padding:4px 11px}
+a.card.host{background:var(--host)}
+a.card.host h3{color:inherit}
 
 /* ——— биография ——— */
 .story{margin-top:26px;padding:30px 32px;border-radius:26px;border:1px solid var(--line);
-  background:linear-gradient(120deg,rgba(255,255,255,.05),rgba(255,255,255,.015));backdrop-filter:blur(12px)}
+  background:linear-gradient(120deg,var(--hero1),var(--hero2));backdrop-filter:blur(12px)}
 .story h2{font-family:Georgia,serif;font-weight:400;margin:0 0 14px;font-size:26px}
 .story p{color:var(--muted);margin:0 0 12px;font-size:16.5px}
 .story p:last-child{margin-bottom:0}
@@ -101,7 +158,23 @@ footer a:hover{color:var(--gold)}
 <script defer src="https://derev-studio.github.io/photo-gallery/analytics-client.js"></script>
 </head>
 <body>
+<script>
+/* тема применяется сразу, до отрисовки — без мигания */
+(function(){
+  try{
+    var t=localStorage.getItem('theme')||localStorage.getItem('empire-theme')||'dark';
+    if(['dark','light','beige','green'].indexOf(t)<0) t='dark';
+    document.documentElement.setAttribute('data-theme',t);
+  }catch(e){document.documentElement.setAttribute('data-theme','dark');}
+})();
+</script>
 <div id="spot" aria-hidden="true"></div>
+<div class="themes" role="group" aria-label="Тема оформления">
+  <button class="t-dark"  data-t="dark"  title="Тёмная" aria-label="Тёмная тема"></button>
+  <button class="t-light" data-t="light" title="Светлая" aria-label="Светлая тема"></button>
+  <button class="t-beige" data-t="beige" title="Бежевая" aria-label="Бежевая тема"></button>
+  <button class="t-green" data-t="green" title="Тёмно-зелёная" aria-label="Тёмно-зелёная тема"></button>
+</div>
 <main class="wrap">
 
   <section class="hero">
@@ -323,6 +396,16 @@ footer a:hover{color:var(--gold)}
     },{passive:true});
     document.addEventListener('mouseleave',function(){document.body.classList.remove('lit')});
   }
+
+  /* переключатель тем */
+  var btns=document.querySelectorAll('.themes button');
+  function setTheme(t){
+    document.documentElement.setAttribute('data-theme',t);
+    try{localStorage.setItem('theme',t);localStorage.setItem('empire-theme',t);}catch(e){}
+    btns.forEach(function(b){b.classList.toggle('on', b.dataset.t===t)});
+  }
+  btns.forEach(function(b){ b.addEventListener('click',function(){ setTheme(b.dataset.t) }) });
+  setTheme(document.documentElement.getAttribute('data-theme')||'dark');
 })();
 </script>
 </body>
