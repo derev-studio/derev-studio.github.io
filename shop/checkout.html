@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Оплата — Александр Деревяшкин</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#eae7e1;--dim:#a49f97;--gold:#d8b26a;--line:#2a2f3a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.wrap{max-width:760px;margin:auto;padding:26px 16px 60px}
+a.home{color:var(--dim);text-decoration:none;font-size:14px}
+h1{font-size:26px;margin:16px 0 6px}
+.sub{color:var(--dim);font-size:15px;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;display:flex;gap:16px;align-items:center}
+.card img{width:64px;border-radius:8px;flex:0 0 auto}
+.card .info{flex:1;min-width:0}
+.card .t{font-weight:700;font-size:17px;margin-bottom:4px}
+.card .pr{color:var(--gold);font-weight:700}
+.btn{display:inline-block;background:var(--gold);color:#141414;border:0;border-radius:11px;padding:11px 20px;font-weight:700;font-size:15px;text-decoration:none;cursor:pointer}
+.btn.sec{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:600}
+.btn.muted{background:transparent;border:1px solid var(--gold);color:var(--gold);font-weight:600;font-size:13px;padding:9px 16px}
+.total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);margin-top:20px;padding-top:18px;font-size:19px;font-weight:700}
+.note{color:var(--dim);font-size:14px;margin-top:14px}
+.badge{display:inline-block;background:#3a2f16;color:var(--gold);border:1px solid #5c4a22;border-radius:999px;padding:3px 11px;font-size:12px;font-weight:600;margin-left:8px;vertical-align:middle}
+.ok{background:#16261a;border:1px solid #2c5c39;color:#a8e6b8;border-radius:14px;padding:18px;margin-bottom:20px}
+.empty{color:var(--dim);text-align:center;padding:40px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="home" href="/derevyashkin-writer/shop/index.html">← назад в магазин</a>
+<h1>Оплата покупки</h1>
+<div class="sub">Оплата проходит на защищённой странице банка. Данные карты на моём сайте не сохраняются.</div>
+<div id="ok" class="ok" style="display:none"></div>
+<div id="list"></div>
+<div id="foot"></div>
+<div class="note" id="hint"></div>
+</div>
+<script src="paylinks.js"></script>
+<script>
+const GOODS=[{"id": 69692569, "t": "Древний человек и его тигр", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/69692569.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/drevniy-chelovek-i-ego-tigr-69692569/"}, {"id": 71239471, "t": "Танец под звёздами", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71239471.jpg", "url": "free/tanec-pod-zve-zdami.html"}, {"id": 72600247, "t": "Идеальный мужчина", "price": 59.9, "cover": "https://www.litres.ru/pub/c/cover/72600247.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/idealnyi-muzhchina-72600247/"}, {"id": 72247489, "t": "Защита от гипноза", "price": 99.9, "cover": "https://www.litres.ru/pub/c/cover/72247489.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/zaschita-ot-gipnoza-72247489/"}, {"id": 72576595, "t": "Мыльная эпопея", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/72576595.jpg", "url": "archive/mylnaya-epopeya.html"}, {"id": 72487717, "t": "Искорка", "price": 149.0, "cover": "https://www.litres.ru/pub/c/cover/72487717.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/iskorka-72487717/"}, {"id": 69587722, "t": "Пустыня", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/69587722.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/pustynya-69587722/"}, {"id": 72264235, "t": "Черепашка", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/72264235.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/cherepashka-72264235/"}, {"id": 72410476, "t": "Саванна", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/72410476.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/savanna-72410476/"}, {"id": 72477826, "t": "Огненный шторм", "price": 59.9, "cover": "https://www.litres.ru/pub/c/cover/72477826.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/ognennyi-shtorm-72477826/"}, {"id": 72264013, "t": "Три зёрнышка счастья", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/72264013.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/tri-zernyshka-schastya-72264013/"}, {"id": 69780589, "t": "Хлебное прозрение", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/69780589.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/hlebnoe-prozrenie-69780589/"}, {"id": 71807470, "t": "Аяна", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71807470.jpg", "url": "free/ayana.html"}, {"id": 71252989, "t": "Роби и Ника", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71252989.jpg", "url": "free/robi-i-nika.html"}, {"id": 72762253, "t": "Травма и сила", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/72762253.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/travma-i-sila-72762253/"}, {"id": 70924519, "t": "Ваше мышление", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70924519.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/vashe-myshlenie-70924519/"}, {"id": 71510443, "t": "Кактусология", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71510443.jpg", "url": "free/kaktusologiya.html"}, {"id": 71196700, "t": "Леонид", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71196700.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/leonid-71196700/"}, {"id": 72310573, "t": "Дом под облаками", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/72310573.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/dom-pod-oblakami-72310573/"}, {"id": 71360758, "t": "О любви и жизни", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71360758.jpg", "url": "archive/o-lyubvi-i-zhizni.html"}, {"id": 69532540, "t": "Тайное Оружие", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/69532540.jpg", "url": "free/tai-noe-oruzhie.html"}, {"id": 71444074, "t": "Жизнь любви", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71444074.jpg", "url": "archive/zhizn-lyubvi.html"}, {"id": 70925398, "t": "Планета отравленных", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70925398.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/planeta-otravlennyh-70925398/"}, {"id": 69748429, "t": "Сладкий искуситель", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/69748429.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/sladkiy-iskusitel-69748429/"}, {"id": 72454501, "t": "Дочь трав", "price": 79.99, "cover": "https://www.litres.ru/pub/c/cover/72454501.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/doch-trav-72454501/"}, {"id": 72341104, "t": "Дикие амазонки", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/72341104.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/dikie-amazonki-72341104/"}, {"id": 72198964, "t": "Тихое озеро", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/72198964.jpg", "url": "free/tihoe-ozero.html"}, {"id": 71269162, "t": "Идеальная женщина", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71269162.jpg", "url": "free/idealnaya-zhenschina.html"}, {"id": 70855459, "t": "Йога для сна", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70855459.jpg", "url": "free/i-oga-dlya-sna.html"}, {"id": 72276682, "t": "Эрена", "price": 79.99, "cover": "https://www.litres.ru/pub/c/cover/72276682.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/erena-72276682/"}, {"id": 72252040, "t": "Встреча во времени", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/72252040.jpg", "url": "free/vstrecha-vo-vremeni.html"}, {"id": 70939885, "t": "Израиль. Напряжение", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70939885.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/izrail-napryazhenie-70939885/"}, {"id": 72218437, "t": "Седьмой компонент", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/72218437.jpg", "url": "archive/sedmoi--komponent.html"}, {"id": 71164456, "t": "Его звали садовник", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71164456.jpg", "url": "free/ego-zvali-sadovnik.html"}, {"id": 70913533, "t": "Фактор страха", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70913533.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/faktor-straha-70913533/"}, {"id": 70912495, "t": "Обними одиночество", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70912495.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/obnimi-odinochestvo-70912495/"}, {"id": 70909624, "t": "С он", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70909624.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/s-on-70909624/"}, {"id": 70853911, "t": "Движение по параболе", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70853911.jpg", "url": "free/dvizhenie-po-parabole.html"}, {"id": 70845184, "t": "Дети солнца", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70845184.jpg", "url": "free/deti-solnca.html"}, {"id": 70832368, "t": "Тихое слово", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70832368.jpg", "url": "free/tihoe-slovo.html"}, {"id": 70280743, "t": "Странствующий Альбатрос", "price": 99.9, "cover": "https://www.litres.ru/pub/c/cover/70280743.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/stranstvuuschiy-albatros-70280743/"}, {"id": 72468616, "t": "Закон добра и души", "price": 59.9, "cover": "https://www.litres.ru/pub/c/cover/72468616.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/zakon-dobra-i-dushi-72468616/"}, {"id": 72450976, "t": "Виана", "price": 99.9, "cover": "https://www.litres.ru/pub/c/cover/72450976.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/viana-72450976/"}, {"id": 70901047, "t": "Обмануть депрессию", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70901047.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/obmanut-depressiu-70901047/"}, {"id": 70888120, "t": "Завтрак на траве", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70888120.jpg", "url": "free/zavtrak-na-trave.html"}, {"id": 70845439, "t": "Андромеда", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70845439.jpg", "url": "free/andromeda.html"}, {"id": 72410080, "t": "Юпитер сердится", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/72410080.jpg", "url": "archive/yupiter-serditsya.html"}, {"id": 72363844, "t": "Винегрет из Персички", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/72363844.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/vinegret-iz-persichki-72363844/"}, {"id": 72314758, "t": "Ламбада", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/72314758.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/lambada-72314758/"}, {"id": 72247510, "t": "Обыкновенная храбрость", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/72247510.jpg", "url": "free/obyknovennaya-hrabrost.html"}, {"id": 71767300, "t": "В сердце пустыни", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71767300.jpg", "url": "free/v-serdce-pustyni.html"}, {"id": 70955050, "t": "Телефонные мошенники", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70955050.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/telefonnye-moshenniki-70955050/"}, {"id": 70889029, "t": "Мышка", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70889029.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/myshka-70889029/"}, {"id": 70871828, "t": "Сокровище нежности", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70871828.jpg", "url": "free/sokrovische-nezhnosti.html"}, {"id": 70852855, "t": "Блатодэй", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70852855.jpg", "url": "free/blatodei.html"}, {"id": 70794409, "t": "Бред сивой кобылы", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70794409.jpg", "url": "free/bred-sivoi--kobyly.html"}, {"id": 70245532, "t": "Путешествие к оранжевым звёздам", "price": 99.9, "cover": "https://www.litres.ru/pub/c/cover/70245532.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/puteshestvie-k-oranzhevym-zvezdam-70245532/"}, {"id": 69665479, "t": "Путь в Хамат Гадер", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/69665479.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/put-v-hamat-gader-69665479/"}, {"id": 72582922, "t": "Душа будущего", "price": 59.9, "cover": "https://www.litres.ru/pub/c/cover/72582922.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/dusha-buduschego-72582922/"}, {"id": 72443752, "t": "Вкусняшка", "price": 49.9, "cover": "https://www.litres.ru/pub/c/cover/72443752.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/vkusnyashka-72443752/"}, {"id": 71005276, "t": "Портрет писателя", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/71005276.jpg", "url": "free/portret-pisatelya.html"}, {"id": 70983028, "t": "Мурчащие", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70983028.jpg", "url": "free/murchaschie.html"}, {"id": 70980655, "t": "Андромеда", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70980655.jpg", "url": "free/andromeda.html"}, {"id": 70939186, "t": "Дети солнца", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70939186.jpg", "url": "free/deti-solnca.html"}, {"id": 70926442, "t": "Сказки доброго Геши", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70926442.jpg", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/skazki-dobrogo-geshi-70926442/"}, {"id": 70894174, "t": "Благодарю", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70894174.jpg", "url": "free/blagodaryu.html"}, {"id": 70859416, "t": "Предрассветная мгла", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70859416.jpg", "url": "free/predrassvetnaya-mgla.html"}, {"id": 70853482, "t": "Я диктую", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70853482.jpg", "url": "free/ya-diktuyu.html"}, {"id": 70807450, "t": "Тайна мудрости", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/70807450.jpg", "url": "free/tai-na-mudrosti.html"}, {"id": 69541924, "t": "Тайное Оружие", "price": 0, "cover": "https://www.litres.ru/pub/c/cover/69541924.jpg", "url": "free/tai-noe-oruzhie.html"}];
+const LINKS=(window.PAYLINKS||{});
+const CART_KEY='derev_cart';
+function money(v){return (Math.round(v*100)/100).toFixed(0)+' \u20bd';}
+function params(){const p=new URLSearchParams(location.search);return {id:p.get('id'),ok:p.get('ok')};}
+function byId(id){return GOODS.find(g=>String(g.id)===String(id));}
+function items(){
+  const q=params();
+  if(q.id){const g=byId(q.id);return g?[g]:[];}
+  let cart=[];try{cart=JSON.parse(localStorage.getItem(CART_KEY)||'[]');}catch(e){}
+  return cart.map(c=>byId(c.id)).filter(Boolean);
+}
+function payUrl(g){return LINKS[String(g.id)]||'';}
+function render(){
+  const q=params(), list=document.getElementById('list');
+  if(q.ok){const el=document.getElementById('ok');el.style.display='block';
+    el.innerHTML='<b>Спасибо за покупку!</b><br>Оплата прошла. Книгу пришлю на вашу почту в течение дня. '
+      +'Если письма нет — напишите на <a style="color:#a8e6b8" href="mailto:derev.derev@mail.ru">derev.derev@mail.ru</a> '
+      +'и укажите название книги.';}
+  const it=items();
+  if(!it.length){list.innerHTML='<div class="empty">Корзина пуста.<br><br><a class="btn sec" href="/derevyashkin-writer/shop/index.html">Вернуться в магазин</a></div>';
+    document.getElementById('foot').innerHTML='';document.getElementById('hint').innerHTML='';return;}
+  let sum=0, html='';
+  it.forEach(g=>{
+    const price=g.price||0; sum+=price;
+    const u=payUrl(g);
+    const act = u
+      ? '<a class="btn" href="'+u+'" target=_blank rel=noopener>Оплатить '+money(price)+'</a>'
+      : '<a class="btn muted" href="'+g.url+'" target=_blank rel=noopener>Купить на ЛитРес '+money(price)+'</a>';
+    const badge = u ? '' : '<span class="badge">картой на сайте — скоро</span>';
+    html+='<div class="card">'+(g.cover?'<img src="'+g.cover+'" alt="">':'')+
+      '<div class="info"><div class="t">'+g.t+badge+'</div><div class="pr">'+money(price)+'</div></div>'+act+'</div>';
+  });
+  list.innerHTML=html;
+  document.getElementById('foot').innerHTML='<div class="total"><span>Итого</span><span>'+money(sum)+'</span></div>'+
+    '<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">'+
+    '<button class="btn sec" onclick="clearCart()">Очистить корзину</button>'+
+    '<a class="btn sec" href="/derevyashkin-writer/shop/index.html">Добавить ещё книгу</a></div>';
+  document.getElementById('hint').innerHTML =
+    Object.keys(LINKS).length
+      ? 'Нажимайте «Оплатить» по одной книге. После оплаты файл выдаётся автоматически.'
+      : 'Пока оплата картой на сайте не подключена — книги продаются на ЛитРес, кнопка слева. Прямая оплата заработает, как только подключим кассу: страница уже готова, останется вставить ссылку.';
+}
+function clearCart(){localStorage.removeItem(CART_KEY);render();}
+render();
+</script>
+</body>
+</html>
