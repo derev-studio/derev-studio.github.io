@@ -1,0 +1,360 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Магазин книг — Александр Деревяшкин</title>
+<meta name="description" content="Магазин книг Александра Деревяшкина: 36 книг с ценами, 34 бесплатных для чтения на сайте. Электронные, бумажные и аудиокниги.">
+<style>
+:root{--bg:#0b1016;--bg2:#0f1620;--panel:rgba(255,255,255,.05);--line:rgba(255,255,255,.12);
+ --txt:#eaf1f8;--mu:#9fb0c2;--gold:#ffcc7a;--blue:#6cb6ff}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(900px 500px at 15% -10%,rgba(255,170,80,.12),transparent 60%),
+ linear-gradient(180deg,var(--bg),var(--bg2) 70%,#0a0f15);color:var(--txt);
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}
+.wrap{max-width:1120px;margin:auto;padding:26px 20px 90px}
+a{color:var(--blue);text-decoration:none}a:hover{color:var(--gold)}
+h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(28px,4vw,44px);margin:0 0 8px;
+ background:linear-gradient(100deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.meta{color:var(--mu);font-size:15px}
+.back{display:inline-block;margin-bottom:20px;font-size:14px;font-weight:600;border:1px solid var(--line);
+ border-radius:999px;padding:8px 15px;background:var(--panel)}
+.f{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 22px}
+.f button{border:1px solid var(--line);background:var(--panel);color:var(--txt);border-radius:999px;padding:8px 15px;
+ font-size:13.5px;cursor:pointer}.f button.on{background:var(--gold);color:#111;border-color:transparent}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+ background:var(--panel);transition:.2s}
+.card:hover{transform:translateY(-4px);border-color:rgba(255,204,122,.45);box-shadow:0 16px 34px rgba(0,0,0,.5)}
+.card img{width:100%;display:block;aspect-ratio:1/1.42;object-fit:cover;background:#111}
+.card .b{padding:12px 13px 14px;display:flex;flex-direction:column;gap:7px;flex:1}
+.card .t{font-size:15.5px;font-weight:600;line-height:1.35}
+.card .p{color:var(--gold);font-weight:700;font-size:15px;margin-top:auto}
+.card .btn{display:block;text-align:center;border:1px solid var(--line);border-radius:10px;padding:8px;
+ font-size:13.5px;font-weight:600;background:rgba(255,255,255,.06);color:var(--txt);cursor:pointer}
+.card .btn:hover{background:var(--gold);color:#111;border-color:transparent}
+.tag{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);border:1px solid rgba(255,204,122,.3);
+ border-radius:999px;padding:2px 9px;align-self:flex-start}
+#cart{position:fixed;top:14px;right:14px;z-index:60;border:1px solid var(--line);background:rgba(12,17,24,.92);
+ backdrop-filter:blur(10px);border-radius:14px;padding:10px 14px;font-size:14px}
+#cart b{color:var(--gold)}
+.note{margin-top:26px;padding:15px 18px;border-radius:14px;border:1px solid rgba(255,204,122,.3);
+ background:rgba(255,204,122,.07);color:#f0e2c8;font-size:14.5px}
+h2{font-family:Georgia,serif;font-weight:400;font-size:clamp(22px,3vw,30px);margin:34px 0 8px}
+.legal p{color:#d8e3ee}
+</style></head><body>
+<div id="cart">🛒 Корзина: <b id="c">0</b> · <span id="sum">0 ₽</span>
+<button class="btn" style="display:inline-block;margin-left:8px;padding:4px 10px" onclick="checkout()">Оформить</button></div>
+<div class="wrap">
+<a class="back" href="https://derev-studio.github.io/">← На главную сайта</a>
+<h1>Магазин книг</h1>
+<div class="meta">Всего 70 книг: 36 с ценой и 34 бесплатных. Бесплатные читаются прямо здесь, без регистрации и рекламы.</div>
+<div class="f" id="f">
+<button data-g="all">Все</button><button data-g="купить">Купить</button><button data-g="бесплатно">Бесплатно</button><a class="btn" style="align-self:center;text-decoration:none;padding:8px 15px" href="../try/index.html">📖 Попробовать перед покупкой</a>
+</div>
+<div class="grid" id="grid"><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/69692569.jpg" alt="Древний человек и его тигр" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Древний человек и его тигр</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(0)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/71239471.jpg" alt="Танец под звёздами" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Танец под звёздами</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/tanec-pod-zve-zdami.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72600247.jpg" alt="Идеальный мужчина" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Идеальный мужчина</div>
+<div class="p">60 ₽</div><button class="btn" onclick="add(2)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72247489.jpg" alt="Защита от гипноза" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Защита от гипноза</div>
+<div class="p">100 ₽</div><a class="btn" style="margin-bottom:6px" href="../try/try-zaschita-ot-gipnoza.html">Почитать начало</a><button class="btn" onclick="add(3)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/72576595.jpg" alt="Мыльная эпопея" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Мыльная эпопея</div>
+<div class="p">Бесплатно</div><a class="btn" href="archive/mylnaya-epopeya.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72487717.jpg" alt="Искорка" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Искорка</div>
+<div class="p">149 ₽</div><button class="btn" onclick="add(5)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/69587722.jpg" alt="Пустыня" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Пустыня</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(6)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72264235.jpg" alt="Черепашка" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Черепашка</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(7)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72410476.jpg" alt="Саванна" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Саванна</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(8)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72477826.jpg" alt="Огненный шторм" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Огненный шторм</div>
+<div class="p">60 ₽</div><button class="btn" onclick="add(9)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72264013.jpg" alt="Три зёрнышка счастья" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Три зёрнышка счастья</div>
+<div class="p">50 ₽</div><a class="btn" style="margin-bottom:6px" href="../try/try-tri-ze-rnyshka-schastya.html">Почитать начало</a><button class="btn" onclick="add(10)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/69780589.jpg" alt="Хлебное прозрение" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Хлебное прозрение</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(11)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/71807470.jpg" alt="Аяна" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Аяна</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/ayana.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/71252989.jpg" alt="Роби и Ника" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Роби и Ника</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/robi-i-nika.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72762253.jpg" alt="Травма и сила" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Травма и сила</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(14)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70924519.jpg" alt="Ваше мышление" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Ваше мышление</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(15)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/71510443.jpg" alt="Кактусология" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Кактусология</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/kaktusologiya.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/71196700.jpg" alt="Леонид" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Леонид</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(17)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72310573.jpg" alt="Дом под облаками" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Дом под облаками</div>
+<div class="p">50 ₽</div><a class="btn" style="margin-bottom:6px" href="../try/try-dom-pod-oblakami.html">Почитать начало</a><button class="btn" onclick="add(18)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/71360758.jpg" alt="О любви и жизни" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">О любви и жизни</div>
+<div class="p">Бесплатно</div><a class="btn" href="archive/o-lyubvi-i-zhizni.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/69532540.jpg" alt="Тайное Оружие" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Тайное Оружие</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/tai-noe-oruzhie.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/71444074.jpg" alt="Жизнь любви" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Жизнь любви</div>
+<div class="p">Бесплатно</div><a class="btn" href="archive/zhizn-lyubvi.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70925398.jpg" alt="Планета отравленных" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Планета отравленных</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(22)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/69748429.jpg" alt="Сладкий искуситель" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Сладкий искуситель</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(23)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72454501.jpg" alt="Дочь трав" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Дочь трав</div>
+<div class="p">80 ₽</div><button class="btn" onclick="add(24)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72341104.jpg" alt="Дикие амазонки" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Дикие амазонки</div>
+<div class="p">50 ₽</div><a class="btn" style="margin-bottom:6px" href="../try/try-dikie-amazonki.html">Почитать начало</a><button class="btn" onclick="add(25)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/72198964.jpg" alt="Тихое озеро" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Тихое озеро</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/tihoe-ozero.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/71269162.jpg" alt="Идеальная женщина" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Идеальная женщина</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/idealnaya-zhenschina.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70855459.jpg" alt="Йога для сна" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Йога для сна</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/i-oga-dlya-sna.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72276682.jpg" alt="Эрена" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Эрена</div>
+<div class="p">80 ₽</div><button class="btn" onclick="add(29)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/72252040.jpg" alt="Встреча во времени" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Встреча во времени</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/vstrecha-vo-vremeni.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70939885.jpg" alt="Израиль. Напряжение" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Израиль. Напряжение</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(31)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/72218437.jpg" alt="Седьмой компонент" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Седьмой компонент</div>
+<div class="p">Бесплатно</div><a class="btn" href="archive/sedmoi--komponent.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/71164456.jpg" alt="Его звали садовник" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Его звали садовник</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/ego-zvali-sadovnik.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70913533.jpg" alt="Фактор страха" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Фактор страха</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(34)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70912495.jpg" alt="Обними одиночество" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Обними одиночество</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(35)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70909624.jpg" alt="С он" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">С он</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(36)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70853911.jpg" alt="Движение по параболе" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Движение по параболе</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/dvizhenie-po-parabole.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70845184.jpg" alt="Дети солнца" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Дети солнца</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/deti-solnca.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70832368.jpg" alt="Тихое слово" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Тихое слово</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/tihoe-slovo.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70280743.jpg" alt="Странствующий Альбатрос" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Странствующий Альбатрос</div>
+<div class="p">100 ₽</div><a class="btn" style="margin-bottom:6px" href="../try/try-stranstvuyuschii--albatros.html">Почитать начало</a><button class="btn" onclick="add(40)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72468616.jpg" alt="Закон добра и души" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Закон добра и души</div>
+<div class="p">60 ₽</div><button class="btn" onclick="add(41)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72450976.jpg" alt="Виана" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Виана</div>
+<div class="p">100 ₽</div><button class="btn" onclick="add(42)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70901047.jpg" alt="Обмануть депрессию" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Обмануть депрессию</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(43)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70888120.jpg" alt="Завтрак на траве" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Завтрак на траве</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/zavtrak-na-trave.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70845439.jpg" alt="Андромеда" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Андромеда</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/andromeda.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/72410080.jpg" alt="Юпитер сердится" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Юпитер сердится</div>
+<div class="p">Бесплатно</div><a class="btn" href="archive/yupiter-serditsya.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72363844.jpg" alt="Винегрет из Персички" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Винегрет из Персички</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(47)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72314758.jpg" alt="Ламбада" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Ламбада</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(48)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/72247510.jpg" alt="Обыкновенная храбрость" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Обыкновенная храбрость</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/obyknovennaya-hrabrost.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/71767300.jpg" alt="В сердце пустыни" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">В сердце пустыни</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/v-serdce-pustyni.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70955050.jpg" alt="Телефонные мошенники" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Телефонные мошенники</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(51)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70889029.jpg" alt="Мышка" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Мышка</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(52)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70871828.jpg" alt="Сокровище нежности" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Сокровище нежности</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/sokrovische-nezhnosti.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70852855.jpg" alt="Блатодэй" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Блатодэй</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/blatodei.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70794409.jpg" alt="Бред сивой кобылы" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Бред сивой кобылы</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/bred-sivoi--kobyly.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70245532.jpg" alt="Путешествие к оранжевым звёздам" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Путешествие к оранжевым звёздам</div>
+<div class="p">100 ₽</div><a class="btn" style="margin-bottom:6px" href="../try/try-puteshestvie-k-oranzhevym-zve-zdam.html">Почитать начало</a><button class="btn" onclick="add(56)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/69665479.jpg" alt="Путь в Хамат Гадер" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Путь в Хамат Гадер</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(57)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72582922.jpg" alt="Душа будущего" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Душа будущего</div>
+<div class="p">60 ₽</div><button class="btn" onclick="add(58)">В корзину</button></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/72443752.jpg" alt="Вкусняшка" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Вкусняшка</div>
+<div class="p">50 ₽</div><button class="btn" onclick="add(59)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/71005276.jpg" alt="Портрет писателя" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Портрет писателя</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/portret-pisatelya.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70983028.jpg" alt="Мурчащие" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Мурчащие</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/murchaschie.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70980655.jpg" alt="Андромеда" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Андромеда</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/andromeda.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70939186.jpg" alt="Дети солнца" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Дети солнца</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/deti-solnca.html">Читать здесь</a></div></div><div class="card" data-g="купить">
+<img src="https://www.litres.ru/pub/c/cover/70926442.jpg" alt="Сказки доброго Геши" loading="lazy">
+<div class="b"><span class="tag">купить</span>
+<div class="t">Сказки доброго Геши</div>
+<div class="p">Бесплатно</div><button class="btn" onclick="add(64)">В корзину</button></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70894174.jpg" alt="Благодарю" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Благодарю</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/blagodaryu.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70859416.jpg" alt="Предрассветная мгла" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Предрассветная мгла</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/predrassvetnaya-mgla.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70853482.jpg" alt="Я диктую" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Я диктую</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/ya-diktuyu.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/70807450.jpg" alt="Тайна мудрости" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Тайна мудрости</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/tai-na-mudrosti.html">Читать здесь</a></div></div><div class="card" data-g="бесплатно">
+<img src="https://www.litres.ru/pub/c/cover/69541924.jpg" alt="Тайное Оружие" loading="lazy">
+<div class="b"><span class="tag">бесплатно</span>
+<div class="t">Тайное Оружие</div>
+<div class="p">Бесплатно</div><a class="btn" href="free/tai-noe-oruzhie.html">Читать здесь</a></div></div></div>
+<div class="note">📚 Оплата и доставка — на странице <a href="https://derev-studio.github.io/shop/delivery.html">«Доставка и оплата»</a>.
+Возврат — <a href="https://derev-studio.github.io/shop/refund.html">«Возврат»</a>. Вопросы — <a href="https://derev-studio.github.io/shop/contact.html">«Контакты»</a>.<br>
+💛 Поддержать автора: <a href="https://ko-fi.com/X8X71XWAGRF" target="_blank" rel="noopener">Ko-fi</a>.</div>
+</div>
+<script>
+const G=[{"t": "Древний человек и его тигр", "cover": "https://www.litres.ru/pub/c/cover/69692569.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/drevniy-chelovek-i-ego-tigr-69692569/", "site": false, "free": null, "id": 69692569, "desc": ""}, {"t": "Танец под звёздами", "cover": "https://www.litres.ru/pub/c/cover/71239471.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/tanec-pod-zve-zdami.html", "site": true, "free": true, "id": 71239471, "desc": ""}, {"t": "Идеальный мужчина", "cover": "https://www.litres.ru/pub/c/cover/72600247.jpg", "price": 59.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/idealnyi-muzhchina-72600247/", "site": false, "free": null, "id": 72600247, "desc": ""}, {"t": "Защита от гипноза", "cover": "https://www.litres.ru/pub/c/cover/72247489.jpg", "price": 99.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/zaschita-ot-gipnoza-72247489/", "site": false, "free": null, "id": 72247489, "desc": ""}, {"t": "Мыльная эпопея", "cover": "https://www.litres.ru/pub/c/cover/72576595.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/archive/mylnaya-epopeya.html", "site": true, "free": true, "id": 72576595, "desc": ""}, {"t": "Искорка", "cover": "https://www.litres.ru/pub/c/cover/72487717.jpg", "price": 149.0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/iskorka-72487717/", "site": false, "free": null, "id": 72487717, "desc": ""}, {"t": "Пустыня", "cover": "https://www.litres.ru/pub/c/cover/69587722.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/pustynya-69587722/", "site": false, "free": null, "id": 69587722, "desc": ""}, {"t": "Черепашка", "cover": "https://www.litres.ru/pub/c/cover/72264235.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/cherepashka-72264235/", "site": false, "free": null, "id": 72264235, "desc": ""}, {"t": "Саванна", "cover": "https://www.litres.ru/pub/c/cover/72410476.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/savanna-72410476/", "site": false, "free": null, "id": 72410476, "desc": ""}, {"t": "Огненный шторм", "cover": "https://www.litres.ru/pub/c/cover/72477826.jpg", "price": 59.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/ognennyi-shtorm-72477826/", "site": false, "free": null, "id": 72477826, "desc": ""}, {"t": "Три зёрнышка счастья", "cover": "https://www.litres.ru/pub/c/cover/72264013.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/tri-zernyshka-schastya-72264013/", "site": false, "free": null, "id": 72264013, "desc": ""}, {"t": "Хлебное прозрение", "cover": "https://www.litres.ru/pub/c/cover/69780589.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/hlebnoe-prozrenie-69780589/", "site": false, "free": null, "id": 69780589, "desc": ""}, {"t": "Аяна", "cover": "https://www.litres.ru/pub/c/cover/71807470.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/ayana.html", "site": true, "free": true, "id": 71807470, "desc": ""}, {"t": "Роби и Ника", "cover": "https://www.litres.ru/pub/c/cover/71252989.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/robi-i-nika.html", "site": true, "free": true, "id": 71252989, "desc": ""}, {"t": "Травма и сила", "cover": "https://www.litres.ru/pub/c/cover/72762253.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/travma-i-sila-72762253/", "site": false, "free": null, "id": 72762253, "desc": ""}, {"t": "Ваше мышление", "cover": "https://www.litres.ru/pub/c/cover/70924519.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/vashe-myshlenie-70924519/", "site": false, "free": null, "id": 70924519, "desc": ""}, {"t": "Кактусология", "cover": "https://www.litres.ru/pub/c/cover/71510443.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/kaktusologiya.html", "site": true, "free": true, "id": 71510443, "desc": ""}, {"t": "Леонид", "cover": "https://www.litres.ru/pub/c/cover/71196700.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/leonid-71196700/", "site": false, "free": null, "id": 71196700, "desc": ""}, {"t": "Дом под облаками", "cover": "https://www.litres.ru/pub/c/cover/72310573.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/dom-pod-oblakami-72310573/", "site": false, "free": null, "id": 72310573, "desc": ""}, {"t": "О любви и жизни", "cover": "https://www.litres.ru/pub/c/cover/71360758.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/archive/o-lyubvi-i-zhizni.html", "site": true, "free": true, "id": 71360758, "desc": ""}, {"t": "Тайное Оружие", "cover": "https://www.litres.ru/pub/c/cover/69532540.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/tai-noe-oruzhie.html", "site": true, "free": true, "id": 69532540, "desc": ""}, {"t": "Жизнь любви", "cover": "https://www.litres.ru/pub/c/cover/71444074.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/archive/zhizn-lyubvi.html", "site": true, "free": true, "id": 71444074, "desc": ""}, {"t": "Планета отравленных", "cover": "https://www.litres.ru/pub/c/cover/70925398.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/planeta-otravlennyh-70925398/", "site": false, "free": null, "id": 70925398, "desc": ""}, {"t": "Сладкий искуситель", "cover": "https://www.litres.ru/pub/c/cover/69748429.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/sladkiy-iskusitel-69748429/", "site": false, "free": null, "id": 69748429, "desc": ""}, {"t": "Дочь трав", "cover": "https://www.litres.ru/pub/c/cover/72454501.jpg", "price": 79.99, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/doch-trav-72454501/", "site": false, "free": null, "id": 72454501, "desc": ""}, {"t": "Дикие амазонки", "cover": "https://www.litres.ru/pub/c/cover/72341104.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/dikie-amazonki-72341104/", "site": false, "free": null, "id": 72341104, "desc": ""}, {"t": "Тихое озеро", "cover": "https://www.litres.ru/pub/c/cover/72198964.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/tihoe-ozero.html", "site": true, "free": true, "id": 72198964, "desc": ""}, {"t": "Идеальная женщина", "cover": "https://www.litres.ru/pub/c/cover/71269162.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/idealnaya-zhenschina.html", "site": true, "free": true, "id": 71269162, "desc": ""}, {"t": "Йога для сна", "cover": "https://www.litres.ru/pub/c/cover/70855459.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/i-oga-dlya-sna.html", "site": true, "free": true, "id": 70855459, "desc": ""}, {"t": "Эрена", "cover": "https://www.litres.ru/pub/c/cover/72276682.jpg", "price": 79.99, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/erena-72276682/", "site": false, "free": null, "id": 72276682, "desc": ""}, {"t": "Встреча во времени", "cover": "https://www.litres.ru/pub/c/cover/72252040.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/vstrecha-vo-vremeni.html", "site": true, "free": true, "id": 72252040, "desc": ""}, {"t": "Израиль. Напряжение", "cover": "https://www.litres.ru/pub/c/cover/70939885.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/izrail-napryazhenie-70939885/", "site": false, "free": null, "id": 70939885, "desc": ""}, {"t": "Седьмой компонент", "cover": "https://www.litres.ru/pub/c/cover/72218437.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/archive/sedmoi--komponent.html", "site": true, "free": true, "id": 72218437, "desc": ""}, {"t": "Его звали садовник", "cover": "https://www.litres.ru/pub/c/cover/71164456.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/ego-zvali-sadovnik.html", "site": true, "free": true, "id": 71164456, "desc": ""}, {"t": "Фактор страха", "cover": "https://www.litres.ru/pub/c/cover/70913533.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/faktor-straha-70913533/", "site": false, "free": null, "id": 70913533, "desc": ""}, {"t": "Обними одиночество", "cover": "https://www.litres.ru/pub/c/cover/70912495.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/obnimi-odinochestvo-70912495/", "site": false, "free": null, "id": 70912495, "desc": ""}, {"t": "С он", "cover": "https://www.litres.ru/pub/c/cover/70909624.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/s-on-70909624/", "site": false, "free": null, "id": 70909624, "desc": ""}, {"t": "Движение по параболе", "cover": "https://www.litres.ru/pub/c/cover/70853911.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/dvizhenie-po-parabole.html", "site": true, "free": true, "id": 70853911, "desc": ""}, {"t": "Дети солнца", "cover": "https://www.litres.ru/pub/c/cover/70845184.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/deti-solnca.html", "site": true, "free": true, "id": 70845184, "desc": ""}, {"t": "Тихое слово", "cover": "https://www.litres.ru/pub/c/cover/70832368.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/tihoe-slovo.html", "site": true, "free": true, "id": 70832368, "desc": ""}, {"t": "Странствующий Альбатрос", "cover": "https://www.litres.ru/pub/c/cover/70280743.jpg", "price": 99.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/stranstvuuschiy-albatros-70280743/", "site": false, "free": null, "id": 70280743, "desc": ""}, {"t": "Закон добра и души", "cover": "https://www.litres.ru/pub/c/cover/72468616.jpg", "price": 59.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/zakon-dobra-i-dushi-72468616/", "site": false, "free": null, "id": 72468616, "desc": ""}, {"t": "Виана", "cover": "https://www.litres.ru/pub/c/cover/72450976.jpg", "price": 99.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/viana-72450976/", "site": false, "free": null, "id": 72450976, "desc": ""}, {"t": "Обмануть депрессию", "cover": "https://www.litres.ru/pub/c/cover/70901047.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/obmanut-depressiu-70901047/", "site": false, "free": null, "id": 70901047, "desc": ""}, {"t": "Завтрак на траве", "cover": "https://www.litres.ru/pub/c/cover/70888120.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/zavtrak-na-trave.html", "site": true, "free": true, "id": 70888120, "desc": ""}, {"t": "Андромеда", "cover": "https://www.litres.ru/pub/c/cover/70845439.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/andromeda.html", "site": true, "free": true, "id": 70845439, "desc": ""}, {"t": "Юпитер сердится", "cover": "https://www.litres.ru/pub/c/cover/72410080.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/archive/yupiter-serditsya.html", "site": true, "free": true, "id": 72410080, "desc": ""}, {"t": "Винегрет из Персички", "cover": "https://www.litres.ru/pub/c/cover/72363844.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/vinegret-iz-persichki-72363844/", "site": false, "free": null, "id": 72363844, "desc": ""}, {"t": "Ламбада", "cover": "https://www.litres.ru/pub/c/cover/72314758.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/lambada-72314758/", "site": false, "free": null, "id": 72314758, "desc": ""}, {"t": "Обыкновенная храбрость", "cover": "https://www.litres.ru/pub/c/cover/72247510.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/obyknovennaya-hrabrost.html", "site": true, "free": true, "id": 72247510, "desc": ""}, {"t": "В сердце пустыни", "cover": "https://www.litres.ru/pub/c/cover/71767300.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/v-serdce-pustyni.html", "site": true, "free": true, "id": 71767300, "desc": ""}, {"t": "Телефонные мошенники", "cover": "https://www.litres.ru/pub/c/cover/70955050.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/telefonnye-moshenniki-70955050/", "site": false, "free": null, "id": 70955050, "desc": ""}, {"t": "Мышка", "cover": "https://www.litres.ru/pub/c/cover/70889029.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/myshka-70889029/", "site": false, "free": null, "id": 70889029, "desc": ""}, {"t": "Сокровище нежности", "cover": "https://www.litres.ru/pub/c/cover/70871828.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/sokrovische-nezhnosti.html", "site": true, "free": true, "id": 70871828, "desc": ""}, {"t": "Блатодэй", "cover": "https://www.litres.ru/pub/c/cover/70852855.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/blatodei.html", "site": true, "free": true, "id": 70852855, "desc": ""}, {"t": "Бред сивой кобылы", "cover": "https://www.litres.ru/pub/c/cover/70794409.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/bred-sivoi--kobyly.html", "site": true, "free": true, "id": 70794409, "desc": ""}, {"t": "Путешествие к оранжевым звёздам", "cover": "https://www.litres.ru/pub/c/cover/70245532.jpg", "price": 99.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/puteshestvie-k-oranzhevym-zvezdam-70245532/", "site": false, "free": null, "id": 70245532, "desc": ""}, {"t": "Путь в Хамат Гадер", "cover": "https://www.litres.ru/pub/c/cover/69665479.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/put-v-hamat-gader-69665479/", "site": false, "free": null, "id": 69665479, "desc": ""}, {"t": "Душа будущего", "cover": "https://www.litres.ru/pub/c/cover/72582922.jpg", "price": 59.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/dusha-buduschego-72582922/", "site": false, "free": null, "id": 72582922, "desc": ""}, {"t": "Вкусняшка", "cover": "https://www.litres.ru/pub/c/cover/72443752.jpg", "price": 49.9, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/vkusnyashka-72443752/", "site": false, "free": null, "id": 72443752, "desc": ""}, {"t": "Портрет писателя", "cover": "https://www.litres.ru/pub/c/cover/71005276.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/portret-pisatelya.html", "site": true, "free": true, "id": 71005276, "desc": ""}, {"t": "Мурчащие", "cover": "https://www.litres.ru/pub/c/cover/70983028.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/murchaschie.html", "site": true, "free": true, "id": 70983028, "desc": ""}, {"t": "Андромеда", "cover": "https://www.litres.ru/pub/c/cover/70980655.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/andromeda.html", "site": true, "free": true, "id": 70980655, "desc": ""}, {"t": "Дети солнца", "cover": "https://www.litres.ru/pub/c/cover/70939186.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/deti-solnca.html", "site": true, "free": true, "id": 70939186, "desc": ""}, {"t": "Сказки доброго Геши", "cover": "https://www.litres.ru/pub/c/cover/70926442.jpg", "price": 0, "cur": "RUB", "url": "https://www.litres.ru/book/aleksandr-derevyashkin-32679463/skazki-dobrogo-geshi-70926442/", "site": false, "free": null, "id": 70926442, "desc": ""}, {"t": "Благодарю", "cover": "https://www.litres.ru/pub/c/cover/70894174.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/blagodaryu.html", "site": true, "free": true, "id": 70894174, "desc": ""}, {"t": "Предрассветная мгла", "cover": "https://www.litres.ru/pub/c/cover/70859416.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/predrassvetnaya-mgla.html", "site": true, "free": true, "id": 70859416, "desc": ""}, {"t": "Я диктую", "cover": "https://www.litres.ru/pub/c/cover/70853482.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/ya-diktuyu.html", "site": true, "free": true, "id": 70853482, "desc": ""}, {"t": "Тайна мудрости", "cover": "https://www.litres.ru/pub/c/cover/70807450.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/tai-na-mudrosti.html", "site": true, "free": true, "id": 70807450, "desc": ""}, {"t": "Тайное Оружие", "cover": "https://www.litres.ru/pub/c/cover/69541924.jpg", "price": 0, "cur": "RUB", "url": "https://derev-studio.github.io/derevyashkin-writer/free/tai-noe-oruzhie.html", "site": true, "free": true, "id": 69541924, "desc": ""}];
+let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+function save(){localStorage.setItem('cart',JSON.stringify(cart));paint();}
+function add(i){const g=G[i];if(g.free)return;cart.push({t:g.t,p:g.price,u:g.url});save();}
+function paint(){
+ const n=cart.length, s=cart.reduce((a,b)=>a+b.p,0);
+ document.getElementById('c').textContent=n;
+ document.getElementById('sum').textContent=(s? s.toFixed(0)+' ₽':'0 ₽');
+}
+function checkout(){
+ if(!cart.length){alert('Корзина пуста');return;}
+ const list=cart.map(x=>'• '+x.t+' — '+x.p.toFixed(0)+' ₽').join('\n');
+ alert('В корзине:\n'+list+'\n\nСейчас покупка открывается на ЛитРес — по одной книге.\nОплата картой прямо на сайте включится, когда подключим кассу.');
+ cart=[];save();
+}
+document.querySelectorAll('#f button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('#f button').forEach(x=>x.classList.toggle('on',x===b));
+ const g=b.dataset.g;
+ document.querySelectorAll('.card').forEach(c=>{c.style.display=(g==='all'||c.dataset.g===g)?'':'none';});
+});
+document.querySelector('#f button').classList.add('on');
+paint();
+</script></body></html>
