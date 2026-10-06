@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="he">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -182,10 +182,10 @@ footer{
 <div class="shell">
   <div class="controls">
     <nav class="langbar" aria-label="Language">
-      <button class="active" data-lang="ru">Русский</button>
+      <button data-lang="ru">Русский</button>
       <button data-lang="en">English</button>
       <button data-lang="ar">العربية</button>
-      <button data-lang="he">עברית</button>
+      <button class="active" data-lang="he">עברית</button>
     </nav>
     <nav class="themebar" aria-label="Theme">
       <button data-theme="navy" title="Тёмно-синяя"><span class="swatch s-navy"></span>Тёмно-синяя</button>
@@ -203,7 +203,7 @@ footer{
     </div>
     <div class="ornament">♡ ✦ ♡</div>
 
-    <section class="lang active" id="ru" lang="ru" dir="ltr">
+    <section class="lang" id="ru" lang="ru" dir="ltr">
       <h1>Линойка и Ярден</h1>
       <div class="subtitle">Письмо от дедушки Саши</div>
       <div class="content">
@@ -248,7 +248,7 @@ footer{
       </div>
     </section>
 
-    <section class="lang" id="he" lang="he" dir="rtl">
+    <section class="lang active" id="he" lang="he" dir="rtl">
       <h1>לינוי וירדן</h1>
       <div class="subtitle">מכתב מסבא סשה</div>
       <div class="content">
@@ -265,10 +265,10 @@ footer{
   </main>
 
   <footer>
-    <div class="private-note active" data-note="ru">♥<br>Личное семейное письмо. Пожалуйста, не пересылайте и не публикуйте.</div>
+    <div class="private-note" data-note="ru">♥<br>Личное семейное письмо. Пожалуйста, не пересылайте и не публикуйте.</div>
     <div class="private-note" data-note="en">♥<br>Private family letter. Please do not forward or publish it.</div>
     <div class="private-note" data-note="ar" dir="rtl">♥<br>رسالة عائلية خاصة. يُرجى عدم إعادة إرسالها أو نشرها.</div>
-    <div class="private-note" data-note="he" dir="rtl">♥<br>מכתב משפחתי פרטי. בבקשה לא להעביר ולא לפרסם.</div>
+    <div class="private-note active" data-note="he" dir="rtl">♥<br>מכתב משפחתי פרטי. בבקשה לא להעביר ולא לפרסם.</div>
   </footer>
 </div>
 
@@ -282,10 +282,14 @@ function showLanguage(lang){
   notes.forEach(n=>n.classList.toggle('active',n.dataset.note===lang));
   document.documentElement.lang=lang;
   history.replaceState(null,'','#'+lang);
+  const activeButton=langButtons.find(b=>b.dataset.lang===lang);
+  if(activeButton && window.innerWidth<=700){
+    requestAnimationFrame(()=>activeButton.scrollIntoView({behavior:'auto',block:'nearest',inline:'nearest'}));
+  }
 }
 langButtons.forEach(b=>b.addEventListener('click',()=>showLanguage(b.dataset.lang)));
-const initial=(location.hash||'#ru').slice(1);
-showLanguage(['ru','en','ar','he'].includes(initial)?initial:'ru');
+const initial=(location.hash||'#he').slice(1);
+showLanguage(['ru','en','ar','he'].includes(initial)?initial:'he');
 
 const themeButtons=[...document.querySelectorAll('.themebar button')];
 function setTheme(theme){
