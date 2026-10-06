@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /gpt-review/
 
 Sitemap: https://derev-studio.github.io/sitemap.xml
