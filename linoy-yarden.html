@@ -9,81 +9,153 @@
 <meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
 <style>
 :root{
-  --paper:#fffaf0; --ink:#4b3b32; --muted:#8d7768; --gold:#c9a15f;
-  --sage:#91a88c; --line:rgba(117,89,67,.14); --shadow:0 18px 55px rgba(81,58,39,.15);
+  --bg:#efe3cf;--bg2:#f8f0e5;--paper:#fffaf1;--ink:#241f1a;--muted:#6f6257;
+  --accent:#9b7446;--line:rgba(71,52,34,.16);--toolbar:rgba(255,250,241,.92);
+  --shadow:0 22px 70px rgba(66,45,29,.18);--spot:rgba(255,255,255,.48)
+}
+body.theme-navy{
+  --bg:#071426;--bg2:#0c223d;--paper:#102740;--ink:#f4f7fb;--muted:#c7d4e3;
+  --accent:#86b8ff;--line:rgba(219,235,255,.16);--toolbar:rgba(10,29,50,.91);
+  --shadow:0 28px 80px rgba(0,0,0,.42);--spot:rgba(140,190,255,.22)
+}
+body.theme-green{
+  --bg:#081b15;--bg2:#123529;--paper:#143629;--ink:#f1f8f3;--muted:#c7dbcd;
+  --accent:#9bd2ac;--line:rgba(224,247,232,.16);--toolbar:rgba(15,44,34,.91);
+  --shadow:0 28px 80px rgba(0,0,0,.38);--spot:rgba(168,232,187,.20)
+}
+body.theme-beige{
+  --bg:#ead9c2;--bg2:#f7ede0;--paper:#fffaf1;--ink:#241f1a;--muted:#6f6257;
+  --accent:#9b7446;--line:rgba(71,52,34,.16);--toolbar:rgba(255,250,241,.93);
+  --shadow:0 22px 70px rgba(66,45,29,.18);--spot:rgba(255,255,255,.52)
+}
+body.theme-light{
+  --bg:#f2f2f2;--bg2:#ffffff;--paper:#ffffff;--ink:#080808;--muted:#4b4b4b;
+  --accent:#111111;--line:rgba(0,0,0,.13);--toolbar:rgba(255,255,255,.94);
+  --shadow:0 22px 65px rgba(0,0,0,.13);--spot:rgba(255,255,255,.70)
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  margin:0; min-height:100vh; color:var(--ink);
+  margin:0;min-height:100vh;color:var(--ink);
   background:
-    radial-gradient(circle at 10% 5%,rgba(213,230,207,.65),transparent 28%),
-    radial-gradient(circle at 92% 7%,rgba(245,219,173,.58),transparent 27%),
-    linear-gradient(135deg,#f7efe3,#efe7db);
-  font-family: Georgia,"Times New Roman",serif;
-  padding:24px 14px 48px;
+    radial-gradient(circle at 8% 4%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 28%),
+    radial-gradient(circle at 94% 10%,color-mix(in srgb,var(--paper) 26%,transparent),transparent 30%),
+    linear-gradient(145deg,var(--bg),var(--bg2));
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,"Noto Sans Hebrew","Noto Sans Arabic",sans-serif;
+  padding:18px 12px 46px;
+  transition:background .35s ease,color .35s ease;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility
 }
-.shell{width:min(940px,100%);margin:auto}
-.langbar{
-  position:sticky;top:10px;z-index:20;
-  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
-  padding:10px;margin:0 auto 18px;
-  background:rgba(255,250,240,.88);backdrop-filter:blur(10px);
-  border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 30px rgba(81,58,39,.09)
+.spotlight{
+  position:fixed;inset:0;pointer-events:none;z-index:30;
+  background:radial-gradient(270px circle at var(--mx,50%) var(--my,18%),var(--spot),transparent 70%);
+  transition:background .18s linear
 }
-.langbar button{
-  appearance:none;border:1px solid rgba(127,99,73,.22);background:#fffaf4;color:var(--ink);
-  padding:11px 16px;border-radius:999px;font:700 15px/1 system-ui,-apple-system,sans-serif;cursor:pointer
+.shell{width:min(980px,100%);margin:auto;position:relative;z-index:2}
+.controls{
+  position:sticky;top:8px;z-index:40;display:grid;gap:9px;margin:0 auto 15px;
+  padding:10px;background:var(--toolbar);backdrop-filter:blur(14px) saturate(120%);
+  border:1px solid var(--line);border-radius:18px;box-shadow:0 10px 34px rgba(0,0,0,.10)
 }
-.langbar button.active{background:var(--ink);color:white;border-color:var(--ink)}
+.langbar,.themebar{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;direction:ltr}
+.langbar button,.themebar button{
+  appearance:none;border:1px solid var(--line);background:color-mix(in srgb,var(--paper) 82%,transparent);
+  color:var(--ink);padding:10px 15px;border-radius:999px;
+  font:700 14px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.2s ease
+}
+.langbar button:hover,.themebar button:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(0,0,0,.12)}
+.langbar button.active,.themebar button.active{
+  background:var(--ink);color:var(--paper);border-color:var(--ink)
+}
+.themebar button{display:flex;align-items:center;gap:7px;padding:8px 12px;font-size:12px}
+.swatch{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(0,0,0,.16)}
+.s-navy{background:#0c223d}.s-green{background:#143629}.s-beige{background:#ead9c2}.s-light{background:#fff}
 .letter{
-  position:relative;overflow:hidden;background:var(--paper);
-  border:1px solid rgba(132,102,77,.18);border-radius:28px;box-shadow:var(--shadow);
-  padding:clamp(28px,6vw,70px) clamp(24px,8vw,92px);
+  position:relative;overflow:hidden;background:var(--paper);color:var(--ink);
+  border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);
+  padding:clamp(22px,4vw,44px) clamp(20px,7vw,80px) clamp(34px,6vw,68px);
+  transition:background .35s ease,color .35s ease,border-color .35s ease
 }
-.letter:before,.letter:after{
-  content:"";position:absolute;width:250px;height:250px;border-radius:50%;pointer-events:none;filter:blur(2px)
+.hero{margin:0 auto 34px;max-width:780px}
+.hero-frame{
+  position:relative;border-radius:25px;overflow:hidden;border:1px solid var(--line);
+  box-shadow:0 18px 52px rgba(0,0,0,.22);background:var(--bg)
 }
-.letter:before{left:-145px;top:-135px;background:rgba(156,181,146,.20)}
-.letter:after{right:-140px;bottom:-150px;background:rgba(226,190,124,.20)}
-.ornament{font-size:26px;letter-spacing:10px;color:var(--gold);text-align:center;margin:0 0 22px}
+.hero img{display:block;width:100%;height:auto}
+.hero-frame:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),inset 0 -80px 90px rgba(0,0,0,.08)
+}
+.ornament{font-size:24px;letter-spacing:10px;color:var(--accent);text-align:center;margin:0 0 18px}
 h1{
-  font-size:clamp(30px,5vw,48px);line-height:1.14;text-align:center;font-weight:500;
-  margin:0 auto 12px;max-width:720px
+  font-family:Georgia,"Times New Roman","Noto Serif Hebrew","Noto Serif Arabic",serif;
+  font-size:clamp(31px,5vw,48px);line-height:1.15;text-align:center;font-weight:700;
+  margin:0 auto 9px;max-width:760px;letter-spacing:.01em
 }
-.subtitle{text-align:center;color:var(--muted);font:500 15px/1.5 system-ui,-apple-system,sans-serif;margin-bottom:34px}
-.content{font-size:clamp(19px,2.65vw,25px);line-height:1.72;letter-spacing:.002em}
-.content p{margin:0 0 1.15em}
-.content p:last-child{margin-bottom:0}
-.content .wish{font-size:1.08em}
-.signature{margin-top:30px;padding-top:22px;border-top:1px solid var(--line);font-style:italic}
-[dir="rtl"] .content,[dir="rtl"] h1,[dir="rtl"] .subtitle{text-align:right}
-[dir="rtl"] .ornament{text-align:center}
+.subtitle{text-align:center;color:var(--muted);font-size:15px;font-weight:650;margin-bottom:32px}
+.content{
+  max-width:790px;margin:auto;font-family:Georgia,"Times New Roman","Noto Serif Hebrew","Noto Serif Arabic",serif;
+  font-size:clamp(20px,2.5vw,25px);line-height:1.72;letter-spacing:.005em;
+  font-weight:500;text-shadow:0 0 .01px currentColor
+}
+.content p{margin:0 0 1.2em}
+.content .wish{font-size:1.07em;font-weight:600}
+.signature{margin-top:31px;padding-top:22px;border-top:1px solid var(--line);font-style:italic;font-weight:600}
+.lang[dir="rtl"] .content,.lang[dir="rtl"] h1,.lang[dir="rtl"] .subtitle{text-align:right}
+.lang[dir="ltr"] .content{text-align:left}
 .lang{display:none}
 .lang.active{display:block}
-footer{text-align:center;color:#8d7e73;font:13px/1.5 system-ui,-apple-system,sans-serif;margin-top:16px}
-@media (max-width:600px){
- body{padding:12px 8px 28px}
- .letter{border-radius:20px;padding:31px 21px 38px}
- .content{font-size:19px;line-height:1.64}
- .langbar{top:6px;border-radius:14px}
- .langbar button{padding:10px 13px;font-size:14px}
+footer{
+  text-align:center;color:var(--muted);font:600 13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  margin-top:17px;padding:0 10px
 }
+.private-note{display:none}
+.private-note.active{display:block}
+@media(max-width:650px){
+  body{padding:8px 6px 26px}
+  .controls{top:4px;border-radius:14px;padding:8px;gap:7px}
+  .langbar button{padding:9px 12px;font-size:13px}
+  .themebar button{padding:7px 9px;font-size:0}
+  .themebar button .swatch{width:16px;height:16px}
+  .letter{border-radius:20px;padding:17px 16px 34px}
+  .hero{margin-bottom:27px}
+  .hero-frame{border-radius:18px}
+  .content{font-size:20px;line-height:1.66;font-weight:520}
+  h1{font-size:32px}
+}
+@media(pointer:coarse){.spotlight{display:none}}
 @media print{
- body{background:white;padding:0}.langbar,footer{display:none}.letter{box-shadow:none;border:none;border-radius:0;padding:20mm}
+  body{background:white;padding:0}.controls,.spotlight,footer{display:none}.letter{box-shadow:none;border:none;border-radius:0;padding:18mm}.hero{max-width:150mm}
 }
 </style>
 </head>
-<body>
+<body class="theme-beige">
+<div class="spotlight" aria-hidden="true"></div>
 <div class="shell">
-  <nav class="langbar" aria-label="Language">
-    <button class="active" data-lang="ru">Русский</button>
-    <button data-lang="he">עברית</button>
-    <button data-lang="ar">العربية</button>
-    <button data-lang="en">English</button>
-  </nav>
+  <div class="controls">
+    <nav class="langbar" aria-label="Language">
+      <button class="active" data-lang="ru">Русский</button>
+      <button data-lang="en">English</button>
+      <button data-lang="ar">العربية</button>
+      <button data-lang="he">עברית</button>
+    </nav>
+    <nav class="themebar" aria-label="Theme">
+      <button data-theme="navy" title="Тёмно-синяя"><span class="swatch s-navy"></span>Тёмно-синяя</button>
+      <button data-theme="green" title="Тёмно-зелёная"><span class="swatch s-green"></span>Тёмно-зелёная</button>
+      <button class="active" data-theme="beige" title="Светло-бежевая"><span class="swatch s-beige"></span>Светло-бежевая</button>
+      <button data-theme="light" title="Белая"><span class="swatch s-light"></span>Белая</button>
+    </nav>
+  </div>
 
   <main class="letter">
+    <div class="hero">
+      <div class="hero-frame">
+        <img src="family-main.webp" alt="Линойка, Ярден и малыш">
+      </div>
+    </div>
     <div class="ornament">♡ ✦ ♡</div>
 
     <section class="lang active" id="ru" lang="ru" dir="ltr">
@@ -101,18 +173,18 @@ footer{text-align:center;color:#8d7e73;font:13px/1.5 system-ui,-apple-system,san
       </div>
     </section>
 
-    <section class="lang" id="he" lang="he" dir="rtl">
-      <h1>לינוי וירדן</h1>
-      <div class="subtitle">מכתב מסבא סשה</div>
+    <section class="lang" id="en" lang="en" dir="ltr">
+      <h1>Linoy and Yarden</h1>
+      <div class="subtitle">A letter from Grandpa Sasha</div>
       <div class="content">
-        <p>שלום לינוי וירדן, כותב לכם סבא סשה.</p>
-        <p>החיים הם דבר מדהים, והם השתנו מאוד. אני דינוזאור זקן, הרבה דברים בעולם של היום אני לא מבין, והרבה דברים אינם מוכרים לי, אבל החיים ממשיכים קדימה.</p>
-        <p>לא מזמן עברתי ניתוח קשה, והיה לי קשה מאוד. אמא שלך ודודה לנה עזרו לי, אבל הן לא יכלו להיות לידי כל הזמן. כמעט בלתי אפשרי היה לקרוא לאחיות — יש הרבה חולים ומעט אחיות. וכששכבתי בלי יכולת לזוז, אף אחד אפילו לא התקשר לשאול: „איך אתה שם, סבא, חי?”</p>
-        <p>וברגע הקשה ביותר, כששכבתי ולא יכולתי לקום כדי להביא מים, קרה דבר מפתיע. אל השכן שלי לחדר הגיעו הרבה בני משפחה ערבים — מבוגרים וילדים. ביקשתי מאחד מהם לתת לי מים, והם עזרו לי. מעולם לא חשבתי שדווקא ערבים יעזרו לי, אבל הם פשוט עזרו. בלי מים במצב כזה הייתי עלול פשוט למות. החיים יודעים להפתיע.</p>
-        <p>אבל מספיק על בית החולים. היום התאוששתי קצת ואני כבר יכול לכתוב את המכתב הזה.</p>
-        <p class="wish">אני מברך אתכם מכל הלב לרגל הולדת התינוק! מי ייתן וביתכם יתמלא בחום, בשמחה, בצחוק של ילדים ובתחושת בית אמיתית. גדלו את הקטן באהבה ובדאגה, שכל יום יביא לכם רק בשורות טובות, שתמיד יהיו לכם הרבה כוחות, סבלנות ורגעים מוארים, ושבריאותו של התינוק תהיה חזקה־חזקה.</p>
-        <p>רק לא מזמן הייתי גם אני ילד קטן בגן, והזמן חלף במהירות — והנה אני כבר סבא־רבא.</p>
-        <p class="signature">מאחל לכם אושר.</p>
+        <p>Hello, Linoy and Yarden. Grandpa Sasha is writing to you.</p>
+        <p>Life is an amazing thing, and it has changed so much. I’m an old dinosaur; there is a lot about today’s world that I don’t understand, and much of it still feels unfamiliar to me. But life keeps moving forward.</p>
+        <p>Not long ago I went through a major operation, and it was very hard. Your mother and Aunt Lena helped me, but they couldn’t stay by my side all the time. It was almost impossible to get a nurse’s attention — there were many patients and too few nurses. And while I was lying there unable to move, nobody even called to ask, “How are you doing, Grandpa — are you alive?”</p>
+        <p>Then, at the hardest moment, when I was lying there and couldn’t even get up to fetch some water, something remarkable happened. A huge Arab family — adults and children — came to visit the man in the bed next to me. I asked one of them for some water, and they helped me. I never expected that they would be the ones to help me, but they simply did. Without water in that condition, I could have died. Life has a way of surprising us.</p>
+        <p>But enough about the hospital. Today I’m feeling a little better, and I can finally write this letter.</p>
+        <p class="wish">From the bottom of my heart, congratulations on the birth of your baby! May your home be filled with warmth, joy, children’s laughter, and true comfort. Raise your little one with love and care. May every day bring you good news, may you always have strength, patience, and bright moments, and may your baby grow strong and healthy.</p>
+        <p>It feels like only yesterday that I was a little boy in kindergarten. Time flew by — and now I’m already a great-grandfather.</p>
+        <p class="signature">Wishing you happiness.</p>
       </div>
     </section>
 
@@ -131,39 +203,62 @@ footer{text-align:center;color:#8d7e73;font:13px/1.5 system-ui,-apple-system,san
       </div>
     </section>
 
-    <section class="lang" id="en" lang="en" dir="ltr">
-      <h1>Linoy and Yarden</h1>
-      <div class="subtitle">A letter from Grandpa Sasha</div>
+    <section class="lang" id="he" lang="he" dir="rtl">
+      <h1>לינוי וירדן</h1>
+      <div class="subtitle">מכתב מסבא סשה</div>
       <div class="content">
-        <p>Hello, Linoy and Yarden. Grandpa Sasha is writing to you.</p>
-        <p>Life is an amazing thing, and it has changed so much. I’m an old dinosaur; there is a lot about today’s world that I don’t understand, and much of it still feels unfamiliar to me. But life keeps moving forward.</p>
-        <p>Not long ago I went through a major operation, and it was very hard. Your mother and Aunt Lena helped me, but they couldn’t stay by my side all the time. It was almost impossible to get a nurse’s attention — there were many patients and too few nurses. And while I was lying there unable to move, nobody even called to ask, “How are you doing, Grandpa — are you alive?”</p>
-        <p>Then, at the hardest moment, when I was lying there and couldn’t even get up to fetch some water, something remarkable happened. A huge Arab family — adults and children — came to visit the man in the bed next to me. I asked one of them for some water, and they helped me. I never expected that they would be the ones to help me, but they simply did. Without water in that condition, I could have died. Life has a way of surprising us.</p>
-        <p>But enough about the hospital. Today I’m feeling a little better, and I can finally write this letter.</p>
-        <p class="wish">From the bottom of my heart, congratulations on the birth of your baby! May your home be filled with warmth, joy, children’s laughter, and true comfort. Raise your little one with love and care. May every day bring you good news, may you always have strength, patience, and bright moments, and may your baby grow strong and healthy.</p>
-        <p>It feels like only yesterday that I was a little boy in kindergarten. Time flew by — and now I’m already a great-grandfather.</p>
-        <p class="signature">Wishing you happiness.</p>
+        <p>שלום לינוי וירדן, כותב לכם סבא סשה.</p>
+        <p>החיים הם דבר מדהים, והם השתנו מאוד. אני דינוזאור זקן, הרבה דברים בעולם של היום אני לא מבין, והרבה דברים אינם מוכרים לי, אבל החיים ממשיכים קדימה.</p>
+        <p>לא מזמן עברתי ניתוח קשה, והיה לי קשה מאוד. אמא שלך ודודה לנה עזרו לי, אבל הן לא יכלו להיות לידי כל הזמן. כמעט בלתי אפשרי היה לקרוא לאחיות — יש הרבה חולים ומעט אחיות. וכששכבתי בלי יכולת לזוז, אף אחד אפילו לא התקשר לשאול: „איך אתה שם, סבא, חי?”</p>
+        <p>וברגע הקשה ביותר, כששכבתי ולא יכולתי לקום כדי להביא מים, קרה דבר מפתיע. אל השכן שלי לחדר הגיעו הרבה בני משפחה ערבים — מבוגרים וילדים. ביקשתי מאחד מהם לתת לי מים, והם עזרו לי. מעולם לא חשבתי שדווקא ערבים יעזרו לי, אבל הם פשוט עזרו. בלי מים במצב כזה הייתי עלול פשוט למות. החיים יודעים להפתיע.</p>
+        <p>אבל מספיק על בית החולים. היום התאוששתי קצת ואני כבר יכול לכתוב את המכתב הזה.</p>
+        <p class="wish">אני מברך אתכם מכל הלב לרגל הולדת התינוק! מי ייתן וביתכם יתמלא בחום, בשמחה, בצחוק של ילדים ובתחושת בית אמיתית. גדלו את הקטן באהבה ובדאגה, שכל יום יביא לכם רק בשורות טובות, שתמיד יהיו לכם הרבה כוחות, סבלנות ורגעים מוארים, ושבריאותו של התינוק תהיה חזקה־חזקה.</p>
+        <p>רק לא מזמן הייתי גם אני ילד קטן בגן, והזמן חלף במהירות — והנה אני כבר סבא־רבא.</p>
+        <p class="signature">מאחל לכם אושר.</p>
       </div>
     </section>
   </main>
-  <footer>♥<br>Личное семейное письмо. Пожалуйста, не пересылайте и не публикуйте.</footer>
+
+  <footer>
+    <div class="private-note active" data-note="ru">♥<br>Личное семейное письмо. Пожалуйста, не пересылайте и не публикуйте.</div>
+    <div class="private-note" data-note="en">♥<br>Private family letter. Please do not forward or publish it.</div>
+    <div class="private-note" data-note="ar" dir="rtl">♥<br>رسالة عائلية خاصة. يُرجى عدم إعادة إرسالها أو نشرها.</div>
+    <div class="private-note" data-note="he" dir="rtl">♥<br>מכתב משפחתי פרטי. בבקשה לא להעביר ולא לפרסם.</div>
+  </footer>
 </div>
 
 <script>
-const buttons=[...document.querySelectorAll('.langbar button')];
+const langButtons=[...document.querySelectorAll('.langbar button')];
 const sections=[...document.querySelectorAll('.lang')];
-function show(lang){
-  buttons.forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+const notes=[...document.querySelectorAll('.private-note')];
+function showLanguage(lang){
+  langButtons.forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
   sections.forEach(s=>s.classList.toggle('active',s.id===lang));
-  const active=document.getElementById(lang);
+  notes.forEach(n=>n.classList.toggle('active',n.dataset.note===lang));
   document.documentElement.lang=lang;
-  document.documentElement.dir=active.dir||'ltr';
   history.replaceState(null,'','#'+lang);
-  window.scrollTo({top:0,behavior:'smooth'});
 }
-buttons.forEach(b=>b.addEventListener('click',()=>show(b.dataset.lang)));
+langButtons.forEach(b=>b.addEventListener('click',()=>showLanguage(b.dataset.lang)));
 const initial=(location.hash||'#ru').slice(1);
-if(['ru','he','ar','en'].includes(initial)) show(initial);
+showLanguage(['ru','en','ar','he'].includes(initial)?initial:'ru');
+
+const themeButtons=[...document.querySelectorAll('.themebar button')];
+function setTheme(theme){
+  document.body.classList.remove('theme-navy','theme-green','theme-beige','theme-light');
+  document.body.classList.add('theme-'+theme);
+  themeButtons.forEach(b=>b.classList.toggle('active',b.dataset.theme===theme));
+  try{localStorage.setItem('family-theme',theme)}catch(e){}
+}
+themeButtons.forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.theme)));
+let saved='beige';
+try{saved=localStorage.getItem('family-theme')||'beige'}catch(e){}
+if(!['navy','green','beige','light'].includes(saved))saved='beige';
+setTheme(saved);
+
+document.addEventListener('pointermove',e=>{
+  document.documentElement.style.setProperty('--mx',e.clientX+'px');
+  document.documentElement.style.setProperty('--my',e.clientY+'px');
+},{passive:true});
 </script>
 </body>
 </html>
