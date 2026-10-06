@@ -26,6 +26,13 @@ h1{font-size:26px;margin:16px 0 6px}
 .badge{display:inline-block;background:#3a2f16;color:var(--gold);border:1px solid #5c4a22;border-radius:999px;padding:3px 11px;font-size:12px;font-weight:600;margin-left:8px;vertical-align:middle}
 .ok{background:#16261a;border:1px solid #2c5c39;color:#a8e6b8;border-radius:14px;padding:18px;margin-bottom:20px}
 .empty{color:var(--dim);text-align:center;padding:40px 0}
+.pays{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-top:22px}
+.pays h3{margin:0 0 10px;font-size:17px}
+.payrow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.paytag{background:#1b2130;border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:13px;color:var(--ink)}
+.paytag b{color:var(--gold)}
+.pays p{margin:8px 0 0;font-size:13.5px;color:var(--dim)}
+.pays .warn{border-left:2px solid var(--gold);padding-left:11px;margin-top:12px}
 </style>
 </head>
 <body>
@@ -36,6 +43,22 @@ h1{font-size:26px;margin:16px 0 6px}
 <div id="ok" class="ok" style="display:none"></div>
 <div id="list"></div>
 <div id="foot"></div>
+<div class="pays">
+<h3>Чем можно платить</h3>
+<div class="payrow">
+<span class="paytag"><b>Карта</b> Visa · Mastercard</span>
+<span class="paytag"><b>Израиль</b> Isracard · Amex</span>
+<span class="paytag"><b>Телефон</b> Apple Pay · Google Pay</span>
+<span class="paytag"><b>Израиль</b> Bit</span>
+<span class="paytag"><b>Европа</b> iDEAL · Bancontact · BLIK · SEPA</span>
+</div>
+<p>Оплата проходит на защищённой странице Stripe. Данные карты на сайте не сохраняются.</p>
+<p>Цены в шекелях. Покупателю из другой страны Stripe сам покажет цену в его валюте —
+в долларах, евро или местной.</p>
+<p class="warn"><b>Если карта российского банка</b> — оплата на сайте не пройдёт:
+такие карты международные системы не обслуживают. Для этого случая рядом с книгой
+есть кнопка <b>«Купить на ЛитРес»</b> — там покупка проходит как обычно.</p>
+</div>
 <div class="note" id="hint"></div>
 </div>
 <script src="paylinks.js"></script>
