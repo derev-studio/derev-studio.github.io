@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Линойка и Ярден — от дедушки Саши</title>
+<meta name="description" content="Семейное поздравление с рождением малыша.">
+<style>
+:root{
+  --paper:#fffaf0; --ink:#4b3b32; --muted:#8d7768; --gold:#c9a15f;
+  --sage:#91a88c; --line:rgba(117,89,67,.14); --shadow:0 18px 55px rgba(81,58,39,.15);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; min-height:100vh; color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 5%,rgba(213,230,207,.65),transparent 28%),
+    radial-gradient(circle at 92% 7%,rgba(245,219,173,.58),transparent 27%),
+    linear-gradient(135deg,#f7efe3,#efe7db);
+  font-family: Georgia,"Times New Roman",serif;
+  padding:24px 14px 48px;
+}
+.shell{width:min(940px,100%);margin:auto}
+.langbar{
+  position:sticky;top:10px;z-index:20;
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+  padding:10px;margin:0 auto 18px;
+  background:rgba(255,250,240,.88);backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 30px rgba(81,58,39,.09)
+}
+.langbar button{
+  appearance:none;border:1px solid rgba(127,99,73,.22);background:#fffaf4;color:var(--ink);
+  padding:11px 16px;border-radius:999px;font:700 15px/1 system-ui,-apple-system,sans-serif;cursor:pointer
+}
+.langbar button.active{background:var(--ink);color:white;border-color:var(--ink)}
+.letter{
+  position:relative;overflow:hidden;background:var(--paper);
+  border:1px solid rgba(132,102,77,.18);border-radius:28px;box-shadow:var(--shadow);
+  padding:clamp(28px,6vw,70px) clamp(24px,8vw,92px);
+}
+.letter:before,.letter:after{
+  content:"";position:absolute;width:250px;height:250px;border-radius:50%;pointer-events:none;filter:blur(2px)
+}
+.letter:before{left:-145px;top:-135px;background:rgba(156,181,146,.20)}
+.letter:after{right:-140px;bottom:-150px;background:rgba(226,190,124,.20)}
+.ornament{font-size:26px;letter-spacing:10px;color:var(--gold);text-align:center;margin:0 0 22px}
+h1{
+  font-size:clamp(30px,5vw,48px);line-height:1.14;text-align:center;font-weight:500;
+  margin:0 auto 12px;max-width:720px
+}
+.subtitle{text-align:center;color:var(--muted);font:500 15px/1.5 system-ui,-apple-system,sans-serif;margin-bottom:34px}
+.content{font-size:clamp(19px,2.65vw,25px);line-height:1.72;letter-spacing:.002em}
+.content p{margin:0 0 1.15em}
+.content p:last-child{margin-bottom:0}
+.content .wish{font-size:1.08em}
+.signature{margin-top:30px;padding-top:22px;border-top:1px solid var(--line);font-style:italic}
+[dir="rtl"] .content,[dir="rtl"] h1,[dir="rtl"] .subtitle{text-align:right}
+[dir="rtl"] .ornament{text-align:center}
+.lang{display:none}
+.lang.active{display:block}
+footer{text-align:center;color:#8d7e73;font:13px/1.5 system-ui,-apple-system,sans-serif;margin-top:16px}
+@media (max-width:600px){
+ body{padding:12px 8px 28px}
+ .letter{border-radius:20px;padding:31px 21px 38px}
+ .content{font-size:19px;line-height:1.64}
+ .langbar{top:6px;border-radius:14px}
+ .langbar button{padding:10px 13px;font-size:14px}
+}
+@media print{
+ body{background:white;padding:0}.langbar,footer{display:none}.letter{box-shadow:none;border:none;border-radius:0;padding:20mm}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="langbar" aria-label="Language">
+    <button class="active" data-lang="ru">Русский</button>
+    <button data-lang="he">עברית</button>
+    <button data-lang="ar">العربية</button>
+    <button data-lang="en">English</button>
+  </nav>
+
+  <main class="letter">
+    <div class="ornament">♡ ✦ ♡</div>
+
+    <section class="lang active" id="ru" lang="ru" dir="ltr">
+      <h1>Линойка и Ярден</h1>
+      <div class="subtitle">Письмо от дедушки Саши</div>
+      <div class="content">
+        <p>Привет, Линойка и Ярден, пишет вам дедушка Саша.</p>
+        <p>Жизнь — удивительная штука, и она очень сильно изменилась. Я старый динозавр, многого в сегодняшнем мире не понимаю, для меня многое непривычно, но жизнь идет вперед.</p>
+        <p>Недавно я перенес тяжелую операцию, было очень тяжело. Твоя мама и тётя Лена мне помогли, но всё время быть рядом они не могли. А до медсестер докричаться было почти невозможно — больных много, а медсестер мало. И когда я лежал пластом, никто даже не позвонил и не спросил: «Как ты там, дедушка, живой?».</p>
+        <p>И в самый трудный момент, когда я лежал и не мог встать, чтобы набрать воды, произошла удивительная вещь. К соседу по палате приехала целая деревня арабов — и взрослые, и дети. Я попросил одного из них дать мне воды, и они помогли. Я никогда не думал, что мне помогут арабы, а они взяли и помогли. Ведь без воды в таком состоянии я мог просто умереть. Жизнь умеет удивлять.</p>
+        <p>Но хватит о больнице, сегодня я немного отошел и могу написать это письмо.</p>
+        <p class="wish">От всего сердца поздравляю вас с рождением малыша! Пусть ваш дом наполнится теплом, радостью, детским смехом и настоящим уютом. Растите кроху в любви и заботе, пусть каждый день приносит вам только хорошие новости, пусть у вас всегда будет много сил, терпения и светлых моментов, а здоровье малыша будет крепким-крепким.</p>
+        <p>Ещё недавно я сам был малышом в детском садике, а время пролетело быстро — и вот я уже прадед.</p>
+        <p class="signature">Счастья вам.</p>
+      </div>
+    </section>
+
+    <section class="lang" id="he" lang="he" dir="rtl">
+      <h1>לינוי וירדן</h1>
+      <div class="subtitle">מכתב מסבא סשה</div>
+      <div class="content">
+        <p>שלום לינוי וירדן, כותב לכם סבא סשה.</p>
+        <p>החיים הם דבר מדהים, והם השתנו מאוד. אני דינוזאור זקן, הרבה דברים בעולם של היום אני לא מבין, והרבה דברים אינם מוכרים לי, אבל החיים ממשיכים קדימה.</p>
+        <p>לא מזמן עברתי ניתוח קשה, והיה לי קשה מאוד. אמא שלך ודודה לנה עזרו לי, אבל הן לא יכלו להיות לידי כל הזמן. כמעט בלתי אפשרי היה לקרוא לאחיות — יש הרבה חולים ומעט אחיות. וכששכבתי בלי יכולת לזוז, אף אחד אפילו לא התקשר לשאול: „איך אתה שם, סבא, חי?”</p>
+        <p>וברגע הקשה ביותר, כששכבתי ולא יכולתי לקום כדי להביא מים, קרה דבר מפתיע. אל השכן שלי לחדר הגיעו הרבה בני משפחה ערבים — מבוגרים וילדים. ביקשתי מאחד מהם לתת לי מים, והם עזרו לי. מעולם לא חשבתי שדווקא ערבים יעזרו לי, אבל הם פשוט עזרו. בלי מים במצב כזה הייתי עלול פשוט למות. החיים יודעים להפתיע.</p>
+        <p>אבל מספיק על בית החולים. היום התאוששתי קצת ואני כבר יכול לכתוב את המכתב הזה.</p>
+        <p class="wish">אני מברך אתכם מכל הלב לרגל הולדת התינוק! מי ייתן וביתכם יתמלא בחום, בשמחה, בצחוק של ילדים ובתחושת בית אמיתית. גדלו את הקטן באהבה ובדאגה, שכל יום יביא לכם רק בשורות טובות, שתמיד יהיו לכם הרבה כוחות, סבלנות ורגעים מוארים, ושבריאותו של התינוק תהיה חזקה־חזקה.</p>
+        <p>רק לא מזמן הייתי גם אני ילד קטן בגן, והזמן חלף במהירות — והנה אני כבר סבא־רבא.</p>
+        <p class="signature">מאחל לכם אושר.</p>
+      </div>
+    </section>
+
+    <section class="lang" id="ar" lang="ar" dir="rtl">
+      <h1>لينوي وياردين</h1>
+      <div class="subtitle">رسالة من الجد ساشا</div>
+      <div class="content">
+        <p>مرحبًا يا لينوي وياردين، يكتب إليكما الجد ساشا.</p>
+        <p>الحياة شيء مدهش، وقد تغيّرت كثيرًا. أنا ديناصور عجوز، وهناك أشياء كثيرة في عالم اليوم لا أفهمها، وأشياء كثيرة ما زالت غريبة عليّ، لكن الحياة تمضي إلى الأمام.</p>
+        <p>قبل فترة قصيرة خضعت لعملية جراحية صعبة، وكان الأمر قاسيًا جدًا. ساعدتني والدتك والعمة لينا، لكنهما لم تستطيعا البقاء بجانبي طوال الوقت. وكان من شبه المستحيل أن أنادي الممرضات — المرضى كثيرون والممرضات قليلات. وعندما كنت طريح الفراش وغير قادر على الحركة، لم يتصل أحد حتى ليسألني: «كيف حالك يا جدي، هل أنت بخير؟».</p>
+        <p>وفي أصعب لحظة، عندما كنت مستلقيًا ولا أستطيع النهوض لأحضر الماء، حدث شيء مدهش. جاء لزيارة جاري في الغرفة عدد كبير من أفراد عائلة عربية — كبارًا وصغارًا. طلبت من أحدهم أن يعطيني ماءً، فساعدوني. لم أكن أتوقع أن تأتي مساعدتي منهم، لكنهم فعلوا ذلك ببساطة. ومن دون الماء في تلك الحالة كان من الممكن أن أموت. الحياة تعرف كيف تفاجئنا.</p>
+        <p>لكن يكفي حديثًا عن المستشفى. اليوم تحسنت قليلًا وأصبحت قادرًا على كتابة هذه الرسالة.</p>
+        <p class="wish">أهنئكما من أعماق قلبي بميلاد طفلكما! أتمنى أن يمتلئ بيتكما بالدفء والفرح وضحكات الأطفال والراحة الحقيقية. ربّيا صغيركما بالحب والرعاية، وليحمل لكما كل يوم أخبارًا طيبة، ولتكن لديكما دائمًا القوة والصبر واللحظات المضيئة، ولتكن صحة الطفل قوية جدًا.</p>
+        <p>منذ وقت يبدو قريبًا كنت أنا نفسي طفلًا صغيرًا في الروضة، ومرّ الزمن بسرعة — وها أنا اليوم أصبحت جدًّا أكبر.</p>
+        <p class="signature">أتمنى لكما السعادة.</p>
+      </div>
+    </section>
+
+    <section class="lang" id="en" lang="en" dir="ltr">
+      <h1>Linoy and Yarden</h1>
+      <div class="subtitle">A letter from Grandpa Sasha</div>
+      <div class="content">
+        <p>Hello, Linoy and Yarden. Grandpa Sasha is writing to you.</p>
+        <p>Life is an amazing thing, and it has changed so much. I’m an old dinosaur; there is a lot about today’s world that I don’t understand, and much of it still feels unfamiliar to me. But life keeps moving forward.</p>
+        <p>Not long ago I went through a major operation, and it was very hard. Your mother and Aunt Lena helped me, but they couldn’t stay by my side all the time. It was almost impossible to get a nurse’s attention — there were many patients and too few nurses. And while I was lying there unable to move, nobody even called to ask, “How are you doing, Grandpa — are you alive?”</p>
+        <p>Then, at the hardest moment, when I was lying there and couldn’t even get up to fetch some water, something remarkable happened. A huge Arab family — adults and children — came to visit the man in the bed next to me. I asked one of them for some water, and they helped me. I never expected that they would be the ones to help me, but they simply did. Without water in that condition, I could have died. Life has a way of surprising us.</p>
+        <p>But enough about the hospital. Today I’m feeling a little better, and I can finally write this letter.</p>
+        <p class="wish">From the bottom of my heart, congratulations on the birth of your baby! May your home be filled with warmth, joy, children’s laughter, and true comfort. Raise your little one with love and care. May every day bring you good news, may you always have strength, patience, and bright moments, and may your baby grow strong and healthy.</p>
+        <p>It feels like only yesterday that I was a little boy in kindergarten. Time flew by — and now I’m already a great-grandfather.</p>
+        <p class="signature">Wishing you happiness.</p>
+      </div>
+    </section>
+  </main>
+  <footer>♥</footer>
+</div>
+
+<script>
+const buttons=[...document.querySelectorAll('.langbar button')];
+const sections=[...document.querySelectorAll('.lang')];
+function show(lang){
+  buttons.forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+  sections.forEach(s=>s.classList.toggle('active',s.id===lang));
+  const active=document.getElementById(lang);
+  document.documentElement.lang=lang;
+  document.documentElement.dir=active.dir||'ltr';
+  history.replaceState(null,'','#'+lang);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+buttons.forEach(b=>b.addEventListener('click',()=>show(b.dataset.lang)));
+const initial=(location.hash||'#ru').slice(1);
+if(['ru','he','ar','en'].includes(initial)) show(initial);
+</script>
+</body>
+</html>
