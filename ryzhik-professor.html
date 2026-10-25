@@ -311,7 +311,7 @@ window.addEventListener('load',()=>{if(selectedLanguage!=='ru'){setTimeout(()=>s
 <script type="module">
 // Set values copied from Firebase Console > Project settings > Your apps > Web app.
 // Firebase API keys are public configuration identifiers; never include admin SDK/private keys.
-const firebaseConfig={apiKey:'',authDomain:'',projectId:'',appId:''};
+const firebaseConfig={apiKey:"AIzaSyB2X3o7KwYFkMfsskKoWpQYBrws8L-Mn9w",authDomain:"photo-gallery-18193.firebaseapp.com",projectId:"photo-gallery-18193",appId:"1:329094770221:web:b9d076f195f968668212a4"};
 const ready=Object.values(firebaseConfig).every(Boolean);
 const login=document.querySelector('#login'),logout=document.querySelector('#logout'),status=document.querySelector('#authStatus'),compose=document.querySelector('#compose'),list=document.querySelector('#commentList');
 if(!ready){login.disabled=true;status.textContent='Вход Google и комментарии пока не активированы: владелец страницы должен заполнить firebaseConfig и правила Firestore.'}
