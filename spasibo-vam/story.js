@@ -336,5 +336,5 @@ function showLanguage(lang){
 function showTheme(theme){document.documentElement.dataset.theme=theme;document.querySelectorAll('.themes button').forEach(b=>b.classList.toggle('active',b.dataset.theme===theme));try{localStorage.setItem('shay-theme',theme)}catch{}}
 document.querySelectorAll('.langs button').forEach(b=>b.addEventListener('click',()=>showLanguage(b.id)));
 document.querySelectorAll('.themes button').forEach(b=>b.addEventListener('click',()=>showTheme(b.dataset.theme)));
-let savedLang='ru',savedTheme='beige';try{savedLang=localStorage.getItem('shay-lang')||'ru';savedTheme=localStorage.getItem('shay-theme')||'beige'}catch{}
-showLanguage(ui[savedLang]?savedLang:'ru');showTheme(['beige','white','forest','navy'].includes(savedTheme)?savedTheme:'beige');
+let savedTheme='beige';try{savedTheme=localStorage.getItem('shay-theme')||'beige'}catch{}
+showLanguage('he');showTheme(['beige','white','forest','navy'].includes(savedTheme)?savedTheme:'beige');
