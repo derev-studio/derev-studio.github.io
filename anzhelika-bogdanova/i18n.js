@@ -2,8 +2,10 @@
 (() => {
   const en = {
     'Пространство психологии, слова и творчества':'A space for psychology, words and creativity',
-    'Анжелика':'Angelika','Богданова':'Bogdanova','Анжелика Богданова':'Angelika Bogdanova','А':'A','Б':'B','а':'a','АД':'AD','А✳Б':'A✳B',
+    'Анжелика':'Angelika','Богданова':'Bogdanova','Анжелика Богданова':'Angelika Bogdanova','А':'A','Б':'B','а':'a','АД':'AD','А✳Б':'A✳B','АБ':'AB',
     'Обо мне':'About','Консультации':'Consultations','Программы':'Programs','Публикации':'Articles','Отзывы':'Reviews','Мой Шедеврум':'My Shedevrum',
+    'Поделиться':'Share','Поделиться сайтом':'Share this website','Настройки сайта':'Website settings','Вид':'Style','Оформление':'Appearance','Язык':'Language','Звук кнопок':'Button sounds','Выключен':'Off','Включён':'On','Включить звуки кнопок':'Enable button sounds','Выключить звуки кнопок':'Disable button sounds',
+    'Ночная тема':'Night theme','Сумеречная тема':'Twilight theme','Ночь':'Night','Сумерки':'Twilight',
     'Записаться':'Book a session','Записаться ↗':'Book a session ↗',
     'ПСИХОЛОГ • ПИСАТЕЛЬ • НАСТАВНИК':'PSYCHOLOGIST • WRITER • MENTOR',
     'Слова, которые':'Words that','помогают':'help you','услышать':'hear','себя.':'yourself.',
@@ -43,12 +45,15 @@
     'Узнать подробнее':'Learn more',
     '04 / ПУБЛИКАЦИИ':'04 / PUBLICATIONS','Мысли, которые':'Thoughts that','остаются с нами.':'stay with us.',
     'Все публикации на «Проза.ру»':'All writing on Proza.ru',
+    'Психология, отношения, писательство и творчество. Выберите интересную тему — и найдите свою статью.':'Psychology, relationships, writing, and creativity. Choose a topic and find something that speaks to you.',
+    'Найти статью...':'Find an article...','Поиск по статьям':'Search articles','Темы публикаций':'Article topics','Показать ещё':'Show more','Все 683 произведения на «Проза.ру»':'All 683 works on Proza.ru',
     'ПРОФЕССИЯ · 2025':'PROFESSION · 2025','Почему психолог пишет статьи':'Why a Psychologist Writes Articles',
     'ТВОРЧЕСТВО · 2025':'CREATIVITY · 2025','Не увязнуть в самокопании при написании книги':'How Not to Get Lost in Self-Analysis While Writing a Book',
     'ПРАКТИКА · 2025':'PRACTICE · 2025','Техника «Визуализация места силы»':'The “Place of Strength” Visualization',
     'АРХЕТИПЫ · 2025':'ARCHETYPES · 2025','Красная Шапочка и Серый Волк: архетипические образы':'Little Red Riding Hood and the Gray Wolf: Archetypes',
     'Статьи открываются на страницах, где они опубликованы автором.':'Articles open on the original author’s publishing pages.',
-    '05 / ОТЗЫВЫ ЧИТАТЕЛЕЙ':'05 / READER REVIEWS','Слова, которые':'Words that','находят отклик.':'resonate.',
+    '05 / ОТЗЫВЫ ЧИТАТЕЛЕЙ':'05 / READER REVIEWS','05 / ЧИТАТЕЛИ О КНИГЕ':'05 / READERS ON THE BOOK','Слова, которые':'Words that','находят отклик.':'resonate.',
+    'Александр Деревяшкин о книге Анжелики «Блоготерапия». Два отзыва, оставленные на Литрес.':'Alexander Derevyashkin on Angelika’s book “Blog Therapy.” Two reviews published on Litres.',
     'Подлинные отзывы о книге «Блоготерапия», опубликованные на Литрес. Это впечатления читателей, а не отзывы о психологических консультациях.':'Authentic reviews of the book “Blog Therapy” published on Litres. These are readers’ impressions, not testimonials about psychological consultations.',
     '«Глубокая сила мысли и искренность в книге».':'“The depth of thought and sincerity in this book.”',
     '«Она многому меня научила! Это интересно и важно!»':'“It taught me so much! It’s interesting and important!”',
@@ -77,6 +82,7 @@
     'Профиль психолога':'Psychologist profile','Картины и образы':'Artwork and imagery',
     'Проза.ру':'Proza.ru','Шедеврум':'Shedevrum',
     'Психология. Слово. Творчество.':'Psychology. Words. Creativity.',
+    'Персональный сайт психолога и писателя':'Personal website of a psychologist and writer','© 2026 Анжелика Богданова':'© 2026 Angelika Bogdanova',
     '© 2026 · Авторская страница':'© 2026 · Personal website','Наверх ↑':'Back to top ↑',
     'Направления, актуальные форматы, цены и условия записи уточняются у Анжелики. Сайт не предназначен для экстренной психологической помощи.':'Please confirm services, formats, pricing and booking directly with Angelika. This website does not provide emergency mental health support.',
     'ТЕМА':'THEME',
@@ -147,11 +153,13 @@
       ? 'Angelika Bogdanova — psychologist, writer and mentor. Consultations, blog therapy, creative practices and original artwork.'
       : 'Анжелика Богданова — психолог, писатель и наставник. Консультации, блоготерапия, творческие практики, публикации и авторские изображения.';
     save('angelika-language',language);
+    document.dispatchEvent(new CustomEvent('site:language-change',{detail:{language}}));
   }
-  const themes = new Set(['sunrise','lilac','lagoon','garden']);
+  const themes = new Set(['sunrise','lilac','lagoon','garden','night','nocturne']);
   function setTheme(next) {
     if (!themes.has(next)) return;
     document.body.dataset.theme=next;
+    document.body.classList.toggle('is-dark',next==='night'||next==='nocturne');
     for (const button of document.querySelectorAll('[data-set-theme]')) button.setAttribute('aria-pressed',String(button.dataset.setTheme===next));
     document.querySelector('meta[name="theme-color"]').content=getComputedStyle(document.body).backgroundColor;
     save('angelika-theme',next);
