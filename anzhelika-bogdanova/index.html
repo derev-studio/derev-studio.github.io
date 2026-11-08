@@ -15,16 +15,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./themes.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Анжелика Богданова","jobTitle":"Психолог, писатель, наставник","sameAs":["https://www.b17.ru/id254740/","https://proza.ru/avtor/mart0903","https://shedevrum.ai/@psyangel"]}</script>
   <title>Анжелика Богданова — психолог, писатель, наставник</title>
 </head>
-<body>
+<body data-theme="sunrise">
   <a class="skip-link" href="#main">Перейти к содержанию</a>
   <div class="announcement"><span class="announcement-dot"></span> Пространство психологии, слова и творчества <span class="announcement-star">✳</span></div>
 
   <header class="site-header" id="siteHeader">
     <a class="brand" href="#top" aria-label="Анжелика Богданова — главная">
-      <span class="brand-mark">а<span class="brand-star">✳</span>б</span>
+      <span class="brand-mark">А<span class="brand-star">✳</span>Б</span>
       <span class="brand-name">Анжелика<br><strong>Богданова</strong></span>
     </a>
     <nav class="nav" id="nav" aria-label="Основная навигация">
@@ -37,6 +38,18 @@
     <a class="header-cta" href="#booking">Записаться <span aria-hidden="true">↗</span></a>
     <button class="menu-toggle" id="menuToggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav"><span></span><span></span></button>
   </header>
+
+  <div class="style-dock" aria-label="Настройки оформления">
+    <span class="style-dock-label">ТЕМА</span>
+    <div class="theme-choices" role="group" aria-label="Выберите цветовую тему">
+      <button class="theme-choice theme-sunrise" type="button" data-set-theme="sunrise" aria-label="Янтарная тема" title="Янтарная" aria-pressed="true"></button>
+      <button class="theme-choice theme-lilac" type="button" data-set-theme="lilac" aria-label="Сиреневая тема" title="Сиреневая" aria-pressed="false"></button>
+      <button class="theme-choice theme-lagoon" type="button" data-set-theme="lagoon" aria-label="Бирюзовая тема" title="Бирюзовая" aria-pressed="false"></button>
+      <button class="theme-choice theme-garden" type="button" data-set-theme="garden" aria-label="Зелёная тема" title="Зелёная" aria-pressed="false"></button>
+    </div>
+    <span class="style-dock-divider" aria-hidden="true"></span>
+    <button class="lang-choice" id="langToggle" type="button" aria-label="Switch website to English" title="English version">EN</button>
+  </div>
 
   <main id="main">
     <section class="hero" id="top">
@@ -149,9 +162,20 @@
       </div>
     </section>
 
+    <section class="section testimonials" id="testimonials">
+      <div class="wrap">
+        <div class="section-heading reveal"><div><span class="section-number">05 / ОТЗЫВЫ ЧИТАТЕЛЕЙ</span><h2>Слова, которые<br><em>находят отклик.</em></h2></div><p>Подлинные отзывы о книге «Блоготерапия», опубликованные на Литрес. Это впечатления читателей, а не отзывы о психологических консультациях.</p></div>
+        <div class="testimonial-grid">
+          <article class="testimonial-card reveal"><span class="testimonial-quote-mark" aria-hidden="true">“</span><blockquote>«Глубокая сила мысли и искренность в книге».</blockquote><div class="testimonial-author"><span class="testimonial-avatar">АД</span><div><strong>Александр Деревяшкин</strong><span>Писатель · 20 ноября 2021</span></div></div></article>
+          <article class="testimonial-card reveal"><span class="testimonial-quote-mark" aria-hidden="true">“</span><blockquote>«Она многому меня научила! Это интересно и важно!»</blockquote><div class="testimonial-author"><span class="testimonial-avatar">АД</span><div><strong>Александр Деревяшкин</strong><span>Писатель · 22 марта 2021</span></div></div></article>
+        </div>
+        <a class="testimonials-source underlined-link" href="https://www.litres.ru/book/anzhelika-bogdanova/blogoterapiya-64462116/reviews/" target="_blank" rel="noopener noreferrer">Читать оригиналы отзывов на Литрес <span>↗</span></a>
+      </div>
+    </section>
+
     <section class="section art" id="art">
       <div class="wrap">
-        <div class="art-intro reveal"><div><span class="section-number">05 / МОЙ ШЕДЕВРУМ</span><h2>Когда мысли<br><em>становятся образами.</em></h2></div><p>Это настоящие работы из галереи Анжелики в «Шедевруме». Живописные истории, настроения и внутренние миры — ещё один способ говорить о человеке.</p></div>
+        <div class="art-intro reveal"><div><span class="section-number">06 / МОЙ ШЕДЕВРУМ</span><h2>Когда мысли<br><em>становятся образами.</em></h2></div><p>Это настоящие работы из галереи Анжелики в «Шедевруме». Живописные истории, настроения и внутренние миры — ещё один способ говорить о человеке.</p></div>
         <div class="art-grid">
           <a class="art-tile art-tile-tall reveal" href="https://shedevrum.ai/post/d27c4f6ada0c11f193bb0e7435050a33/" target="_blank" rel="noopener noreferrer"><img src="./assets/inner-dialogue.webp" alt="Работа Анжелики: задумчивая женщина в синем, масляная живопись" loading="lazy" width="512" height="512"><span class="art-tile-overlay"><span>01 / Внутренний диалог</span><b>↗</b></span></a>
           <a class="art-tile reveal" href="https://shedevrum.ai/post/f4a4981ed5ff11f1af93b632ab106e2a/" target="_blank" rel="noopener noreferrer"><img src="./assets/quiet-portrait.webp" alt="Работа Анжелики: задумчивая светловолосая женщина, акварель" loading="lazy" width="512" height="512"><span class="art-tile-overlay"><span>02 / Пауза</span><b>↗</b></span></a>
@@ -163,7 +187,7 @@
 
     <section class="section booking" id="booking">
       <div class="wrap booking-grid">
-        <div class="booking-copy reveal"><span class="section-number">06 / СДЕЛАТЬ ПЕРВЫЙ ШАГ</span><h2>Можно просто<br><em>написать мне.</em></h2><p>Не нужно заранее формулировать всё идеально. Выберите интересующее направление и отправьте короткую заявку в Telegram.</p><div class="booking-message"><span>✳</span><p>Текст заявки будет скопирован. Затем откроется мой Telegram — останется вставить сообщение и отправить. Сайт ничего не сохраняет.</p></div><div class="booking-contact"><span>Или сразу напишите:</span><a href="https://t.me/angelikastory" target="_blank" rel="noopener noreferrer">@angelikastory ↗</a></div></div>
+        <div class="booking-copy reveal"><span class="section-number">07 / СДЕЛАТЬ ПЕРВЫЙ ШАГ</span><h2>Можно просто<br><em>написать мне.</em></h2><p>Не нужно заранее формулировать всё идеально. Выберите интересующее направление и отправьте короткую заявку в Telegram.</p><div class="booking-message"><span>✳</span><p>Текст заявки будет скопирован. Затем откроется мой Telegram — останется вставить сообщение и отправить. Сайт ничего не сохраняет.</p></div><div class="booking-contact"><span>Или сразу напишите:</span><a href="https://t.me/angelikastory" target="_blank" rel="noopener noreferrer">@angelikastory ↗</a></div></div>
         <div class="booking-panel reveal">
           <div class="form-heading"><span>ОБРАЩЕНИЕ К АНЖЕЛИКЕ</span><span class="form-decoration">✺</span></div>
           <h3>Давайте познакомимся</h3>
@@ -185,9 +209,10 @@
     </section>
   </main>
 
-  <footer class="footer"><div class="wrap footer-main"><div class="footer-brand"><span class="footer-symbol">а✳б</span><strong>Анжелика Богданова</strong><small>Психология. Слово. Творчество.</small></div><div class="footer-right"><span>© 2026 · Авторская страница</span><a href="#top">Наверх ↑</a></div></div><div class="wrap footer-note">Направления, актуальные форматы, цены и условия записи уточняются у Анжелики. Сайт не предназначен для экстренной психологической помощи.</div></footer>
+  <footer class="footer"><div class="wrap footer-main"><div class="footer-brand"><span class="footer-symbol">А✳Б</span><strong>Анжелика Богданова</strong><small>Психология. Слово. Творчество.</small></div><div class="footer-right"><span>© 2026 · Авторская страница</span><a href="#top">Наверх ↑</a></div></div><div class="wrap footer-note">Направления, актуальные форматы, цены и условия записи уточняются у Анжелики. Сайт не предназначен для экстренной психологической помощи.</div></footer>
 
   <a class="mobile-booking-cta" href="#booking">Записаться <span>↗</span></a>
+  <script src="./i18n.js" defer></script>
   <script src="./script.js" defer></script>
 </body>
 </html>
