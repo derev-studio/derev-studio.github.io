@@ -4,6 +4,7 @@ const nav = document.getElementById('nav');
 const bookingForm = document.getElementById('bookingForm');
 const serviceSelect = document.getElementById('serviceSelect');
 const formStatus = document.getElementById('formStatus');
+const t = value => window.siteI18n?.translate(value) || value;
 
 function updateHeader(){header.classList.toggle('scrolled',window.scrollY>35)}
 updateHeader();
@@ -12,19 +13,19 @@ window.addEventListener('scroll', updateHeader, {passive:true});
 menuToggle.addEventListener('click',()=>{
   const expanded = menuToggle.getAttribute('aria-expanded')==='true';
   menuToggle.setAttribute('aria-expanded',String(!expanded));
-  menuToggle.setAttribute('aria-label',expanded?'Открыть меню':'Закрыть меню');
+  menuToggle.setAttribute('aria-label',t(expanded?'Открыть меню':'Закрыть меню'));
   nav.classList.toggle('open',!expanded);
 });
 nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{
   nav.classList.remove('open');
   menuToggle.setAttribute('aria-expanded','false');
-  menuToggle.setAttribute('aria-label','Открыть меню');
+  menuToggle.setAttribute('aria-label',t('Открыть меню'));
 }));
 document.addEventListener('keydown',event=>{
   if(event.key==='Escape'){
     nav.classList.remove('open');
     menuToggle.setAttribute('aria-expanded','false');
-    menuToggle.setAttribute('aria-label','Открыть меню');
+    menuToggle.setAttribute('aria-label',t('Открыть меню'));
   }
 });
 
@@ -65,22 +66,30 @@ bookingForm.addEventListener('submit', async event=>{
   const service=serviceSelect.value;
   const contact=document.getElementById('clientContact').value.trim();
   const note=document.getElementById('clientNote').value.trim();
-  if(name.length<2 || !contact){formStatus.textContent='Пожалуйста, заполните имя и контакт.';return}
-  const message=[
+  if(name.length<2 || !contact){formStatus.textContent=t('Пожалуйста, заполните имя и контакт.');return}
+  const english = window.siteI18n?.language==='en';
+  const message=(english ? [
+    'Hello, Angelika! I would like to contact you through your website.',
+    'Name: '+name,
+    'Interested in: '+t(service),
+    'Contact: '+contact,
+    note?'Note: '+note:null,
+    'Could you please tell me about current availability and booking conditions?'
+  ] : [
     'Здравствуйте, Анжелика! Хочу обратиться к вам через ваш сайт.',
     'Имя: '+name,
     'Интересует: '+service,
     'Мой контакт: '+contact,
     note?'Пожелание: '+note:null,
     'Подскажите, пожалуйста, актуальные условия и возможность записи.'
-  ].filter(Boolean).join('\n');
+  ]).filter(Boolean).join('\n');
   const popup=window.open('https://t.me/angelikastory','_blank','noopener,noreferrer');
   const copied=await copyText(message);
-  formStatus.textContent=copied?'Заявка скопирована. Вставьте текст в открывшийся чат Telegram и нажмите «Отправить».':'Не удалось автоматически скопировать сообщение. Вы можете написать Анжелике в Telegram напрямую.';
+  formStatus.textContent=t(copied?'Заявка скопирована. Вставьте текст в открывшийся чат Telegram и нажмите «Отправить».':'Не удалось автоматически скопировать сообщение. Вы можете написать Анжелике в Telegram напрямую.');
   if(!popup){
     const link=document.createElement('a');
     link.href='https://t.me/angelikastory';link.target='_blank';link.rel='noopener noreferrer';
-    link.textContent=' Открыть Telegram ↗';
+    link.textContent=' '+t('Открыть Telegram ↗');
     formStatus.appendChild(link);
   }
 });
