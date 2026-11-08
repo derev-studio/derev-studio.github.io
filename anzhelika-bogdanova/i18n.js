@@ -3,7 +3,7 @@
   const en = {
     'Пространство психологии, слова и творчества':'A space for psychology, words and creativity',
     'Анжелика':'Angelika','Богданова':'Bogdanova','Анжелика Богданова':'Angelika Bogdanova','А':'A','Б':'B','а':'a','АД':'AD','А✳Б':'A✳B',
-    'Обо мне':'About','Консультации':'Consultations','Программы':'Programs','Публикации':'Articles','Мой Шедеврум':'My Shedevrum',
+    'Обо мне':'About','Консультации':'Consultations','Программы':'Programs','Публикации':'Articles','Отзывы':'Reviews','Мой Шедеврум':'My Shedevrum',
     'Записаться':'Book a session','Записаться ↗':'Book a session ↗',
     'ПСИХОЛОГ • ПИСАТЕЛЬ • НАСТАВНИК':'PSYCHOLOGIST • WRITER • MENTOR',
     'Слова, которые':'Words that','помогают':'help you','услышать':'hear','себя.':'yourself.',
