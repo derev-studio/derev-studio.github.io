@@ -85,7 +85,8 @@ body.is-dark .program-feature-copy p,body.is-dark .book-cover strong,body.is-dar
 body.is-dark .form-field select{color:var(--t-ink)}
 body.is-dark .booking-panel,body.is-dark .service-card,body.is-dark .testimonial-card{border-color:var(--t-line)}
 body.is-dark .art-tile-overlay{background:linear-gradient(0deg,#000b,transparent)}
-body.is-dark .brand-mark{background:linear-gradient(145deg,var(--t-soft),var(--t-dark))}
+body.is-dark .brand-mark{background:linear-gradient(145deg,var(--t-soft),var(--t-dark));color:var(--t-accent-light)}
+body.is-dark .hero h1 em,body.is-dark .section h2 em,body.is-dark .library-category,body.is-dark .section-number{color:var(--t-accent-light)}
 body.is-dark .library-card,body.is-dark .library-panel{border-color:var(--t-line)}
 body.is-dark .spotlight-card{position:relative;isolation:isolate;overflow:hidden}
 body.is-dark .spotlight-card::before{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:0;background:radial-gradient(310px circle at var(--spot-x,50%) var(--spot-y,50%),color-mix(in srgb,var(--t-accent-light) 21%,transparent),transparent 72%);transition:opacity .25s}
