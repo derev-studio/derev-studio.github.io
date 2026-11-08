@@ -1,0 +1,78 @@
+/* Four light, accessible visual personalities; selected locally by the visitor. */
+body[data-theme="sunrise"]{--t-paper:#fff9f0;--t-soft:#fff0e1;--t-alt:#fff5eb;--t-card:#fffdf9;--t-accent:#ad4352;--t-accent-light:#f4c4a3;--t-ink:#39272c;--t-muted:#705c62;--t-dark:#673b49;--t-line:#eacfc5;--t-glow:#ffdeb9;--t-special:#f6dfcf}
+body[data-theme="lilac"]{--t-paper:#faf7ff;--t-soft:#f0e7fc;--t-alt:#f8f1ff;--t-card:#fffaff;--t-accent:#7750b9;--t-accent-light:#dbc3ff;--t-ink:#302741;--t-muted:#696078;--t-dark:#4c356d;--t-line:#d8c9ec;--t-glow:#ead5ff;--t-special:#e9ddf8}
+body[data-theme="lagoon"]{--t-paper:#f3fbfd;--t-soft:#ddf2f7;--t-alt:#edfaff;--t-card:#fff;--t-accent:#086d92;--t-accent-light:#99e0e8;--t-ink:#173743;--t-muted:#536f78;--t-dark:#14546a;--t-line:#bcdce4;--t-glow:#c6f3ff;--t-special:#d8f2ee}
+body[data-theme="garden"]{--t-paper:#f9fbf2;--t-soft:#e9f2dd;--t-alt:#f2f8e8;--t-card:#fffdf6;--t-accent:#527437;--t-accent-light:#d7e6a4;--t-ink:#2d3a2b;--t-muted:#68735d;--t-dark:#3f5838;--t-line:#ccdabb;--t-glow:#e4f2c6;--t-special:#e1e9ca}
+body[data-theme]{background:var(--t-paper);color:var(--t-ink);--ink:var(--t-ink);--plum:var(--t-accent);--line:var(--t-line);--muted:var(--t-muted);--paper:var(--t-paper);--white:var(--t-card)}
+body[data-theme] .announcement{background:var(--t-dark);color:white}
+body[data-theme] .announcement-star,body[data-theme] .announcement-dot{color:var(--t-accent-light);background:var(--t-accent-light)}
+body[data-theme] .site-header{background:color-mix(in srgb,var(--t-paper) 94%,transparent);border-color:var(--t-line)}
+body[data-theme] .nav a:after{background:var(--t-accent)}
+body[data-theme] .brand-mark{border:2px solid var(--t-accent);background:var(--t-card);color:var(--t-dark);font-style:normal;font-weight:700;font-size:21px;letter-spacing:-.1em;padding:0 4px 0 0;box-shadow:0 6px 20px color-mix(in srgb,var(--t-accent) 17%,transparent)}
+body[data-theme] .brand-star{color:var(--t-accent);font-size:10px;margin-inline:3px}
+body[data-theme] .hero{background:radial-gradient(ellipse at 83% 21%,var(--t-glow),transparent 42%),radial-gradient(ellipse at 12% 89%,var(--t-special),transparent 44%),var(--t-paper)}
+body[data-theme] .hero h1,body[data-theme] .about-statement,body[data-theme] .section h2,body[data-theme] .service-card h3,body[data-theme] .article-row h3,body[data-theme] .program-small h3,body[data-theme] .program-feature-copy h3{color:var(--t-ink)}
+body[data-theme] .hero h1 em,body[data-theme] .section h2 em,body[data-theme] .contact-section h2 em{color:var(--t-accent)}
+body[data-theme] .hero-lead,body[data-theme] .about-content>p:not(.about-statement),body[data-theme] .section-heading>p,body[data-theme] .service-card p,body[data-theme] .program-small p,body[data-theme] .program-feature-copy p,body[data-theme] .booking-copy>p,body[data-theme] .art-intro p{color:var(--t-muted)}
+body[data-theme] .eyebrow,body[data-theme] .section-number,body[data-theme] .article-category,body[data-theme] .program-feature-copy>span{color:var(--t-accent)}
+body[data-theme] .eyebrow-line{background:var(--t-accent)}
+body[data-theme] .hero-visual-arch,body[data-theme] .hero-bottom{border-color:var(--t-line)}
+body[data-theme] .hero-badge{background:var(--t-accent-light);color:var(--t-dark)}
+body[data-theme] .hero-visual-caption,body[data-theme] .hero-vertical,body[data-theme] .hero-footnote{color:var(--t-muted)}
+body[data-theme] .header-cta,body[data-theme] .button-dark,body[data-theme] .mobile-booking-cta{background:var(--t-accent);color:#fff;box-shadow:0 12px 28px color-mix(in srgb,var(--t-accent) 27%,transparent)}
+body[data-theme] .button-dark:hover,body[data-theme] .header-cta:hover{background:var(--t-dark)}
+body[data-theme] .words-band,body[data-theme] .quote-break,body[data-theme] .contact-section{background:var(--t-dark);color:#fff}
+body[data-theme] .words-track b,body[data-theme] .quote-star{color:var(--t-accent-light)}
+body[data-theme] .quote-content blockquote em,body[data-theme] .contact-section h2 em{color:var(--t-accent-light)}
+body[data-theme] .about,body[data-theme] .programs,body[data-theme] .booking{background:var(--t-soft)}
+body[data-theme] .practice,body[data-theme] .reading{background:var(--t-card)}
+body[data-theme] .art,body[data-theme] .testimonials{background:var(--t-alt)}
+body[data-theme] .about-portrait img{outline-color:var(--t-accent)}
+body[data-theme] .about-pills span,body[data-theme] .article-row,body[data-theme] .article-list{border-color:var(--t-line)}
+body[data-theme] .about-pills span,body[data-theme] .underlined-link,body[data-theme] .service-action{color:var(--t-dark)}
+body[data-theme] .service-card{background:var(--t-paper);border:1px solid var(--t-line);border-radius:22px;box-shadow:0 10px 35px color-mix(in srgb,var(--t-dark) 7%,transparent)}
+body[data-theme] .service-card-accent{background:var(--t-special)}
+body[data-theme] .service-symbol,body[data-theme] .service-index{color:var(--t-accent)}
+body[data-theme] .service-action{border-color:var(--t-line)}
+body[data-theme] .program-feature{background:var(--t-paper);border-radius:22px}
+body[data-theme] .program-feature-art{background:radial-gradient(circle,var(--t-accent-light),var(--t-special))}
+body[data-theme] .program-small{border-radius:20px}
+body[data-theme] .program-small-rose{background:var(--t-special)}
+body[data-theme] .program-small-green{background:var(--t-glow)}
+body[data-theme] .article-row:hover{background:var(--t-soft)}
+body[data-theme] .article-arrow{border-color:var(--t-line)}
+body[data-theme] .article-row:hover .article-arrow{background:var(--t-accent-light)}
+body[data-theme] .art-tile{border-radius:18px}
+body[data-theme] .art-footer{color:var(--t-muted)}
+body[data-theme] .button-outline{border-color:var(--t-accent);color:var(--t-dark)}
+body[data-theme] .button-outline:hover{background:var(--t-special)}
+body[data-theme] .booking-panel{background:var(--t-card);border:1px solid var(--t-line);border-radius:24px;box-shadow:0 25px 55px color-mix(in srgb,var(--t-dark) 10%,transparent)}
+body[data-theme] .booking-message{border-color:var(--t-accent)}
+body[data-theme] .booking-message p,body[data-theme] .booking-contact span{color:var(--t-muted)}
+body[data-theme] .booking-panel .form-heading,body[data-theme] .form-field label span{color:var(--t-accent)}
+body[data-theme] .form-field input,body[data-theme] .form-field select,body[data-theme] .form-field textarea{border-color:var(--t-line);background:var(--t-paper);border-radius:10px;color:var(--t-ink)}
+body[data-theme] .form-field input:focus,body[data-theme] .form-field select:focus,body[data-theme] .form-field textarea:focus{border-color:var(--t-accent);background:var(--t-card)}
+body[data-theme] .footer{background:color-mix(in srgb,var(--t-dark) 88%,#111);color:#fff}
+
+/* True reader reviews, clearly distinguished from client feedback. */
+.testimonial-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.testimonial-card{padding:45px 44px 39px;border-radius:22px;background:var(--t-card);border:1px solid var(--t-line);box-shadow:0 18px 42px color-mix(in srgb,var(--t-dark) 7%,transparent);display:flex;flex-direction:column;min-height:315px;transition:transform .25s,box-shadow .25s}
+.testimonial-card:hover{transform:translateY(-6px);box-shadow:0 24px 50px color-mix(in srgb,var(--t-dark) 12%,transparent)}
+.testimonial-quote-mark{font:italic 92px/0.9 var(--serif);color:var(--t-accent)}
+.testimonial-card blockquote{margin:9px 0 36px;font:500 clamp(24px,2.2vw,33px)/1.45 var(--serif);letter-spacing:-.035em;color:var(--t-ink)}
+.testimonial-author{display:flex;align-items:center;gap:14px;margin-top:auto}
+.testimonial-avatar{width:49px;height:49px;border-radius:50%;display:grid;place-items:center;background:var(--t-accent-light);color:var(--t-dark);font-weight:800;font-size:13px}
+.testimonial-author div{display:flex;flex-direction:column;gap:5px}.testimonial-author strong{font-size:13px}.testimonial-author div span{font-size:11px;color:var(--t-muted)}
+.testimonials-source{margin-top:34px}
+
+/* Compact palette + language control, always visible without crowding the menu. */
+.style-dock{position:fixed;z-index:101;left:24px;bottom:22px;display:flex;align-items:center;gap:12px;padding:10px 13px 10px 17px;background:color-mix(in srgb,var(--t-card) 96%,transparent);border:1px solid var(--t-line);border-radius:100px;box-shadow:0 14px 44px #1e18302a;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.style-dock-label{color:var(--t-muted);font-size:9px;letter-spacing:.17em;font-weight:800}.theme-choices{display:flex;align-items:center;gap:7px}
+.theme-choice{width:25px;height:25px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #65575728;transition:transform .2s,box-shadow .2s;position:relative;padding:0}
+.theme-choice:hover{transform:scale(1.17)}.theme-choice[aria-pressed="true"]{box-shadow:0 0 0 2px var(--t-ink);transform:scale(1.08)}
+.theme-sunrise{background:linear-gradient(135deg,#ffdc8e 48%,#ad4352 50%)}.theme-lilac{background:linear-gradient(135deg,#e1b9ff 48%,#7750b9 50%)}.theme-lagoon{background:linear-gradient(135deg,#9feefa 48%,#086d92 50%)}.theme-garden{background:linear-gradient(135deg,#d8ed9c 48%,#527437 50%)}
+.style-dock-divider{height:25px;width:1px;background:var(--t-line)}
+.lang-choice{border:0;background:var(--t-dark);color:#fff;font-size:12px;font-weight:800;letter-spacing:.02em;min-width:43px;padding:9px 10px;border-radius:25px;transition:background .2s}.lang-choice:hover{background:var(--t-accent)}
+@media(max-width:980px){body[data-theme] .nav{background:var(--t-card);border-color:var(--t-line)}body[data-theme] .nav a{border-color:var(--t-line)}}
+@media(max-width:720px){.style-dock{left:10px;bottom:13px;gap:7px;padding:8px 10px}.style-dock-label{display:none}.theme-choices{gap:4px}.theme-choice{width:22px;height:22px}.lang-choice{min-width:37px;font-size:11px;padding:8px}.testimonial-grid{grid-template-columns:1fr}.testimonial-card{padding:30px;min-height:250px}.style-dock-divider{height:21px}.mobile-booking-cta{bottom:13px;right:10px;padding:13px 14px;gap:9px;font-size:11px}}
+@media(max-width:400px){.style-dock{gap:4px}.theme-choices{gap:2px}.theme-choice{width:19px;height:19px}.style-dock-divider{margin-inline:3px}.mobile-booking-cta{gap:5px;font-size:10px}}
