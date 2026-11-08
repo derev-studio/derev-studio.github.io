@@ -50,8 +50,8 @@ body[data-theme] .booking-panel{background:var(--t-card);border:1px solid var(--
 body[data-theme] .booking-message{border-color:var(--t-accent)}
 body[data-theme] .booking-message p,body[data-theme] .booking-contact span{color:var(--t-muted)}
 body[data-theme] .booking-panel .form-heading,body[data-theme] .form-field label span{color:var(--t-accent)}
-body[data-theme] .form-field input,body[data-theme] .form-field select,body[data-theme] .form-field textarea{border-color:var(--t-line);background:var(--t-paper);border-radius:10px;color:var(--t-ink)}
-body[data-theme] .form-field input:focus,body[data-theme] .form-field select:focus,body[data-theme] .form-field textarea:focus{border-color:var(--t-accent);background:var(--t-card)}
+body[data-theme] .form-field input,body[data-theme] .form-field select,body[data-theme] .form-field textarea{border-color:var(--t-line);background-color:var(--t-paper);border-radius:10px;color:var(--t-ink)}
+body[data-theme] .form-field input:focus,body[data-theme] .form-field select:focus,body[data-theme] .form-field textarea:focus{border-color:var(--t-accent);background-color:var(--t-card)}
 body[data-theme] .footer{background:color-mix(in srgb,var(--t-dark) 88%,#111);color:#fff}
 
 /* True reader reviews, clearly distinguished from client feedback. */
