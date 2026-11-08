@@ -5,6 +5,90 @@ const bookingForm = document.getElementById('bookingForm');
 const serviceSelect = document.getElementById('serviceSelect');
 const formStatus = document.getElementById('formStatus');
 const t = value => window.siteI18n?.translate(value) || value;
+const settingsToggle = document.getElementById('settingsToggle');
+const styleDock = document.getElementById('styleDock');
+const soundToggle = document.getElementById('soundToggle');
+const siteToast = document.getElementById('siteToast');
+
+let toastTimeout;
+function toast(message){
+  siteToast.textContent=message;
+  siteToast.classList.add('is-visible');
+  clearTimeout(toastTimeout);
+  toastTimeout=setTimeout(()=>{siteToast.classList.remove('is-visible');siteToast.textContent=''},3400);
+}
+function closeSettings(){styleDock.hidden=true;settingsToggle.setAttribute('aria-expanded','false')}
+settingsToggle.addEventListener('click',()=>{
+  const isOpen=!styleDock.hidden;
+  styleDock.hidden=isOpen;
+  settingsToggle.setAttribute('aria-expanded',String(!isOpen));
+  nav.classList.remove('open');
+  menuToggle.setAttribute('aria-expanded','false');
+});
+document.addEventListener('pointerdown',event=>{
+  if(!styleDock.hidden&&!event.target.closest('.settings-wrap'))closeSettings();
+});
+
+let soundEnabled=false;
+try{soundEnabled=localStorage.getItem('angelika-sound')==='on'}catch(e){}
+let audioContext;
+function updateSoundToggle(){
+  soundToggle.textContent=soundEnabled?t('Включён'):t('Выключен');
+  soundToggle.setAttribute('aria-pressed',String(soundEnabled));
+  soundToggle.setAttribute('aria-label',t(soundEnabled?'Выключить звуки кнопок':'Включить звуки кнопок'));
+}
+function playClickSound(){
+  if(!soundEnabled)return;
+  try{
+    const Context=window.AudioContext||window.webkitAudioContext;
+    if(!Context)return;
+    audioContext ||= new Context();
+    if(audioContext.state==='suspended')void audioContext.resume();
+    const now=audioContext.currentTime;
+    const oscillator=audioContext.createOscillator();
+    const gain=audioContext.createGain();
+    oscillator.type='sine';oscillator.frequency.setValueAtTime(590,now);
+    oscillator.frequency.exponentialRampToValueAtTime(770,now+.055);
+    gain.gain.setValueAtTime(.0001,now);
+    gain.gain.exponentialRampToValueAtTime(.018,now+.007);
+    gain.gain.exponentialRampToValueAtTime(.0001,now+.067);
+    oscillator.connect(gain);gain.connect(audioContext.destination);
+    oscillator.start(now);oscillator.stop(now+.075);
+  }catch(e){}
+}
+soundToggle.addEventListener('click',()=>{
+  soundEnabled=!soundEnabled;
+  try{localStorage.setItem('angelika-sound',soundEnabled?'on':'off')}catch(e){}
+  updateSoundToggle();
+});
+document.addEventListener('site:language-change',updateSoundToggle);
+updateSoundToggle();
+document.addEventListener('click',event=>{
+  if(event.target.closest('button,.header-cta,.button,.article-row,.library-card'))playClickSound();
+});
+
+document.getElementById('shareButton').addEventListener('click',async()=>{
+  const url=document.querySelector('link[rel="canonical"]')?.href||location.href;
+  const english=window.siteI18n?.language==='en';
+  if(navigator.share){
+    try{await navigator.share({title:english?'Angelika Bogdanova — Personal Website':'Анжелика Богданова — персональный сайт',url});return}
+    catch(error){if(error?.name==='AbortError')return}
+  }
+  const copied=await copyText(url);
+  toast(copied?(english?'Website link copied':'Ссылка на сайт скопирована'):(english?'You can copy the address from your browser':'Скопируйте адрес из строки браузера'));
+});
+
+document.querySelectorAll('.service-card,.testimonial-card,.program-small,.booking-panel').forEach(card=>card.classList.add('spotlight-card'));
+if(window.matchMedia('(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)').matches){
+  document.addEventListener('pointermove',event=>{
+    if(!document.body.classList.contains('is-dark'))return;
+    const card=event.target.closest('.spotlight-card');
+    if(!card)return;
+    const rect=card.getBoundingClientRect();
+    card.style.setProperty('--spot-x',`${event.clientX-rect.left}px`);
+    card.style.setProperty('--spot-y',`${event.clientY-rect.top}px`);
+  },{passive:true});
+}
 
 function updateHeader(){header.classList.toggle('scrolled',window.scrollY>35)}
 updateHeader();
@@ -15,6 +99,7 @@ menuToggle.addEventListener('click',()=>{
   menuToggle.setAttribute('aria-expanded',String(!expanded));
   menuToggle.setAttribute('aria-label',t(expanded?'Открыть меню':'Закрыть меню'));
   nav.classList.toggle('open',!expanded);
+  closeSettings();
 });
 nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{
   nav.classList.remove('open');
@@ -23,6 +108,7 @@ nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{
 }));
 document.addEventListener('keydown',event=>{
   if(event.key==='Escape'){
+    closeSettings();
     nav.classList.remove('open');
     menuToggle.setAttribute('aria-expanded','false');
     menuToggle.setAttribute('aria-label',t('Открыть меню'));
