@@ -231,3 +231,69 @@ body[data-theme] .art-tile img{filter:none}
 @media(max-width:720px){body[data-theme] .hero-inner{min-height:0;padding-block:47px 35px;gap:20px}body[data-theme] .hero h1{font-size:clamp(34px,7.65vw,49px);letter-spacing:-.035em;line-height:1.3}body[data-theme] .hero-visual{height:440px}body[data-theme] .hero-art-link{width:min(87%,360px)}body[data-theme] .section{padding-block:68px}body[data-theme] .section h2,body[data-theme] .contact-section h2{font-size:clamp(33px,7vw,44px)}body[data-theme] .about-content h2{font-size:clamp(36px,8.2vw,48px)}body[data-theme] .about-statement{font-size:18px}body[data-theme] .about-portrait{width:195px;margin:0 auto}.guided-entry{flex-direction:column;align-items:stretch;padding:18px 21px}.guide-trigger{justify-content:space-between}.section-shortcuts-inner{gap:9px}.section-shortcuts a{font-size:11px;padding:11px 14px}.shortcuts-label{font-size:10px}.back-to-top{bottom:80px;right:15px;width:40px;height:40px}.image-dialog-bottom{flex-direction:column;align-items:flex-start}.guide-dialog{padding:21px}}
 @media(max-width:400px){body[data-theme] .hero h1{font-size:34px}body[data-theme] .about-content h2{font-size:37px}.hero-actions{flex-wrap:wrap}.guide-dialog h2{font-size:27px}}
 @media(prefers-reduced-motion:reduce){body[data-theme] .hero::after{animation:none}.about-portrait-open:hover,.guide-options button:hover,.section-shortcuts a:hover{transform:none}}
+
+/* A coherent gallery: one square format, straight edges and fine, polished gold frames. */
+body[data-theme] .hero-visual{height:460px;min-height:0}
+body[data-theme] .hero-art-link{width:min(88%,390px);margin-inline:auto}
+body[data-theme] .about-portrait{width:min(370px,100%);margin:46px auto 0 0}
+body[data-theme] .hero-art-link,
+body[data-theme] .about-portrait-open,
+body[data-theme] .art-tile{
+  aspect-ratio:1;
+  padding:8px;
+  border:2px solid #ae823e;
+  border-radius:12px;
+  background:linear-gradient(130deg,#b68b45 0%,#f7e2aa 16%,#be914a 37%,#faeabe 58%,#a87531 84%,#d7b46f 100%);
+  box-shadow:inset 0 0 0 2px #fff4cb91,0 16px 38px #39250e27;
+  transform:none;
+  transition:box-shadow .25s ease,filter .25s ease;
+}
+body[data-theme] .hero-art-link:hover,
+body[data-theme] .about-portrait-open:hover,
+body[data-theme] .art-tile:hover{transform:none;filter:brightness(1.035);box-shadow:inset 0 0 0 2px #fff4cb91,0 20px 44px #39250e3b}
+body[data-theme] .hero-art-link::after{display:none}
+body[data-theme] .hero-art-link img,
+body[data-theme] .about-portrait-open img,
+body[data-theme] .art-tile img{
+  display:block;width:100%;height:100%;aspect-ratio:1;
+  border:5px solid #fffaf0;border-radius:3px;
+  object-fit:cover;filter:none;transform:none;
+}
+body[data-theme] .hero-art-link:hover img,
+body[data-theme] .art-tile:hover img{transform:none}
+body[data-theme] .hero-visual-caption{right:6%;bottom:0;align-items:flex-end;transform:none}
+body[data-theme] .art-grid{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto;gap:22px}
+body[data-theme] .art-tile{width:100%;min-width:0;grid-row:auto;grid-column:auto;overflow:hidden}
+body[data-theme] .art-tile-overlay{left:15px;right:15px;bottom:15px;padding:15px;border-radius:0 0 3px 3px}
+
+/* The enlarged artwork is itself framed, not surrounded by a rough-edged overlay. */
+body[data-theme] .image-dialog{
+  width:min(92vw,calc(100dvh - 130px),1020px);
+  padding:14px;border:1px solid #b58c4a;border-radius:17px;
+  background:var(--t-card);box-shadow:0 35px 110px #0008;
+}
+.image-dialog-frame{
+  padding:8px;border:2px solid #aa7b35;border-radius:11px;
+  background:linear-gradient(130deg,#b68b45 0%,#f7e2aa 16%,#be914a 37%,#faeabe 58%,#a87531 84%,#d7b46f 100%);
+  box-shadow:inset 0 0 0 2px #fff5d491,0 4px 17px #36220f30;
+}
+body[data-theme] .image-dialog-frame img{
+  display:block;width:100%;height:auto;max-height:none;aspect-ratio:1;
+  object-fit:contain;border:5px solid #fffaf0;border-radius:3px;background:#fffaf0;
+}
+.image-dialog-close{border-color:#b58c4a;box-shadow:0 7px 22px #0004}
+
+@media(max-width:980px){
+  body[data-theme] .art-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  body[data-theme] .art-tile:last-child{grid-column:1/-1;width:calc(50% - 9px);justify-self:center}
+}
+@media(max-width:720px){
+  body[data-theme] .hero-visual{height:410px;min-height:0}
+  body[data-theme] .hero-art-link{width:min(91%,370px)}
+  body[data-theme] .about-aside{flex-direction:column;align-items:center;gap:17px}
+  body[data-theme] .about-portrait{width:min(340px,94%);margin:0 auto}
+  body[data-theme] .art-grid{grid-template-columns:1fr;gap:18px}
+  body[data-theme] .art-tile:last-child{grid-column:auto;width:100%}
+  body[data-theme] .image-dialog{width:min(94vw,calc(100dvh - 122px));padding:9px}
+  .image-dialog-frame{padding:5px}
+}
