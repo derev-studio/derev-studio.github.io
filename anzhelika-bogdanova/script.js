@@ -219,8 +219,6 @@ guideDialog.addEventListener('click',event=>{if(event.target===guideDialog)guide
 // Large images open inside the page, with an optional link to the artist's original post.
 const imageDialog=document.getElementById('imageDialog');
 const imageDialogPhoto=document.getElementById('imageDialogPhoto');
-const imageDialogCaption=document.getElementById('imageDialogCaption');
-const imageDialogSource=document.getElementById('imageDialogSource');
 document.querySelectorAll('.about-portrait-open,.hero-art-link,.art-tile,.editorial-image-open,.art-feature-open').forEach(trigger=>{
   trigger.addEventListener('click',event=>{
     if(typeof imageDialog.showModal!=='function')return;
@@ -229,8 +227,6 @@ document.querySelectorAll('.about-portrait-open,.hero-art-link,.art-tile,.editor
     event.preventDefault();
     imageDialogPhoto.src=trigger.dataset.imageLarge||image.currentSrc||image.src;
     imageDialogPhoto.alt=image.alt;
-    imageDialogCaption.textContent=image.alt;
-    imageDialogSource.href=trigger.dataset.imageSource||trigger.href;
     imageDialog.showModal();
   });
 });

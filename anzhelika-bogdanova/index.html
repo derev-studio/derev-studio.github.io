@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css?v=20261109b">
-  <link rel="stylesheet" href="./themes.css?v=20261109f">
+  <link rel="stylesheet" href="./themes.css?v=20261109g">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Анжелика Богданова","jobTitle":"Психолог, писатель, наставник","sameAs":["https://www.b17.ru/id254740/","https://proza.ru/avtor/mart0903","https://shedevrum.ai/@psyangel"]}</script>
   <title>Анжелика Богданова — психолог, писатель, наставник</title>
 </head>
@@ -32,7 +32,7 @@
       <a href="#programs">Программы</a>
       <a href="#reading">Публикации</a>
       <a href="#testimonials">Отзывы</a>
-      <a href="#art">Мой Шедеврум</a>
+      <a href="#art">Картины</a>
     </nav>
     <div class="header-tools">
       <button class="header-share" id="shareButton" type="button" aria-label="Поделиться сайтом" title="Поделиться сайтом"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V3m0 0-5 5m5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg><span>Поделиться</span></button>
@@ -86,20 +86,17 @@
     <section class="section about" id="about">
       <div class="wrap about-grid">
         <div class="about-aside reveal">
-          <span class="section-number">01 / ЗНАКОМСТВО</span>
           <div class="about-portrait">
             <button type="button" class="about-portrait-open" aria-label="Увеличить портрет Анжелики с конём" data-image-large="./assets/angelika-profile-large.webp" data-image-source="https://shedevrum.ai/@psyangel">
               <img src="./assets/angelika-profile-restored.webp" alt="Анжелика Богданова рядом со светлым конём" loading="lazy" width="768" height="768">
             </button>
-            <span>Образ из моего профиля в «Шедевруме»</span>
           </div>
         </div>
         <div class="about-content reveal">
-          <div class="eyebrow">НЕСКОЛЬКО СЛОВ ОБО МНЕ</div>
           <h2>Здравствуйте,<br>я <em>Анжелика.</em></h2>
           <p class="about-statement">Я психолог, писатель, наставник и аромапсихолог. Мне близок мир, в котором слово, образ и внимательное отношение к себе помогают человеку открывать новое.</p>
           <p>В моих публикациях переплетаются психология, творчество, личные истории, блоготерапия и темы профессионального развития. Здесь я собираю направления своей работы, статьи, книги и изображения.</p>
-          <div class="about-pills"><span>Психология</span><span>Блоготерапия</span><span>Творчество</span><span>Аромапсихология</span></div>
+          <nav class="about-pills" aria-label="Выберите направление"><a href="#practice">Психология</a><a href="#programs">Блоготерапия</a><a href="#reading">Творчество</a><a href="#serviceAroma">Аромапсихология</a></nav>
           <a class="underlined-link" href="https://www.b17.ru/id254740/" target="_blank" rel="noopener noreferrer">Мой профессиональный профиль на B17 <span>↗</span></a>
         </div>
       </div>
@@ -122,7 +119,7 @@
             <p>Работа со словом, внутренними ограничениями, самовыражением и развитием авторского голоса.</p>
             <button class="service-action" type="button" data-service="Блоготерапия и творческое сопровождение" aria-label="Выбрать блоготерапию">Выбрать формат <span>↗</span></button>
           </article>
-          <article class="service-card reveal">
+          <article class="service-card reveal" id="serviceAroma">
             <div class="service-top"><span class="service-index">03</span><span class="service-symbol flower-symbol">✿</span></div>
             <h3>Образы и<br>аромапсихология</h3>
             <p>Знакомство с метафорами, ассоциациями и образными практиками, о которых я пишу.</p>
@@ -182,7 +179,7 @@
 
     <section class="section art" id="art">
       <div class="wrap">
-        <div class="art-intro reveal"><div><span class="section-number">06 / МОЙ ШЕДЕВРУМ</span><h2>Истории<br><em>в красках.</em></h2></div><p>Книги, ароматы, отношения и маленькие моменты жизни. Выберите главу и листайте картины Анжелики в своём ритме.</p></div>
+        <div class="art-intro reveal"><div><span class="section-number">06 / КАРТИНЫ</span><h2>Истории<br><em>в красках.</em></h2></div><p>Книги, ароматы, отношения и маленькие моменты жизни. Выберите главу и листайте картины Анжелики в своём ритме.</p></div>
         <div class="art-exhibition reveal" id="artExhibition">
           <div class="art-chapters" role="tablist" aria-label="Темы картин">
             <button type="button" id="artTabWords" class="art-chapter is-active" role="tab" aria-controls="artStage" aria-selected="true" data-gallery-group="words"><span>01</span><strong>Книги и слово</strong><small>6 картин</small></button>
@@ -207,7 +204,7 @@
             </div>
           </div>
         </div>
-        <div class="art-footer reveal"><span>25 картин в четырёх тематических главах.</span><a class="button button-outline" href="https://shedevrum.ai/@psyangel" target="_blank" rel="noopener noreferrer">Другие работы Анжелики <span>↗</span></a></div>
+        <div class="art-footer reveal"><a class="button button-outline" href="https://shedevrum.ai/@psyangel" target="_blank" rel="noopener noreferrer">Другие работы Анжелики <span>↗</span></a></div>
       </div>
     </section>
 
@@ -231,7 +228,7 @@
     </section>
 
     <section class="contact-section" id="contacts">
-      <div class="wrap contact-inner"><div><span class="section-number">ОСТАВАЙТЕСЬ НА СВЯЗИ</span><h2>До встречи <em>в разговоре.</em></h2></div><div class="contact-links"><a href="https://t.me/angelikastory" target="_blank" rel="noopener noreferrer"><span>Telegram</span><b>@angelikastory</b><i>↗</i></a><a href="https://www.b17.ru/id254740/" target="_blank" rel="noopener noreferrer"><span>Профиль психолога</span><b>B17.ru</b><i>↗</i></a><a href="https://proza.ru/avtor/mart0903" target="_blank" rel="noopener noreferrer"><span>Публикации</span><b>Проза.ру</b><i>↗</i></a><a href="https://shedevrum.ai/@psyangel" target="_blank" rel="noopener noreferrer"><span>Картины и образы</span><b>Шедеврум</b><i>↗</i></a></div></div>
+      <div class="wrap contact-inner"><div><span class="section-number">ОСТАВАЙТЕСЬ НА СВЯЗИ</span><h2>До встречи <em>в разговоре.</em></h2></div><div class="contact-links"><a href="https://t.me/angelikastory" target="_blank" rel="noopener noreferrer"><span>Telegram</span><b>@angelikastory</b><i>↗</i></a><a href="https://www.b17.ru/id254740/" target="_blank" rel="noopener noreferrer"><span>Профиль психолога</span><b>B17.ru</b><i>↗</i></a><a href="https://proza.ru/avtor/mart0903" target="_blank" rel="noopener noreferrer"><span>Публикации</span><b>Проза.ру</b><i>↗</i></a><a href="https://shedevrum.ai/@psyangel" target="_blank" rel="noopener noreferrer"><span>Картины и образы</span><b>Галерея</b><i>↗</i></a></div></div>
     </section>
   </main>
 
@@ -247,14 +244,13 @@
   <dialog class="image-dialog" id="imageDialog" aria-label="Просмотр изображения">
     <button type="button" class="image-dialog-close" id="closeImageDialog" aria-label="Закрыть изображение">×</button>
     <div class="image-dialog-frame"><img id="imageDialogPhoto" alt="" width="1254" height="1254"></div>
-    <div class="image-dialog-bottom"><span id="imageDialogCaption"></span><a id="imageDialogSource" target="_blank" rel="noopener noreferrer" href="https://shedevrum.ai/@psyangel">Смотреть в Шедевруме ↗</a></div>
   </dialog>
   <a class="back-to-top" id="backToTop" href="#top" aria-label="Вернуться к началу" title="Наверх">↑</a>
 
   <a class="mobile-booking-cta" href="#booking">Записаться <span>↗</span></a>
-  <script src="./i18n.js?v=20261109e" defer></script>
+  <script src="./i18n.js?v=20261109g" defer></script>
   <script src="./articles.js" defer></script>
-  <script src="./script.js?v=20261109e" defer></script>
+  <script src="./script.js?v=20261109g" defer></script>
   <script src="./gallery.js?v=20261109f" defer></script>
 </body>
 </html>

@@ -378,3 +378,21 @@ body[data-theme] .art-footer{margin-top:25px}
   .art-thumb{flex-basis:61px;width:61px;height:61px}
   .art-expand{font-size:11px;bottom:11px;right:11px}
 }
+
+/* The four topics are links, not decorative labels. */
+body[data-theme] .about-pills a{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  border:1px solid var(--t-line);border-radius:50px;padding:11px 17px;
+  background:var(--t-card);color:var(--t-dark);font-size:13px;font-weight:700;
+  text-decoration:none;cursor:pointer;
+  transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;
+}
+body[data-theme] .about-pills a::after{content:'↗';color:var(--t-accent);font-size:16px;line-height:1}
+body[data-theme] .about-pills a:hover{
+  background:var(--t-special);border-color:var(--t-accent);
+  transform:translateY(-2px);box-shadow:0 7px 20px color-mix(in srgb,var(--t-accent) 12%,transparent);
+}
+body[data-theme] .about-pills a:focus-visible{outline:3px solid var(--t-accent);outline-offset:3px}
+#serviceAroma{scroll-margin-top:120px}
+body[data-theme] .art-footer{justify-content:flex-end}
+@media(max-width:720px){body[data-theme] .about-pills a{font-size:12px;padding:10px 13px;gap:8px}}
