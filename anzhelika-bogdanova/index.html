@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css?v=20261109b">
-  <link rel="stylesheet" href="./themes.css?v=20261109d">
+  <link rel="stylesheet" href="./themes.css?v=20261109e">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Анжелика Богданова","jobTitle":"Психолог, писатель, наставник","sameAs":["https://www.b17.ru/id254740/","https://proza.ru/avtor/mart0903","https://shedevrum.ai/@psyangel"]}</script>
   <title>Анжелика Богданова — психолог, писатель, наставник</title>
 </head>
@@ -182,16 +182,32 @@
 
     <section class="section art" id="art">
       <div class="wrap">
-        <div class="art-intro reveal"><div><span class="section-number">06 / МОЙ ШЕДЕВРУМ</span><h2>Когда мысли<br><em>становятся образами.</em></h2></div><p>Картины из галереи Анжелики в «Шедевруме». Живописные истории, настроения и внутренние миры — ещё один способ говорить о человеке.</p></div>
-        <div class="art-grid">
-          <figure class="art-piece reveal"><button class="art-tile" type="button" data-image-source="https://shedevrum.ai/@psyangel" aria-label="Открыть картину «Навстречу»"><img src="./assets/love-and-support.webp" alt="Акварель: улыбающиеся мужчина и женщина держатся за руки среди цветов" loading="lazy" width="1024" height="1024"></button><figcaption>Навстречу</figcaption></figure>
-          <figure class="art-piece reveal"><button class="art-tile" type="button" data-image-source="https://shedevrum.ai/@psyangel" aria-label="Открыть картину «Услышать друг друга»"><img src="./assets/thoughtful-conversation.webp" alt="Акварель: мужчина и женщина внимательно разговаривают на скамейке" loading="lazy" width="1024" height="1024"></button><figcaption>Услышать друг друга</figcaption></figure>
-          <figure class="art-piece reveal"><button class="art-tile" type="button" data-image-source="https://shedevrum.ai/@psyangel" aria-label="Открыть картину «Близость»"><img src="./assets/warm-embrace.webp" alt="Акварель: мужчина бережно обнимает женщину в розовом" loading="lazy" width="1024" height="1024"></button><figcaption>Близость</figcaption></figure>
-          <figure class="art-piece reveal"><button class="art-tile" type="button" data-image-source="https://shedevrum.ai/@psyangel" aria-label="Открыть картину «Разговор»"><img src="./assets/honest-talk.webp" alt="Акварель: мужчина и женщина сидят друг напротив друга и держатся за руки" loading="lazy" width="1024" height="1024"></button><figcaption>Разговор</figcaption></figure>
-          <figure class="art-piece reveal"><button class="art-tile" type="button" data-image-source="https://shedevrum.ai/@psyangel" aria-label="Открыть картину «Доверие»"><img src="./assets/mutual-trust.webp" alt="Акварель: пара смотрит друг на друга и бережно держит руки" loading="lazy" width="1024" height="1024"></button><figcaption>Доверие</figcaption></figure>
-          <figure class="art-piece reveal"><button class="art-tile" type="button" data-image-source="https://shedevrum.ai/post/dabaeda5d5fe11f18e21860be368d33b/" aria-label="Открыть картину «Осенний свет»"><img src="./assets/autumn-park.webp" alt="Акварель: яркий осенний парк с мостиком и утками" loading="lazy" width="512" height="512"></button><figcaption>Осенний свет</figcaption></figure>
+        <div class="art-intro reveal"><div><span class="section-number">06 / МОЙ ШЕДЕВРУМ</span><h2>Истории<br><em>в красках.</em></h2></div><p>Книги, ароматы, отношения и маленькие моменты жизни. Выберите главу и листайте картины Анжелики в своём ритме.</p></div>
+        <div class="art-exhibition reveal" id="artExhibition">
+          <div class="art-chapters" role="tablist" aria-label="Темы картин">
+            <button type="button" id="artTabWords" class="art-chapter is-active" role="tab" aria-controls="artStage" aria-selected="true" data-gallery-group="words"><span>01</span><strong>Книги и слово</strong><small>6 картин</small></button>
+            <button type="button" id="artTabAromas" class="art-chapter" role="tab" aria-controls="artStage" aria-selected="false" data-gallery-group="aromas"><span>02</span><strong>Ароматы и природа</strong><small>3 картины</small></button>
+            <button type="button" id="artTabRelations" class="art-chapter" role="tab" aria-controls="artStage" aria-selected="false" data-gallery-group="relations"><span>03</span><strong>Близость и отношения</strong><small>7 картин</small></button>
+            <button type="button" id="artTabMoments" class="art-chapter" role="tab" aria-controls="artStage" aria-selected="false" data-gallery-group="moments"><span>04</span><strong>Моменты жизни</strong><small>9 картин</small></button>
+          </div>
+          <div class="art-stage" role="tabpanel" id="artStage">
+            <div class="art-stage-visual">
+              <button type="button" class="art-feature-open" id="artFeatureOpen" data-image-source="https://shedevrum.ai/@psyangel" aria-label="Увеличить картину">
+                <img id="artFeatureImage" src="./assets/art-19.webp" alt="Волшебная книга среди сияющих цветов и деревьев" loading="lazy" width="1024" height="1024">
+                <span class="art-expand">Увеличить <span aria-hidden="true">↗</span></span>
+              </button>
+            </div>
+            <div class="art-stage-info">
+              <div class="art-stage-top"><span id="artChapterName">Книги и слово</span><span id="artPosition">01 / 06</span></div>
+              <div class="art-stage-headline"><span class="art-stage-glyph" aria-hidden="true">✦</span><h3 id="artFeatureTitle">Книга оживает</h3><p id="artFeatureText">Там, где слово встречается с воображением.</p></div>
+              <div class="art-stage-bottom">
+                <div class="art-page-controls"><button type="button" id="artPrev" aria-label="Предыдущая картина">←</button><span>Листайте картины</span><button type="button" id="artNext" aria-label="Следующая картина">→</button></div>
+                <div class="art-filmstrip" id="artFilmstrip" role="group" aria-label="Выберите картину"></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="art-footer reveal"><span>У Анжелики более тысячи публикаций в «Шедевруме».</span><a class="button button-outline" href="https://shedevrum.ai/@psyangel" target="_blank" rel="noopener noreferrer">Смотреть все работы <span>↗</span></a></div>
+        <div class="art-footer reveal"><span>25 картин в четырёх тематических главах.</span><a class="button button-outline" href="https://shedevrum.ai/@psyangel" target="_blank" rel="noopener noreferrer">Другие работы Анжелики <span>↗</span></a></div>
       </div>
     </section>
 
@@ -236,8 +252,9 @@
   <a class="back-to-top" id="backToTop" href="#top" aria-label="Вернуться к началу" title="Наверх">↑</a>
 
   <a class="mobile-booking-cta" href="#booking">Записаться <span>↗</span></a>
-  <script src="./i18n.js?v=20261109d" defer></script>
+  <script src="./i18n.js?v=20261109e" defer></script>
   <script src="./articles.js" defer></script>
-  <script src="./script.js?v=20261109d" defer></script>
+  <script src="./script.js?v=20261109e" defer></script>
+  <script src="./gallery.js?v=20261109e" defer></script>
 </body>
 </html>
