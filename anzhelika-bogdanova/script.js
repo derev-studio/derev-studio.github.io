@@ -221,7 +221,7 @@ const imageDialog=document.getElementById('imageDialog');
 const imageDialogPhoto=document.getElementById('imageDialogPhoto');
 const imageDialogCaption=document.getElementById('imageDialogCaption');
 const imageDialogSource=document.getElementById('imageDialogSource');
-document.querySelectorAll('.about-portrait-open,.hero-art-link,.art-tile').forEach(trigger=>{
+document.querySelectorAll('.about-portrait-open,.hero-art-link,.art-tile,.editorial-image-open').forEach(trigger=>{
   trigger.addEventListener('click',event=>{
     if(typeof imageDialog.showModal!=='function')return;
     const image=trigger.querySelector('img');

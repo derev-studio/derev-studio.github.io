@@ -232,68 +232,88 @@ body[data-theme] .art-tile img{filter:none}
 @media(max-width:400px){body[data-theme] .hero h1{font-size:34px}body[data-theme] .about-content h2{font-size:37px}.hero-actions{flex-wrap:wrap}.guide-dialog h2{font-size:27px}}
 @media(prefers-reduced-motion:reduce){body[data-theme] .hero::after{animation:none}.about-portrait-open:hover,.guide-options button:hover,.section-shortcuts a:hover{transform:none}}
 
-/* A coherent gallery: one square format, straight edges and fine, polished gold frames. */
+/* Watercolors feel at home on paper, with soft light and no ornamental frames. */
 body[data-theme] .hero-visual{height:460px;min-height:0}
-body[data-theme] .hero-art-link{width:min(88%,390px);margin-inline:auto}
-body[data-theme] .about-portrait{width:min(370px,100%);margin:46px auto 0 0}
+body[data-theme] .hero-art-link{width:min(92%,420px);margin-inline:auto;aspect-ratio:1}
+body[data-theme] .about-portrait{width:min(365px,100%);margin:46px auto 0 0}
 body[data-theme] .hero-art-link,
 body[data-theme] .about-portrait-open,
 body[data-theme] .art-tile{
-  aspect-ratio:1;
-  padding:8px;
-  border:2px solid #ae823e;
-  border-radius:12px;
-  background:linear-gradient(130deg,#b68b45 0%,#f7e2aa 16%,#be914a 37%,#faeabe 58%,#a87531 84%,#d7b46f 100%);
-  box-shadow:inset 0 0 0 2px #fff4cb91,0 16px 38px #39250e27;
-  transform:none;
-  transition:box-shadow .25s ease,filter .25s ease;
+  aspect-ratio:1;padding:0;border:0;border-radius:10px;
+  background:transparent;transform:none;
+  box-shadow:0 15px 37px #38291d1a;
+  transition:box-shadow .25s ease,transform .25s ease;
 }
+body[data-theme] .hero-art-link{box-shadow:none;overflow:visible}
+body[data-theme] .hero-art-link::after{display:none}
 body[data-theme] .hero-art-link:hover,
 body[data-theme] .about-portrait-open:hover,
-body[data-theme] .art-tile:hover{transform:none;filter:brightness(1.035);box-shadow:inset 0 0 0 2px #fff4cb91,0 20px 44px #39250e3b}
-body[data-theme] .hero-art-link::after{display:none}
+body[data-theme] .art-tile:hover{transform:translateY(-3px);box-shadow:0 18px 42px #38291d25}
+body[data-theme] .hero-art-link:hover{box-shadow:none}
 body[data-theme] .hero-art-link img,
 body[data-theme] .about-portrait-open img,
 body[data-theme] .art-tile img{
   display:block;width:100%;height:100%;aspect-ratio:1;
-  border:5px solid #fffaf0;border-radius:3px;
-  object-fit:cover;filter:none;transform:none;
+  border:0;border-radius:9px;object-fit:cover;filter:none;transform:none;
 }
+body[data-theme] .hero-art-link img{object-fit:contain;border-radius:3px}
+body:not(.is-dark) .hero-art-link img{mix-blend-mode:multiply}
 body[data-theme] .hero-art-link:hover img,
 body[data-theme] .art-tile:hover img{transform:none}
-body[data-theme] .hero-visual-caption{right:6%;bottom:0;align-items:flex-end;transform:none}
-body[data-theme] .art-grid{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto;gap:22px}
-body[data-theme] .art-tile{width:100%;min-width:0;grid-row:auto;grid-column:auto;overflow:hidden}
-body[data-theme] .art-tile-overlay{left:15px;right:15px;bottom:15px;padding:15px;border-radius:0 0 3px 3px}
+body[data-theme] .hero-visual-caption{right:5%;bottom:-2px;align-items:flex-end;transform:none}
+body[data-theme] .about-portrait-open{border:5px solid var(--t-card);background:var(--t-card)}
 
-/* The enlarged artwork is itself framed, not surrounded by a rough-edged overlay. */
+/* An image and a quote alternate with the portrait, creating a calm visual rhythm. */
+body[data-theme] .quote-break{min-height:0;background:var(--t-soft);color:var(--t-ink)}
+body[data-theme] .quote-break::before,body[data-theme] .quote-break::after{display:none}
+body[data-theme] .quote-content{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(270px,.75fr);align-items:center;gap:8%;text-align:left;padding-block:67px}
+body[data-theme] .quote-content blockquote{font-size:clamp(26px,2.8vw,44px);line-height:1.5}
+body[data-theme] .quote-content blockquote em{color:var(--t-accent)}
+body[data-theme] .quote-decor{color:var(--t-muted)}
+.editorial-image-open{display:block;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:zoom-in;overflow:hidden}
+.editorial-image-open img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.editorial-image-open:hover img{transform:scale(1.025)}
+.editorial-image-open:focus-visible,.art-tile:focus-visible{outline:3px solid var(--t-accent);outline-offset:4px}
+.quote-art{width:min(100%,370px);height:auto;aspect-ratio:1;justify-self:center;border-radius:10px;box-shadow:0 17px 34px #392b2123}
+.quote-art img{border-radius:10px}
+body[data-theme] .program-feature-photo{background:var(--t-soft)}
+.program-feature-photo .editorial-image-open{height:100%;min-height:400px}
+.program-feature-photo .editorial-image-open img{object-position:55% center}
+
+/* Six square works: visible titles below the image, not painted over it. */
+body[data-theme] .art-grid{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto;gap:29px 22px}
+.art-piece{margin:0;min-width:0;display:flex;flex-direction:column;gap:12px}
+body[data-theme] .art-tile{display:block;width:100%;height:auto;min-width:0;grid-row:auto;grid-column:auto;overflow:hidden;cursor:zoom-in}
+.art-piece figcaption{font:500 17px/1.5 var(--serif);color:var(--t-ink);text-align:center}
+
+/* The large picture floats on a simple off-white mount. */
 body[data-theme] .image-dialog{
-  width:min(92vw,calc(100dvh - 130px),1020px);
-  padding:14px;border:1px solid #b58c4a;border-radius:17px;
+  width:min(92vw,calc(100dvh - 145px),1020px);
+  padding:13px;border:1px solid var(--t-line);border-radius:18px;
   background:var(--t-card);box-shadow:0 35px 110px #0008;
 }
-.image-dialog-frame{
-  padding:8px;border:2px solid #aa7b35;border-radius:11px;
-  background:linear-gradient(130deg,#b68b45 0%,#f7e2aa 16%,#be914a 37%,#faeabe 58%,#a87531 84%,#d7b46f 100%);
-  box-shadow:inset 0 0 0 2px #fff5d491,0 4px 17px #36220f30;
-}
+.image-dialog-frame{padding:6px;border:1px solid var(--t-line);border-radius:11px;background:#fffdf9;box-shadow:none}
 body[data-theme] .image-dialog-frame img{
   display:block;width:100%;height:auto;max-height:none;aspect-ratio:1;
-  object-fit:contain;border:5px solid #fffaf0;border-radius:3px;background:#fffaf0;
+  object-fit:contain;border:0;border-radius:5px;background:#fffdf9;
 }
-.image-dialog-close{border-color:#b58c4a;box-shadow:0 7px 22px #0004}
+.image-dialog-close{border-color:var(--t-line);box-shadow:0 7px 22px #0004}
 
 @media(max-width:980px){
-  body[data-theme] .art-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-  body[data-theme] .art-tile:last-child{grid-column:1/-1;width:calc(50% - 9px);justify-self:center}
+  body[data-theme] .art-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+  body[data-theme] .quote-content{grid-template-columns:1fr .8fr;gap:4%}
 }
 @media(max-width:720px){
-  body[data-theme] .hero-visual{height:410px;min-height:0}
-  body[data-theme] .hero-art-link{width:min(91%,370px)}
+  body[data-theme] .hero-visual{height:430px;min-height:0}
+  body[data-theme] .hero-art-link{width:min(94%,385px)}
   body[data-theme] .about-aside{flex-direction:column;align-items:center;gap:17px}
   body[data-theme] .about-portrait{width:min(340px,94%);margin:0 auto}
-  body[data-theme] .art-grid{grid-template-columns:1fr;gap:18px}
-  body[data-theme] .art-tile:last-child{grid-column:auto;width:100%}
-  body[data-theme] .image-dialog{width:min(94vw,calc(100dvh - 122px));padding:9px}
-  .image-dialog-frame{padding:5px}
+  body[data-theme] .quote-content{grid-template-columns:1fr;gap:25px;padding-block:49px}
+  body[data-theme] .quote-content blockquote{font-size:clamp(25px,6vw,37px)}
+  .quote-art{width:min(100%,360px)}
+  .program-feature-photo .editorial-image-open{min-height:330px;aspect-ratio:1}
+  body[data-theme] .art-grid{grid-template-columns:1fr;gap:24px}
+  body[data-theme] .image-dialog{width:min(94vw,calc(100dvh - 130px));padding:9px}
+  .image-dialog-frame{padding:4px}
 }
+@media(prefers-reduced-motion:reduce){.editorial-image-open:hover img{transform:none}}
