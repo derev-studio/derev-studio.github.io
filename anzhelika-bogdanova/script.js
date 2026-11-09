@@ -179,3 +179,65 @@ bookingForm.addEventListener('submit', async event=>{
     formStatus.appendChild(link);
   }
 });
+
+// A useful, private orientation aid: the visitor only chooses a topic; nothing is stored.
+const guideDialog=document.getElementById('formatGuide');
+const guideChoices=document.getElementById('guideChoices');
+const guideResult=document.getElementById('guideResult');
+const guideTitle=document.getElementById('guideResultTitle');
+const guideText=document.getElementById('guideResultText');
+const guideMap={
+  talk:{service:'Индивидуальная консультация',ru:['Индивидуальная консультация','Личный разговор, в котором можно остановиться, разобраться в переживаниях и найти опору.'],en:['Individual consultation','A personal conversation to explore your feelings, questions, and inner sources of support.']},
+  write:{service:'Блоготерапия и творческое сопровождение',ru:['Блоготерапия','Работа со словом, самовыражением и собственным голосом — через письмо и творчество.'],en:['Blog therapy','Exploring self-expression and your own voice through writing and creative work.']},
+  images:{service:'Образные практики и аромапсихология',ru:['Образные практики','Метафоры, ассоциации и творческие образы помогают посмотреть на привычные вопросы по-новому.'],en:['Creative image-based practices','Metaphors, associations, and creative imagery can offer a new perspective on familiar questions.']}
+};
+let guideSelection='talk';
+function openGuide(){
+  guideChoices.hidden=false;guideResult.hidden=true;
+  if(typeof guideDialog.showModal==='function')guideDialog.showModal();
+  else document.getElementById('practice').scrollIntoView({behavior:'smooth'});
+}
+document.querySelectorAll('[data-open-guide]').forEach(button=>button.addEventListener('click',openGuide));
+document.getElementById('closeGuide').addEventListener('click',()=>guideDialog.close());
+document.querySelectorAll('[data-guide]').forEach(button=>button.addEventListener('click',()=>{
+  guideSelection=button.dataset.guide;
+  const english=window.siteI18n?.language==='en';
+  const info=guideMap[guideSelection];
+  guideTitle.textContent=info[english?'en':'ru'][0];
+  guideText.textContent=info[english?'en':'ru'][1];
+  guideChoices.hidden=true;guideResult.hidden=false;
+  document.getElementById('guideBack').focus();
+}));
+document.getElementById('guideBack').addEventListener('click',()=>{guideChoices.hidden=false;guideResult.hidden=true;document.querySelector('[data-guide]').focus()});
+document.getElementById('guideBook').addEventListener('click',()=>{
+  serviceSelect.value=guideMap[guideSelection].service;
+  guideDialog.close();
+  document.getElementById('booking').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+});
+guideDialog.addEventListener('click',event=>{if(event.target===guideDialog)guideDialog.close()});
+
+// Large images open inside the page, with an optional link to the artist's original post.
+const imageDialog=document.getElementById('imageDialog');
+const imageDialogPhoto=document.getElementById('imageDialogPhoto');
+const imageDialogCaption=document.getElementById('imageDialogCaption');
+const imageDialogSource=document.getElementById('imageDialogSource');
+document.querySelectorAll('.about-portrait-open,.hero-art-link,.art-tile').forEach(trigger=>{
+  trigger.addEventListener('click',event=>{
+    if(typeof imageDialog.showModal!=='function')return;
+    const image=trigger.querySelector('img');
+    if(!image)return;
+    event.preventDefault();
+    imageDialogPhoto.src=trigger.dataset.imageLarge||image.currentSrc||image.src;
+    imageDialogPhoto.alt=image.alt;
+    imageDialogCaption.textContent=image.alt;
+    imageDialogSource.href=trigger.dataset.imageSource||trigger.href;
+    imageDialog.showModal();
+  });
+});
+document.getElementById('closeImageDialog').addEventListener('click',()=>imageDialog.close());
+imageDialog.addEventListener('click',event=>{if(event.target===imageDialog)imageDialog.close()});
+
+const backToTop=document.getElementById('backToTop');
+function updateBackToTop(){backToTop.classList.toggle('is-visible',window.scrollY>850)}
+window.addEventListener('scroll',updateBackToTop,{passive:true});
+updateBackToTop();

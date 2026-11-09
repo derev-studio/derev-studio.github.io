@@ -13,7 +13,7 @@
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./themes.css?v=20261109">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Анжелика Богданова","jobTitle":"Психолог, писатель, наставник","sameAs":["https://www.b17.ru/id254740/","https://proza.ru/avtor/mart0903","https://shedevrum.ai/@psyangel"]}</script>
@@ -78,24 +78,24 @@
             <img class="hero-art" src="./assets/cards-and-story.webp" alt="Акварельная работа Анжелики Богдановой: женщина рассматривает карту с изображением" width="512" height="512" fetchpriority="high">
           </a>
           <div class="hero-visual-caption"><span class="caption-index">01 / Авторская работа</span><span>Шедеврум · @psyangel ↗</span></div>
-          <div class="hero-badge" aria-hidden="true"><span>внимание<br>к себе</span><svg viewBox="0 0 60 60"><path d="M30 0v60M0 30h60M9 9l42 42M51 9L9 51"/></svg></div>
-          <div class="hero-vertical">ЧУВСТВОВАТЬ · ПОНИМАТЬ · СОЗДАВАТЬ</div>
         </div>
       </div>
       <div class="hero-bottom wrap"><span>Листайте, чтобы познакомиться</span><span class="down-indicator">↓</span><span>01 — 07</span></div>
     </section>
 
-    <div class="words-band" aria-label="Слова о работе с собой"><div class="words-track"><span>Вдохновение</span><b>✳</b><span>Ясность</span><b>✳</b><span>Собственный голос</span><b>✳</b><span>Тёплый разговор</span><b>✳</b><span>Вдохновение</span><b>✳</b><span>Ясность</span><b>✳</b><span>Собственный голос</span><b>✳</b><span>Тёплый разговор</span><b>✳</b></div></div>
+    <nav class="section-shortcuts" aria-label="Быстрый переход по сайту"><div class="wrap section-shortcuts-inner"><span class="shortcuts-label">Исследуйте сайт</span><a href="#about">Обо мне <span>↗</span></a><a href="#practice">Консультации <span>↗</span></a><a href="#reading">Статьи <span>↗</span></a><a href="#booking">Написать Анжелике <span>↗</span></a></div></nav>
 
     <section class="section about" id="about">
       <div class="wrap about-grid">
         <div class="about-aside reveal">
           <span class="section-number">01 / ЗНАКОМСТВО</span>
           <div class="about-portrait">
-            <img src="./assets/angelika-profile.webp" alt="Изображение, выбранное Анжеликой Богдановой для её профиля в Шедевруме" loading="lazy" width="200" height="200">
+            <button type="button" class="about-portrait-open" aria-label="Увеличить портрет Анжелики с конём" data-image-large="./assets/angelika-profile-large.webp" data-image-source="https://shedevrum.ai/@psyangel">
+              <img src="./assets/angelika-profile-restored.webp" alt="Анжелика Богданова рядом со светлым конём" loading="lazy" width="768" height="768">
+              <span class="portrait-zoom">Увеличить ↗</span>
+            </button>
             <span>Образ из моего профиля в «Шедевруме»</span>
           </div>
-          <div class="about-spiral" aria-hidden="true">✺</div>
         </div>
         <div class="about-content reveal">
           <div class="eyebrow">НЕСКОЛЬКО СЛОВ ОБО МНЕ</div>
@@ -111,6 +111,7 @@
     <section class="section practice" id="practice">
       <div class="wrap">
         <div class="section-heading reveal"><div><span class="section-number">02 / РАБОТА СО МНОЙ</span><h2>У каждого запроса —<br><em>свой путь.</em></h2></div><p>Несколько направлений, о которых я рассказываю в своей практике и публикациях. Формат встречи и актуальные условия обсудим лично.</p></div>
+        <div class="guided-entry"><div><strong>Не знаете, с чего начать?</strong><span>Выберите, что вам ближе, — сайт подскажет направление.</span></div><button type="button" class="guide-trigger" data-open-guide>Подобрать направление <span aria-hidden="true">↗</span></button></div>
         <div class="service-grid">
           <article class="service-card reveal">
             <div class="service-top"><span class="service-index">01</span><span class="service-symbol">✳</span></div>
@@ -217,6 +218,20 @@
   </main>
 
   <footer class="footer"><div class="wrap footer-main"><div class="footer-brand"><span class="footer-symbol">АБ</span><div class="footer-wordmark"><strong>Анжелика Богданова</strong><small>Персональный сайт психолога и писателя</small></div></div><div class="footer-right"><span>© 2026 Анжелика Богданова</span><a href="#top">Наверх ↑</a></div></div></footer>
+
+  <dialog class="guide-dialog" id="formatGuide" aria-labelledby="guideTitle">
+    <div class="guide-dialog-top"><span class="section-number">НЕБОЛЬШАЯ ПОДСКАЗКА</span><button type="button" class="guide-close" id="closeGuide" aria-label="Закрыть подсказку">×</button></div>
+    <div id="guideChoices"><h2 id="guideTitle">С чего вам хочется начать?</h2><p>Выберите один вариант — и мы покажем подходящее направление.</p>
+      <div class="guide-options"><button type="button" data-guide="talk"><strong>Поговорить о важном</strong><span>Хочется разобраться в чувствах и мыслях.</span><b>↗</b></button><button type="button" data-guide="write"><strong>Найти себя через письмо</strong><span>Интересуют слова, творчество, самовыражение.</span><b>↗</b></button><button type="button" data-guide="images"><strong>Исследовать образы</strong><span>Ближе метафоры, ассоциации и воображение.</span><b>↗</b></button></div>
+    </div>
+    <div id="guideResult" hidden><span class="guide-result-label">ВАШЕ НАПРАВЛЕНИЕ</span><h2 id="guideResultTitle"></h2><p id="guideResultText"></p><div class="guide-result-actions"><button type="button" id="guideBack">← Другой вариант</button><button type="button" id="guideBook">Узнать об обращении ↗</button></div></div>
+  </dialog>
+  <dialog class="image-dialog" id="imageDialog" aria-label="Просмотр изображения">
+    <button type="button" class="image-dialog-close" id="closeImageDialog" aria-label="Закрыть изображение">×</button>
+    <img id="imageDialogPhoto" alt="" width="1254" height="1254">
+    <div class="image-dialog-bottom"><span id="imageDialogCaption"></span><a id="imageDialogSource" target="_blank" rel="noopener noreferrer" href="https://shedevrum.ai/@psyangel">Смотреть в Шедевруме ↗</a></div>
+  </dialog>
+  <a class="back-to-top" id="backToTop" href="#top" aria-label="Вернуться к началу" title="Наверх">↑</a>
 
   <a class="mobile-booking-cta" href="#booking">Записаться <span>↗</span></a>
   <script src="./i18n.js" defer></script>
