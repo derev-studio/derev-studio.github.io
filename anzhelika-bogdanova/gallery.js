@@ -4,7 +4,7 @@
   if (!exhibition) return;
 
   const picture = (file, title, titleEn, note, noteEn, alt, altEn) => ({
-    src: `./assets/${file}.webp`, title, titleEn, note, noteEn, alt, altEn
+    src: `./assets/${file}.webp?v=20261109f`, title, titleEn, note, noteEn, alt, altEn
   });
   const chapters = {
     words: {

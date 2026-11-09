@@ -169,7 +169,7 @@ body[data-theme] .hero::after{content:"";position:absolute;inset:-20%;z-index:0;
 @keyframes quietAurora{from{opacity:.38;transform:translate3d(-1%,0,0)}to{opacity:.74;transform:translate3d(2%,-1%,0)}}
 body[data-theme] .hero-inner,body[data-theme] .hero-bottom{z-index:1}
 body[data-theme] .hero-inner{min-height:575px;padding-block:33px 23px;gap:30px}
-body[data-theme] .hero h1{font-family:var(--serif);font-size:clamp(43px,4.15vw,65px);line-height:1.24;letter-spacing:-.048em;margin-bottom:21px;font-weight:500}
+body[data-theme] .hero h1{font-family:var(--serif);font-size:clamp(38px,3.3vw,54px);line-height:1.28;letter-spacing:-.042em;margin-bottom:21px;font-weight:500}
 body[data-theme] .hero-lead{font-size:14px;line-height:1.86;max-width:520px;margin-bottom:26px}
 body[data-theme] .hero-visual{height:500px}
 body[data-theme] .hero-art-link{width:min(86%,420px);transform:rotate(-1deg);border-radius:44% 44% 16px 16px}
