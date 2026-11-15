@@ -1,0 +1,35 @@
+name: Build unified product index
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/ohotnik-universal-index.yml'
+  schedule:
+    - cron: '18 4,16 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: ohotnik-public-index
+  cancel-in-progress: false
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build index from permitted public product sitemaps
+        run: python -u ohotnik/tools/build_public_index.py
+      - name: Publish searchable product index
+        run: |
+          if git diff --quiet -- ohotnik/catalog-auto.json; then
+            echo "No catalog changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ohotnik/catalog-auto.json
+          git commit -m "Refresh multi-store product index"
+          git push
