@@ -36,14 +36,15 @@ def load(url):
  with urlopen(req,timeout=15) as r:
   return r.read(2_000_000).decode("utf-8","ignore")
 def photo(page):
- html=load(page);p=Photos();p.feed(html)
+ html=load(quote(page,safe=":/?=&%"));p=Photos();p.feed(html)
+ print("DEBUG",page,"candidates",len(p.candidates),"samples",p.candidates[:8])
  for _,image in sorted(p.candidates):
   if not image:continue
   u=urljoin(page,image.strip())
   host=urlparse(u).hostname or ""
   if host not in ("forel-dan.co.il","www.forel-dan.co.il"):continue
   if "logo" in u.lower() or "placeholder" in u.lower():continue
-  if not re.search(r"\.(jpg|jpeg|png|webp)(\?|$)",u,re.I):continue
+  if not re.search(r"\.(jpg|jpeg|png|webp|avif|gif)(\?|$)",u,re.I):continue
   return u
  return None
 def main():
