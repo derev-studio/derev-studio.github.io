@@ -1,0 +1,30 @@
+name: Collect farm product photos
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/ohotnik-farm-photos.yml'
+permissions:
+  contents: write
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check official farm product images
+        run: python ohotnik/tools/collect_farm_photos.py
+      - name: Save photo URLs
+        run: |
+          if git diff --quiet -- ohotnik/farm-photos.json; then
+            echo "No new images available"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ohotnik/farm-photos.json
+          git commit -m "Refresh official trout image links"
+          git push
