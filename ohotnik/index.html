@@ -130,7 +130,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 19</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 20</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -282,7 +282,7 @@ function productLabel(name,meta){
    else if(/פרגי/.test(n))ru='Куриное филе (паргит)';
    else if(/שלם/.test(n))ru='Целая курица';
    else ru='Куриное мясо';
- }else if(meta.salmon){ru='Лосось';emoji='🐟'}
+ }else if(meta.salmon){emoji='🐟';ru=/מעושן|копчен|smok/i.test(n)?'Лосось копчёный':(/פילה|filet/i.test(n)?'Филе лосося':'Лосось'); if(/נתחי|куск|portion/i.test(n))ru+=' · кусочки'}
  else {
    const lex=[['חלב','Молоко','🥛'],['ביצ','Яйца','🥚'],['לחם','Хлеб','🍞'],['קפה','Кофе','☕'],['גבינ','Сыр','🧀'],['עגבני','Помидоры','🍅'],['מלפפון','Огурцы','🥒'],['תפוח אדמה','Картофель','🥔'],['שמן','Масло','🫒'],['דג','Рыба','🐟'],['בשר','Мясо','🥩'],['סוכר','Сахар','🧂'],['אורז','Рис','🍚'],['יוגורט','Йогурт','🥛'],['גלידה','Мороженое','🍦'],['פסטה','Макароны','🍝'],['תפוח','Яблоки','🍏'],['בננה','Бананы','🍌'],['שוקולד','Шоколад','🍫'],['ביסקוויט','Печенье','🍪'],['טונה','Тунец','🐟'],['מיץ','Сок','🧃'],['מים','Вода','💧'],['נקניק','Колбаса','🥓'],['קוטג','Творог','🥣'],['חמאה','Сливочное масло','🧈'],['חומוס','Хумус','🥣']];
    for(const [he,r,e] of lex)if(n.includes(he)){ru=r;emoji=e;break}
@@ -338,9 +338,11 @@ async function getFoodPhoto(code){
 // Verified product pages with matching barcode and their own product imagery.
 // Product pages belong to price-comparison services, NOT the supermarkets themselves.
 const exactGroceryPages={
- '7290004194529':{url:'https://www.pricez.co.il/Item-Prices.html?P=94843',site:'Pricez',type:'Страница этого товара с фото'},
- '7290000611860':{url:'https://www.pricez.co.il/Item-Prices.html?P=66095',site:'Pricez',type:'Страница этого товара с фото'},
- '7290003361441':{url:'https://deally.co.il/products/7290003361441',site:'Deally',type:'Страница этого товара с фото и ценами'}
+ '7290004194529':{url:'https://avrum.online/price/7290004194529',site:'А́врум',type:'Этот штрихкод, изображение и цены магазинов'},
+ '7290000611860':{url:'https://avrum.online/price/7290000611860',site:'А́врум',type:'Этот штрихкод, изображение и цены магазинов'},
+ '7290003361441':{url:'https://deally.co.il/products/7290003361441',site:'Deally',type:'Этот штрихкод, изображение и цены магазинов'},
+ '7290014435704':{url:'https://avrum.online/price/7290014435704',site:'А́врум',type:'Этот штрихкод, изображение и цены магазинов'},
+ '7290000659312':{url:'https://avrum.online/price/7290000659312',site:'А́врум',type:'Этот штрихкод, изображение и цены магазинов'}
 };
 function exactGroceryPage(code){return exactGroceryPages[String(code||'').replace(/\D/g,'')]||null}
 // Openly licensed category photographs: examples of the type, NEVER claim to be the actual package.
@@ -407,7 +409,7 @@ function showRetailerSuggestions(meta){
    photo.style.fontSize='34px';c.append(photo);
    c.append(node('h3','',p.title));
    c.append(node('p','',p.desc));
-   c.append(action('🛍 Открыть товар с фотографией',p.url,true));
+   c.append(action('🛍 Открыть похожий товар с фотографией',p.url,true));
    wrap.append(c);
  }
  section.append(wrap);
@@ -429,7 +431,7 @@ function showFoodDetail(p,meta,priceArea){
  body.append(hint);
  if(illustration)body.append(action('Источник иллюстрации и лицензия',illustration.source));
  if(exact){
-  body.append(node('h3','', '✅ Точный товар с фотографией'));
+  body.append(node('h3','', '✅ Страница товара по точному штрихкоду'));
   body.append(node('div','info','Штрихкод совпадает. Это каталог сравнения цен '+exact.site+', а не оформление покупки в супермаркете.'));
   body.append(action('📦 Открыть ЭТОТ товар с фото · '+exact.site,exact.url,true));
  }else{
@@ -456,10 +458,35 @@ function showFoodDetail(p,meta,priceArea){
  }
 }
 
+
+function enrichFoodThumbnail(el,barcode){
+ if(!/^\d{8,14}$/.test(String(barcode||'')))return;
+ async function load(){
+  const imgInfo=await getFoodPhoto(barcode);
+  if(!imgInfo||!el.isConnected)return;
+  const img=document.createElement('img');
+  img.alt='Фото именно этого продукта по штрихкоду '+barcode;
+  img.loading='lazy';
+  img.onload=()=>{
+    if(!el.isConnected)return;
+    el.replaceChildren(img,node('small','','Фото товара'));
+    el.title='Фото того же штрихкода из Open Food Facts (сообщество, CC BY-SA)';
+  };
+  img.onerror=()=>{};
+  img.src=imgInfo.src;
+ }
+ if('IntersectionObserver' in window){
+  const observer=new IntersectionObserver((entries)=>{
+   if(entries.some(e=>e.isIntersecting)){observer.disconnect();load()}
+  },{rootMargin:'120px'});
+  observer.observe(el);
+ }else load();
+}
+
 function displayGroceryCard(p,meta){
  const item=node('article','priceitem'), head=node('div','product-head');
  const title=titleOf(p), code=String(codeOf(p)),label=productLabel(title,meta);
- head.append(makeFoodImage(title,meta,true));
+ const thumbnail=makeFoodImage(title,meta,true);head.append(thumbnail);enrichFoodThumbnail(thumbnail,code);
  const main=node('div','product-main');
  main.append(node('strong','',label.ru));
  const he=node('div','original',title);he.dir='auto';main.append(he);
@@ -475,7 +502,7 @@ function displayGroceryCard(p,meta){
  actions.append(view);
  const exact=exactGroceryPage(code);
  if(exact){
-   actions.append(action('📦 Этот товар с фото · '+exact.site,exact.url,true));
+   actions.append(action('📦 Страница товара · '+exact.site,exact.url,true));
  }
  let btn=null;
  if(code){btn=node('button','action','🔄 Обновить цены');btn.type='button';btn.addEventListener('click',()=>comparePrices(code,item,btn,prices));actions.append(btn)}
