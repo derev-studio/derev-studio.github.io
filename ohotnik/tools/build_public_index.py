@@ -28,7 +28,7 @@ SOURCES=[
     ("ACE","https://www.ace.co.il",6,300),
 ]
 TODAY=dt.date.today().isoformat()
-MAX_DETAIL_PAGES=16
+MAX_DETAIL_PAGES=32
 DELAY_SECONDS=0.45
 
 def request(url,limit=2500000):
@@ -178,7 +178,7 @@ def enrich_product(p,rb):
     return p
 
 
-def ingest_shopify_public_feed(existing, origin, max_pages=26):
+def ingest_shopify_public_feed(existing, origin, max_pages=100):
     """Home Center public Shopify products.json with exact shekel prices."""
     rb=robots(origin)
     created=0;priced=0;count=0
@@ -187,7 +187,7 @@ def ingest_shopify_public_feed(existing, origin, max_pages=26):
         if not rb.can_fetch(AGENT,u):
             print("Public Shopify feed disallowed by robots; stop",flush=True);break
         try:
-            data=json.loads(request(u,limit=3600000))
+            data=json.loads(request(u,limit=8000000))
             products=data.get("products") if isinstance(data,dict) else []
             if not isinstance(products,list) or not products:break
             for obj in products:
@@ -204,7 +204,11 @@ def ingest_shopify_public_feed(existing, origin, max_pages=26):
                         if 0<value<1000000:valid.append((value,bool(v.get("available"))))
                     except (TypeError,ValueError):pass
                 available=[p for p,yes in valid if yes]
-                price=min(available) if available else (min(p for p,yes in valid) if valid else None)
+                sale_prices=available or [p for p,_ in valid]
+                price=min(sale_prices) if sale_prices else None
+                # A product page can contain several differently priced variants.
+                # Show its minimum only with the truthful 'from' qualifier.
+                price_is_from=len({round(p,2) for p in sale_prices})>1
                 photo=None;imgs=obj.get("images") or []
                 if imgs:
                     photo=imgs[0]
@@ -218,7 +222,8 @@ def ingest_shopify_public_feed(existing, origin, max_pages=26):
                     "img":photo or old.get("img") or "",
                     "brand":trim(obj.get("vendor")),"category":"all",
                     "store":"Home Center","url":url,"as_of":TODAY,
-                    "in_stock":in_stock,"verified":"store_public_product_feed"
+                    "in_stock":in_stock,"price_is_from":price_is_from,
+                    "verified":"store_public_product_feed"
                 }
                 if url not in existing:created+=1
                 existing[url]=entry
