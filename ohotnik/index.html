@@ -211,12 +211,15 @@ footer strong{color:#2b4364}
 .real-photo-icon{font-size:44px;line-height:1.3}
 .product-focus-photo .real-photo-icon{font-size:70px}
 .product-focus-dialog .product-focus-photo{margin:14px 0!important}
+
+.photo-credit{font-size:11px!important;color:#5b7491!important;background:none!important;border:0!important;text-decoration:underline;box-shadow:none!important;text-align:left!important;padding:4px 0!important}
+.catalog-picture .grocery-photo-hint,.product-focus-photo .grocery-photo-hint{z-index:1}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 39</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 40</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -658,40 +661,41 @@ const exactStorePages={
 function actualStorePage(code){
  return exactStorePages[String(code||'').replace(/\D/g,'')]||null;
 }
-function realImage(box,code){
- const key=String(code||'').replace(/\D/g,'');
- if(!/^\d{8,14}$/.test(key))return;
- const sources=[
-  'https://img.rami-levy.co.il/product/'+key+'/small.jpg'
- ];
- let index=0;
- function tryNext(){
-  if(!box.isConnected)return;
-  if(index>=sources.length){
-   getFoodPhoto(key).then(info=>{
-    if(info&&box.isConnected)tryImage(info.src,'Open Food Facts');
-   });
-   return;
-  }
-  tryImage(sources[index++],'Rami Levy');
- }
- function tryImage(url,credit){
-  const photo=document.createElement('img');
-  photo.loading='lazy';
-  photo.alt='Фотография продукта с совпадающим штрихкодом '+key;
-  photo.onload=()=>{
-   if(!box.isConnected)return;
-   box.replaceChildren(photo);
-   box.append(node('span','grocery-photo-hint',credit+' · по штрихкоду'));
-  };
-  photo.onerror=()=>{
-   if(credit==='Rami Levy')tryNext();
-  };
-  photo.src=url;
- }
- // The element is built detached; start photo loading only after it reaches DOM.
- requestAnimationFrame(tryNext);
+// Barcode URLs from retail websites must not be guessed: they were returning
+// unrelated photos. Try Open Food Facts only for a valid retail GTIN.
+function validFoodGTIN(code){
+ const num=String(code||'').replace(/\D/g,'');
+ if(![8,12,13,14].includes(num.length))return false;
+ let sum=0,weight=3;
+ for(let i=num.length-2;i>=0;i--){sum+=Number(num[i])*weight;weight=weight===3?1:3;}
+ return (10-sum%10)%10===Number(num[num.length-1]);
 }
+function photoFitsItem(photo,name){
+ const expected=String(name||'').toLowerCase();
+ const label=String(photo?.productName||'').toLowerCase();
+ if(!label||/friskies|whiskas|purina|cat food|dog food|kitten|חתול|כלב|מזון|לה קט|לקט|פטה|pate|pâté|корм/.test(label))return false;
+ if(/סלמון|salmon|лосос|семг|сёмг/.test(expected))return /סלמון|salmon|лосос|семг|сёмг/.test(label);
+ if(/עוף|פרגי|כרע|שוק|כנפ|חזה|chicken|куриц|цыпл/.test(expected))return /עוף|chicken|куриц|цыпл/.test(label);
+ return true;
+}
+function realImage(box,code,name){
+ if(!validFoodGTIN(code))return;
+ requestAnimationFrame(async()=>{
+  if(!box.isConnected)return;
+  const data=await getFoodPhoto(code);
+  if(!data||!box.isConnected||!photoFitsItem(data,name))return;
+  const img=document.createElement('img');
+  img.loading='lazy';img.alt='Фото конкретной упаковки по штрихкоду';
+  img.onload=()=>{
+   if(!box.isConnected)return;
+   box.dataset.kind='exact';
+   box.replaceChildren(img,node('span','grocery-photo-hint','Фото товара по штрихкоду'));
+  };
+  img.onerror=()=>{};
+  img.src=data.src;
+ });
+}
+
 function foodRuTitle(name,meta){
  const n=String(name||'').toLowerCase();
  if(meta.salmon){
@@ -792,16 +796,52 @@ function compactOfferText(offer){
 // Other shop prices are optional and collapsed rather than covering the item itself.
 // One product per card. Never display a category stock photograph as
 // the photograph of an individual SKU: images must be barcode matched.
+// Open-source photos of the appropriate food TYPE, never advertised as
+// pictures of the specific SKU. Every image retains a source/licence link.
+function groceryExampleImage(name){
+ const n=String(name||'').toLowerCase();
+ let file='',credit='';
+ if(/סלמון|salmon|лосос|семг|сёмг/.test(n)){
+  if(/מעושן|smoked|копч/.test(n)){file='Smoked salmon (8333105627).jpg';credit='Ruth Hartnup · CC BY 2.0';}
+  else if(/סטייק|steak|стейк/.test(n)){file='Salmon steaks.JPG';credit='Marlith · CC BY-SA 3.0';}
+  else if(/נתח|פרוס|кусоч|portion/.test(n)){file='Salmon cut 1.jpg';credit='Garitzko · Public domain';}
+  else if(/פילה|פילט|פלט|fillet|filet|филе/.test(n)){file='Raw salmon fillets.jpg';credit='FULVIO_TOGNON · CC0';}
+  else {file='Salmon Fish.JPG';credit='Marlith · CC BY-SA 3.0';}
+ }else if(/עוף|עופות|פרגי|כרע|שוק|כנפ|חזה|chicken|куриц|цыпл/.test(n)){
+  if(/חזה|breast|груд/.test(n)){file='Raw chicken slices.jpg';credit='kakyusei · CC0';}
+  else if(/כרע|ירך|פרגי|thigh|бедр/.test(n)){file='Raw chicken thighs.jpg';credit='Gran · CC BY 3.0';}
+  else if(/שוק|drum|голен/.test(n)){file='Chicken leg.jpg';credit='Karan Jagdale · CC BY-SA 4.0';}
+  else if(/כנפ|wing|крыл/.test(n)){file='Raw chicken.jpg';credit='Bhaskaranaidu · CC BY-SA 3.0';}
+  else {file='Raw broiler chicken.jpg';credit='Obasi Ogbeyialu Precious · CC BY 4.0';}
+ }else if(/עגבני|помидор|tomato/.test(n)){file='Tomatoes.jpg';credit='Wilfredor · CC0';}
+ else if(/לחם|хлеб|bread/.test(n)){file='Simple Bread.jpg';credit='o.tacke · CC0';}
+ else if(/חלב|молок|milk/.test(n)){file='Milk glass.jpg';credit='Stefan Kühn · CC BY-SA 3.0';}
+ if(!file)return null;
+ return {url:'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(file)+'?width=580',source:'https://commons.wikimedia.org/wiki/File:'+encodeURIComponent(file.replace(/ /g,'_')),credit};
+}
 function exactProductImage(code,title,large=false){
  const box=node('div',large?'food-detail-photo product-focus-photo':'catalog-picture grocery-image');
+ box.dataset.kind='missing';
  const placeholder=node('div','real-photo-missing');
- const emoji=node('div','real-photo-icon',/סלמון|salmon|лосос/i.test(title)?'🐟':/עוף|chicken|куриц/i.test(title)?'🍗':'🛒');
- placeholder.append(emoji);
- placeholder.append(node('span','','Фото товара пока нет'));
+ placeholder.append(node('div','real-photo-icon',/סלמון|salmon|лосос/.test(title)?'🐟':/עוף|chicken|куриц/.test(title)?'🍗':'🛒'));
+ placeholder.append(node('span','','Фото пока нет'));
  box.append(placeholder);
- realImage(box,code);
+ const example=groceryExampleImage(title);
+ if(example){
+  const img=document.createElement('img');
+  img.loading=large?'eager':'lazy';
+  img.alt='Иллюстрация вида товара, не фотография упаковки';
+  img.onload=()=>{
+   if(!box.isConnected||box.dataset.kind==='exact')return;
+   box.dataset.kind='example';
+   box.replaceChildren(img,node('span','grocery-photo-hint','Иллюстрация вида товара'));
+  };
+  img.onerror=()=>{};img.src=example.url;
+ }
+ realImage(box,code,title);
  return box;
 }
+
 function showProductPriceDetail(group,meta){
  const code=String(group.code||''),name=String(group.name||'').trim();
  const offers=Array.isArray(group.offers)?group.offers:[];
@@ -815,6 +855,11 @@ function showProductPriceDetail(group,meta){
  close.addEventListener('click',()=>dialog.close());top.append(close);body.append(top);
  const original=node('div','food-detail-original',name);original.dir='auto';body.append(original);
  const image=exactProductImage(code,name,true);body.append(image);
+ const example=groceryExampleImage(name);
+ if(example){
+  const credit=action('Источник иллюстрации · '+example.credit,example.source,false);
+  credit.classList.add('photo-credit');body.append(credit);
+ }
  // Confirmed source: matched GTIN or product code only. No random fish illustrations.
  const section=node('div','product-focus-purchase');
  if(best){
@@ -836,7 +881,7 @@ function showProductPriceDetail(group,meta){
   }
   body.append(more);
  }
- body.append(node('div','food-detail-caption','Если вместо фотографии значок, подтверждённого фото этого товара пока нет. Наличие проверяй у продавца.'));
+ body.append(node('div','food-detail-caption','Иллюстрация показывает вид продукта, не конкретную упаковку. Подлинное фото бывает только при подтверждении штрихкода. Наличие уточняй в магазине.'));
  dialog.append(body);document.body.append(dialog);
  dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
  dialog.addEventListener('close',()=>dialog.remove(),{once:true});
