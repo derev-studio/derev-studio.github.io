@@ -1,6 +1,9 @@
 name: Update Ohotnik product catalog
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/ohotnik-catalog.yml'
   schedule:
     - cron: '17 3,15 * * *'
 permissions:
