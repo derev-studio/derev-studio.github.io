@@ -287,6 +287,45 @@
       "photo": "",
       "as_of": "2026-11-15",
       "verified": "store"
+    },
+    {
+      "id": "ksp-475713",
+      "name_ru": "Крестовая отвёртка WERA PH1 × 80 мм, модель 350 PH",
+      "name_he": "מברג פיליפס PH1x80 מ״מ דגם 350 PH מבית WERA",
+      "brand": "WERA",
+      "category": "screwdriver",
+      "price": 30,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/475713",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "ksp-154399",
+      "name_ru": "Набор изолированных отвёрток Signet — 8 предметов, до 1000 В",
+      "name_he": "סט מברגים מבודדים סיגנט 8 חלקים Signet",
+      "brand": "Signet",
+      "category": "screwdriver",
+      "price": 65,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/154399",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "ksp-316476",
+      "name_ru": "Набор изолированных отвёрток Signet VDE — 6 штук",
+      "name_he": "סט 6 מברגי VDE מבודדים SIGNET",
+      "brand": "Signet",
+      "category": "screwdriver",
+      "price": 99,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/316476",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
     }
   ]
 }
