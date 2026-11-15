@@ -185,7 +185,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 26</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 27</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -1127,30 +1127,61 @@ function retailerQuery(q){
  }
  return searchHebrew(q);
 }
+// Общий механизм для ЛЮБОГО товара. Магазины подключаются как источники,
+// а не как отдельные кнопки под каждую модель или категорию.
 function retailerDestinations(q){
- const t=String(q||'').toLowerCase(),translated=retailerQuery(q);
- const kspSearch='https://ksp.co.il/web/cat/?search='+encodeURIComponent(translated);
+ const term=retailerQuery(q),raw=String(q||'').toLowerCase();
+ const tools=/отв[её]рт|מברג|дрел|шурупов|молот|сверл|ключ[иеё]|инструмент|пил[аы]|рулетк|гаечн|ножовк|перфоратор|болгарк|screwdriver|drill/.test(raw);
+ const electronics=/принтер|ноутбук|монитор|смартфон|кабел|плеер|fiio|xerox|компьют|телефон|клавиатур|мышк|наушник|планшет|телевизор/.test(raw);
  const stores=[
-  {name:'KSP',icon:'🔵',desc:'Поиск по введённому товару: '+translated,url:kspSearch,button:'Искать «'+translated+'» в KSP',type:'search'}
+  {
+   name:'KSP',icon:'🔵',
+   desc:'Поиск '+term+' на сайте KSP. Если магазин не распознает запрос, скопируй слово из строки выше.',
+   url:'https://ksp.co.il/web/cat/?search='+encodeURIComponent(term),
+   button:'Найти в KSP',type:'search'
+  },
+  {
+   name:'Ivory',icon:'🟣',
+   desc:'Каталог электроники, техники, инструментов и товаров для дома.',
+   url:'https://www.ivory.co.il/',
+   button:'Открыть Ivory',type:'category'
+  },
+  {
+   name:'Zap',icon:'🟠',
+   desc:'Независимый поиск и сравнение цен разных магазинов Израиля.',
+   url:'https://www.zap.co.il/',
+   button:'Открыть Zap',type:'category'
+  },
+  {
+   name:'Home Center',icon:'🏠',
+   desc:'Поиск товаров для дома, ремонта, садоводства и инструмента.',
+   url:'https://www.homecenter.co.il/search',
+   button:'Открыть поиск Home Center',type:'category'
+  },
+  {
+   name:'PriceDrop',icon:'📉',
+   desc:'Каталог KSP с фотографиями и историей цен. Это сторонний сервис, не источник данных нашего сайта.',
+   url:'https://pricedrop.co.il/items',
+   button:'Открыть каталог PriceDrop',type:'category'
+  },
+  {
+   name:'ACE',icon:'🛠️',
+   desc:tools?'Ручные инструменты и отвёртки':'Товары для дома, ремонта и сада',
+   url:tools?'https://www.ace.co.il/tools-paint-affixing/work-tools/hand-weilded-tools':'https://www.ace.co.il/',
+   button:tools?'Открыть инструменты ACE':'Открыть ACE',type:'category'
+  }
  ];
- // Только подтверждённые страницы категорий. Категория не выдаётся за точный поиск.
- if(/отв[её]рт|מברג|screwdriver/.test(t)){
-   stores.push(
-    {name:'KSP · отвёртки',icon:'🔧',desc:'Проверенный каталог отвёрток и наборов',url:'https://ksp.co.il/mob/cat/3640',button:'Смотреть отвёртки KSP',type:'category'},
-    {name:'Ivory',icon:'🟣',desc:'Раздел наборов отвёрток в Ivory',url:'https://www.ivory.co.il/catalog.php?act=cat&f=8284&id=168670',button:'Открыть отвёртки Ivory',type:'category'},
-    {name:'ACE',icon:'🛠️',desc:'Ручной инструмент и отвёртки',url:'https://www.ace.co.il/tools-paint-affixing/work-tools/hand-weilded-tools',button:'Открыть инструменты ACE',type:'category'}
-   );
- }else if(/дрел|шурупов|сверл|מקדח|מברגה/.test(t)){
-   stores.push(
-    {name:'KSP · инструменты',icon:'🔧',desc:'Дрели, шуруповёрты и другие инструменты',url:'https://ksp.co.il/mob/world/7288',button:'Открыть инструменты KSP',type:'category'},
-    {name:'Ivory',icon:'🟣',desc:'Каталог инструментов',url:'https://www.ivory.co.il/catalog.php?act=cat&id=29395',button:'Открыть инструменты Ivory',type:'category'},
-    {name:'ACE',icon:'🛠️',desc:'Электроинструмент',url:'https://www.ace.co.il/tools-paint-affixing/work-tools/power-tools/screwdrivers',button:'Открыть инструменты ACE',type:'category'}
-   );
- }else{
-   stores.push({name:'Ivory',icon:'🟣',desc:'Все категории Ivory; название для поиска можно скопировать выше',url:'https://www.ivory.co.il/catalog.php?act=all_categories',button:'Открыть каталог Ivory',type:'category'});
+ if(tools){
+  // Категории помогают ускорить выбор, но остаются вторичными.
+  stores[1].url='https://www.ivory.co.il/catalog.php?act=cat&f=8284&id=168670';
+  stores[1].desc='Раздел инструментов и наборов отвёрток Ivory. Для других инструментов пользуйся поиском магазина.';
  }
- return {translated,stores};
+ if(!electronics&&!tools){
+   stores[1].url='https://www.ivory.co.il/';
+ }
+ return {translated:term,stores};
 }
+
 function showStoreFallback(q,hadItems){
  const data=retailerDestinations(q),section=node('section','panel retail-search');
  section.append(node('h3','',hadItems?'Поискать ещё в магазинах':'Найти «'+q+'» непосредственно в магазинах'));
@@ -1166,6 +1197,8 @@ function showStoreFallback(q,hadItems){
   catch(e){copy.textContent='Выдели название выше для копирования';}
  });
  section.append(copy);
+ const note=node('div','message','Переход к магазину — запасной способ поиска. Он не заменяет карточку товара: проверенные фото, цены и прямые ссылки появляются здесь только когда товар есть в нашем каталоге.');
+ section.append(note);
  const list=node('div','retail-stores');
  for(const store of data.stores){
   const c=node('div','retail-store');
