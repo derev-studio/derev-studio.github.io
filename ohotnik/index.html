@@ -185,7 +185,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 34</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 35</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -877,12 +877,13 @@ function previousKnownChicken(meta){
  row.append(node('div','price-shop','מחסני השוק · Тверия'));
  ui.prices.append(row);ui.btn&&ui.btn.remove();res.append(ui.item);return true;
 }
-async function loadFood(mySeq,q){
+async function loadFood(mySeq,q,translatedTerm){
  setText('heading','🛒 Продукты и цены');
  setText('subtitle','Такие же карточки, как в технике: фото по штрихкоду, название, цена, конкретный магазин.');
  const isChicken=has(q.toLowerCase(),words.chicken);
  if(isChicken)setFilters([['all','🍗 Вся курица'],['whole','Целая'],['breast','Грудка'],['thigh','Бёдра'],['drum','Голени'],['wing','Крылья']]);
  const meta=filteredFood(q);
+ if(translatedTerm&&!meta.chicken&&!meta.salmon)meta.term=translatedTerm;
  if(/форел|форель|кибуц дан|киббуц дан|forel|trout|פורל|דגי דן|קיבוץ דן/.test(q.toLowerCase())){showFarmTrout();return}
  res.replaceChildren();
  message('🔎 Ищу товары и цены…');
@@ -1182,8 +1183,8 @@ function searchVariants(q){
  for(const [p,heWord] of synonyms)if(p.test(raw))variants.push(heWord);
  return [...new Set(variants.map(x=>x.toLowerCase().trim()))];
 }
-function rankCatalog(items,q){
- const variants=searchVariants(q);
+function rankCatalog(items,q,translated){
+ const variants=[...searchVariants(q),...(translated&&/\u005bא-ת\u005d/.test(translated)?[translated.toLowerCase().trim()]:[])];
  const queryLatin=tokenize(q).filter(t=>/[a-z]/i.test(t)&&/\d/.test(t));
  const queryTerms=tokenize(q).filter(t=>/[a-z0-9]/i.test(t)&&t.length>1);
  const results=[];
@@ -1362,12 +1363,50 @@ function showCatalogResult(products,q,failed){
  res.append(note);
  revealResults();
 }
+// Free keyless translation is a FALLBACK for Russian words not covered
+// by the local lexicon. The translated term is checked against actual
+// merchant product titles: a translation alone never creates a product.
+const productTranslations=new Map();
+function translateProductName(q){
+ if(!/[а-яё]/i.test(q)||q.length>95)return Promise.resolve(null);
+ if(productTranslations.has(q))return productTranslations.get(q);
+ const promise=(async()=>{
+  const ctrl=new AbortController(),timeout=setTimeout(()=>ctrl.abort(),6500);
+  try{
+   const u=new URL('https://api.mymemory.translated.net/get');
+   u.searchParams.set('q',q);
+   u.searchParams.set('langpair','ru|he');
+   const r=await fetch(u,{signal:ctrl.signal,mode:'cors'});
+   if(!r.ok)return null;
+   const data=await r.json();
+   const text=String(data?.responseData?.translatedText||'').trim();
+   if(text.length>100||!/[א-ת]/.test(text)||/[<>]/.test(text))return null;
+   return text;
+  }catch(e){return null}
+  finally{clearTimeout(timeout)}
+ })();
+ productTranslations.set(q,promise);
+ return promise;
+}
 async function showTech(q,mySeq){
  setText('heading','🛍️ Поиск товаров: '+q);
- setText('subtitle','Один поиск по разным магазинам. Показываем только найденные карточки, фотографии, цены и отдельные магазины.');
- const products=rankCatalog(await catalogData(),q);
+ setText('subtitle','Один поиск по товарам Израиля. Только конкретные карточки продавцов.');
+ res.replaceChildren();
+ message('🔎 Проверяю названия товаров в магазинах…');
+ const items=await catalogData();
  if(seq!==mySeq)return;
- showCatalogResult(products,q,false);
+ let products=rankCatalog(items,q);
+ if(products.length){showCatalogResult(products,q,false);return}
+ // Universal fallback: use free Russian→Hebrew translation even when
+ // the word has never appeared in our hand-written dictionary.
+ const translated=await translateProductName(q);
+ if(seq!==mySeq)return;
+ if(translated)products=rankCatalog(items,q,translated);
+ if(products.length){showCatalogResult(products,q,false);return}
+ // If no indexed retailer has the item, try the public grocery price
+ // feed too; do not send the user to a generic retailer storefront.
+ if(translated)return loadFood(mySeq,q,translated);
+ showCatalogResult([],q,false);
 }
 
 function showFree(){
