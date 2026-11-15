@@ -3,6 +3,7 @@ from urllib.request import Request,urlopen
 from urllib.parse import urlparse
 from urllib.robotparser import RobotFileParser
 import xml.etree.ElementTree as ET
+import json
 import re,json,html
 SITES=["https://www.homecenter.co.il","https://www.ace.co.il"]
 def fetch(url,limit=4000000):
@@ -35,3 +36,24 @@ for origin in SITES:
     print("OG IMG",re.findall(r'<meta[^>]+(?:og:image|twitter:image)[^>]*>',p,re.I)[:3],flush=True)
     print("JSONLD HEAD",[x[:450] for x in re.findall(r'<script[^>]+application/ld\+json[^>]*>(.*?)</script>',p,re.S|re.I)[:2]],flush=True)
  except Exception as exc:print("ERROR",type(exc).__name__,str(exc)[:250],flush=True)
+
+
+import urllib.request
+def probe_shopify():
+ origin="https://www.homecenter.co.il"
+ rb=RobotFileParser();rb.set_url(origin+"/robots.txt");rb.read()
+ for url in [origin+"/products.json?limit=10",origin+"/products/1214106334.js"]:
+  allowed=rb.can_fetch("OhotnikCatalogBot",url)
+  print("SHOPIFY",url,"robots_allowed",allowed,flush=True)
+  if not allowed:continue
+  try:
+   req=urllib.request.Request(url,headers={"User-Agent":"OhotnikCatalogBot/1.0","Accept":"application/json"})
+   with urllib.request.urlopen(req,timeout=10) as r:
+    body=r.read(500000)
+    data=json.loads(body)
+    products=data.get("products",[]) if isinstance(data,dict) else []
+    p=products[0] if products else data
+    variants=p.get("variants",[])
+    print("SHOPIFY STATUS",r.status,"PRODUCT_COUNT",len(products),"FIRST",repr({k:p.get(k) for k in ("id","title","handle","price","available")}),"FIRST_VARIANT",repr(variants[0])[:420] if variants else None,flush=True)
+  except Exception as e:print("SHOPIFY ERROR",type(e).__name__,str(e)[:200],flush=True)
+probe_shopify()
