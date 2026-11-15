@@ -248,12 +248,71 @@ footer strong{color:#2b4364}
 
 .local-search-info{display:flex;flex-direction:column;gap:6px;padding:12px;background:#edf5ff;border:1px solid #cddff2;border-radius:11px;margin:12px 0}
 .local-search-info strong{font-size:15px;color:#183c63}.local-search-info span{font-size:12px;color:#56708d}
+
+/* Language selection: Russian left, English centre, Hebrew right. */
+.site-customizer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.lang-switch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));direction:ltr;gap:0;border:1px solid var(--line);border-radius:13px;overflow:hidden;min-width:340px;background:var(--white)}
+.lang-switch button{background:transparent;border:0;border-right:1px solid var(--line);padding:10px 15px;color:var(--text);font-weight:750;font-size:14px}
+.lang-switch button:last-child{border:0}
+.lang-switch button[aria-pressed=true]{background:#235f9b;color:#fff}
+.theme-picker{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:750;color:var(--text)}
+.theme-picker select{min-width:195px;max-width:240px;height:42px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:5px 8px;font:inherit;font-size:13px;color:var(--text)}
+@media(max-width:700px){.site-customizer{gap:8px}.lang-switch{flex:1;min-width:0;width:100%}.lang-switch button{padding:10px 8px;font-size:13px}.theme-picker{width:100%;justify-content:flex-end}.theme-picker select{max-width:100%;min-width:0}}
+html[dir="rtl"] .lang-switch{direction:ltr}
+html[dir="rtl"] .hero,html[dir="rtl"] .catalog-content,html[dir="rtl"] .local-shop{text-align:start}
+html[dir="rtl"] #query{direction:auto;text-align:start}
+html[dir="rtl"] .grocery-original,html[dir="rtl"] .catalog-sub{unicode-bidi:plaintext}
+html[dir="rtl"] .grocery-price,html[dir="rtl"] .catalog-price,html[dir="rtl"] .tech-price{direction:ltr;unicode-bidi:isolate;text-align:start}
+html[data-theme="beige"]{--paper:#f4eee2;--white:#fffbf4;--text:#493e32;--gray:#74665a;--line:#e0d1bd;--blue:#886544;--amber:#e2b36c}
+html[data-theme="beige"] .hero{background:linear-gradient(115deg,#7b583a,#a77a4b)}
+html[data-theme="beige"] .hero p{color:#fff1dd}
+html[data-theme="beige"] .deals-hub,html[data-theme="beige"] .local-shops,html[data-theme="beige"] .catalog-card,html[data-theme="beige"] .card,html[data-theme="beige"] .panel{background:var(--white);border-color:var(--line)}
+html[data-theme="beige"] .tag,html[data-theme="beige"] .shop-filter{background:#fff6e7;border-color:#dec5a3;color:#6e4e2e}
+html[data-theme="beige"] .deal-link,html[data-theme="beige"] .local-shop,html[data-theme="beige"] .message{background:#faf2e4;border-color:#e3d4bd;color:#513e2d}
+html[data-theme="beige"] .grocery-price,html[data-theme="beige"] .catalog-price{color:#825b33}
+html[data-theme="navy"]{color-scheme:dark;--paper:#0c1728;--white:#192a42;--text:#eaf2fc;--gray:#a4b8cf;--line:#34506e;--blue:#8dbdff;--amber:#f4bd67;--ui-alt:#223956;--ui-link:#a6d5ff}
+html[data-theme="forest"]{color-scheme:dark;--paper:#0d211b;--white:#19362c;--text:#ebf7ef;--gray:#a5c5b5;--line:#365849;--blue:#9bd7ad;--amber:#d5c28b;--ui-alt:#244536;--ui-link:#b7e6bb}
+html[data-theme="navy"] body,html[data-theme="forest"] body{background:var(--paper);color:var(--text)}
+html[data-theme="navy"] .hero{background:linear-gradient(125deg,#182945,#294969)}
+html[data-theme="forest"] .hero{background:linear-gradient(125deg,#193c30,#2f5842)}
+html[data-theme="navy"] .hero p,html[data-theme="forest"] .hero p{color:#d0e4dd}
+html:is([data-theme="navy"],[data-theme="forest"]) :is(.deals-hub,.local-shops,.catalog-card,.card,.panel,.grocery-card,.food-detail-dialog,.priceitem,.retail-store,.farm-card,.message,.place,.local-shop,.local-search-info,.retail-query,.shop-filter,.tag,.grocery-detail-row,.price-row,.grocery-image,.catalog-picture,.grocery-disabled,.food-detail-photo){background:var(--white)!important;color:var(--text)!important;border-color:var(--line)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) :is(.local-shop,.retail-store,.retail-query,.local-search-info){background:var(--ui-alt)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) :is(.card p,.catalog-sub,.catalog-source,.grocery-original,.grocery-store,.grocery-date,.info,.pill,.deals-note,.local-shops small,.local-shop-note,.result-count,.food-detail-caption,.food-detail-original,.catalog-actions small,.retail-help,.brand small,.local-search-info span,footer){color:var(--gray)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) :is(.grocery-price,.catalog-price,.tech-price,.product-focus-price,.product-focus-store,.catalog-title,.price-num,.price-shop,.grocery-offer strong,.retail-store h4){color:var(--text)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) :is(.deal-link:not(.hot),.local-shop-actions a,.action:not(.primary),.shop-filter,.food-detail-close){background:var(--ui-alt)!important;color:var(--ui-link)!important;border-color:var(--line)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .deal-link.hot{background:#354f75!important;color:#fff!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .deal-link.history{background:var(--ui-alt)!important;color:var(--ui-link)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .deal-link small{color:var(--gray)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .tag.active,html:is([data-theme="navy"],[data-theme="forest"]) .shop-filter.active{background:#32669b!important;color:#fff!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .hero .tag{background:#ffffff15!important;color:#fff!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .hero input,html:is([data-theme="navy"],[data-theme="forest"]) .place input{background:var(--ui-alt)!important;color:var(--text)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .grocery-photo-hint{color:white!important;background:#122940db!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .real-photo-missing{background:var(--ui-alt);color:var(--gray)}
+html:is([data-theme="navy"],[data-theme="forest"]) .photo-credit{color:var(--ui-link)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .search button{color:#15223a}
+html:is([data-theme="navy"],[data-theme="forest"]) .grocery-image img{background:transparent}
 </style>
 </head>
 <body>
 <main>
+<div class="site-customizer" aria-label="Язык и оформление">
+<nav class="lang-switch" aria-label="Язык сайта">
+<button type="button" data-lang="ru" lang="ru" aria-pressed="true">Русский</button>
+<button type="button" data-lang="en" lang="en" aria-pressed="false">English</button>
+<button type="button" data-lang="he" lang="he" dir="rtl" aria-pressed="false">עברית</button>
+</nav>
+<label class="theme-picker" for="site-theme"><span id="theme-label">🎨 Тема</span>
+<select id="site-theme" aria-label="Оформление сайта">
+<option value="auto">🌙 Авто: день / ночь</option>
+<option value="light">☀️ Светлая</option>
+<option value="beige">🏖️ Бежевая</option>
+<option value="navy">🌌 Тёмно-синяя</option>
+<option value="forest">🌲 Тёмно-зелёная</option>
+</select></label>
+</div>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 45</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 46</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -1569,6 +1628,148 @@ city.addEventListener('change',()=>{if(query.value.trim())search()});
 el('examples').addEventListener('click',e=>{const b=e.target.closest('[data-query]');if(!b)return;query.value=b.dataset.query;chosen='auto';variation='all';document.querySelectorAll('#categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='auto'));search()});
 el('categories').addEventListener('click',e=>{const b=e.target.closest('[data-type]');if(!b)return;chosen=b.dataset.type;document.querySelectorAll('#categories button').forEach(x=>x.classList.toggle('active',x===b));if(query.value.trim()){variation='all';search()}});
 const q=new URLSearchParams(location.search).get('q');if(q){query.value=q;search()}
+})();
+</script>
+
+<script>
+/* Independent presentation-only layer. Product feeds, links, search terms and
+ * original Hebrew merchant descriptions are never altered by translation. */
+(function(){
+'use strict';
+const langs={ru:0,en:1,he:2};
+const phrases={"Охотник за скидками":["Deal Hunter","צייד המבצעים"],"Поиск полезного в Израиле":["Find what you need in Israel","מוצאים מה שצריך בישראל"],"Один поиск — всё, что нужно":["One search. Everything you need.","חיפוש אחד. כל מה שצריך."],"Продукты, техника, рюкзаки, бесплатные вещи, помощь и знакомства. Сначала результаты — потом магазин.":["Groceries, electronics, bags, free items, assistance and dating. See results first.","מזון, חשמל, תיקים, דברים בחינם, עזרה והיכרויות. קודם תוצאות, אחר כך החנות."],"🔎 НАЙТИ":["🔎 SEARCH","🔎 חיפוש"],"НАЙТИ":["SEARCH","חיפוש"],"Например: курица, дрель, отдам даром":["E.g. chicken, drill, free items","למשל: עוף, מקדחה, למסירה"],"Что ищем":["What are you searching for?","מה מחפשים?"],"Город (можно выбрать любой)":["City (choose any)","עיר (אפשר לבחור)"],"Впиши город или выбери из списка":["Enter a city or choose from the list","הקלידו עיר או בחרו מהרשימה"],"Курица":["Chicken","עוף"],"Лосось":["Salmon","סלמון"],"Форель Дана":["Dan trout","פורל דן"],"Дрель":["Drill","מקדחה"],"Рюкзак":["Backpack","תיק גב"],"Даром":["Free items","למסירה"],"Помощь":["Assistance","סיוע"],"Знакомства":["Dating","היכרויות"],"Охота за скидками KSP":["Hunt KSP deals","ציד מבצעים ב-KSP"],"Одна кнопка — сразу нужный раздел. Картинки и цены там показывает сам магазин.":["One tap opens a section. The retailer displays products and prices.","לחיצה אחת פותחת קטגוריה. המוצרים והמחירים מוצגים באתר החנות."],"акции ноября":["November offers","מבצעי נובמבר"],"Ноябрьские скидки":["November deals","מבצעי נובמבר"],"товары по акции":["Discounted products","מוצרים במבצע"],"Уценка и остатки":["Outlet and clearance","מציאון ועודפים"],"Все акции KSP":["All KSP deals","כל מבצעי KSP"],"Купоны и предложения":["Coupons and offers","קופונים והצעות"],"История цен KSP — бесплатно":["Free KSP price history","היסטוריית מחירים של KSP בחינם"],"Сравнить цены разных магазинов":["Compare stores' prices","השוואת מחירים בין חנויות"],"Black Friday и ноябрьская распродажа частично пересекаются. Реальность скидки сравнивай с историей цен в PriceDrop; цены и наличие проверяй у продавца.":["Black Friday and November deals may overlap. Check past prices on PriceDrop and confirm availability with the seller.","מבצעי בלאק פריידי ונובמבר עשויים לחפוף. בדקו היסטוריית מחירים ב-PriceDrop ואשרו זמינות מול המוכר."],"Электрика и инструменты в Тверии":["Electrical supplies and tools in Tiberias","חשמל וכלי עבודה בטבריה"],"Мики на Кикаре":["Miki by the square","מיקי בכיכר"],"Ицхак Бен-Цви, 13 · Шикун-Далет":["Yitzhak Ben-Zvi 13 · Shikun Dalet","יצחק בן צבי 13 · שיכון ד׳"],"Местный магазин без интернет-каталога: цены и наличие спрашивать":["Local store without an online catalog; ask about prices and stock.","חנות מקומית בלי קטלוג מקוון; יש לברר מחירים ומלאי"],"Позвонить":["Call","התקשרו"],"Карта":["Map","מפה"],"ARKA · Тверия":["ARKA · Tiberias","ארכה · טבריה"],"Ха-Масор, 10 · электротовары и инструмент":["HaMasor 10 · electrical supplies and tools","המשור 10 · חשמל וכלי עבודה"],"Есть цены и отдельные карточки товаров":["Individual product pages with prices are available","יש דפי מוצרים עם מחירים"],"Удлинители":["Extension cords","כבלים מאריכים"],"Точное наличие товара в местных филиалах нужно подтвердить перед поездкой.":["Please confirm local stock before visiting.","יש לוודא מלאי בסניף לפני הגעה."],"Все разделы":["All categories","כל הקטגוריות"],"Еда":["Groceries","מזון"],"Товары":["Products","מוצרים"],"Бесплатно":["Free","בחינם"],"Что будем искать?":["What shall we find?","מה מחפשים?"],"Выбери пример или напиши свой запрос.":["Choose a suggestion or enter a search.","בחרו דוגמה או הקלידו חיפוש."],"Начни поиск: название товара, цена и магазин появятся здесь, а не в Google.":["Search to see product names, prices and stores right here.","חפשו כדי לראות כאן שמות מוצרים, מחירים וחנויות."],"Создатель — Александр Деревяшкин":["Created by Alexander Derevyashkin","יוצר האתר: אלכסנדר דרוויאשקין"],"Новые технологии и искусственный интеллект · Израиль":["New technology and AI · Israel","טכנולוגיה חדשה ובינה מלאכותית · ישראל"],"Цены и наличие меняются; перед покупкой проверяйте у продавца. Сайт не является магазином.":["Prices and stock change; check with the seller. This is not an online shop.","המחירים והמלאי משתנים; בדקו מול המוכר. האתר אינו חנות."],"Все магазины":["All stores","כל החנויות"],"Другие магазины":["Other stores","חנויות אחרות"],"Показать ещё товары":["Show more products","הצג עוד מוצרים"],"Открыть товар":["Open product","פתיחת מוצר"],"Фото пока нет":["No photo yet","אין תמונה עדיין"],"Фото товара по штрихкоду":["Barcode-matched photo","תמונה לפי ברקוד"],"Иллюстрация вида товара":["Illustrative photo","תמונה להמחשה"],"Изображение товара":["Product image","תמונת מוצר"],"Цена не получена":["Price unavailable","המחיר אינו זמין"],"Проверяю цены…":["Checking prices…","בודק מחירים…"],"Цены магазинов":["Store prices","מחירי חנויות"],"Закрыть":["Close","סגירה"],"Подробности":["Details","פרטים"],"Магазин":["Store","חנות"],"Фото · товар · цена":["Photo · product · price","תמונה · מוצר · מחיר"],"Сравнить цены других магазинов":["Compare other stores","השוואת מחירים בין חנויות"],"В наличии у продавца (на дату проверки)":["In stock when checked","במלאי בזמן הבדיקה"],"Сейчас нет в наличии":["Currently out of stock","אזל מהמלאי"],"На карте":["On map","במפה"],"Вся курица":["All chicken","כל סוגי העוף"],"Целая":["Whole","שלם"],"Грудка":["Breast","חזה"],"Бёдра":["Thighs","ירכיים"],"Голени":["Drumsticks","שוקיים"],"Крылья":["Wings","כנפיים"],"Местные магазины: Мики и ARKA":["Local stores: Miki and ARKA","חנויות מקומיות: מיקי וארכה"],"Мики: позвонить":["Call Miki","התקשרו למיקי"],"Мики на карте":["Miki on map","מיקי במפה"],"ARKA на карте":["ARKA on map","ארכה במפה"],"Все отвёртки ARKA":["ARKA screwdrivers","מברגים בארכה"],"Сведения от":["Updated","עודכן"],"Открыть объявления":["View listings","פתיחת מודעות"],"Смотреть объявления":["View listings","צפייה במודעות"],"Без покупки":["No purchase required","ללא רכישה"],"Бесплатные вещи":["Free items","חפצים למסירה"],"Отдам даром":["Free giveaways","למסירה בחינם"],"Бесплатная еда и помощь":["Free meals and assistance","מזון בחינם וסיוע"],"Пункты помощи могут менять расписание и условия выдачи.":["Aid centers may change schedules and eligibility.","מרכזי הסיוע עשויים לשנות שעות ותנאים."],"Поиск мужчин":["Men","גברים"],"Поиск женщин":["Women","נשים"],"Знакомства · женщины и мужчины":["Dating · women and men","היכרויות · נשים וגברים"],"Ищу женщину":["Looking for a woman","מחפש אישה"],"Ищу мужчину":["Looking for a man","מחפש גבר"],"Открыть анкеты":["View profiles","צפייה בפרופילים"],"Перейти к знакомствам":["Open dating service","כניסה לאתר היכרויות"],"Израиль":["Israel","ישראל"],"Куриные голени":["Chicken drumsticks","שוקי עוף"],"Куриная грудка":["Chicken breast","חזה עוף"],"Филе лосося":["Salmon fillet","פילה סלמון"],"Стейк лосося":["Salmon steak","סטייק סלמון"],"Кусочки лосося":["Salmon pieces","נתחי סלמון"],"Лосось целиком":["Whole salmon","סלמון שלם"],"Продукт питания":["Food product","מוצר מזון"],"свежий":["fresh","טרי"],"замороженный":["frozen","קפוא"],"копчёный":["smoked","מעושן"],"норвежский":["Norwegian","נורווגי"],"солёный":["salted","מלוח"],"Найдено":["Found","נמצאו"],"товаров":["products","מוצרים"],"конкретных товаров":["products","מוצרים"],"сетей":["retail chains","רשתות"],"магазинах":["stores","חנויות"],"в":["in","ב-"],"Поиск товаров":["Product search","חיפוש מוצרים"],"Удлинитель":["Extension cord","כבל מאריך"],"Отвёртка":["Screwdriver","מברג"],"Набор отвёрток":["Screwdriver set","סט מברגים"],"Крестовая отвёртка":["Phillips screwdriver","מברג פיליפס"],"Розетка":["Power outlet","שקע חשמל"],"Шнур":["Cable","כבל"],"кабель":["cable","כבל"],"без выключателя":["without switch","ללא מפסק"],"с выключателем":["with switch","עם מפסק"],"розеток":["outlets","שקעים"],"розетки":["outlets","שקעים"],"м":["m","מ׳"],"кг":["kg","ק״ג"],"Результаты":["Results","תוצאות"],"Тема":["Theme","ערכת נושא"],"Тверия":["Tiberias","טבריה"]};
+const themeLabels={
+ ru:['🌙 Авто: день / ночь','☀️ Светлая','🏖️ Бежевая','🌌 Тёмно-синяя','🌲 Тёмно-зелёная'],
+ en:['🌙 Auto: day / night','☀️ Light','🏖️ Beige','🌌 Dark blue','🌲 Dark green'],
+ he:['🌙 אוטומטי: יום / לילה','☀️ בהירה','🏖️ בז׳','🌌 כחול כהה','🌲 ירוק כהה']
+};
+const saved=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const save=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let currentLang=Object.hasOwn(langs,saved('ohotnik-lang'))?saved('ohotnik-lang'):'ru';
+let themeChoice=['auto','light','beige','navy','forest'].includes(saved('ohotnik-theme'))?saved('ohotnik-theme'):'auto';
+const origin=new WeakMap();
+const attributes=new WeakMap();
+const dictionaryParts=[
+ ['Удлинитель','Extension cord','כבל מאריך'],
+ ['Набор изолированных отвёрток','Insulated screwdriver set','סט מברגים מבודדים'],
+ ['Крестовая отвёртка','Phillips screwdriver','מברג פיליפס'],
+ ['Набор отвёрток','Screwdriver set','סט מברגים'],
+ ['Отвёртка','Screwdriver','מברג'],
+ ['Ударная дрель','Hammer drill','מקדחה רוטטת'],
+ ['Дрель','Drill','מקדחה'],
+ ['Рюкзак','Backpack','תיק גב'],
+ ['Филе лосося','Salmon fillet','פילה סלמון'],
+ ['Стейк лосося','Salmon steak','סטייק סלמון'],
+ ['Кусочки лосося','Salmon pieces','נתחי סלמון'],
+ ['Лосось целиком','Whole salmon','סלמון שלם'],
+ ['Лосось','Salmon','סלמון'],
+ ['Куриные голени','Chicken drumsticks','שוקי עוף'],
+ ['Магазин:','Store:','חנות:'],
+ ['Цена от','Price as of','מחיר מתאריך'],
+ ['Цены от','Prices as of','מחירים מתאריך'],
+ ['Сведения от','Updated','עודכן'],
+ ['Данные от','Data from','נתונים מתאריך'],
+ ['Фото','Photo','תמונה'],
+ ['Товар','Product','מוצר'],
+ ['Цена','Price','מחיר'],
+ ['Открыть','Open','פתיחה'],
+ ['Обновить цены','Refresh prices','רענון מחירים'],
+ ['с выключателем','with switch','עם מפסק'],
+ ['без выключателя','without switch','ללא מפסק'],
+ ['розеток','outlets','שקעים'],
+ ['розетки','outlets','שקעים'],
+ ['В наличии','In stock','במלאי'],
+ ['Магазины','Stores','חנויות']
+];
+function translateText(originalText){
+ if(currentLang==='ru')return originalText;
+ const langIndex=currentLang==='en'?0:1;
+ const text=String(originalText);
+ const match=text.match(/^(\s*)(.*?)(\s*)$/s);if(!match)return text;
+ const lead=match[1],raw=match[2],trail=match[3];
+ if(!/[а-яё]/i.test(raw))return text;
+ const trimEmoji=raw.match(/^([^А-Яа-яЁёA-Za-z\u0590-\u05ff]*)(.*)$/s);
+ const head=trimEmoji?trimEmoji[1]:'',plain=trimEmoji?trimEmoji[2]:raw;
+ const exact=phrases[plain]||phrases[raw];
+ if(exact)return lead+(exact===phrases[plain]?head:'')+exact[langIndex]+trail;
+ const searching=plain.match(/^Поиск товаров:\s*(.+)$/);
+ if(searching)return lead+head+(currentLang==='en'?'Product search: ':'חיפוש מוצרים: ')+searching[1]+trail;
+ const resultMatch=plain.match(/^Найдено\s+(\d+)\s+товаров\s+в\s+(\d+)\s+магазинах/);
+ if(resultMatch)return lead+head+(currentLang==='en'?'Found '+resultMatch[1]+' products in '+resultMatch[2]+' stores.':'נמצאו '+resultMatch[1]+' מוצרים ב-'+resultMatch[2]+' חנויות.')+trail;
+ const foodMatch=plain.match(/^Найдено\s+(\d+)\s+конкретных товаров\s+·\s+(\d+)\s+сетей\s+·\s+(.+)$/);
+ if(foodMatch)return lead+head+(currentLang==='en'?'Found '+foodMatch[1]+' products · '+foodMatch[2]+' retail chains · '+foodMatch[3]:'נמצאו '+foodMatch[1]+' מוצרים · '+foodMatch[2]+' רשתות · '+foodMatch[3])+trail;
+ let result=plain;
+ for(const [ru,en,he] of dictionaryParts){
+  if(result.includes(ru))result=result.replaceAll(ru,langIndex===0?en:he);
+ }
+ return lead+head+result+trail;
+}
+function translateNode(node){
+ const parent=node.parentElement;
+ if(!parent||parent.closest('script,style,noscript,[data-no-translate],.grocery-original,.food-detail-original,.catalog-sub,.original'))return;
+ const text=node.nodeValue;
+ let entry=origin.get(node);
+ if(!entry||entry.displayed!==text){entry={ru:text,displayed:text};origin.set(node,entry)}
+ const converted=translateText(entry.ru);
+ if(text!==converted)node.nodeValue=converted;
+ entry.displayed=converted;
+}
+function translateAttributes(el){
+ if(el.closest('[data-no-translate]'))return;
+ let orig=attributes.get(el);
+ if(!orig){orig={};for(const key of ['placeholder','aria-label','title'])if(el.hasAttribute(key))orig[key]=el.getAttribute(key);attributes.set(el,orig);}
+ for(const key of Object.keys(orig)){
+  const converted=translateText(orig[key]);
+  if(el.getAttribute(key)!==converted)el.setAttribute(key,converted);
+ }
+}
+function translateVisible(){
+ const root=document.body;
+ const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+ let n;while((n=walker.nextNode()))translateNode(n);
+ for(const el of root.querySelectorAll('[placeholder],[aria-label],[title]'))translateAttributes(el);
+ document.documentElement.lang=currentLang;
+ document.documentElement.dir=currentLang==='he'?'rtl':'ltr';
+ for(const button of document.querySelectorAll('.lang-switch button')){
+  const active=button.dataset.lang===currentLang;
+  button.setAttribute('aria-pressed',String(active));
+ }
+ document.getElementById('theme-label').textContent=currentLang==='en'?'🎨 Theme':currentLang==='he'?'🎨 ערכת נושא':'🎨 Тема';
+ for(const [i,option] of [...document.querySelectorAll('#site-theme option')].entries())option.textContent=themeLabels[currentLang][i];
+}
+let scheduled=false;
+function scheduleTranslation(){
+ if(scheduled)return;scheduled=true;
+ requestAnimationFrame(()=>{scheduled=false;translateVisible()});
+}
+const nav=document.querySelector('.lang-switch');
+nav.addEventListener('click',event=>{
+ const button=event.target.closest('button[data-lang]');
+ if(!button)return;
+ currentLang=button.dataset.lang;
+ save('ohotnik-lang',currentLang);
+ translateVisible();
+});
+function israelHour(){
+ try{return Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jerusalem',hour:'2-digit',hourCycle:'h23'}).format(new Date()))}
+ catch(e){return new Date().getHours()}
+}
+function setAppearance(){
+ // Night mode starts at 19:00, ends at 07:00 (Israel time).
+ const hour=israelHour(),theme=themeChoice==='auto'?(hour>=19||hour<7?'navy':'beige'):themeChoice;
+ document.documentElement.dataset.theme=theme;
+ document.documentElement.dataset.themePreference=themeChoice;
+ document.getElementById('site-theme').value=themeChoice;
+}
+document.getElementById('site-theme').addEventListener('change',event=>{
+ themeChoice=event.target.value;
+ save('ohotnik-theme',themeChoice);
+ setAppearance();
+});
+setAppearance();
+setInterval(()=>{if(themeChoice==='auto')setAppearance()},60000);
+translateVisible();
+new MutationObserver(scheduleTranslation).observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
 </script>
 </body></html>
