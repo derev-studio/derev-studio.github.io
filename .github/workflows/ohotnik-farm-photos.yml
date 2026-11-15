@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/ohotnik-farm-photos.yml'
+      - 'ohotnik/tools/collect_farm_photos.py'
 permissions:
   contents: write
 jobs:
