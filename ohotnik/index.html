@@ -172,7 +172,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 23</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 24</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -188,6 +188,7 @@ footer strong{color:#2b4364}
 <div class="tags" id="examples">
 <button class="tag" type="button" data-query="курица">🍗 Курица</button>
 <button class="tag" type="button" data-query="лосось">🐟 Лосось</button>
+<button class="tag" type="button" data-query="форель Дана">🐟 Форель Дана</button>
 <button class="tag" type="button" data-query="дрель">🔧 Дрель</button>
 <button class="tag" type="button" data-query="рюкзак">🎒 Рюкзак</button>
 <button class="tag" type="button" data-query="FiiO DM13">🎵 FiiO DM13</button>
@@ -690,11 +691,11 @@ function foodRuTitle(name,meta){
 // Цены опубликованы на сайте продавца, за килограмм, если unit='кг'.
 const farmTroutProducts=[
  {id:'white-whole',name:'Форель белая · целая очищенная',price:65,unit:'кг',url:'https://forel-dan.co.il/product/white-trout/',icon:'🐟',imageKey:'white-trout'},
- {id:'white-fillet',name:'Форель белая · филе',price:95,unit:'кг',url:'https://forel-dan.co.il/product/white-trout/',icon:'🐟',imageKey:'white-trout'},
+ {id:'white-fillet',name:'Форель белая · филе',price:95,unit:'кг',url:'https://forel-dan.co.il/product/white-trout/',icon:'🐟',imageKey:'white-fillet'},
  {id:'pink-whole',name:'Форель розовая · целая очищенная',price:68,unit:'кг',url:'https://forel-dan.co.il/product/pink-trout/',icon:'🐟',imageKey:'pink-trout'},
- {id:'pink-fillet',name:'Форель розовая · филе',price:97,unit:'кг',url:'https://forel-dan.co.il/product/pink-trout/',icon:'🐟',imageKey:'pink-trout'},
- {id:'family-whole',name:'Форель семейная · целая очищенная',price:72,unit:'кг',url:'https://forel-dan.co.il/shop/',icon:'🐟',imageKey:'family-trout'},
- {id:'family-fillet',name:'Форель семейная · филе',price:104,unit:'кг',url:'https://forel-dan.co.il/shop/',icon:'🐟',imageKey:'family-trout'},
+ {id:'pink-fillet',name:'Форель розовая · филе',price:97,unit:'кг',url:'https://forel-dan.co.il/product/pink-trout/',icon:'🐟',imageKey:'pink-fillet'},
+ {id:'family-whole',name:'Форель семейная · целая очищенная',price:72,unit:'кг',url:'https://forel-dan.co.il/product/trout-family-clean/',icon:'🐟',imageKey:'family-trout'},
+ {id:'family-fillet',name:'Форель семейная · филе',price:104,unit:'кг',url:'https://forel-dan.co.il/product/trout-family-clean/',icon:'🐟',imageKey:'family-fillet'},
  {id:'frozen-five',name:'Форель замороженная · набор',price:50,unit:'кг',url:'https://forel-dan.co.il/product/פורל-חמישיות-קפוא/',icon:'🐟',imageKey:'frozen-trout'},
  {id:'smoked-fillet',name:'Форель · филе горячего копчения',price:160,unit:'кг',url:'https://forel-dan.co.il/product/פילה-פורל-מעושן/',icon:'🐟',imageKey:'smoked-trout'},
  {id:'cold-smoked',name:'Форель холодного копчения · упаковка около 100 г',price:22,unit:'упаковка',url:'https://forel-dan.co.il/product/פורל-בעישון-קר/',icon:'🐟',imageKey:'cold-smoked-trout'}
@@ -808,7 +809,11 @@ function renderMarket(groups,meta,cityText){
    const s=shopChoice(o.shop);if(s)stores.set(s.id,s);
   }
  }
- const choices=[{id:'all',label:'Все магазины'},...stores.values()];
+ const knownNetwork=[
+  {id:'yoch',label:'Йохананов'},{id:'shuf',label:'Шуферсаль'},
+  {id:'rami',label:'Рами Леви'},{id:'carrefour',label:'Карфур'},
+  {id:'mah',label:'Махсаней ха-Шук'},{id:'victory',label:'Виктори'}];
+ const choices=[{id:'all',label:'Все магазины'},...knownNetwork];
  let selected='all',visible=[],position=0,more=null;
  function paintFilter(){
   filters.replaceChildren();
