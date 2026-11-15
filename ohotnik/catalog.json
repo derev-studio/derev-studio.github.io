@@ -1,0 +1,110 @@
+{
+  "generated_at": "2026-11-15",
+  "source": "KSP; ручная проверка опубликованных карточек товаров",
+  "items": [
+    {
+      "id": "480141",
+      "name_ru": "Рюкзак Reebok Miami 900D — персиковый",
+      "name_he": "תיק גב דגם Miami 900D מבית Reebok - צבע אפרסק",
+      "brand": "Reebok",
+      "category": "backpack",
+      "price": 49,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/480141",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "480142",
+      "name_ru": "Рюкзак Reebok Miami 900D — серый",
+      "name_he": "תיק גב דגם Miami 900D מבית Reebok - צבע אפור",
+      "brand": "Reebok",
+      "category": "backpack",
+      "price": 49,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/480142",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "480418",
+      "name_ru": "Рюкзак SCUF Loadout для ноутбука 17″",
+      "name_he": "תיק גב למחשב נייד בגודל 17 אינץ' דגם SCUF Loadout",
+      "brand": "SCUF",
+      "category": "backpack",
+      "price": 89.9,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/480418",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "408345",
+      "name_ru": "Портативный CD-плеер FiiO DM13 — серый",
+      "name_he": "נגן דיסקים נייד Fiio DM13 - צבע אפור",
+      "brand": "FiiO",
+      "category": "audio",
+      "price": 699,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/408345",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "247522",
+      "name_ru": "Ударная дрель Bosch EasyImpact 570, 570 Вт",
+      "name_he": "מקדחה רוטטת Bosch EasyImpact 570",
+      "brand": "Bosch",
+      "category": "drill",
+      "price": 189,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/247522",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "332374",
+      "name_ru": "Ударная дрель Bosch GSB 13 RE, 600 Вт",
+      "name_he": "מקדחה רוטטת מקצועית Bosch GSB 13 RE 600W",
+      "brand": "Bosch",
+      "category": "drill",
+      "price": 254,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/332374",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "343495",
+      "name_ru": "Ударная дрель Bosch Professional GSB 600, 600 Вт",
+      "name_he": "מקדחה רוטטת Bosch Professional GSB 600",
+      "brand": "Bosch",
+      "category": "drill",
+      "price": 268,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/343495",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "142374",
+      "name_ru": "Ударная дрель Makita HP1641K, 680 Вт",
+      "name_he": "מקדחה רוטטת חשמלית Makita HP1641K 680W",
+      "brand": "Makita",
+      "category": "drill",
+      "price": 399,
+      "store": "KSP",
+      "url": "https://ksp.co.il/mob/item/142374",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    }
+  ]
+}
