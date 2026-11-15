@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-11-15",
-  "source": "KSP; ручная проверка опубликованных карточек товаров",
+  "source": "KSP, Ivory, ACE, Home Center, ARKA (ארכה); confirmed direct individual product pages; price dated",
   "items": [
     {
       "id": "480141",
@@ -103,6 +103,84 @@
       "store": "KSP",
       "url": "https://ksp.co.il/mob/item/142374",
       "photo": "https://ksp.co.il/site/siteUpload/269453367-7a75d243-7dd4-4158-b75f-da69e9493193_hp1641k_p_1500px.jpg",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "ivory-164566",
+      "name_ru": "Ударная аккумуляторная дрель-шуруповёрт Bosch GSB 120-LI, 12 В, набор",
+      "name_he": "מקדחה/מברגה בוש רוטטת BOSCH PRO GSB 120-LI 12V",
+      "brand": "Bosch",
+      "category": "drill",
+      "price": 465,
+      "store": "Ivory",
+      "url": "https://www.ivory.co.il/catalog.php?id=164566",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "ivory-29440",
+      "name_ru": "Ударная дрель Worx WX317, 600 Вт",
+      "name_he": "מקדחה רוטטת Worx WX317 600W",
+      "brand": "Worx",
+      "category": "drill",
+      "price": 199,
+      "store": "Ivory",
+      "url": "https://www.ivory.co.il/catalog.php?id=29440",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "ace-2200105",
+      "name_ru": "Ударная дрель Bosch EasyImpact 600, 600 Вт",
+      "name_he": "מקדחה רוטטת BOSCH 600W",
+      "brand": "Bosch",
+      "category": "drill",
+      "price": 249,
+      "store": "ACE",
+      "url": "https://www.ace.co.il/2200105",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "homecenter-1683612156753",
+      "name_ru": "Ударная дрель Bosch EasyImpact 570, 570 Вт",
+      "name_he": "מקדחה רוטטת BOSCH EasyImpact 570",
+      "brand": "Bosch",
+      "category": "drill",
+      "price": 199.9,
+      "store": "Home Center",
+      "url": "https://www.homecenter.co.il/products/1683612156753",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "erco-245DCK266P2",
+      "name_ru": "Набор DeWalt 18 В: ударная дрель и импакт, 2 аккумулятора",
+      "name_he": "סט מקדחה ואימפקט 18V עם 2 סוללות 5Ah דיוולט",
+      "brand": "DeWalt",
+      "category": "drill",
+      "price": null,
+      "store": "ARKA (ארכה)",
+      "url": "https://www.erco.co.il/b2c/245dck266p2.html",
+      "photo": "",
+      "as_of": "2026-11-15",
+      "verified": "store"
+    },
+    {
+      "id": "erco-245DTD156BAG",
+      "name_ru": "Аккумуляторный импакт Makita DTD156, 18 В, без аккумулятора",
+      "name_he": "מברגת אימפקט קומפקטית מקיטה 155Nm DTD156+תיק",
+      "brand": "Makita",
+      "category": "drill",
+      "price": null,
+      "store": "ARKA (ארכה)",
+      "url": "https://www.erco.co.il/b2c/245dtd156bag.html",
+      "photo": "",
       "as_of": "2026-11-15",
       "verified": "store"
     }
