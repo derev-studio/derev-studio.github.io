@@ -1072,9 +1072,12 @@ function productPhoto(item,emoji){
  if(typeof source==='object'&&source)source=source.url||source.src||'';
  if(typeof source!=='string'||!source.trim())return wrap;
  let src=source.trim();
+ const bases={'KSP':'https://ksp.co.il','Home Center':'https://www.homecenter.co.il','ACE':'https://www.ace.co.il','Ivory':'https://www.ivory.co.il'};
+ const base=bases[item.store];
  if(src.startsWith('//'))src='https:'+src;
- else if(src.startsWith('/'))src='https://ksp.co.il'+src;
- else if(!/^https:\/\//i.test(src))src='https://ksp.co.il/'+src.replace(/^\/+/,'');
+ else if(src.startsWith('/')&&base)src=base+src;
+ else if(!/^https:\/\//i.test(src)&&base)src=base+'/'+src.replace(/^\/+/,'');
+ else if(!/^https:\/\//i.test(src))return wrap;
  let u;
  try{u=new URL(src)}catch(e){return wrap}
  if(u.protocol!=='https:')return wrap;
