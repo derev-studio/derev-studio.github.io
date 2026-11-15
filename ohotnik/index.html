@@ -115,12 +115,22 @@ footer strong{color:#2b4364}
 .food-detail-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
 .view-food-btn{background:#245f9c;color:#fff!important;border-color:#245f9c!important;min-width:186px;text-align:center}
 @media(max-width:580px){.food-detail-inner{padding:14px}.food-detail-top h2{font-size:20px}.food-detail-photo{height:200px}.view-food-btn{flex:1}}
+
+.food-thumb{width:100px;height:92px;flex:none;border-radius:12px;overflow:hidden;background:#f0f4fa;display:grid;place-items:center;position:relative}
+.food-thumb img{width:100%;height:100%;object-fit:cover}
+.food-thumb small{position:absolute;bottom:0;right:0;left:0;text-align:center;background:#102c46cc;color:white;font-size:10px;line-height:1.4}
+.food-photo-note{font-size:12px;color:#60748e;margin:0 0 9px}
+.food-detail-photo{height:240px!important;min-height:0!important;padding:0!important}
+.food-detail-photo img{width:100%;height:100%;object-fit:contain}
+.exact-photo-link{background:#23639c!important;color:white!important;border-color:#23639c!important}
+.priceitem .actions .view-food-btn{font-weight:850}
+@media(max-width:580px){.food-thumb{width:80px;height:78px}.food-detail-photo{height:200px!important}}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 18</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 19</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -324,6 +334,50 @@ async function getFoodPhoto(code){
 
 /* Настоящие адреса карточек товаров Carrefour, найденные и проверенные отдельно.
    НЕ приписываем им штрихкоды и цены других сетей. */
+
+// Verified product pages with matching barcode and their own product imagery.
+// Product pages belong to price-comparison services, NOT the supermarkets themselves.
+const exactGroceryPages={
+ '7290004194529':{url:'https://www.pricez.co.il/Item-Prices.html?P=94843',site:'Pricez',type:'Страница этого товара с фото'},
+ '7290000611860':{url:'https://www.pricez.co.il/Item-Prices.html?P=66095',site:'Pricez',type:'Страница этого товара с фото'},
+ '7290003361441':{url:'https://deally.co.il/products/7290003361441',site:'Deally',type:'Страница этого товара с фото и ценами'}
+};
+function exactGroceryPage(code){return exactGroceryPages[String(code||'').replace(/\D/g,'')]||null}
+// Openly licensed category photographs: examples of the type, NEVER claim to be the actual package.
+function categoryPicture(name,meta){
+ const n=String(name||'').toLowerCase();
+ if(meta.salmon||/סלמון/.test(n))return {
+  url:'https://commons.wikimedia.org/wiki/Special:FilePath/Raw_salmon_fillets.jpg?width=520',
+  credit:'Фото вида продукта · FULVIO_TOGNON · CC0 (Wikimedia Commons)',
+  source:'https://commons.wikimedia.org/wiki/File:Raw_salmon_fillets.jpg'
+ };
+ if(meta.chicken){
+  if(/כרע|ירך|thigh|бедр|פרגית/.test(n))return {
+   url:'https://commons.wikimedia.org/wiki/Special:FilePath/Raw_chicken_thighs.jpg?width=520',
+   credit:'Фото вида продукта · Gran · CC BY 3.0 (Wikimedia Commons)',
+   source:'https://commons.wikimedia.org/wiki/File:Raw_chicken_thighs.jpg'
+  };
+  return {
+   url:'https://commons.wikimedia.org/wiki/Special:FilePath/Raw_broiler_chicken.jpg?width=520',
+   credit:'Фото вида продукта · Obasi Ogbeyialu Precious · CC BY 4.0 (Wikimedia Commons)',
+   source:'https://commons.wikimedia.org/wiki/File:Raw_broiler_chicken.jpg'
+  };
+ }
+ return null;
+}
+function makeFoodImage(name,meta,small){
+ const spec=categoryPicture(name,meta),wrap=node('div',small?'food-thumb':'food-detail-photo');
+ if(!spec){wrap.append(node('div','product-symbol',meta.chicken?'🍗':(meta.salmon?'🐟':'🛒')));return wrap}
+ const img=document.createElement('img');
+ img.loading=small?'lazy':'eager';
+ img.alt='Иллюстрация вида продукта, НЕ фото конкретной упаковки';
+ img.onerror=()=>{wrap.replaceChildren(node('div','',meta.chicken?'🍗':(meta.salmon?'🐟':'🛒')))};
+ img.src=spec.url;
+ wrap.append(img);
+ if(small)wrap.append(node('small','','Иллюстрация'));
+ return wrap;
+}
+
 const retailerProducts=[
  {kind:'whole',title:'Целая свежая курица',desc:'Carrefour · товар с фотографией на странице магазина',url:'https://www.carrefour.co.il/?catalogProduct=4057177',emoji:'🍗'},
  {kind:'breast',title:'Свежая куриная грудка',desc:'Carrefour · товар с фотографией на странице магазина',url:'https://www.carrefour.co.il/categories/79710/products?catalogProduct=6431963',emoji:'🍗'},
@@ -360,66 +414,52 @@ function showRetailerSuggestions(meta){
  res.prepend(section);
 }
 function showFoodDetail(p,meta,priceArea){
- const heName=titleOf(p),barcode=String(codeOf(p)||''),label=productLabel(heName,meta);
- const matching=retailerMatches(heName,meta);
- const dialog=node('dialog','food-detail-dialog');
- dialog.setAttribute('aria-label','Карточка продукта: '+label.ru);
+ const name=titleOf(p),code=String(codeOf(p)||''),label=productLabel(name,meta);
+ const exact=exactGroceryPage(code),dialog=node('dialog','food-detail-dialog');
+ dialog.setAttribute('aria-label','Товар: '+label.ru);
  const body=node('div','food-detail-inner'),top=node('div','food-detail-top');
  top.append(node('h2','',label.ru));
- const close=node('button','food-detail-close','✕ Закрыть');close.type='button';close.addEventListener('click',()=>dialog.close());
- top.append(close);body.append(top);
- const original=node('div','food-detail-original',heName);original.dir='auto';body.append(original);
- body.append(node('div','pill',barcode?'Штрихкод: '+barcode:'Штрихкод не указан'));
- // Не оставляем огромную пустую рамку, если реальной фотографии нет.
- const picture=node('div','food-detail-photo');
- picture.style.height='auto';picture.style.minHeight='0';picture.style.padding='12px';
- const photoNotice=node('div','','Проверяю фотографию по штрихкоду…');
- picture.append(photoNotice);body.append(picture);
- const photoSource=node('div','food-detail-caption','');body.append(photoSource);
- const sellerLinks=node('div','food-detail-actions');
- if(matching.length){
-   body.append(node('h3','', 'Товар с фотографией в магазине'));
-   body.append(node('div','info','Прямая карточка Carrefour похожего товара. Точное совпадение штрихкода с товаром из базы цен не подтверждено.'));
-   for(const matched of matching){
-     sellerLinks.append(action('🛒 '+matched.title+' — открыть в Carrefour',matched.url,true));
-   }
+ const close=node('button','food-detail-close','✕ Закрыть');close.type='button';
+ close.addEventListener('click',()=>dialog.close());top.append(close);body.append(top);
+ const he=node('div','food-detail-original',name);he.dir='auto';body.append(he);
+ body.append(node('div','pill','Код товара: '+(code||'не указан')));
+ const photo=makeFoodImage(name,meta,false);body.append(photo);
+ const illustration=categoryPicture(name,meta);
+ const hint=node('div','food-detail-caption',illustration?illustration.credit:'Фотография конкретной упаковки пока отсутствует');
+ body.append(hint);
+ if(illustration)body.append(action('Источник иллюстрации и лицензия',illustration.source));
+ if(exact){
+  body.append(node('h3','', '✅ Точный товар с фотографией'));
+  body.append(node('div','info','Штрихкод совпадает. Это каталог сравнения цен '+exact.site+', а не оформление покупки в супермаркете.'));
+  body.append(action('📦 Открыть ЭТОТ товар с фото · '+exact.site,exact.url,true));
  }else{
-   body.append(node('div','message','Прямой карточки именно этого товара в интернет-магазине пока нет. Показываю цены и магазины, не подменяя товар другим.'));
+  body.append(node('div','message','Пока не найдена подтверждённая страница этого штрихкода в интернет-магазине. Название магазина на карте не означает, что открылась карточка товара.'));
  }
- body.append(sellerLinks);
- body.append(node('h3','', 'Сравнение цен по штрихкоду'));
- const priceRows=priceArea.querySelectorAll('.price-row');
- if(priceRows.length){
-   for(const sourceRow of [...priceRows].slice(0,10)){body.append(sourceRow.cloneNode(true))}
- }else{body.append(node('div','message','Для выбранного города подтверждённых цен нет.'))}
- body.append(node('div','info','Название магазина в таблице цен не является прямой ссылкой на товар: опубликованные прайс-листы не всегда содержат URL страницы покупки.'));
+ body.append(node('h3','', 'Цены магазинов'));
+ const rows=priceArea.querySelectorAll('.price-row');
+ if(rows.length){for(const row of [...rows].slice(0,10))body.append(row.cloneNode(true))}
+ else body.append(node('div','message','Цена по выбранному городу пока не подтверждена.'));
+ body.append(node('div','info','В прайс-листе супермаркета часто есть только штрихкод, цена и адрес магазина. Ссылки на покупку именно этого товара в нём нет.'));
  dialog.append(body);document.body.append(dialog);
- dialog.addEventListener('close',()=>dialog.remove());
  dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+ dialog.addEventListener('close',()=>dialog.remove());
  dialog.showModal();
- if(!barcode){
-   picture.remove();
-   return;
+ if(code){
+  getFoodPhoto(code).then(info=>{
+   if(!dialog.isConnected||!info)return;
+   const img=document.createElement('img');
+   img.alt='Фото упаковки по точному штрихкоду '+code;
+   img.onload=()=>{photo.replaceChildren(img);hint.textContent='Фото той же упаковки по штрихкоду '+code+' · Open Food Facts';};
+   img.onerror=()=>{};
+   img.src=info.src;
+  });
  }
- getFoodPhoto(barcode).then(info=>{
-   if(!dialog.isConnected)return;
-   if(info){
-     picture.replaceChildren();picture.style.height='230px';picture.style.padding='0';
-     const img=document.createElement('img');img.alt='Фотография товара по штрихкоду '+barcode;
-     img.onerror=()=>{picture.remove();photoSource.textContent='Фотография по штрихкоду не загрузилась.'};
-     img.onload=()=>{photoSource.textContent='Фотография совпавшего штрихкода из Open Food Facts.'};
-     img.src=info.src;picture.append(img);
-   }else{
-     picture.remove();
-     photoSource.textContent='Фото именно этого штрихкода не найдено; фотографию похожего товара можно увидеть на сайте Carrefour по кнопке выше.';
-   }
- });
 }
 
 function displayGroceryCard(p,meta){
  const item=node('article','priceitem'), head=node('div','product-head');
  const title=titleOf(p), code=String(codeOf(p)),label=productLabel(title,meta);
- head.append(node('div','product-symbol',label.emoji));
+ head.append(makeFoodImage(title,meta,true));
  const main=node('div','product-main');
  main.append(node('strong','',label.ru));
  const he=node('div','original',title);he.dir='auto';main.append(he);
@@ -428,14 +468,14 @@ function displayGroceryCard(p,meta){
  const prices=node('div','price-loading','Проверяю цены магазинов в '+city.value+'…');
  item.append(prices);
  const actions=node('div','actions');
- const view=node('button','action view-food-btn','👁 Посмотреть товар и магазины');
+ const view=node('button','action view-food-btn','👁 Фото, товар и цены');
  view.type='button';
  view.setAttribute('aria-label','Посмотреть товар: '+label.ru);
  view.addEventListener('click',()=>showFoodDetail(p,meta,prices));
  actions.append(view);
- const found=retailerMatches(title,meta);
- for(const product of found){
-   actions.append(action('🛒 Похожий товар в Carrefour',product.url,true));
+ const exact=exactGroceryPage(code);
+ if(exact){
+   actions.append(action('📦 Этот товар с фото · '+exact.site,exact.url,true));
  }
  let btn=null;
  if(code){btn=node('button','action','🔄 Обновить цены');btn.type='button';btn.addEventListener('click',()=>comparePrices(code,item,btn,prices));actions.append(btn)}
@@ -516,6 +556,8 @@ function insertMarketCard(group,meta){
   const shop=node('div','',offer.shop);shop.dir='auto';info.append(shop);
   if(offer.date)info.append(node('div','price-date','Данные от '+offer.date));
   row.append(info);
+  const actual=exactGroceryPage(group.code);
+  if(actual)row.append(action('📦 Товар',actual.url));
   row.append(action('📍 Карта',map(offer.shop)));
   ui.prices.append(row);
  }
@@ -532,7 +574,7 @@ function renderMarket(groups,meta,cityText){
   count=Math.min(count+12,groups.length);
   if(count>=groups.length&&more)more.remove();
  }
- res.append(list);showRetailerSuggestions(meta);
+ res.append(list);
  let more=null;show();
  if(groups.length>12){
   more=node('button','action primary','Показать ещё товары');
@@ -593,7 +635,7 @@ async function loadFood(mySeq,q){
    for(const p of matching.slice(0,16)){
     const ui=displayGroceryCard(p,meta);list.append(ui.item);cards.push(ui);
    }
-   res.append(list);showRetailerSuggestions(meta);
+   res.append(list);
    // Ограничиваем одновременные запросы, чтобы не перегружать бесплатный API.
    for(const card of cards.slice(0,5)){
     if(seq!==mySeq)return;
