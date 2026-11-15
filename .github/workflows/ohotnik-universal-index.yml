@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/ohotnik-universal-index.yml'
+      - 'ohotnik/tools/build_public_index.py'
   schedule:
     - cron: '18 4,16 * * *'
 permissions:
