@@ -185,7 +185,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 29</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 30</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -1196,7 +1196,7 @@ function retailerQuery(q){
 // Общий механизм для ЛЮБОГО товара. Магазины подключаются как источники,
 // а не как отдельные кнопки под каждую модель или категорию.
 function retailerDestinations(q){
- const term=retailerQuery(q),raw=String(q||'').toLowerCase();
+ const term=searchVariants(q).find(x=>/[א-ת]/.test(x))||retailerQuery(q),raw=String(q||'').toLowerCase();
  const tools=/отв[её]рт|מברג|дрел|шурупов|молот|сверл|ключ[иеё]|инструмент|пил[аы]|рулетк|гаечн|ножовк|перфоратор|болгарк|screwdriver|drill/.test(raw);
  const electronics=/принтер|ноутбук|монитор|смартфон|кабел|плеер|fiio|xerox|компьют|телефон|клавиатур|мышк|наушник|планшет|телевизор/.test(raw);
  const stores=[
@@ -1221,8 +1221,8 @@ function retailerDestinations(q){
   {
    name:'Home Center',icon:'🏠',
    desc:'Поиск товаров для дома, ремонта, садоводства и инструмента.',
-   url:'https://www.homecenter.co.il/search',
-   button:'Открыть поиск Home Center',type:'category'
+   url:'https://www.homecenter.co.il/search?q='+encodeURIComponent(term),
+   button:'Найти «'+term+'» в Home Center',type:'search'
   },
   {
    name:'PriceDrop',icon:'📉',
@@ -1249,11 +1249,13 @@ function retailerDestinations(q){
 }
 
 function showStoreFallback(q,hadItems){
- const data=retailerDestinations(q),section=node('section','panel retail-search');
+ const data=retailerDestinations(q),section=node('details','panel retail-search');
+ section.open=!hadItems;
+ section.append(node('summary','','Другие варианты поиска по магазинам'));
  section.append(node('h3','',hadItems?'Поискать ещё в магазинах':'Найти «'+q+'» непосредственно в магазинах'));
  const descr=hadItems?
-  'Это дополнительные каталоги. Цены внутри них нужно проверить в самом магазине.':
-  'Наш каталог не получил карточки товара. Но магазины доступны: открой поиск или нужный раздел напрямую.';
+  'Дополнительные источники. Реальные карточки товаров находятся выше; ссылки на каталоги ниже не являются товарными карточками.':
+  'Точных карточек по этому запросу пока нет в нашей базе. Ниже есть поиск с уже подставленным названием товара.';
  section.append(node('p','retail-help',descr));
  const phrase=node('div','retail-query',data.translated);phrase.dir='auto';section.append(phrase);
  const copy=node('button','action','📋 Скопировать название для поиска');
