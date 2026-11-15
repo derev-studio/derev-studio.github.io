@@ -101,7 +101,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 15</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 16</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -292,56 +292,175 @@ function displayGroceryCard(p,meta){
  item.append(actions);
  return {item,code,btn,prices};
 }
+
+// Прямой поиск предложений супермаркетов по товару и городу.
+// Раньше сайт делал до 6 запросов на поиск и ещё 8 за ценами, что
+// приводило к частым пустым ответам и задержкам.
+function marketRows(payload){
+ const paths=['rows','items','records','results','data','result','entries'];
+ function read(value,depth){
+  if(depth>5||!value)return [];
+  if(Array.isArray(value)){
+   if(value.some(x=>x&&typeof x==='object'&&('item_price' in x||'itemPrice' in x)))return value;
+   for(const v of value){const found=read(v,depth+1);if(found.length)return found}
+   return [];
+  }
+  if(typeof value==='object'){
+   for(const k of paths){if(k in value){const found=read(value[k],depth+1);if(found.length)return found}}
+  }
+  return [];
+ }
+ return read(payload,0);
+}
+async function marketSearch(term,cityName){
+ const u=new URL('https://www.over.org.il/api/prices/table/prices_market');
+ u.searchParams.set('q',term);
+ if(cityName)u.searchParams.set('city',cityName);
+ u.searchParams.set('columns','item_code,item_name,item_price,chain_name,store_name,as_of');
+ u.searchParams.set('limit','200');
+ const control=new AbortController(),timeout=setTimeout(()=>control.abort(),11500);
+ try{
+  const response=await fetch(u.toString(),{signal:control.signal,cache:'no-store',mode:'cors',headers:{Accept:'application/json'}});
+  if(!response.ok)throw Error('HTTP '+response.status);
+  return marketRows(await response.json());
+ }finally{clearTimeout(timeout)}
+}
+function numberPrice(value){
+ if(typeof value==='number')return value;
+ if(value===null||value===undefined)return NaN;
+ const s=String(value).replace('₪','').replace(/\s/g,'').replace(',','.');
+ return Number(s);
+}
+function pricedMarketGroups(rows,meta){
+ const groups=new Map();
+ for(const row of rows){
+  if(!row||!foodRelevant({item_name:row.item_name||row.product_name||row.name||''},meta))continue;
+  const price=numberPrice(row.item_price??row.itemPrice??row.price);
+  if(!Number.isFinite(price)||price<=0||price>100000)continue;
+  const code=String(row.item_code_bare||row.item_code||row.barcode||row.code||'');
+  const name=String(row.item_name||row.product_name||row.name||'').trim();
+  if(!name)continue;
+  const key=code||name;
+  let group=groups.get(key);
+  if(!group){group={code,name,offers:[],seen:new Set()};groups.set(key,group)}
+  const shop=String(row.store_name||row.chain_name||row.store||row.chain||'Магазин');
+  const key2=shop+'|'+price;
+  if(group.seen.has(key2))continue;
+  group.seen.add(key2);
+  group.offers.push({shop,price,date:String(row.as_of||row.file_date||row.updated_at||'').slice(0,10)});
+ }
+ const result=[...groups.values()];
+ for(const p of result)p.offers.sort((a,b)=>a.price-b.price);
+ result.sort((a,b)=>(a.offers[0]?.price??999999)-(b.offers[0]?.price??999999));
+ return result;
+}
+function insertMarketCard(group,meta){
+ const p={item_name:group.name,item_code:group.code};
+ const ui=displayGroceryCard(p,meta);
+ ui.prices.replaceChildren();
+ for(const offer of group.offers.slice(0,6)){
+  const row=node('div','price-row');
+  row.append(node('div','price-num',offer.price.toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
+  const info=node('div','price-shop');
+  const shop=node('div','',offer.shop);shop.dir='auto';info.append(shop);
+  if(offer.date)info.append(node('div','price-date','Данные от '+offer.date));
+  row.append(info);
+  row.append(action('📍 Карта',map(offer.shop)));
+  ui.prices.append(row);
+ }
+ if(ui.btn){ui.btn.textContent='🔄 Обновить цены';}
+ return ui.item;
+}
+function renderMarket(groups,meta,cityText){
+ res.replaceChildren();
+ res.append(node('p','result-count','Найдено товаров: '+groups.length+' · цены из опубликованных прайс-листов'+(cityText?' · '+cityText:'')));
+ const list=node('div','result');
+ let count=0;
+ function show(){
+  for(const g of groups.slice(count,count+12))list.append(insertMarketCard(g,meta));
+  count=Math.min(count+12,groups.length);
+  if(count>=groups.length&&more)more.remove();
+ }
+ res.append(list);
+ let more=null;show();
+ if(groups.length>12){
+  more=node('button','action primary','Показать ещё товары');
+  more.type='button';more.addEventListener('click',show);res.append(more);
+ }
+}
+function previousKnownChicken(meta){
+ if(!meta.chicken||variation==='breast'||variation==='thigh'||variation==='wing'||variation==='drum')return false;
+ if(!/^(тверия|טבריה)$/i.test(city.value.trim()))return false;
+ // Значение из скриншота пользователя, не выдаём за текущую цену.
+ const p={item_name:'עוף טרי ארוז שלם',item_code:'4194529'};
+ const ui=displayGroceryCard(p,meta);ui.prices.replaceChildren();
+ ui.prices.append(node('div','message warn','Последняя известная цена от 14.11.2026 — НЕ проверена сегодня.'));
+ const row=node('div','price-row');
+ row.append(node('div','price-num','23,90 ₪'));
+ row.append(node('div','price-shop','מחסני השוק · Тверия'));
+ ui.prices.append(row);ui.btn&&ui.btn.remove();res.append(ui.item);return true;
+}
 async function loadFood(mySeq,q){
  setText('heading','🛒 Продукты и цены');
- setText('subtitle','Товар, цена в шекелях и магазин — в одном месте. Сначала ищем в '+city.value+'.');
+ setText('subtitle','Сначала показываю товары и цены из магазинов '+city.value+'. Без переходов в техническую базу.');
  const isChicken=has(q.toLowerCase(),words.chicken);
  if(isChicken)setFilters([['all','🍗 Вся курица'],['whole','Целая'],['breast','Грудка'],['thigh','Бёдра'],['drum','Голени'],['wing','Крылья']]);
  const meta=filteredFood(q);
- res.replaceChildren();message('🔎 Ищу настоящие продукты и цены…');
- const terms=(isChicken&&variation==='all')?['עוף שלם','חזה עוף','כרעיים עוף','שוקיים עוף','פרגיות','כנפיים עוף']:[meta.term];
+ res.replaceChildren();
+ message('🔎 Ищу предложения магазинов для «'+q+'»…');
+ let marketError=null;
  try{
-  // Ищем по видам мяса: общий запрос «עוף» поднимает в выдаче сосиски и супы.
-  const batches=await Promise.allSettled(terms.map(fetchPriceProducts));
+  // Один запрос к объединённой базе цен вместо десятков параллельных.
+  let offers=await marketSearch(meta.term,cityHe());
   if(seq!==mySeq)return;
-  const seen=new Set(), products=[];
-  for(const batch of batches){
-    if(batch.status!=='fulfilled')continue;
-    for(const p of batch.value){
-      const code=String(codeOf(p)||''),name=titleOf(p);
-      if(!code||seen.has(code)||!foodRelevant(p,meta))continue;
-      seen.add(code);products.push(p);
-    }
+  let groups=pricedMarketGroups(offers,meta);
+  if(groups.length){
+   renderMarket(groups,meta,city.value);
+   return;
+  }
+ }catch(error){marketError=error}
+ if(seq!==mySeq)return;
+ // Запасной поиск по каталогу названий: он содержит товары и штрихкоды
+ // даже тогда, когда нет цены по выбранному городу.
+ try{
+  let products=await fetchPriceProducts(meta.term);
+  if(seq!==mySeq)return;
+  let seen=new Set(),matching=products.filter(p=>{
+    let id=String(codeOf(p)||'');
+    if(!id||seen.has(id)||!foodRelevant(p,meta))return false;
+    seen.add(id);return true;
+  });
+  if(matching.length===0&&isChicken&&variation==='all'){
+   products=await fetchPriceProducts('עוף שלם');
+   if(seq!==mySeq)return;
+   matching=products.filter(p=>codeOf(p)&&foodRelevant(p,meta));
   }
   res.replaceChildren();
-  if(products.length===0){
-    message('Подходящие товары пока не появились. Попробуй выбрать «Грудка» или «Целая» — мы не будем подменять курицу лапшой.',true);
-  }else{
-    const visible=products.slice(0,18), cards=[];
-    res.append(node('p','result-count','Найдено подходящих товаров: '+products.length+' · показываю '+visible.length));
-    const root=node('div','result');
-    for(const p of visible){const box=displayGroceryCard(p,meta);root.append(box.item);cards.push(box)}
-    res.append(root);
-    // Цены в первых карточках появляются сразу, без нажатия на непонятную кнопку.
-    await Promise.allSettled(cards.slice(0,8).map(x=>x.code?comparePrices(x.code,x.item,x.btn,x.prices):Promise.resolve()));
+  if(matching.length){
+   res.append(node('div','message','Товары найдены. Цены по '+city.value+' получаю отдельно; если их нет в базе, название товара останется на экране.'));
+   const list=node('div','result'),cards=[];
+   for(const p of matching.slice(0,16)){
+    const ui=displayGroceryCard(p,meta);list.append(ui.item);cards.push(ui);
+   }
+   res.append(list);
+   // Ограничиваем одновременные запросы, чтобы не перегружать бесплатный API.
+   for(const card of cards.slice(0,5)){
     if(seq!==mySeq)return;
-    if(cards.length>8){
-      const more=node('button','action primary','💰 Показать цены остальных товаров');
-      more.type='button';more.addEventListener('click',async()=>{more.disabled=true;more.textContent='Проверяю…';await Promise.allSettled(cards.slice(8).map(x=>x.code?comparePrices(x.code,x.item,x.btn,x.prices):Promise.resolve()));more.remove()});
-      res.append(more);
-    }
+    if(card.code)await comparePrices(card.code,card.item,card.btn,card.prices);
+   }
+   if(cards.length>5){
+    const more=node('button','action primary','Проверить цены остальных товаров');
+    more.type='button';more.addEventListener('click',async()=>{more.disabled=true;more.textContent='Проверяю…';for(const card of cards.slice(5)){if(card.code)await comparePrices(card.code,card.item,card.btn,card.prices)}more.remove()});
+    res.append(more);
+   }
+   return;
   }
- }catch(e){if(seq!==mySeq)return;res.replaceChildren();message('Цены временно недоступны. Это проблема получения данных, а не отсутствие курицы в магазинах.',true)}
+ }catch(error){/* источник временно недоступен — сообщение ниже */}
  if(seq!==mySeq)return;
- const shops=[
-   ['Рами Леви','https://www.rami-levy.co.il/'],
-   ['Йохананов','https://www.yochananof.co.il/'],
-   ['Шуферсаль','https://www.shufersal.co.il/'],
-   ['Карфур','https://www.carrefour.co.il/']
- ];
- const area=node('details','panel'), summary=node('summary','', 'Другие супермаркеты на карте');area.append(summary);
- const g=node('div','grid');shops.forEach(s=>g.append(card(s[0],'Карта и сайт магазина. Наличие товара уточняй в филиале.',[['📍 Магазин на карте',map(s[0])],['Сайт магазина',s[1]]],'Магазин')));
- area.append(g);res.append(area);
+ res.replaceChildren();
+ message('Не удалось получить свежие данные о товарах. Это сбой источника цен, а не подтверждение, что товара нет в магазинах.',true);
+ if(previousKnownChicken(meta))res.append(node('p','info','Показана только цена из предыдущей проверки. Она может уже измениться.'));
+ res.append(node('div','message','Попробуй изменить город или повторить поиск. Когда источник восстановится, здесь снова появятся товары с ценами.'));
 }
 function flattenPrices(obj,depth){
  if(depth>5||!obj||typeof obj!=='object')return [];
