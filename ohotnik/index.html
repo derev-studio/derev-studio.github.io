@@ -1018,7 +1018,7 @@ function searchHebrew(q){
  [/самокат/,'קורקינט'],
  [/обувь|кроссовк/,'נעליים'],
  [/куртк/,'מעיל'],
- [/кресл/,'כיסא'],
+ [/кресл/,'כורסה'],
  [/мебел/,'רהיטים'],
  [/холодильник/,'מקרר'],
  [/стиральн.*машин/,'מכונת כביסה'],
@@ -1200,6 +1200,17 @@ function rankCatalog(items,q){
    if(score<=0)continue;
    const exactPhrase=variants.some(v=>v.length>2&&combined.includes(v));
    if(exactPhrase)score+=8;
+   // Prefer the actual named product over accessories mentioning it.
+   // E.g. שולחן (table) comes before מפת שולחן (tablecloth).
+   const titleTerms=tokenize(p.name_ru||p.name_he||p.name||'');
+   let headingBonus=0;
+   for(const variant of variants){
+     const words=tokenize(variant);
+     if(!words.length||!titleTerms.length)continue;
+     if(words.every((word,i)=>titleTerms[i]===word))headingBonus=Math.max(headingBonus,12+words.length*4);
+     else if(titleTerms[0]===words[0])headingBonus=Math.max(headingBonus,10);
+   }
+   score+=headingBonus;
    if(p.price!=null&&Number(p.price)>0)score+=1;
    if(p.img||p.photo)score+=1;
    results.push({p,score});
