@@ -253,7 +253,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 44</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 45</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -1405,7 +1405,7 @@ function showLocalShoppingHint(q){
  info.append(node('strong','','🏪 Местные магазины: Мики и ARKA'));
  info.append(node('span','','Мики, Ицхак Бен-Цви 13 — без интернет-каталога. Наличие и цену уточни по телефону.'));
  const actions=node('div','local-shop-actions');
- actions.append(action('📞 Мики: позвонить','https://api.whatsapp.com/send?phone=972505620388',false));
+ const call=node('a','action','📞 Мики: позвонить');call.href='tel:+972505620388';actions.append(call);
  actions.append(action('📍 Мики на карте',"https://www.google.com/maps/search/?api=1&query=%D7%9E%D7%99%D7%A7%D7%99%20%D7%97%D7%95%D7%9E%D7%A8%D7%99%20%D7%91%D7%A0%D7%99%D7%99%D7%9F%20%D7%99%D7%A6%D7%97%D7%A7%20%D7%91%D7%9F%20%D7%A6%D7%91%D7%99%2013%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C",false));
  actions.append(action('📍 ARKA на карте',"https://www.google.com/maps/search/?api=1&query=%D7%90%D7%A8%D7%9B%D7%94%20%D7%94%D7%9E%D7%A9%D7%95%D7%A8%2010%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C",false));
  if(/отв[её]рт|מברג/.test(q.toLowerCase()))actions.append(action('🔧 Все отвёртки ARKA','https://www.erco.co.il/b2c/work-tools/hand-tools/screwdrivers.html',false));
