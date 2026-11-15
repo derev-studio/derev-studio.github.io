@@ -185,7 +185,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 32</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 33</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -1179,7 +1179,13 @@ function rankCatalog(items,q){
  for(const p of items){
    const combined=[p.name_ru,p.name_he,p.name,p.brand,p.id].filter(Boolean).join(' ').toLowerCase();
    const hay=tokenize(combined);
-   const termExists=t=>hay.some(w=>w===t||w.startsWith(t)&&t.length>=3);
+   const termExists=t=>hay.some(w=>{
+     if(w===t)return true;
+     if(t.length<3||!w.startsWith(t))return false;
+     if(/\d/.test(t))return false;
+     if(/[א-ת]/.test(t))return ['ים','ות','יים'].includes(w.slice(t.length));
+     return t.length>=4;
+   });
    // Обязательные номера моделей: DM15 не должен показывать DM13.
    if(queryLatin.length && !queryLatin.every(termExists))continue;
    const matches=variants.map(v=>{
