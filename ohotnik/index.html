@@ -185,7 +185,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 33</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 34</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -764,15 +764,15 @@ function compactOfferText(offer){
 
 function makeCompactFood(group,meta){
  const code=String(group.code||''),title=String(group.name||'').trim();
- const card=node('article','grocery-card');
- const photo=node('div','grocery-image');
+ const card=node('article','catalog-card grocery-card');
+ const photo=node('div','catalog-picture grocery-image');
  photo.append(node('div','grocery-placeholder',meta.salmon?'🐟':meta.chicken?'🍗':'🛒'));
  card.append(photo);
  realImage(photo,code);
- const info=node('div','grocery-info');
+ const info=node('div','catalog-content grocery-info');
  const known=actualStorePage(code);
- info.append(node('h3','',known?known.name:foodRuTitle(title,meta)));
- const original=node('div','grocery-original',title);original.dir='auto';info.append(original);
+ info.append(node('h3','catalog-title',known?known.name:foodRuTitle(title,meta)));
+ const original=node('div','catalog-sub grocery-original',title);original.dir='auto';info.append(original);
  if(code)info.append(node('div','pill','Штрихкод: '+code));
  const offers=Array.isArray(group.offers)?group.offers:[];
  const best=offers[0];
@@ -781,16 +781,15 @@ function makeCompactFood(group,meta){
   const st=node('div','grocery-store','Магазин: '+compactOfferText(best));st.dir='auto';info.append(st);
   if(best.date)info.append(node('div','grocery-date','Обновлено '+best.date));
  }else info.append(node('div','grocery-price','Цена не получена'));
- const btns=node('div','grocery-actions');
- if(known){
-  btns.append(action('🛍 Открыть товар в '+known.chain,known.url,true));
+ const btns=node('div','catalog-actions grocery-actions');
+ // A supermarket price row is NOT a merchant's online product page.
+ // Only show a purchase link if the same barcode has a separately verified
+ // direct URL AND the price list actually contains that same retailer.
+ const verifiedSeller=known&&offers.some(o=>known.chain==='Rami Levy'&&shopChoice(o.shop)?.id==='rami');
+ if(verifiedSeller){
+  btns.append(action('🛒 Открыть конкретный товар в '+known.chain,known.url,true));
  }else{
-  const searchLink=code?'https://www.rami-levy.co.il/he/online/search?item='+encodeURIComponent(code):null;
-  const merchant=best?shopChoice(best.shop):null;
-  if(merchant)btns.append(action('🏪 Каталог '+merchant.label,merchant.site,false));
-  else btns.append(node('div','grocery-disabled','Ссылка на товар не подтверждена'));
-  // Для лосося поиск по коду у Rami Levy может открыть консервы вместо филе.
-  if(searchLink&&merchant?.id==='rami'&&!meta.salmon)btns.append(action('Поиск штрихкода Rami Levy',searchLink,false));
+  btns.append(node('div','grocery-disabled','Прямая ссылка на этот товар у продавца пока не получена. Общий каталог не открываем.'));
  }
  info.append(btns);
  if(offers.length>0){
@@ -802,10 +801,9 @@ function makeCompactFood(group,meta){
    line.append(node('strong','',Number(offer.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
    if(offer.date)line.append(node('div','grocery-date','Данные от '+offer.date));
    const links=node('div','grocery-detail-links');
-   if(known&&/רמי|rami/i.test(offer.shop)&&known.chain==='Rami Levy')links.append(action('Открыть в Rami Levy',known.url,true));
-   const merchant=shopChoice(offer.shop);
-   if(merchant)links.append(action('🏪 Сайт '+merchant.label,merchant.site));
-   links.append(action('📍 Карта',map(offer.shop)));
+   if(known&&known.chain==='Rami Levy'&&shopChoice(offer.shop)?.id==='rami'){
+    links.append(action('🛒 Открыть именно этот товар',known.url,true));
+   }
    line.append(links);detail.append(line);
   }
   info.append(detail);
@@ -818,7 +816,7 @@ function renderMarket(groups,meta,cityText){
  res.append(node('p','result-count','Товаров: '+groups.length+' · прайс-листы супермаркетов · '+(cityText||'Израиль')));
  const filters=node('div','shop-filter-bar');
  res.append(filters);
- const root=node('div','grocery-grid');res.append(root);
+ const root=node('div','catalog-grid grocery-grid');res.append(root);
  const stores=new Map();
  for(const g of groups){
   for(const o of (g.offers||[])){
@@ -1321,7 +1319,6 @@ function showCatalogResult(products,q,failed){
  res.replaceChildren();
  if(!products.length){
   message('В нашей базе пока нет подтверждённых карточек по запросу «'+q+'». Это не означает, что магазины не продают товар.',true);
-  showStoreFallback(q,false);
   revealResults();return;
  }
  const stores=[...new Set(products.map(p=>p.store).filter(Boolean))];
@@ -1355,7 +1352,6 @@ function showCatalogResult(products,q,failed){
  refresh();
  const note=node('p','info','Название на иврите, фотографии и ссылки взяты из карточек продавцов. Цена появляется только там, где её подтвердил магазин. Город пока используется для карты: наличие в конкретном филиале не проверяется.');
  res.append(note);
- showStoreFallback(q,true);
  revealResults();
 }
 async function showTech(q,mySeq){
@@ -1419,7 +1415,7 @@ async function search(){
  if(type==='help'){showHelp();revealResults();return}
  if(type==='dating'){showDating(q);revealResults();return}
 }
-el('search-form').addEventListener('submit',e=>{e.preventDefault();variation='all';search()});
+el('search-form').addEventListener('submit',e=>{e.preventDefault();chosen='auto';variation='all';document.querySelectorAll('#categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='auto'));search()});
 city.addEventListener('change',()=>{if(query.value.trim())search()});
 el('examples').addEventListener('click',e=>{const b=e.target.closest('[data-query]');if(!b)return;query.value=b.dataset.query;chosen='auto';variation='all';document.querySelectorAll('#categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='auto'));search()});
 el('categories').addEventListener('click',e=>{const b=e.target.closest('[data-type]');if(!b)return;chosen=b.dataset.type;document.querySelectorAll('#categories button').forEach(x=>x.classList.toggle('active',x===b));if(query.value.trim()){variation='all';search()}});
