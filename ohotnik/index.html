@@ -156,7 +156,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 21</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 22</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -590,7 +590,9 @@ function pricedMarketGroups(rows,meta){
   const key=code||name;
   let group=groups.get(key);
   if(!group){group={code,name,offers:[],seen:new Set()};groups.set(key,group)}
-  const shop=String(row.store_name||row.chain_name||row.store||row.chain||'Магазин');
+  const chain=String(row.chain_name||row.chain||'').trim();
+  const branch=String(row.store_name||row.store||'').trim();
+  const shop=chain&&branch&&chain!==branch?(chain+' · '+branch):(chain||branch||'Магазин');
   const key2=shop+'|'+price;
   if(group.seen.has(key2))continue;
   group.seen.add(key2);
@@ -682,7 +684,7 @@ function makeCompactFood(group,meta){
  const best=offers[0];
  if(best){
   info.append(node('div','grocery-price',Number(best.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
-  const st=node('div','grocery-store','Цена: '+best.shop);st.dir='auto';info.append(st);
+  const st=node('div','grocery-store','Магазин: '+best.shop);st.dir='auto';info.append(st);
   if(best.date)info.append(node('div','grocery-date','Обновлено '+best.date));
  }else info.append(node('div','grocery-price','Цена не получена'));
  const btns=node('div','grocery-actions');
@@ -716,9 +718,10 @@ function renderMarket(groups,meta,cityText){
  res.replaceChildren();
  res.append(node('p','result-count','Товаров: '+groups.length+' · цены из прайс-листов магазинов '+(cityText||'Израиля')));
  const grid=node('div','grocery-grid');res.append(grid);
+ const ordered=[...groups].sort((a,b)=>(actualStorePage(b.code)?1:0)-(actualStorePage(a.code)?1:0)||((a.offers[0]?.price??Infinity)-(b.offers[0]?.price??Infinity)));
  let position=0,more=null;
  function show(){
-  for(const g of groups.slice(position,position+12))grid.append(makeCompactFood(g,meta));
+  for(const g of ordered.slice(position,position+12))grid.append(makeCompactFood(g,meta));
   position=Math.min(groups.length,position+12);
   if(more&&position>=groups.length)more.remove();
  }
