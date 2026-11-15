@@ -185,7 +185,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 27</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 28</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -1090,163 +1090,141 @@ function unpackLiveKsp(data){
    as_of:new Date().toLocaleDateString('ru-RU'),verified:'api'
  }));
 }
-function rankCatalog(items,q){
- const terms=tokenize(q),cat=inferredCategory(q),seen=new Set();
- return items.map(p=>{
-   let hay=tokenize([p.name_ru,p.name,p.name_he,p.brand,p.category,p.id].filter(Boolean).join(' ')).join(' ');
-   let score=0;
-   for(const t of terms)if(hay.includes(t))score+=5;else score-=2;
-   if(cat!=='all'&&p.category===cat)score+=8;
-   if(terms.length&&score<0)return null;
-   return {p,score};
- }).filter(Boolean).sort((a,b)=>b.score-a.score||(Number(a.p.price)||999999)-(Number(b.p.price)||999999)).map(x=>x.p);
-}
-async function liveKsp(queryText){
- const ctl=new AbortController(),tid=setTimeout(()=>ctl.abort(),8500);
- try{
-   const url='https://ksp.co.il/m_action/api/category/?search='+encodeURIComponent(searchHebrew(queryText))+'&page=1';
-   const r=await fetch(url,{mode:'cors',signal:ctl.signal,headers:{Accept:'application/json'}});
-   if(!r.ok)throw Error('KSP '+r.status);
-   return unpackLiveKsp(await r.json());
- }finally{clearTimeout(tid)}
-}
+
+// Единая база товарных карточек: KSP/Ivory/ARKA + публичные товары ACE и Home Center.
 let storeCatalogPromise=null;
 function catalogData(){
- if(!storeCatalogPromise)storeCatalogPromise=fetch('./catalog.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('catalog unavailable');return r.json()}).then(d=>Array.isArray(d.items)?d.items:[]).catch(()=>[]);
+ if(storeCatalogPromise)return storeCatalogPromise;
+ const files=['./catalog.json','./catalog-auto.json'];
+ storeCatalogPromise=Promise.all(files.map(async url=>{
+  try{
+   const r=await fetch(url,{cache:'no-store'});
+   if(!r.ok)return [];
+   const doc=await r.json();
+   return Array.isArray(doc.items)?doc.items:[];
+  }catch(e){return []}
+ })).then(sets=>{
+  const unique=new Map();
+  for(const p of sets.flat()){
+   if(!p||!p.url||typeof p.url!=='string'||!/^https:\/\//.test(p.url))continue;
+   const key=p.store+'|'+(p.id||p.url);
+   unique.set(key,p);
+  }
+  return [...unique.values()];
+ });
  return storeCatalogPromise;
 }
-
-function retailerQuery(q){
- const t=String(q||'').toLowerCase();
- if(/отв[её]рт|מברג|screwdriver/.test(t)){
-  if(/крестов|филипс|phillips/.test(t))return 'מברג פיליפס';
-  if(/плоск|шлицев/.test(t))return 'מברג שטוח';
-  if(/изолир|диэлектр/.test(t))return 'מברג מבודד';
-  if(/набор|комплект|наборы/.test(t))return 'סט מברגים';
-  return 'מברג';
- }
- return searchHebrew(q);
-}
-// Общий механизм для ЛЮБОГО товара. Магазины подключаются как источники,
-// а не как отдельные кнопки под каждую модель или категорию.
-function retailerDestinations(q){
- const term=retailerQuery(q),raw=String(q||'').toLowerCase();
- const tools=/отв[её]рт|מברג|дрел|шурупов|молот|сверл|ключ[иеё]|инструмент|пил[аы]|рулетк|гаечн|ножовк|перфоратор|болгарк|screwdriver|drill/.test(raw);
- const electronics=/принтер|ноутбук|монитор|смартфон|кабел|плеер|fiio|xerox|компьют|телефон|клавиатур|мышк|наушник|планшет|телевизор/.test(raw);
- const stores=[
-  {
-   name:'KSP',icon:'🔵',
-   desc:'Поиск '+term+' на сайте KSP. Если магазин не распознает запрос, скопируй слово из строки выше.',
-   url:'https://ksp.co.il/web/cat/?search='+encodeURIComponent(term),
-   button:'Найти в KSP',type:'search'
-  },
-  {
-   name:'Ivory',icon:'🟣',
-   desc:'Каталог электроники, техники, инструментов и товаров для дома.',
-   url:'https://www.ivory.co.il/',
-   button:'Открыть Ivory',type:'category'
-  },
-  {
-   name:'Zap',icon:'🟠',
-   desc:'Независимый поиск и сравнение цен разных магазинов Израиля.',
-   url:'https://www.zap.co.il/',
-   button:'Открыть Zap',type:'category'
-  },
-  {
-   name:'Home Center',icon:'🏠',
-   desc:'Поиск товаров для дома, ремонта, садоводства и инструмента.',
-   url:'https://www.homecenter.co.il/search',
-   button:'Открыть поиск Home Center',type:'category'
-  },
-  {
-   name:'PriceDrop',icon:'📉',
-   desc:'Каталог KSP с фотографиями и историей цен. Это сторонний сервис, не источник данных нашего сайта.',
-   url:'https://pricedrop.co.il/items',
-   button:'Открыть каталог PriceDrop',type:'category'
-  },
-  {
-   name:'ACE',icon:'🛠️',
-   desc:tools?'Ручные инструменты и отвёртки':'Товары для дома, ремонта и сада',
-   url:tools?'https://www.ace.co.il/tools-paint-affixing/work-tools/hand-weilded-tools':'https://www.ace.co.il/',
-   button:tools?'Открыть инструменты ACE':'Открыть ACE',type:'category'
-  }
+function searchVariants(q){
+ const raw=String(q||'').trim();
+ const trans=retailerQuery(raw);
+ const he=searchHebrew(raw);
+ const variants=[raw,trans,he].filter(Boolean);
+ const synonyms=[
+  [/молоток|молотки/i,'פטיש'],[/пила|пилы|ножовка/i,'מסור'],
+  [/отв[её]рт/i,'מברג'],[/дюбел/i,'דיבל'],[/шуруп|винт|саморез/i,'בורג'],
+  [/гайка/i,'אום'],[/рулетка/i,'מטר'],[/строительн.*уровень/i,'פלס'],
+  [/стеллаж|полка/i,'מדף'],[/шкаф/i,'ארון'],[/диван/i,'ספה'],
+  [/кровать/i,'מיטה'],[/матрас/i,'מזרן'],[/подушка/i,'כרית'],
+  [/одеяло/i,'שמיכה'],[/стол/i,'שולחן'],[/стул/i,'כיסא'],
+  [/зеркало/i,'מראה'],[/корзина/i,'סל'],[/контейнер/i,'קופסה'],
+  [/кастрюл/i,'סיר'],[/сковород/i,'מחבת'],[/чайник/i,'קומקום'],
+  [/тарелк/i,'צלחת'],[/чашка|кружка/i,'ספל'],[/нож\b|ножи/i,'סכין'],
+  [/ложка/i,'כף'],[/вилка/i,'מזלג'],[/постель|бель[её]/i,'מצעים'],
+  [/лампа|светильник|подсветка/i,'מנורה'],[/люстра/i,'נברשת'],
+  [/розетка/i,'שקע'],[/выключател/i,'מפסק'],[/тройник|удлинител/i,'מפצל'],
+  [/кабел/i,'כבל'],[/шланг/i,'צינור'],[/кран/i,'ברז'],
+  [/горшок|кашпо/i,'עציץ'],[/цветок/i,'פרח'],[/растен/i,'צמח'],
+  [/кактус/i,'קקטוס'],[/земля для цвет|грунт/i,'אדמה'],
+  [/дрел|сверл/i,'מקדחה'],[/перфоратор/i,'פטישון'],[/лобзик/i,'מסור אנכי'],
+  [/светодиод|led/i,'לד'],[/батарейка/i,'סוללה'],[/блок питания/i,'ספק כוח'],
+  [/телевизор/i,'טלוויזיה'],[/пылесос/i,'שואב אבק'],
+  [/холодильник/i,'מקרר'],[/морозильник/i,'מקפיא'],
+  [/печь|духовка/i,'תנור'],[/плита/i,'כיריים'],
+  [/гриль/i,'גריל'],[/принтер/i,'מדפסת'],[/монитор/i,'מסך'],
+  [/аккумулятор/i,'סוללה'],[/диск/i,'דיסק'],[/наушник/i,'אוזניות'],
+  [/рюкзак/i,'תיק גב'],[/сумка/i,'תיק'],[/чемодан/i,'מזוודה'],
+  [/палатка/i,'אוהל'],[/фонар/i,'פנס'],[/удочка/i,'חכה'],
+  [/кроссовк|обувь/i,'נעליים'],[/перчатк/i,'כפפות'],[/рубашка/i,'חולצה'],
+  [/куртка/i,'מעיל'],[/игрушка/i,'צעצוע'],[/велосипед/i,'אופניים']
  ];
- if(tools){
-  // Категории помогают ускорить выбор, но остаются вторичными.
-  stores[1].url='https://www.ivory.co.il/catalog.php?act=cat&f=8284&id=168670';
-  stores[1].desc='Раздел инструментов и наборов отвёрток Ivory. Для других инструментов пользуйся поиском магазина.';
- }
- if(!electronics&&!tools){
-   stores[1].url='https://www.ivory.co.il/';
- }
- return {translated:term,stores};
+ for(const [p,heWord] of synonyms)if(p.test(raw))variants.push(heWord);
+ return [...new Set(variants.map(x=>x.toLowerCase().trim()))];
 }
-
-function showStoreFallback(q,hadItems){
- const data=retailerDestinations(q),section=node('section','panel retail-search');
- section.append(node('h3','',hadItems?'Поискать ещё в магазинах':'Найти «'+q+'» непосредственно в магазинах'));
- const descr=hadItems?
-  'Это дополнительные каталоги. Цены внутри них нужно проверить в самом магазине.':
-  'Наш каталог не получил карточки товара. Но магазины доступны: открой поиск или нужный раздел напрямую.';
- section.append(node('p','retail-help',descr));
- const phrase=node('div','retail-query',data.translated);phrase.dir='auto';section.append(phrase);
- const copy=node('button','action','📋 Скопировать название для поиска');
- copy.type='button';
- copy.addEventListener('click',async()=>{
-  try{await navigator.clipboard.writeText(data.translated);copy.textContent='✓ Скопировано';}
-  catch(e){copy.textContent='Выдели название выше для копирования';}
- });
- section.append(copy);
- const note=node('div','message','Переход к магазину — запасной способ поиска. Он не заменяет карточку товара: проверенные фото, цены и прямые ссылки появляются здесь только когда товар есть в нашем каталоге.');
- section.append(note);
- const list=node('div','retail-stores');
- for(const store of data.stores){
-  const c=node('div','retail-store');
-  c.append(node('h4','',store.icon+' '+store.name));
-  c.append(node('p','',store.desc));
-  c.append(action(store.button,store.url,store.type==='search'));
-  list.append(c);
+function rankCatalog(items,q){
+ const variants=searchVariants(q);
+ const queryLatin=tokenize(q).filter(t=>/[a-z]/i.test(t)&&/\d/.test(t));
+ const queryTerms=tokenize(q).filter(t=>/[a-z0-9]/i.test(t)&&t.length>1);
+ const results=[];
+ for(const p of items){
+   const combined=[p.name_ru,p.name_he,p.name,p.brand,p.id].filter(Boolean).join(' ').toLowerCase();
+   const hay=tokenize(combined);
+   const termExists=t=>hay.some(w=>w===t||w.startsWith(t)&&t.length>=3);
+   // Обязательные номера моделей: DM15 не должен показывать DM13.
+   if(queryLatin.length && !queryLatin.every(termExists))continue;
+   const matches=variants.map(v=>{
+    const words=tokenize(v);
+    if(!words.length)return 0;
+    const count=words.filter(termExists).length;
+    return count===words.length?words.length*10:0;
+   });
+   let score=Math.max(0,...matches);
+   if(score<=0)continue;
+   const exactPhrase=variants.some(v=>v.length>2&&combined.includes(v));
+   if(exactPhrase)score+=8;
+   if(p.price!=null&&Number(p.price)>0)score+=1;
+   if(p.img||p.photo)score+=1;
+   results.push({p,score});
  }
- section.append(list);res.append(section);
+ results.sort((a,b)=>b.score-a.score||(Number(a.p.price)||Infinity)-(Number(b.p.price)||Infinity));
+ return results.map(x=>x.p);
 }
-function showCatalogResult(products,q,moreLoading){
+function showCatalogResult(products,q,failed){
  res.replaceChildren();
- if(products.length){
-  res.append(node('p','result-count','Подтверждённых товарных карточек: '+products.length));
-  const g=node('div','catalog-grid');
-  products.slice(0,48).forEach(p=>g.append(catalogCard(p,q)));
-  res.append(g);
+ if(!products.length){
+  message('В нашей базе пока нет подтверждённых карточек по запросу «'+q+'». Это не означает, что магазины не продают товар.',true);
+  showStoreFallback(q,false);
+  revealResults();return;
  }
- if(moreLoading){
-   res.append(node('div','loading-line','Проверяю подключение к каталогу KSP…'));
- }else{
-   showStoreFallback(q,products.length>0);
+ const stores=[...new Set(products.map(p=>p.store).filter(Boolean))];
+ const header=node('p','result-count','Найдено '+products.length+' товаров в '+stores.length+' магазинах. Все карточки ведут на конкретный товар.');
+ res.append(header);
+ const toolbar=node('div','shop-filter-bar');
+ const list=node('div','catalog-grid');
+ res.append(toolbar,list);
+ let selected='all',count=0,displayed=[],more=null;
+ function refresh(){
+  displayed=products.filter(p=>selected==='all'||p.store===selected);
+  list.replaceChildren();count=0;
+  if(more){more.remove();more=null}
+  toolbar.replaceChildren();
+  for(const option of [{value:'all',label:'Все магазины'},...stores.map(x=>({value:x,label:x}))]){
+   const b=node('button','shop-filter'+(selected===option.value?' active':''),option.label);
+   b.type='button';b.addEventListener('click',()=>{selected=option.value;refresh()});
+   toolbar.append(b);
+  }
+  showMore();
  }
+ function showMore(){
+  for(const p of displayed.slice(count,count+30))list.append(catalogCard(p,q));
+  count=Math.min(displayed.length,count+30);
+  if(count<displayed.length&&!more){
+   more=node('button','action primary','Показать ещё товары');
+   more.type='button';more.addEventListener('click',()=>{more.remove();more=null;showMore()});
+   res.append(more);
+  }
+ }
+ refresh();
+ const note=node('p','info','Фотография и ссылка ведут к конкретному товару магазина. Цена появляется только там, где источник её подтвердил.');
+ res.append(note);
+ showStoreFallback(q,true);
  revealResults();
 }
 async function showTech(q,mySeq){
- setText('heading','🛍️ Товары: '+q);
- setText('subtitle','Сначала карточки товаров; если каталог недоступен — прямой поиск в KSP, Ivory и других магазинах.');
- // Не показываем пустую страницу: альтернатива доступна сразу.
- showStoreFallback(q,false);
- revealResults();
- const seed=rankCatalog(await catalogData(),q);
+ setText('heading','🛍️ Поиск товаров: '+q);
+ setText('subtitle','Один поиск по разным магазинам. Показываем только найденные карточки, фотографии, цены и отдельные магазины.');
+ const products=rankCatalog(await catalogData(),q);
  if(seq!==mySeq)return;
- showCatalogResult(seed,q,false);
- try{
-   const live=(await liveKsp(q)).map(p=>({...p,category:inferredCategory(q),name_ru:productRu(p,q)}));
-   if(seq!==mySeq)return;
-   const seen=new Set(),all=[];
-   for(const p of [...live,...seed]){
-      if(seen.has(String(p.id)))continue;
-      seen.add(String(p.id));all.push(p);
-   }
-   showCatalogResult(all,q,false);
- }catch(e){
-   if(seq!==mySeq)return;
-   // KSP blocks client API for many browsers; this is not "there are no products."
-   showCatalogResult(seed,q,false);
- }
+ showCatalogResult(products,q,false);
 }
 
 function showFree(){
