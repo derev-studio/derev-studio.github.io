@@ -168,12 +168,24 @@ footer strong{color:#2b4364}
 .farm-card .action{display:block;text-align:center;margin-top:8px}
 @media(max-width:580px){.farm-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.farm-image{height:140px}.farm-info{padding:11px}.farm-info h3{font-size:14px}.farm-card{min-height:306px}}
 @media(max-width:360px){.farm-grid{grid-template-columns:1fr}}
+
+/* Поиск сразу в магазинах — безопасный запасной путь при недоступности API */
+.retail-search{margin-top:16px}
+.retail-search h3{font-size:18px;margin:0 0 6px}
+.retail-stores{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
+.retail-store{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.retail-store h4{margin:0;font-size:17px}
+.retail-store p{margin:0;font-size:13px;color:#59708b;flex:1}
+.retail-store .action{display:block;text-align:center}
+.retail-query{direction:auto;unicode-bidi:plaintext;font-size:18px;font-weight:700;color:#264c76;padding:9px 11px;background:#f0f5fb;border-radius:9px}
+.retail-help{font-size:13px;color:#60748e;margin:4px 0}
+@media(max-width:580px){.retail-stores{grid-template-columns:1fr}.retail-store{padding:12px}}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 25</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 26</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -955,7 +967,7 @@ function cleanModel(s){
 function goodsEmoji(q){
  const s=q.toLowerCase();
  if(/рюкзак|сумк|портфел|תיק|backpack|bag/.test(s))return '🎒';
- if(/дрель|сверл|шурупов|מקדחה|drill/.test(s))return '🔧';
+ if(/дрель|сверл|шурупов|отв[её]рт|מברג|מקדחה|drill|screwdriver/.test(s))return '🔧';
  if(/плеер|fiio|dm13|диск|cd player|נגן/.test(s))return '🎵';
  if(/принтер|xerox|מדפסת/.test(s))return '🖨️';
  if(/кабель|провод|כבל/.test(s))return '🔌';
@@ -981,6 +993,11 @@ function searchHebrew(q){
  const t=q.toLowerCase();
  const dict=[
  [/рюкзак|портфел|сумк|ранц|backpack/,'תיק גב'],
+ [/отв[её]рт|screwdriver|מברג/,'מברג'],
+ [/крестов[а-яё]*\s+отв[её]рт|отв[её]рт[а-яё]*\s+крестов/,'מברג פיליפס'],
+ [/плоск[а-яё]*\s+отв[её]рт|отв[её]рт[а-яё]*\s+плоск/,'מברג שטוח'],
+ [/изолирован[а-яё]*\s+отв[её]рт|отв[её]рт[а-яё]*\s+изолирован/,'מברג מבודד'],
+ [/набор.*отв[её]рт|отв[её]рт.*набор/,'סט מברגים'],
  [/дрел|сверл/,'מקדחה'],
  [/шурупов|аккумуляторн.*дрел/,'מברגה'],
  [/принтер|ксерокс/,'מדפסת'],
@@ -1098,39 +1115,107 @@ function catalogData(){
  if(!storeCatalogPromise)storeCatalogPromise=fetch('./catalog.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('catalog unavailable');return r.json()}).then(d=>Array.isArray(d.items)?d.items:[]).catch(()=>[]);
  return storeCatalogPromise;
 }
+
+function retailerQuery(q){
+ const t=String(q||'').toLowerCase();
+ if(/отв[её]рт|מברג|screwdriver/.test(t)){
+  if(/крестов|филипс|phillips/.test(t))return 'מברג פיליפס';
+  if(/плоск|шлицев/.test(t))return 'מברג שטוח';
+  if(/изолир|диэлектр/.test(t))return 'מברג מבודד';
+  if(/набор|комплект|наборы/.test(t))return 'סט מברגים';
+  return 'מברג';
+ }
+ return searchHebrew(q);
+}
+function retailerDestinations(q){
+ const t=String(q||'').toLowerCase(),translated=retailerQuery(q);
+ const kspSearch='https://ksp.co.il/web/cat/?search='+encodeURIComponent(translated);
+ const stores=[
+  {name:'KSP',icon:'🔵',desc:'Поиск по введённому товару: '+translated,url:kspSearch,button:'Искать «'+translated+'» в KSP',type:'search'}
+ ];
+ // Только подтверждённые страницы категорий. Категория не выдаётся за точный поиск.
+ if(/отв[её]рт|מברג|screwdriver/.test(t)){
+   stores.push(
+    {name:'KSP · отвёртки',icon:'🔧',desc:'Проверенный каталог отвёрток и наборов',url:'https://ksp.co.il/mob/cat/3640',button:'Смотреть отвёртки KSP',type:'category'},
+    {name:'Ivory',icon:'🟣',desc:'Раздел наборов отвёрток в Ivory',url:'https://www.ivory.co.il/catalog.php?act=cat&f=8284&id=168670',button:'Открыть отвёртки Ivory',type:'category'},
+    {name:'ACE',icon:'🛠️',desc:'Ручной инструмент и отвёртки',url:'https://www.ace.co.il/tools-paint-affixing/work-tools/hand-weilded-tools',button:'Открыть инструменты ACE',type:'category'}
+   );
+ }else if(/дрел|шурупов|сверл|מקדח|מברגה/.test(t)){
+   stores.push(
+    {name:'KSP · инструменты',icon:'🔧',desc:'Дрели, шуруповёрты и другие инструменты',url:'https://ksp.co.il/mob/world/7288',button:'Открыть инструменты KSP',type:'category'},
+    {name:'Ivory',icon:'🟣',desc:'Каталог инструментов',url:'https://www.ivory.co.il/catalog.php?act=cat&id=29395',button:'Открыть инструменты Ivory',type:'category'},
+    {name:'ACE',icon:'🛠️',desc:'Электроинструмент',url:'https://www.ace.co.il/tools-paint-affixing/work-tools/power-tools/screwdrivers',button:'Открыть инструменты ACE',type:'category'}
+   );
+ }else{
+   stores.push({name:'Ivory',icon:'🟣',desc:'Все категории Ivory; название для поиска можно скопировать выше',url:'https://www.ivory.co.il/catalog.php?act=all_categories',button:'Открыть каталог Ivory',type:'category'});
+ }
+ return {translated,stores};
+}
+function showStoreFallback(q,hadItems){
+ const data=retailerDestinations(q),section=node('section','panel retail-search');
+ section.append(node('h3','',hadItems?'Поискать ещё в магазинах':'Найти «'+q+'» непосредственно в магазинах'));
+ const descr=hadItems?
+  'Это дополнительные каталоги. Цены внутри них нужно проверить в самом магазине.':
+  'Наш каталог не получил карточки товара. Но магазины доступны: открой поиск или нужный раздел напрямую.';
+ section.append(node('p','retail-help',descr));
+ const phrase=node('div','retail-query',data.translated);phrase.dir='auto';section.append(phrase);
+ const copy=node('button','action','📋 Скопировать название для поиска');
+ copy.type='button';
+ copy.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(data.translated);copy.textContent='✓ Скопировано';}
+  catch(e){copy.textContent='Выдели название выше для копирования';}
+ });
+ section.append(copy);
+ const list=node('div','retail-stores');
+ for(const store of data.stores){
+  const c=node('div','retail-store');
+  c.append(node('h4','',store.icon+' '+store.name));
+  c.append(node('p','',store.desc));
+  c.append(action(store.button,store.url,store.type==='search'));
+  list.append(c);
+ }
+ section.append(list);res.append(section);
+}
 function showCatalogResult(products,q,moreLoading){
  res.replaceChildren();
- if(!products.length){
-   message('Пока нет проверенных карточек по запросу «'+q+'». Поиск по другим магазинам ещё расширяется; случайные результаты не показываю.',true);
-   if(!moreLoading)revealResults();
-   return;
+ if(products.length){
+  res.append(node('p','result-count','Подтверждённых товарных карточек: '+products.length));
+  const g=node('div','catalog-grid');
+  products.slice(0,48).forEach(p=>g.append(catalogCard(p,q)));
+  res.append(g);
  }
- const title=node('p','result-count','Найдено товаров: '+products.length+' · все ссылки ведут на конкретный товар');
- res.append(title);
- const g=node('div','catalog-grid');products.slice(0,48).forEach(p=>g.append(catalogCard(p,q)));res.append(g);
+ if(moreLoading){
+   res.append(node('div','loading-line','Проверяю подключение к каталогу KSP…'));
+ }else{
+   showStoreFallback(q,products.length>0);
+ }
  revealResults();
- if(moreLoading)res.append(node('div','loading-line','Ищу дополнительные модели в каталоге KSP…'));
 }
 async function showTech(q,mySeq){
  setText('heading','🛍️ Товары: '+q);
- setText('subtitle','Русские названия, цены, фотографии при наличии и ссылки сразу на карточки товаров. Не на поиск Google.');
- message('Ищу товары в каталоге…');
+ setText('subtitle','Сначала карточки товаров; если каталог недоступен — прямой поиск в KSP, Ivory и других магазинах.');
+ // Не показываем пустую страницу: альтернатива доступна сразу.
+ showStoreFallback(q,false);
+ revealResults();
  const seed=rankCatalog(await catalogData(),q);
  if(seq!==mySeq)return;
- showCatalogResult(seed,q,true);
+ showCatalogResult(seed,q,false);
  try{
-   const live=(await liveKsp(q)).map(p=>({...p,category:inferredCategory(q),name_ru:productRu(p,q)}));if(seq!==mySeq)return;
+   const live=(await liveKsp(q)).map(p=>({...p,category:inferredCategory(q),name_ru:productRu(p,q)}));
+   if(seq!==mySeq)return;
    const seen=new Set(),all=[];
-   for(const p of [...live,...seed]){if(seen.has(String(p.id)))continue;seen.add(String(p.id));all.push(p)}
-   if(live.length)showCatalogResult(all,q,false);
-   else showCatalogResult(seed,q,false);
+   for(const p of [...live,...seed]){
+      if(seen.has(String(p.id)))continue;
+      seen.add(String(p.id));all.push(p);
+   }
+   showCatalogResult(all,q,false);
  }catch(e){
    if(seq!==mySeq)return;
+   // KSP blocks client API for many browsers; this is not "there are no products."
    showCatalogResult(seed,q,false);
-   if(!seed.length)message('Сейчас KSP не разрешил загрузить свой каталог прямо в браузер. Это ограничение доступа к данным, а не отсутствие товара.',true);
-   else message('Показаны проверенные товары. Живой каталог KSP сейчас недоступен из браузера; дата проверки цены указана под карточкой.');
  }
 }
+
 function showFree(){
  setText('heading','Отдам даром');setText('subtitle','Настоящие объявления о вещах, которые люди отдают бесплатно.');
  grid([
