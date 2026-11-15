@@ -775,7 +775,8 @@ function makeCompactFood(group,meta){
   const merchant=best?shopChoice(best.shop):null;
   if(merchant)btns.append(action('🏪 Каталог '+merchant.label,merchant.site,false));
   else btns.append(node('div','grocery-disabled','Ссылка на товар не подтверждена'));
-  if(searchLink&&merchant?.id==='rami')btns.append(action('Поиск штрихкода Rami Levy',searchLink,false));
+  // Для лосося поиск по коду у Rami Levy может открыть консервы вместо филе.
+  if(searchLink&&merchant?.id==='rami'&&!meta.salmon)btns.append(action('Поиск штрихкода Rami Levy',searchLink,false));
  }
  info.append(btns);
  if(offers.length>0){
