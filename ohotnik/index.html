@@ -233,12 +233,27 @@ footer strong{color:#2b4364}
 @media(max-width:710px){.deals-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.deal-link{min-height:82px;padding:12px}.deal-link strong{font-size:15px}.deals-hub{padding:14px}}
 @media(max-width:335px){.deals-grid{grid-template-columns:1fr}}
  .hero a.tag{display:inline-flex;align-items:center;text-decoration:none}
+
+/* Favorite local hardware stores have real locations, not invented inventory. */
+.local-shops{background:#fff;border:1px solid #dfe8f2;border-radius:17px;padding:15px;margin-top:14px}
+.local-shops h2{font-size:18px;margin:0 0 9px}
+.local-shops-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.local-shop{background:#f6f9fd;border:1px solid #dae5f3;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.local-shop strong{font-size:16px}
+.local-shop small{font-size:12px;color:#526b87}
+.local-shop-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.local-shop-actions a{display:inline-block;background:#e5f0ff;color:#154d80;text-decoration:none;border:1px solid #b6d2ee;border-radius:8px;padding:8px 11px;font-weight:750;font-size:12px}
+.local-shop-note{font-size:12px;margin:10px 0 0;color:#718099}
+@media(max-width:570px){.local-shops-grid{grid-template-columns:1fr}.local-shops{padding:12px}}
+
+.local-search-info{display:flex;flex-direction:column;gap:6px;padding:12px;background:#edf5ff;border:1px solid #cddff2;border-radius:11px;margin:12px 0}
+.local-search-info strong{font-size:15px;color:#183c63}.local-search-info span{font-size:12px;color:#56708d}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 43</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 44</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -277,6 +292,14 @@ footer strong{color:#2b4364}
 <a class="deal-link" href="https://www.zap.co.il/" target="_blank" rel="noopener noreferrer"><strong>⚖️ Zap</strong><small>Сравнить цены разных магазинов</small></a>
 </div>
 <p class="deals-note">Black Friday и ноябрьская распродажа частично пересекаются. Реальность скидки сравнивай с историей цен в PriceDrop; цены и наличие проверяй у продавца.</p>
+</section>
+<section class="local-shops" id="tiberias-hardware" aria-label="Магазины инструментов в Тверии">
+<h2>🏪 Электрика и инструменты в Тверии</h2>
+<div class="local-shops-grid">
+<div class="local-shop"><strong>🔩 Мики на Кикаре</strong><small>Ицхак Бен-Цви, 13 · Шикун-Далет</small><small>Местный магазин без интернет-каталога: цены и наличие спрашивать</small><div class="local-shop-actions"><a href="tel:+972505620388">📞 Позвонить</a><a href="https://www.google.com/maps/search/?api=1&query=%D7%9E%D7%99%D7%A7%D7%99%20%D7%97%D7%95%D7%9E%D7%A8%D7%99%20%D7%91%D7%A0%D7%99%D7%99%D7%9F%20%D7%99%D7%A6%D7%97%D7%A7%20%D7%91%D7%9F%20%D7%A6%D7%91%D7%99%2013%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C" target="_blank" rel="noopener noreferrer">📍 Карта</a></div></div>
+<div class="local-shop"><strong>⚡ ARKA · Тверия</strong><small>Ха-Масор, 10 · электротовары и инструмент</small><small>Есть цены и отдельные карточки товаров</small><div class="local-shop-actions"><a href="https://www.erco.co.il/b2c/home-electricity/power-strip.html" target="_blank" rel="noopener noreferrer">🔌 Удлинители</a><a href="https://www.google.com/maps/search/?api=1&query=%D7%90%D7%A8%D7%9B%D7%94%20%D7%94%D7%9E%D7%A9%D7%95%D7%A8%2010%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C" target="_blank" rel="noopener noreferrer">📍 Карта</a></div></div>
+</div>
+<p class="local-shop-note">Точное наличие товара в местных филиалах нужно подтвердить перед поездкой.</p>
 </section>
 <section><div class="tags" id="categories">
 <button type="button" class="tag active" data-type="auto">Все разделы</button>
@@ -1373,21 +1396,51 @@ function retailerQuery(q){
 }
 // Общий механизм для ЛЮБОГО товара. Магазины подключаются как источники,
 // а не как отдельные кнопки под каждую модель или категорию.
+// The local hardware shop is not a live-price catalogue. Keep it separate
+// from product cards so we never attach a made-up price to its inventory.
+function showLocalShoppingHint(q){
+ if(!/^(тверия|טבריה)$/i.test(city.value.trim()))return;
+ if(!/удлинител|розетк|провод|кабел|электр|отв[её]рт|инструмент|дрел|шуруп|сверл|מארי[ךכ]|מברג|שקע|כבל|мики|miki|מיקי|арка|ארכה/i.test(q))return;
+ const info=node('div','local-search-info');
+ info.append(node('strong','','🏪 Местные магазины: Мики и ARKA'));
+ info.append(node('span','','Мики, Ицхак Бен-Цви 13 — без интернет-каталога. Наличие и цену уточни по телефону.'));
+ const actions=node('div','local-shop-actions');
+ actions.append(action('📞 Мики: позвонить','https://api.whatsapp.com/send?phone=972505620388',false));
+ actions.append(action('📍 Мики на карте',"https://www.google.com/maps/search/?api=1&query=%D7%9E%D7%99%D7%A7%D7%99%20%D7%97%D7%95%D7%9E%D7%A8%D7%99%20%D7%91%D7%A0%D7%99%D7%99%D7%9F%20%D7%99%D7%A6%D7%97%D7%A7%20%D7%91%D7%9F%20%D7%A6%D7%91%D7%99%2013%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C",false));
+ actions.append(action('📍 ARKA на карте',"https://www.google.com/maps/search/?api=1&query=%D7%90%D7%A8%D7%9B%D7%94%20%D7%94%D7%9E%D7%A9%D7%95%D7%A8%2010%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C",false));
+ if(/отв[её]рт|מברג/.test(q.toLowerCase()))actions.append(action('🔧 Все отвёртки ARKA','https://www.erco.co.il/b2c/work-tools/hand-tools/screwdrivers.html',false));
+ info.append(actions);
+ res.append(info);
+}
+function interleaveStores(items){
+ const priority=['KSP','ARKA (ארכה)','Ivory','ACE','Home Center'];
+ const stores=[...new Set(items.map(p=>p.store||'Другие'))].sort((a,b)=>{
+  const aIndex=priority.indexOf(a),bIndex=priority.indexOf(b);
+  return (aIndex<0?999:aIndex)-(bIndex<0?999:bIndex);
+ });
+ const groups=new Map(stores.map(n=>[n,items.filter(p=>(p.store||'Другие')===n)]));
+ const output=[];let had=true,idx=0;
+ while(had&&idx<items.length){had=false;for(const name of stores){const p=groups.get(name).shift();if(p){output.push(p);had=true;}}idx++}
+ return output;
+}
 function showCatalogResult(products,q,failed){
  res.replaceChildren();
  if(!products.length){
+  showLocalShoppingHint(q);
   message('В нашей базе пока нет подтверждённых карточек по запросу «'+q+'». Это не означает, что магазины не продают товар.',true);
   revealResults();return;
  }
  const stores=[...new Set(products.map(p=>p.store).filter(Boolean))];
  const header=node('p','result-count','Найдено '+products.length+' товаров в '+stores.length+' магазинах. Все карточки ведут на конкретный товар.');
  res.append(header);
+ showLocalShoppingHint(q);
  const toolbar=node('div','shop-filter-bar');
  const list=node('div','catalog-grid');
  res.append(toolbar,list);
  let selected='all',count=0,displayed=[],more=null;
  function refresh(){
   displayed=products.filter(p=>selected==='all'||p.store===selected);
+  if(selected==='all')displayed=interleaveStores(displayed);
   list.replaceChildren();count=0;
   if(more){more.remove();more=null}
   toolbar.replaceChildren();
