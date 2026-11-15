@@ -76,17 +76,40 @@ footer strong{color:#2b4364}
 .tech-item .actions{display:flex;gap:8px;flex-wrap:wrap}
 .tech-item .pill{font-size:12px}
 @media(max-width:580px){.product-main strong{font-size:18px}.price-row{padding:9px}.tech-item{min-height:0}}
+
+/* Карточки как в товарном каталоге */
+#city{width:128px;max-width:160px;min-width:96px}
+.place{flex-shrink:0}.place input{max-width:160px;width:128px;cursor:text}
+.catalog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px}
+.catalog-card{background:white;border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;min-height:340px}
+.catalog-picture{height:168px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#edf4fd,#f8fbff);position:relative}
+.catalog-picture img{width:100%;height:100%;object-fit:contain;padding:9px}
+.catalog-placeholder{font-size:70px;line-height:1}
+.catalog-content{padding:16px;display:flex;flex-direction:column;flex:1;gap:8px}
+.catalog-title{font-size:17px;line-height:1.34;font-weight:800;margin:0}
+.catalog-sub{font-size:12px;line-height:1.3;color:#7386a0;max-height:34px;overflow:hidden}
+.catalog-price{font-size:26px;color:#1d5689;font-weight:900;margin-top:auto}
+.catalog-source{font-size:12px;color:#58718f}
+.catalog-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.catalog-actions .action{flex:1;text-align:center}
+.loading-line{color:#60748e;padding:8px 0;font-size:14px}
+#category-guide{color:#60748e;font-size:14px}
+@media(max-width:580px){.catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.catalog-picture{height:140px}.catalog-content{padding:11px}.catalog-card{min-height:304px}.catalog-price{font-size:22px}.catalog-title{font-size:14px}.catalog-actions .action{padding:8px 4px;font-size:12px}.place input{width:92px;max-width:102px}}
+@media(max-width:355px){.catalog-grid{grid-template-columns:1fr}.catalog-picture{height:165px}}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 14</small></div>
-<label class="place">📍 <input id="city" aria-label="Город" value="Тверия"></label>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 15</small></div>
+<label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
+<datalist id="city-options">
+<option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
+</datalist>
 </header>
 <div class="hero">
 <h1>Один поиск — всё, что нужно</h1>
-<p>Продукты, техника, бесплатные вещи, помощь и знакомства. Никуда не переходим без твоего нажатия.</p>
+<p>Продукты, техника, рюкзаки, бесплатные вещи, помощь и знакомства. Сначала результаты — потом магазин.</p>
 <form class="search" id="search-form">
 <input id="query" placeholder="Например: курица, дрель, отдам даром" autocomplete="off" aria-label="Что ищем">
 <button type="submit">🔎 НАЙТИ</button>
@@ -95,6 +118,8 @@ footer strong{color:#2b4364}
 <button class="tag" type="button" data-query="курица">🍗 Курица</button>
 <button class="tag" type="button" data-query="лосось">🐟 Лосось</button>
 <button class="tag" type="button" data-query="дрель">🔧 Дрель</button>
+<button class="tag" type="button" data-query="рюкзак">🎒 Рюкзак</button>
+<button class="tag" type="button" data-query="FiiO DM13">🎵 FiiO DM13</button>
 <button class="tag" type="button" data-query="отдам даром">🎁 Даром</button>
 <button class="tag" type="button" data-query="бесплатная еда">🥗 Помощь</button>
 <button class="tag" type="button" data-query="женщины">❤️ Знакомства</button>
@@ -112,7 +137,7 @@ footer strong{color:#2b4364}
 <h2 id="heading">Что будем искать?</h2>
 <p class="info" id="subtitle">Выбери пример или напиши свой запрос.</p>
 <div id="filters" class="tags hidden"></div>
-<div id="results"><div class="message">Результаты появятся здесь, на нашем сайте. Ссылки на другие сайты открываются только по твоему желанию.</div></div>
+<div id="results"><div class="message">Начни поиск: название товара, цена и магазин появятся здесь, а не в Google.</div></div>
 </section>
 <footer><strong>Создатель — Александр Деревяшкин</strong><div>Новые технологии и искусственный интеллект · Израиль</div><div>Цены и наличие меняются; перед покупкой проверяйте у продавца. Сайт не является магазином.</div></footer>
 </main>
@@ -137,8 +162,10 @@ function mode(q){
  if(has(t,words.help))return 'help';
  if(has(t,words.dating))return 'dating';
  if(has(t,words.free))return 'free';
- if(has(t,words.tech))return 'tech';
- return 'food';
+ // Продукты питания определяются явно. Все прочие покупки — товары, не продукты.
+ const foodWords=['куриц','цыплен','лосос','сёмг','семг','рыб','молок','яйц','яйк','хлеб','кофе','сыр','помидор','огур','карто','масло','сахар','рис','мяс','колбас','йогурт','кетчуп','макарон','овощ','фрукт','яблок','банан','виноград','апельсин','йогур','сок','вод','шоколад','конфет','печень','грудка','бедро','голень','супермаркет','магазин еды','круп','творог','греч','йогурт'];
+ if(has(t,foodWords)||/[א-ת]/.test(t)&&/(עוף|חלב|לחם|גבינה|סלמון|בשר|דג)/.test(t))return 'food';
+ return 'tech';
 }
 function setText(id,t){el(id).textContent=t}
 function clear(){res.replaceChildren();filters.replaceChildren();filters.classList.add('hidden')}
@@ -153,7 +180,18 @@ function card(title,desc,links,badge){
 }
 function grid(cards){const g=node('div','grid');cards.forEach(c=>g.append(c));res.append(g)}
 function message(t,warn){res.append(node('div','message'+(warn?' warn':''),t))}
-function map(name){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+' '+city.value+' Israel')}
+const citiesRU={
+ 'тверия':'טבריה','хайфа':'חיפה','тель-авив':'תל אביב','тель авив':'תל אביב','иерусалим':'ירושלים','афула':'עפולה',
+ 'назарет':'נצרת','ноф-ха-галиль':'נוף הגליל','беэр-шева':'באר שבע','ашдод':'אשדוד','ашкелон':'אשקלון',
+ 'нетания':'נתניה','ришон-ле-цион':'ראשון לציון','петах-тиква':'פתח תקווה','бней-брак':'בני ברק','рамат-ган':'רמת גן',
+ 'цфат':'צפת','акко':'עכו','эйлат':'אילת','нагария':'נהריה','хадера':'חדרה','герцлия':'הרצליה','кармиэль':'כרמיאל',
+ 'кфар-саба':'כפר סבא','реховот':'רחובות','бат-ям':'בת ים','холон':'חולון','кириат-шмона':'קריית שמונה',
+ 'йокнеам':'יקנעם','лод':'לוד','рамла':'רמלה','кирьят-бялик':'קריית ביאליק','кирьят-ата':'קריית אתא',
+ 'весь израиль':''
+};
+function cityHe(){const t=city.value.trim().toLowerCase();return Object.prototype.hasOwnProperty.call(citiesRU,t)?citiesRU[t]:city.value.trim()}
+function map(name){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+' '+cityHe()+' Israel')}
+
 function setFilters(options){
  filters.classList.remove('hidden');
  for(const o of options){let b=node('button','tag'+(variation===o[0]?' active':''),o[1]);b.type='button';b.addEventListener('click',()=>{variation=o[0];search()});filters.append(b)}
@@ -166,7 +204,7 @@ function filteredFood(q){
   return {term:names[variation]||'עוף',chicken:true};
  }
  if(salmon)return {term:'סלמון',salmon:true};
- const dict=[['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז']];
+ const dict=[['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז'],['йогурт','יוגורט'],['макарон','פסטה'],['яблок','תפוח'],['банан','בננה'],['сок','מיץ'],['шоколад','שוקולד'],['печень','ביסקוויט'],['вод','מים'],['колбас','נקניק'],['творог','קוטג'],['сливочное масло','חמאה'],['хумус','חומוס']];
  for(const [ru,he] of dict)if(t.includes(ru))return {term:he};
  return {term:q};
 }
@@ -215,9 +253,9 @@ function productLabel(name,meta){
    else ru='Куриное мясо';
  }else if(meta.salmon){ru='Лосось';emoji='🐟'}
  else {
-   const lex=[['חלב','Молоко','🥛'],['ביצ','Яйца','🥚'],['לחם','Хлеб','🍞'],['קפה','Кофе','☕'],['גבינ','Сыр','🧀'],['עגבני','Помидоры','🍅'],['מלפפון','Огурцы','🥒'],['תפוח אדמה','Картофель','🥔'],['שמן','Масло','🫒'],['דג','Рыба','🐟'],['בשר','Мясо','🥩'],['סוכר','Сахар','🧂'],['אורז','Рис','🍚']];
+   const lex=[['חלב','Молоко','🥛'],['ביצ','Яйца','🥚'],['לחם','Хлеб','🍞'],['קפה','Кофе','☕'],['גבינ','Сыр','🧀'],['עגבני','Помидоры','🍅'],['מלפפון','Огурцы','🥒'],['תפוח אדמה','Картофель','🥔'],['שמן','Масло','🫒'],['דג','Рыба','🐟'],['בשר','Мясо','🥩'],['סוכר','Сахар','🧂'],['אורז','Рис','🍚'],['יוגורט','Йогурт','🥛'],['גלידה','Мороженое','🍦'],['פסטה','Макароны','🍝'],['תפוח','Яблоки','🍏'],['בננה','Бананы','🍌'],['שוקולד','Шоколад','🍫'],['ביסקוויט','Печенье','🍪'],['טונה','Тунец','🐟'],['מיץ','Сок','🧃'],['מים','Вода','💧'],['נקניק','Колбаса','🥓'],['קוטג','Творог','🥣'],['חמאה','Сливочное масло','🧈'],['חומוס','Хумус','🥣']];
    for(const [he,r,e] of lex)if(n.includes(he)){ru=r;emoji=e;break}
-   if(ru==='Продукт')ru='Товар: '+name;
+   if(ru==='Продукт')ru='Продукт: '+(query.value.trim()||'продукты');
  }
  if(/טרי|свеж/.test(n))ru+=' · свежий';
  if(/קפוא|заморож/.test(n))ru+=' · замороженный';
@@ -318,7 +356,7 @@ async function comparePrices(code,item,btn,prices){
  try{
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12500);
   let response;
-  try{response=await fetch('https://www.over.org.il/api/prices/compare?item_code='+encodeURIComponent(code)+'&city='+encodeURIComponent(city.value.toLowerCase().startsWith('твер')?'טבריה':city.value)+'&top=10',{signal:controller.signal,mode:'cors',cache:'no-store'})}
+  try{response=await fetch('https://www.over.org.il/api/prices/compare?item_code='+encodeURIComponent(code)+(cityHe()?'&city='+encodeURIComponent(cityHe()):'')+'&top=10',{signal:controller.signal,mode:'cors',cache:'no-store'})}
   finally{clearTimeout(timeout)}
   if(!response.ok)throw Error('HTTP '+response.status);
   const data=await response.json();
@@ -349,38 +387,186 @@ async function comparePrices(code,item,btn,prices){
   prices.append(node('div','message warn','Не удалось загрузить цены. Попробуй ещё раз. Названия товаров при этом остаются доступны.'));
  }finally{if(btn){btn.disabled=false;btn.textContent='🔄 Обновить цены'}}
 }
-function showTech(q){
- setText('heading','🔧 Товары и техника');
- const t=q.trim().toLowerCase();
- const drills=/(дрел|сверл|bosch|макит|makita|מקדח|шурупов|ударн)/i.test(t);
- if(drills){
-   setText('subtitle','Вот настоящие модели и цены, опубликованные KSP. Открывай конкретный товар, не главную страницу магазина.');
-   const products=[
-    {name:'Bosch EasyImpact 570',desc:'Ударная дрель, 570 Вт, с кейсом',price:189,url:'https://ksp.co.il/mob/item/247522'},
-    {name:'Bosch GSB 13 RE',desc:'Профессиональная ударная дрель, 600 Вт',price:254,url:'https://ksp.co.il/mob/item/332374'},
-    {name:'Bosch Professional GSB 600',desc:'Ударная дрель, 600 Вт',price:268,url:'https://ksp.co.il/mob/item/343495'},
-    {name:'Makita HP1641K',desc:'Ударная дрель, 680 Вт, кейс',price:399,url:'https://ksp.co.il/mob/item/142374'}
-   ];
-   const g=node('div','grid');
-   for(const p of products){
-      const box=node('div','card tech-item');
-      box.append(node('div','tech-icon','🔧'));
-      box.append(node('h3','',p.name));
-      box.append(node('p','',p.desc));
-      box.append(node('div','tech-price',p.price.toLocaleString('ru-RU')+' ₪'));
-      box.append(node('div','pill','KSP · найденная цена на 15.11.2026, проверь перед покупкой'));
-      const bar=node('div','actions');
-      bar.append(action('🛒 Открыть именно этот товар',p.url,true));
-      bar.append(action('📍 KSP на карте',map('KSP')));
-      box.append(bar);g.append(box);
-   }
-   res.append(g);
-   message('Цены показаны по доступным страницам KSP на 15 ноября 2026 г. Это не автоматическое обновление каталога: актуальную цену и остаток проверяй на странице товара.');
- }else{
-   setText('subtitle','Точный товар ищем по магазину и модели. Прямой автоматический каталог всех магазинов ещё не подключён.');
-   message('Для запроса «'+q+'» пока нет подтверждённых карточек товаров. Не подменяю их случайными ссылками.',true);
-   const stores=[['KSP','https://ksp.co.il/'],['Ivory','https://www.ivory.co.il/']];
-   grid(stores.map(s=>card(s[0],'Каталог магазина. Название товара введи в поиск магазина.',[['Открыть каталог',s[1],true],['📍 Магазин на карте',map(s[0])]],'Проверенный магазин')));
+
+function cleanModel(s){
+ const matches=(s||'').match(/[A-Za-z][A-Za-z0-9.+\/_-]*(?:\s+[A-Z0-9][A-Za-z0-9.+\/_-]*)?/g)||[];
+ return matches.filter(x=>x.length>2&&!/^(type|sale|new|ksp|color|model|home)$/i.test(x)).slice(0,3).join(' ');
+}
+function goodsEmoji(q){
+ const s=q.toLowerCase();
+ if(/рюкзак|сумк|портфел|תיק|backpack|bag/.test(s))return '🎒';
+ if(/дрель|сверл|шурупов|מקדחה|drill/.test(s))return '🔧';
+ if(/плеер|fiio|dm13|диск|cd player|נגן/.test(s))return '🎵';
+ if(/принтер|xerox|מדפסת/.test(s))return '🖨️';
+ if(/кабель|провод|כבל/.test(s))return '🔌';
+ if(/телефон|iphone|טלפון/.test(s))return '📱';
+ if(/ноутбук|лаптоп|מחשב/.test(s))return '💻';
+ if(/монитор|экран|מסך/.test(s))return '🖥️';
+ if(/наушник|אוזניות/.test(s))return '🎧';
+ if(/кресло|כיסא/.test(s))return '🪑';
+ if(/пылесос|שואב/.test(s))return '🧹';
+ if(/обувь|кроссов|נעל/.test(s))return '👟';
+ if(/куртка|одежд|מעיל/.test(s))return '🧥';
+ if(/велосипед|אופניים/.test(s))return '🚲';
+ return '🛍️';
+}
+function inferredCategory(q){
+ let t=q.toLowerCase();
+ if(/рюкзак|тревел|backpack|תיק גב|сумк/.test(t))return 'backpack';
+ if(/fiio|плеер|dm13|cd.player|נגן|аудио/.test(t))return 'audio';
+ if(/дрел|шурупов|сверл|bosch|makita|מקדחה/.test(t))return 'drill';
+ return 'all';
+}
+function searchHebrew(q){
+ const t=q.toLowerCase();
+ const dict=[
+ [/рюкзак|портфел|сумк|ранц|backpack/,'תיק גב'],
+ [/дрел|сверл/,'מקדחה'],
+ [/шурупов|аккумуляторн.*дрел/,'מברגה'],
+ [/принтер|ксерокс/,'מדפסת'],
+ [/телевизор/,'טלוויזיה'],
+ [/монитор/,'מסך מחשב'],
+ [/ноутбук/,'מחשב נייד'],
+ [/смартфон|телефон/,'טלפון סלולרי'],
+ [/наушник/,'אוזניות'],
+ [/клавиатур/,'מקלדת'],
+ [/мышк.*компьют|компьют.*мыш/,'עכבר למחשב'],
+ [/кабел|провод/,'כבל'],
+ [/зарядк|зарядное/,'מטען'],
+ [/пылесос/,'שואב אבק'],
+ [/велосипед/,'אופניים'],
+ [/самокат/,'קורקינט'],
+ [/обувь|кроссовк/,'נעליים'],
+ [/куртк/,'מעיל'],
+ [/кресл/,'כיסא'],
+ [/мебел/,'רהיטים'],
+ [/холодильник/,'מקרר'],
+ [/стиральн.*машин/,'מכונת כביסה'],
+ [/кофемашин/,'מכונת קפה'],
+ [/камер|фотоаппарат/,'מצלמה'],
+ [/объектив/,'עדשה'],
+ [/фото.*свет|вспышк/,'פלאש'],
+ [/микрофон/,'מיקרופון'],
+ [/колонк|акустик/,'רמקולים'],
+ [/гитар/,'גיטרה'],
+ [/удлинител/,'מפצל חשמל'],
+ [/лампа|фонар/,'פנס'],
+ [/инструмент/,'כלי עבודה'],
+ [/рюкзак/,'תיק גב']
+ ];
+ for(const [p,he] of dict)if(p.test(t))return he;
+ return q;
+}
+function tokenize(s){return (s||'').toLowerCase().replace(/[^a-zа-яё0-9\u0590-\u05ff]+/gi,' ').trim().split(/\s+/).filter(Boolean)}
+function productRu(p,q){
+ if(typeof p.name_ru==='string'&&p.name_ru.trim())return p.name_ru;
+ const name=p.name||p.name_he||'';
+ const cat=inferredCategory(q+' '+name);
+ const type=cat==='backpack'?'Рюкзак':cat==='drill'?'Дрель':cat==='audio'?'Аудиотехника':q.trim();
+ const brand=p.brand||p.brandName||'';
+ const model=cleanModel(name);
+ const parts=[type,brand,model].filter(Boolean);
+ let title=parts.join(' ').trim();
+ if(!title)title=q;
+ return title.slice(0,145);
+}
+function productPhoto(item,emoji){
+ const wrap=node('div','catalog-picture'),ph=node('div','catalog-placeholder',emoji);wrap.append(ph);
+ let source=item.photo||item.img||item.image;
+ if(typeof source==='object'&&source)source=source.url||source.src||'';
+ if(typeof source!=='string'||!source.trim())return wrap;
+ let src=source.trim();
+ if(src.startsWith('//'))src='https:'+src;
+ else if(src.startsWith('/'))src='https://ksp.co.il'+src;
+ else if(!/^https:\/\//i.test(src))src='https://ksp.co.il/'+src.replace(/^\/+/,'');
+ let u;
+ try{u=new URL(src)}catch(e){return wrap}
+ if(u.protocol!=='https:')return wrap;
+ // Ссылки изображений получаем только из опубликованных карточек KSP
+ const img=document.createElement('img');img.loading='lazy';img.alt='Фото товара: '+productRu(item,query.value);
+ img.referrerPolicy='no-referrer';
+ img.onload=()=>{ph.remove()};img.onerror=()=>{img.remove()};
+ img.src=u.href;wrap.append(img);return wrap;
+}
+function catalogCard(p,q){
+ const box=node('article','catalog-card');
+ box.append(productPhoto(p,goodsEmoji(q+' '+(p.name||p.name_he||''))));
+ const content=node('div','catalog-content');
+ const title=productRu(p,q);content.append(node('h3','catalog-title',title));
+ if(p.name_he){let x=node('div','catalog-sub',p.name_he);x.dir='auto';content.append(x)}
+ const amount=Number(p.price);
+ if(Number.isFinite(amount)&&amount>0)content.append(node('div','catalog-price',amount.toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
+ else content.append(node('div','catalog-price','Цена не указана'));
+ const source=p.store||'KSP';const dated=p.as_of?' · сведения от '+p.as_of:' · при загрузке';
+ content.append(node('div','catalog-source',source+dated));
+ const bar=node('div','catalog-actions');
+ if(p.url)bar.append(action('🛒 Открыть товар',p.url,true));
+ bar.append(action('📍 На карте',map(source)));
+ content.append(bar);box.append(content);return box;
+}
+function unpackLiveKsp(data){
+ const list=data&&data.result&&data.result.items;
+ if(!Array.isArray(list))return [];
+ return list.filter(p=>p&&p.uin&&p.name).slice(0,36).map(p=>({
+   id:String(p.uin),name:p.name,price:Number(p.price),brand:p.brandName||'',
+   img:p.img||'',store:'KSP',url:'https://ksp.co.il/web/item/'+encodeURIComponent(String(p.uin)),
+   as_of:new Date().toLocaleDateString('ru-RU'),verified:'api'
+ }));
+}
+function rankCatalog(items,q){
+ const terms=tokenize(q),cat=inferredCategory(q),seen=new Set();
+ return items.map(p=>{
+   let hay=tokenize([p.name_ru,p.name,p.name_he,p.brand,p.category,p.id].filter(Boolean).join(' ')).join(' ');
+   let score=0;
+   for(const t of terms)if(hay.includes(t))score+=5;else score-=2;
+   if(cat!=='all'&&p.category===cat)score+=8;
+   if(terms.length&&score<0)return null;
+   return {p,score};
+ }).filter(Boolean).sort((a,b)=>b.score-a.score||(Number(a.p.price)||999999)-(Number(b.p.price)||999999)).map(x=>x.p);
+}
+async function liveKsp(queryText){
+ const ctl=new AbortController(),tid=setTimeout(()=>ctl.abort(),8500);
+ try{
+   const url='https://ksp.co.il/m_action/api/category/?search='+encodeURIComponent(searchHebrew(queryText))+'&page=1';
+   const r=await fetch(url,{mode:'cors',signal:ctl.signal,headers:{Accept:'application/json'}});
+   if(!r.ok)throw Error('KSP '+r.status);
+   return unpackLiveKsp(await r.json());
+ }finally{clearTimeout(tid)}
+}
+let storeCatalogPromise=null;
+function catalogData(){
+ if(!storeCatalogPromise)storeCatalogPromise=fetch('./catalog.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('catalog unavailable');return r.json()}).then(d=>Array.isArray(d.items)?d.items:[]).catch(()=>[]);
+ return storeCatalogPromise;
+}
+function showCatalogResult(products,q,moreLoading){
+ res.replaceChildren();
+ if(!products.length){
+   message('Пока нет проверенных карточек по запросу «'+q+'». Поиск по другим магазинам ещё расширяется; случайные результаты не показываю.',true);
+   return;
+ }
+ const title=node('p','result-count','Найдено товаров: '+products.length+' · все ссылки ведут на конкретный товар');
+ res.append(title);
+ const g=node('div','catalog-grid');products.slice(0,48).forEach(p=>g.append(catalogCard(p,q)));res.append(g);
+ if(moreLoading)res.append(node('div','loading-line','Ищу дополнительные модели в каталоге KSP…'));
+}
+async function showTech(q,mySeq){
+ setText('heading','🛍️ Товары: '+q);
+ setText('subtitle','Русские названия, цены, фотографии при наличии и ссылки сразу на карточки товаров. Не на поиск Google.');
+ message('Ищу товары в каталоге…');
+ const seed=rankCatalog(await catalogData(),q);
+ if(seq!==mySeq)return;
+ showCatalogResult(seed,q,true);
+ try{
+   const live=await liveKsp(q);if(seq!==mySeq)return;
+   const seen=new Set(),all=[];
+   for(const p of [...live,...seed]){if(seen.has(String(p.id)))continue;seen.add(String(p.id));all.push(p)}
+   if(live.length)showCatalogResult(all,q,false);
+   else showCatalogResult(seed,q,false);
+ }catch(e){
+   if(seq!==mySeq)return;
+   showCatalogResult(seed,q,false);
+   if(!seed.length)message('Сейчас KSP не разрешил загрузить свой каталог прямо в браузер. Это ограничение доступа к данным, а не отсутствие товара.',true);
+   else message('Показаны проверенные товары. Живой каталог KSP сейчас недоступен из браузера; дата проверки цены указана под карточкой.');
  }
 }
 function showFree(){
@@ -416,7 +602,7 @@ async function search(){
  const mySeq=++seq;clear();
  const type=mode(q);
  if(type==='food')return loadFood(mySeq,q);
- if(type==='tech')return showTech(q);
+ if(type==='tech')return showTech(q,mySeq);
  if(type==='free')return showFree();
  if(type==='help')return showHelp();
  if(type==='dating')return showDating(q);
