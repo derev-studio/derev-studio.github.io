@@ -180,12 +180,22 @@ footer strong{color:#2b4364}
 .retail-query{direction:auto;unicode-bidi:plaintext;font-size:18px;font-weight:700;color:#264c76;padding:9px 11px;background:#f0f5fb;border-radius:9px}
 .retail-help{font-size:13px;color:#60748e;margin:4px 0}
 @media(max-width:580px){.retail-stores{grid-template-columns:1fr}.retail-store{padding:12px}}
+
+/* Price rows are deliberately visible on the card; no need to open a whole catalogue. */
+.grocery-offer{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid #e3eaf3;padding:8px 0;font-size:13px}
+.grocery-offer span{flex:1;min-width:0;overflow-wrap:anywhere;color:#334e6c}
+.grocery-offer strong{white-space:nowrap;color:#14598e;font-size:16px}
+.food-detail-dialog{border:1px solid #d5e0ed;border-radius:18px;max-width:min(620px,95vw);width:95vw;max-height:85vh;overflow:auto;padding:20px;box-shadow:0 16px 60px #112d4d60}
+.food-detail-dialog::backdrop{background:#0b213b90}
+.food-detail-body{display:flex;flex-direction:column;gap:10px}
+.food-detail-body h2{font-size:21px;margin:0}
+.food-detail-body .grocery-detail-row{background:#f7faff;padding:10px;border-radius:10px}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 35</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 36</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -570,7 +580,7 @@ async function marketSearch(term,cityName){
  u.searchParams.set('q',term);
  if(cityName)u.searchParams.set('city',cityName);
  u.searchParams.set('columns','item_code,item_name,item_price,chain_name,store_name,as_of');
- u.searchParams.set('limit','200');
+ u.searchParams.set('limit','800');
  const control=new AbortController(),timeout=setTimeout(()=>control.abort(),11500);
  try{
   const response=await fetch(u.toString(),{signal:control.signal,cache:'no-store',mode:'cors',headers:{Accept:'application/json'}});
@@ -735,101 +745,127 @@ function compactOfferText(offer){
  return merchant?merchant.label+' · '+offer.shop:offer.shop;
 }
 
+// Each grocery card is a REAL product identified by barcode; we show its
+// distinct retailer offers without redirecting to an unrelated store catalogue.
+function showProductPriceDetail(group,meta){
+ const code=String(group.code||''),name=String(group.name||'').trim();
+ const offers=Array.isArray(group.offers)?group.offers:[];
+ const known=actualStorePage(code);
+ const dialog=node('dialog','food-detail-dialog');
+ dialog.setAttribute('aria-label','Цены товара '+name);
+ const body=node('div','food-detail-body');
+ const heading=node('h2','',known?known.name:foodRuTitle(name,meta));
+ body.append(heading);
+ const original=node('div','grocery-original',name);original.dir='auto';body.append(original);
+ if(code)body.append(node('div','pill','Точный штрихкод: '+code));
+ body.append(node('p','info','Цены для выбранного товара в '+city.value+'. Это опубликованные цены магазинов, а не подтверждение наличия.'));
+ if(offers.length){
+  for(const offer of offers.slice(0,30)){
+   const row=node('div','grocery-detail-row');
+   const store=node('strong','',compactOfferText(offer));store.dir='auto';row.append(store);
+   row.append(node('div','grocery-price',Number(offer.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
+   if(offer.date)row.append(node('div','grocery-date','Данные от '+offer.date));
+   if(known&&known.chain==='Rami Levy'&&shopChoice(offer.shop)?.id==='rami')
+    row.append(action('🛒 Страница этого товара в Рами Леви',known.url,true));
+   body.append(row);
+  }
+  if(offers.length>30)body.append(node('p','info','Показаны первые 30 филиалов. Уточни город, чтобы сузить сравнение.'));
+ }else body.append(node('p','message','Для этого товара пока не получены цены филиалов.'));
+ const exact=exactGroceryPage(code);
+ if(exact)body.append(action('🔍 Сравнить этот штрихкод на '+exact.site,exact.url,true));
+ if(!known&&!exact)body.append(node('p','info','Прямой адрес покупки этого товара пока неизвестен. Поэтому не отправляем тебя в общий каталог другого товара.'));
+ const close=node('button','action','Закрыть');
+ close.type='button';close.addEventListener('click',()=>dialog.close());body.append(close);
+ dialog.append(body);document.body.append(dialog);
+ dialog.addEventListener('close',()=>dialog.remove(),{once:true});
+ if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
+}
 function makeCompactFood(group,meta){
  const code=String(group.code||''),title=String(group.name||'').trim();
+ const offers=Array.isArray(group.offers)?group.offers:[];
+ const known=actualStorePage(code);
  const card=node('article','catalog-card grocery-card');
  const photo=node('div','catalog-picture grocery-image');
  photo.append(node('div','grocery-placeholder',meta.salmon?'🐟':meta.chicken?'🍗':'🛒'));
- card.append(photo);
- realImage(photo,code);
+ card.append(photo);realImage(photo,code);
  const info=node('div','catalog-content grocery-info');
- const known=actualStorePage(code);
  info.append(node('h3','catalog-title',known?known.name:foodRuTitle(title,meta)));
  const original=node('div','catalog-sub grocery-original',title);original.dir='auto';info.append(original);
  if(code)info.append(node('div','pill','Штрихкод: '+code));
- const offers=Array.isArray(group.offers)?group.offers:[];
- const best=offers[0];
- if(best){
-  info.append(node('div','grocery-price',Number(best.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
-  const st=node('div','grocery-store','Магазин: '+compactOfferText(best));st.dir='auto';info.append(st);
-  if(best.date)info.append(node('div','grocery-date','Обновлено '+best.date));
- }else info.append(node('div','grocery-price','Цена не получена'));
- const btns=node('div','catalog-actions grocery-actions');
- // A supermarket price row is NOT a merchant's online product page.
- // Only show a purchase link if the same barcode has a separately verified
- // direct URL AND the price list actually contains that same retailer.
- const verifiedSeller=known&&offers.some(o=>known.chain==='Rami Levy'&&shopChoice(o.shop)?.id==='rami');
- if(verifiedSeller){
-  btns.append(action('🛒 Открыть конкретный товар в '+known.chain,known.url,true));
- }else{
-  btns.append(node('div','grocery-disabled','Прямая ссылка на этот товар у продавца пока не получена. Общий каталог не открываем.'));
- }
- info.append(btns);
- if(offers.length>0){
-  const detail=node('details','grocery-detail');
-  detail.append(node('summary','','Сравнить цены · '+offers.length+' предложений'));
-  for(const offer of offers.slice(0,14)){
-   const line=node('div','grocery-detail-row');
-   const st=node('div','',compactOfferText(offer));st.dir='auto';line.append(st);
-   line.append(node('strong','',Number(offer.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
-   if(offer.date)line.append(node('div','grocery-date','Данные от '+offer.date));
-   const links=node('div','grocery-detail-links');
-   if(known&&known.chain==='Rami Levy'&&shopChoice(offer.shop)?.id==='rami'){
-    links.append(action('🛒 Открыть именно этот товар',known.url,true));
-   }
-   line.append(links);detail.append(line);
+ if(offers.length){
+  info.append(node('div','grocery-price',Number(offers[0].price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
+  if(offers[0].date)info.append(node('div','grocery-date','Данные от '+offers[0].date));
+  const caption=node('div','grocery-store','Цены в разных магазинах:');info.append(caption);
+  const unique=new Map();
+  for(const offer of offers){
+   const network=shopChoice(offer.shop);
+   const key=network?.id||String(offer.shop||'').split(' · ')[0].trim();
+   if(!unique.has(key))unique.set(key,offer);
   }
-  info.append(detail);
- }
- card.append(info);
- return card;
+  for(const offer of [...unique.values()].slice(0,5)){
+   const row=node('div','grocery-offer');
+   const shop=node('span','',compactOfferText(offer));shop.dir='auto';row.append(shop);
+   row.append(node('strong','',Number(offer.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
+   info.append(row);
+  }
+  if(unique.size>5)info.append(node('div','grocery-date','Других сетей: '+(unique.size-5)+' · смотри все цены ниже'));
+ }else info.append(node('div','grocery-price','Цена не получена'));
+ const actions=node('div','catalog-actions grocery-actions');
+ const details=node('button','action primary','📦 Открыть этот товар · все цены');
+ details.type='button';
+ details.addEventListener('click',()=>showProductPriceDetail(group,meta));
+ actions.append(details);
+ if(known&&offers.some(o=>known.chain==='Rami Levy'&&shopChoice(o.shop)?.id==='rami'))
+  actions.append(action('🛒 Купить этот товар в Рами Леви',known.url,false));
+ const exact=exactGroceryPage(code);
+ if(exact)actions.append(action('🔍 Этот штрихкод на '+exact.site,exact.url,false));
+ info.append(actions);
+ card.append(info);return card;
 }
+
 function renderMarket(groups,meta,cityText){
  res.replaceChildren();
- res.append(node('p','result-count','Товаров: '+groups.length+' · прайс-листы супермаркетов · '+(cityText||'Израиль')));
- const filters=node('div','shop-filter-bar');
- res.append(filters);
- const root=node('div','catalog-grid grocery-grid');res.append(root);
- const stores=new Map();
- for(const g of groups){
-  for(const o of (g.offers||[])){
-   const s=shopChoice(o.shop);if(s)stores.set(s.id,s);
-  }
+ const networks=new Map();
+ let hasOther=false;
+ for(const group of groups)for(const offer of group.offers||[]){
+  const x=shopChoice(offer.shop);
+  if(x)networks.set(x.id,x);else hasOther=true;
  }
- const knownNetwork=[
-  {id:'yoch',label:'Йохананов'},{id:'shuf',label:'Шуферсаль'},
-  {id:'rami',label:'Рами Леви'},{id:'carrefour',label:'Карфур'},
-  {id:'mah',label:'Махсаней ха-Шук'},{id:'victory',label:'Виктори'}];
- const choices=[{id:'all',label:'Все магазины'},...knownNetwork];
+ res.append(node('p','result-count','Найдено '+groups.length+' конкретных товаров · '+(networks.size+(hasOther?1:0))+' сетей · '+(cityText||'Израиль')));
+ const toolbar=node('div','shop-filter-bar'),root=node('div','catalog-grid grocery-grid');
+ res.append(toolbar,root);
+ const choices=[{id:'all',label:'Все магазины'},...networks.values()];
+ if(hasOther)choices.push({id:'other',label:'Другие магазины'});
  let selected='all',visible=[],position=0,more=null;
- function paintFilter(){
-  filters.replaceChildren();
-  for(const choice of choices){
-   const button=node('button','shop-filter'+(selected===choice.id?' active':''),choice.label);
-   button.type='button';
-   button.addEventListener('click',()=>{selected=choice.id;rebuild()});
-   filters.append(button);
-  }
- }
- function rebuild(){
-  const data=groups.map(g=>{
-   const offers=selected==='all'?g.offers:(g.offers||[]).filter(o=>shopChoice(o.shop)?.id===selected);
-   return {...g,offers};
-  }).filter(g=>g.offers?.length||selected==='all');
+ function refresh(){
+  const data=groups.map(group=>{
+   const offers=(group.offers||[]).filter(offer=>{
+    const network=shopChoice(offer.shop);
+    return selected==='all'||selected==='other'&&!network||network?.id===selected;
+   });
+   return {...group,offers};
+  }).filter(group=>group.offers.length||selected==='all');
   visible=data.sort((a,b)=>(actualStorePage(b.code)?1:0)-(actualStorePage(a.code)?1:0)||((a.offers[0]?.price??Infinity)-(b.offers[0]?.price??Infinity)));
-  position=0;root.replaceChildren();if(more)more.remove();more=null;paintFilter();showMore();
-  if(!visible.length)root.append(node('div','message','В этом городе подходящих предложений выбранного магазина пока не найдено.'));
+  position=0;root.replaceChildren();if(more){more.remove();more=null}
+  toolbar.replaceChildren();
+  for(const choice of choices){
+   const b=node('button','shop-filter'+(selected===choice.id?' active':''),choice.label);
+   b.type='button';b.addEventListener('click',()=>{selected=choice.id;refresh()});
+   toolbar.append(b);
+  }
+  showMore();
+  if(!visible.length)root.append(node('div','message','Для выбранной сети подходящих товаров пока не найдено.'));
  }
  function showMore(){
-  for(const group of visible.slice(position,position+12))root.append(makeCompactFood(group,meta));
+  for(const item of visible.slice(position,position+12))root.append(makeCompactFood(item,meta));
   position=Math.min(visible.length,position+12);
   if(position<visible.length){
    if(!more){more=node('button','action primary','Показать ещё товары');more.type='button';more.addEventListener('click',showMore);res.append(more)}
   }else if(more){more.remove();more=null}
  }
- rebuild();
- revealResults();
+ refresh();revealResults();
 }
+
 function previousKnownChicken(meta){
  if(!meta.chicken||variation==='breast'||variation==='thigh'||variation==='wing'||variation==='drum')return false;
  if(!/^(тверия|טבריה)$/i.test(city.value.trim()))return false;
