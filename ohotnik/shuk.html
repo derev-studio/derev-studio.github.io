@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ru" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f9f5ec">
+<meta name="description" content="Шук — выездной рынок Верхней Тверии по вторникам возле зала Уламей Хен. Цветы, растения, товары для дома и карта.">
+<title>Шук — вторничный рынок Верхней Тверии</title>
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<style>
+:root{color-scheme:light;--page:#f9f5ec;--surface:#fffefb;--ink:#354f59;--muted:#687e83;--line:#e9dfd0;--accent:#358575;--soft:#e8f4ed;--sun:#f5dba5;--pink:#f3d4d2;--shadow:#9d815918}
+html[data-theme="light"]{--page:#f2f6fa;--surface:#fff;--ink:#30485b;--muted:#627585;--line:#dce7f1;--accent:#3b7794;--soft:#e7f2fa;--sun:#eed7a8;--pink:#ebdbef;--shadow:#416fa513}
+html[data-theme="beige"]{--page:#f9f5ec;--surface:#fffefb;--ink:#354f59;--muted:#687e83;--line:#e9dfd0;--accent:#358575;--soft:#e8f4ed;--sun:#f5dba5;--pink:#f3d4d2;--shadow:#9d815918}
+html[data-theme="navy"]{color-scheme:dark;--page:#0c1728;--surface:#172941;--ink:#e8f2ff;--muted:#b2c4d7;--line:#35526c;--accent:#a4e1ce;--soft:#233b4c;--sun:#63563f;--pink:#5b465a;--shadow:#06111b44}
+html[data-theme="forest"]{color-scheme:dark;--page:#10231c;--surface:#19352b;--ink:#edf9ef;--muted:#b7cfbf;--line:#385b4a;--accent:#b8e7ad;--soft:#294d39;--sun:#5c5838;--pink:#55464d;--shadow:#06110a44}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+a{color:inherit}button,select{font:inherit}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #e4b452;outline-offset:3px}
+.wrap{width:min(1080px,calc(100% - 32px));margin-inline:auto}
+.site-header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:16px 0}
+.back{font-weight:800;color:var(--accent);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 14px;text-decoration:none}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.languages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));direction:ltr;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.languages button{border:0;border-inline-end:1px solid var(--line);padding:10px 12px;background:transparent;color:var(--ink);cursor:pointer;font-size:14px;font-weight:750}
+.languages button:last-child{border:0}
+.languages button[aria-pressed="true"]{background:var(--soft);color:var(--accent)}
+.theme-wrap{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+#theme{max-width:160px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 8px;cursor:pointer}
+.hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:28px;background:linear-gradient(125deg,var(--soft) 0%,var(--surface) 62%,var(--pink));box-shadow:0 12px 38px var(--shadow);padding:46px clamp(20px,5vw,54px);min-height:360px}
+.hero-copy{position:relative;z-index:2;max-width:650px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--accent);font-size:13px;font-weight:850;letter-spacing:.04em;margin-bottom:9px}
+h1{font-size:clamp(35px,6vw,62px);line-height:1.12;letter-spacing:-.035em;margin:0 0 16px;font-weight:900}
+.lead{font-size:clamp(16px,2vw,20px);max-width:600px;margin:0 0 24px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 11px;font-size:13px;font-weight:750}
+.actions{display:flex;flex-wrap:wrap;gap:9px}
+.button{display:inline-flex;align-items:center;gap:7px;text-decoration:none;padding:12px 17px;border-radius:12px;font-weight:850;border:1px solid var(--accent)}
+.button.primary{background:var(--accent);color:var(--surface)}
+.button.secondary{background:var(--surface);color:var(--accent)}
+.bouquet{position:absolute;right:3%;bottom:14px;display:flex;gap:0;align-items:end;transform:rotate(-9deg);font-size:clamp(55px,7vw,90px);opacity:.95;filter:drop-shadow(0 12px 8px #735b391a)}
+.bouquet span:nth-child(2){transform:translateY(-65px) rotate(25deg)}
+.bouquet span:nth-child(3){transform:translateY(-18px) rotate(-18deg)}
+.bouquet span:nth-child(4){transform:translateY(-76px) rotate(18deg)}
+.bouquet-label{position:absolute;bottom:10px;right:25px;font-size:10px;color:var(--muted)}
+section{margin-top:35px}
+.section-top{margin-bottom:18px}
+.section-top h2{font-size:clamp(25px,4vw,36px);line-height:1.22;letter-spacing:-.025em;margin:0 0 9px}
+.section-top p{color:var(--muted);margin:0;max-width:730px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:23px 20px;min-height:200px;box-shadow:0 4px 16px var(--shadow);transition:transform .18s ease}
+.tile:hover{transform:translateY(-3px)}
+.tile.flower{background:linear-gradient(135deg,var(--soft),var(--surface));border-color:var(--accent)}
+.tile-emoji{font-size:38px;line-height:1.1;margin-bottom:15px}
+.tile h3{font-size:18px;margin:0 0 8px;line-height:1.24}
+.tile p{font-size:14px;color:var(--muted);margin:0}
+.flowers-feature{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;border:1px solid var(--line);border-radius:24px;padding:clamp(20px,4vw,30px);background:linear-gradient(120deg,var(--surface),var(--soft))}
+.flowers-feature h2{font-size:clamp(24px,4vw,32px);margin:0 0 12px}
+.flowers-feature p{margin:0 0 14px;max-width:750px;color:var(--muted)}
+.tips{display:flex;flex-wrap:wrap;gap:9px}
+.tip{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:13px;font-weight:650}
+.bigflower{font-size:clamp(66px,10vw,125px);align-self:center}
+.map-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(270px,.7fr);gap:18px}
+.map-shell{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:8px;min-width:0}
+.map-shell iframe{display:block;width:100%;height:350px;border:0;border-radius:13px;background:var(--soft)}
+.map-shell small{display:block;font-size:12px;padding:10px 10px 3px;color:var(--muted)}
+.map-copy{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:15px}
+.map-copy h3{font-size:22px;margin:0}
+.map-copy p{font-size:15px;color:var(--muted);margin:0;flex:1}
+.notice{border:1px solid var(--line);background:var(--soft);border-radius:18px;padding:18px 21px}
+.notice strong{display:block;margin-bottom:6px}.notice p{margin:0;color:var(--muted);font-size:14px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:40px 0 23px;padding:18px 0;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.source-links{display:flex;flex-wrap:wrap;gap:13px}
+.source-links a{color:var(--accent);font-weight:700}
+html[dir="rtl"] .bouquet{right:auto;left:3%;transform:rotate(9deg)}
+html[dir="rtl"] .bouquet-label{right:auto;left:25px}
+html[dir="rtl"] h1{letter-spacing:normal}
+@media(max-width:900px){.bouquet{opacity:.24}.hero-copy{max-width:100%}.map-grid{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.wrap{width:min(100% - 20px,1080px)}.site-header{align-items:stretch}.back{text-align:center}.controls{width:100%;justify-content:space-between}.languages{flex:1;min-width:0}.languages button{padding:9px 6px;font-size:12px}.theme-wrap{width:100%;justify-content:flex-end}.hero{padding:28px 18px;border-radius:22px;min-height:0}.bouquet{font-size:56px;bottom:22px}.grid{grid-template-columns:1fr}.tile{min-height:0}.flowers-feature{grid-template-columns:1fr}.bigflower{display:none}.map-shell iframe{height:310px}footer{flex-direction:column}.button{justify-content:center}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tile{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="site-header">
+  <a class="back" href="./" data-t="back">← Охотник за скидками</a>
+  <div class="controls">
+    <nav class="languages" aria-label="Language / שפה / اللغة">
+      <button type="button" data-lang="ru" lang="ru" aria-pressed="true">Русский</button>
+      <button type="button" data-lang="en" lang="en" aria-pressed="false">English</button>
+      <button type="button" data-lang="he" lang="he" dir="rtl" aria-pressed="false">עברית</button>
+      <button type="button" data-lang="ar" lang="ar" dir="rtl" aria-pressed="false">العربية</button>
+    </nav>
+    <label class="theme-wrap"><span data-t="theme">Оформление</span>
+      <select id="theme">
+        <option value="auto" data-t="auto">🌗 Авто</option><option value="light" data-t="light">☀️ Светлая</option>
+        <option value="beige" data-t="beige">🏖️ Нежно-бежевая</option><option value="navy" data-t="navy">🌌 Тёмно-синяя</option><option value="forest" data-t="forest">🌲 Тёмно-зелёная</option>
+      </select>
+    </label>
+  </div>
+</header>
+<main>
+<section class="hero" style="margin-top:0">
+ <div class="hero-copy">
+ <div class="eyebrow">🌷 <span data-t="heroKicker">Верхняя Тверия · שוק נודד</span></div>
+ <h1 data-t="title">ШУК — живой вторник!</h1>
+ <p class="lead" data-t="intro">Немного прогулки, много открытий: цветы, растения, полезные вещи и особая атмосфера рынка. Всё главное — на одной странице.</p>
+ <div class="chips">
+ <span class="chip">🗓 <span data-t="when">Каждый вторник</span></span>
+ <span class="chip">📍 <span data-t="where">Тверия-Илит</span></span>
+ <span class="chip">🏘 <span data-t="landmark">Возле зала «Уламей Хен»</span></span>
+ </div>
+ <div class="actions"><a class="button primary" href="#where" data-t="mapButton">Посмотреть карту</a><a class="button secondary" href="#goods" data-t="goodsButton">Что можно найти</a></div>
+ </div>
+ <div class="bouquet" aria-hidden="true"><span>🪴</span><span>🌷</span><span>🌻</span><span>🌸</span></div>
+ <div class="bouquet-label" data-t="illustration">Цветочная иллюстрация, не фотография рынка</div>
+</section>
+<section id="goods">
+ <div class="section-top"><div class="eyebrow" data-t="goodsEyebrow">Погуляем по рядам</div><h2 data-t="goodsTitle">Что ждёт на шуке</h2><p data-t="goodsIntro">Торговцы привозят разные товары, поэтому каждую неделю ассортимент немного другой.</p></div>
+ <div class="grid">
+  <article class="tile flower"><div class="tile-emoji" aria-hidden="true">💐 🪴</div><h3 data-t="flowerTitle">Цветы и растения</h3><p data-t="flowerDesc">Самый красивый уголок: букеты, горшечные растения и зелёные находки. Иногда хочется прийти только ради цветов!</p></article>
+  <article class="tile"><div class="tile-emoji" aria-hidden="true">👕</div><h3 data-t="clothesTitle">Одежда</h3><p data-t="clothesDesc">Повседневные вещи, сезонная одежда и другие находки на прилавках.</p></article>
+  <article class="tile"><div class="tile-emoji" aria-hidden="true">👜</div><h3 data-t="bagsTitle">Сумки и аксессуары</h3><p data-t="bagsDesc">Сумки и разные мелочи, которые удобно рассматривать не спеша.</p></article>
+  <article class="tile"><div class="tile-emoji" aria-hidden="true">🧺</div><h3 data-t="homeTitle">Для дома</h3><p data-t="homeDesc">Хозяйственные принадлежности и практичные товары для повседневной жизни.</p></article>
+  <article class="tile"><div class="tile-emoji" aria-hidden="true">🧵</div><h3 data-t="textileTitle">Текстиль</h3><p data-t="textileDesc">Скатерти, ткани, занавески и другие домашние вещи.</p></article>
+  <article class="tile"><div class="tile-emoji" aria-hidden="true">🧸</div><h3 data-t="toysTitle">Игрушки</h3><p data-t="toysDesc">Игрушки и небольшие подарки — ассортимент меняется.</p></article>
+ </div>
+</section>
+<section class="flowers-feature" id="flowers">
+  <div><div class="eyebrow" data-t="flowersEyebrow">Особенно люблю этот уголок</div><h2 data-t="flowersHeading">Загляни к цветам 🌸</h2><p data-t="flowersStory">На рынке цветы хочется рассматривать подольше. Выбирай не только по красоте бутона: посмотри на листья, стебель и состояние земли в горшке. А дома новым растениям сначала дай привыкнуть к месту.</p>
+  <div class="tips"><span class="tip" data-t="flowerTip1">🌿 Листья — упругие и без сильного увядания</span><span class="tip" data-t="flowerTip2">🌱 Горшок — с дренажными отверстиями</span><span class="tip" data-t="flowerTip3">💧 Полив — по влажности земли, не по расписанию</span></div>
+  </div><span class="bigflower" aria-hidden="true">🌺</span>
+</section>
+<section id="where">
+ <div class="section-top"><div class="eyebrow" data-t="mapEyebrow">Как добраться</div><h2 data-t="mapTitle">Рынок рядом с «Уламей Хен»</h2></div>
+ <div class="map-grid">
+   <div class="map-shell"><iframe title="Google Maps: אולמי חן, אור חיים 25, טבריה עילית" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=%D7%90%D7%95%D7%9C%D7%9E%D7%99%20%D7%97%D7%9F%20%D7%90%D7%95%D7%A8%20%D7%97%D7%99%D7%99%D7%9D%2025%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%A2%D7%99%D7%9C%D7%99%D7%AA%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C&z=16&output=embed"></iframe><small data-t="mapCaption">Карта Google показывает ориентир. Положение торговых рядов может меняться.</small></div>
+   <div class="map-copy"><h3>📍 אולמי חן</h3><p data-t="mapText">Ориентир — зал אולמי חן, улица Ор Хаим, 25, Верхняя Тверия (Шикун-Далет). Рынок размещается рядом; отметка на карте показывает зал, а не точное место каждого торгового ряда.</p><a class="button primary" href="https://www.google.com/maps/search/?api=1&query=%D7%90%D7%95%D7%9C%D7%9E%D7%99%20%D7%97%D7%9F%20%D7%90%D7%95%D7%A8%20%D7%97%D7%99%D7%99%D7%9D%2025%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%A2%D7%99%D7%9C%D7%99%D7%AA%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C" target="_blank" rel="noopener noreferrer" data-t="mapLink">Открыть маршрут в Google Maps</a></div>
+ </div>
+</section>
+<section class="notice"><strong>💡 <span data-t="important">Полезно знать</span></strong><p data-t="note">Рынок обычно проходит по вторникам. Точные часы отдельных продавцов, ассортимент и работа в праздничные дни могут меняться. Перед специальной поездкой лучше уточнить.</p></section>
+</main>
+<footer><span data-t="footer">Независимая страница о местном рынке. Не официальный сайт администрации или торговцев.</span>
+<div class="source-links"><span data-t="sources">Источники сведений</span>:
+<a href="https://www.fattal.co.il/tiberias-guide-markets" target="_blank" rel="noopener noreferrer" data-t="sourceFattal">Описание рынка</a>
+<a href="https://olameychen.wixsite.com/olamey-chen/location" target="_blank" rel="noopener noreferrer" data-t="sourceHall">Адрес зала</a></div></footer>
+</div>
+<script>
+(function(){
+"use strict";
+const translations={"ru":{"back":"← Охотник за скидками","topmark":"Наш местный путеводитель","heroKicker":"Верхняя Тверия · שוק נודד","title":"ШУК — живой вторник!","intro":"Немного прогулки, много открытий: цветы, растения, полезные вещи и особая атмосфера рынка. Всё главное — на одной странице.","when":"Каждый вторник","where":"Тверия-Илит","landmark":"Возле зала «Уламей Хен»","mapButton":"Посмотреть карту","goodsButton":"Что можно найти","illustration":"Цветочная иллюстрация, не фотография рынка","goodsEyebrow":"Погуляем по рядам","goodsTitle":"Что ждёт на шуке","goodsIntro":"Торговцы привозят разные товары, поэтому каждую неделю ассортимент немного другой.","flowerTitle":"Цветы и растения","flowerDesc":"Самый красивый уголок: букеты, горшечные растения и зелёные находки. Иногда хочется прийти только ради цветов!","clothesTitle":"Одежда","clothesDesc":"Повседневные вещи, сезонная одежда и другие находки на прилавках.","bagsTitle":"Сумки и аксессуары","bagsDesc":"Сумки и разные мелочи, которые удобно рассматривать не спеша.","homeTitle":"Для дома","homeDesc":"Хозяйственные принадлежности и практичные товары для повседневной жизни.","textileTitle":"Текстиль","textileDesc":"Скатерти, ткани, занавески и другие домашние вещи.","toysTitle":"Игрушки","toysDesc":"Игрушки и небольшие подарки — ассортимент меняется.","flowersEyebrow":"Особенно люблю этот уголок","flowersHeading":"Загляни к цветам 🌸","flowersStory":"На рынке цветы хочется рассматривать подольше. Выбирай не только по красоте бутона: посмотри на листья, стебель и состояние земли в горшке. А дома новым растениям сначала дай привыкнуть к месту.","flowerTip1":"🌿 Листья — упругие и без сильного увядания","flowerTip2":"🌱 Горшок — с дренажными отверстиями","flowerTip3":"💧 Полив — по влажности земли, не по расписанию","mapEyebrow":"Как добраться","mapTitle":"Рынок рядом с «Уламей Хен»","mapText":"Ориентир — зал אולמי חן, улица Ор Хаим, 25, Верхняя Тверия (Шикун-Далет). Рынок размещается рядом; отметка на карте показывает зал, а не точное место каждого торгового ряда.","mapLink":"Открыть маршрут в Google Maps","mapCaption":"Карта Google показывает ориентир. Положение торговых рядов может меняться.","important":"Полезно знать","note":"Рынок обычно проходит по вторникам. Точные часы отдельных продавцов, ассортимент и работа в праздничные дни могут меняться. Перед специальной поездкой лучше уточнить.","sources":"Источники сведений","sourceFattal":"Описание рынка","sourceHall":"Адрес зала","footer":"Независимая страница о местном рынке. Не официальный сайт администрации или торговцев.","theme":"Оформление","auto":"🌗 Авто","light":"☀️ Светлая","beige":"🏖️ Нежно-бежевая","navy":"🌌 Тёмно-синяя","forest":"🌲 Тёмно-зелёная"},"en":{"back":"← Deal Hunter","topmark":"Our local market guide","heroKicker":"Upper Tiberias · שוק נודד","title":"SHUK — Tuesday comes alive!","intro":"A pleasant walk and little discoveries: flowers, plants, useful finds and lively market atmosphere. Everything you need on one page.","when":"Every Tuesday","where":"Upper Tiberias","landmark":"Near Olamay Hen hall","mapButton":"View the map","goodsButton":"Explore the stalls","illustration":"Decorative flowers, not a photograph of the market","goodsEyebrow":"Take a stroll","goodsTitle":"What you may find","goodsIntro":"Vendors bring a changing mix of goods, so the selection can vary each week.","flowerTitle":"Flowers and plants","flowerDesc":"A lovely spot for bouquets, potted plants and green discoveries. Sometimes the flowers alone are worth the visit!","clothesTitle":"Clothing","clothesDesc":"Everyday and seasonal clothing and other stall finds.","bagsTitle":"Bags and accessories","bagsDesc":"Bags and small accessories, perfect for a relaxed browse.","homeTitle":"Home essentials","homeDesc":"Practical household goods and everyday items.","textileTitle":"Textiles","textileDesc":"Tablecloths, fabrics, curtains and other home textiles.","toysTitle":"Toys","toysDesc":"Toys and little gifts, with a changing selection.","flowersEyebrow":"Our favourite corner","flowersHeading":"Stop and smell the flowers 🌸","flowersStory":"Take your time looking at the flowers. Look beyond the blossoms: check the leaves, stems and potting soil. At home, give new plants time to adjust.","flowerTip1":"🌿 Leaves — firm, without significant wilting","flowerTip2":"🌱 Pots — with drainage holes","flowerTip3":"💧 Water when the soil needs it","mapEyebrow":"Getting here","mapTitle":"Near Olamay Hen hall","mapText":"Use Olamay Hen (אולמי חן), Or Haim Street 25, Upper Tiberias (Shikun Dalet), as a landmark. The market is nearby; the map pin identifies the hall, not a specific market stall.","mapLink":"Open directions in Google Maps","mapCaption":"The Google map marks a landmark; stalls may be positioned differently.","important":"Before you visit","note":"The market normally takes place on Tuesdays. Individual stall hours, products and holiday arrangements may vary. Check ahead if making a special trip.","sources":"Information sources","sourceFattal":"Market description","sourceHall":"Hall address","footer":"Independent local market guide. Not an official site of the market, vendors or authorities.","theme":"Theme","auto":"🌗 Auto","light":"☀️ Light","beige":"🏖️ Soft beige","navy":"🌌 Dark blue","forest":"🌲 Dark green"},"he":{"back":"→ חזרה לצייד המבצעים","topmark":"המדריך המקומי שלנו","heroKicker":"טבריה עילית · השוק הנודד","title":"שוק של יום שלישי!","intro":"טיול קטן עם הרבה הפתעות: פרחים, עציצים, מציאות שימושיות ואווירת שוק נעימה. כל מה שצריך לדעת בעמוד אחד.","when":"כל יום שלישי","where":"טבריה עילית","landmark":"ליד אולמי חן","mapButton":"הצגת המפה","goodsButton":"מה יש בשוק?","illustration":"איור פרחים, לא צילום מהשוק","goodsEyebrow":"בואו לטייל בין הדוכנים","goodsTitle":"מה אפשר למצוא בשוק?","goodsIntro":"הסוחרים מביאים מוצרים שונים, ולכן המבחר עשוי להשתנות משבוע לשבוע.","flowerTitle":"פרחים ועציצים","flowerDesc":"פינה יפה במיוחד עם זרי פרחים, עציצים ומציאות ירוקות. לפעמים כדאי להגיע רק בשביל הפרחים!","clothesTitle":"ביגוד","clothesDesc":"בגדים ליומיום, פריטים עונתיים ועוד מציאות בדוכנים.","bagsTitle":"תיקים ואביזרים","bagsDesc":"תיקים ואביזרים קטנים שכיף לגלות בלי למהר.","homeTitle":"מוצרים לבית","homeDesc":"כלי בית ופריטים שימושיים לחיי היומיום.","textileTitle":"טקסטיל","textileDesc":"מפות שולחן, בדים, וילונות ופריטים נוספים לבית.","toysTitle":"צעצועים","toysDesc":"צעצועים ומתנות קטנות, עם מבחר משתנה.","flowersEyebrow":"הפינה האהובה עלינו","flowersHeading":"עוצרים ליד הפרחים 🌸","flowersStory":"שווה להקדיש זמן לפרחים. מעבר ליופי של הפריחה, בדקו את העלים, הגבעולים ומצב האדמה בעציץ. בבית תנו לצמח חדש זמן להסתגל.","flowerTip1":"🌿 עלים — מוצקים וללא נבילה משמעותית","flowerTip2":"🌱 עציץ — עם חורי ניקוז","flowerTip3":"💧 משקים לפי לחות האדמה","mapEyebrow":"איך מגיעים?","mapTitle":"השוק ליד אולמי חן","mapText":"נקודת הציון: אולמי חן, רחוב אור חיים 25, טבריה עילית (שיכון ד׳). השוק מתקיים בסמוך; הסימון במפה מציין את האולם, ולא דוכן מסוים.","mapLink":"ניווט ב-Google Maps","mapCaption":"המפה מציגה נקודת ציון. מיקום הדוכנים עשוי להשתנות.","important":"כדאי לדעת","note":"השוק מתקיים בדרך כלל בימי שלישי. שעות הפעילות של דוכנים, המלאי והסדרי חגים עשויים להשתנות. מומלץ לוודא לפני נסיעה מיוחדת.","sources":"מקורות מידע","sourceFattal":"תיאור השוק","sourceHall":"כתובת האולם","footer":"מדריך מקומי עצמאי. אינו האתר הרשמי של השוק, הסוחרים או הרשויות.","theme":"עיצוב","auto":"🌗 אוטומטי","light":"☀️ בהירה","beige":"🏖️ בז׳ עדין","navy":"🌌 כחול כהה","forest":"🌲 ירוק כהה"},"ar":{"back":"→ العودة إلى صياد التخفيضات","topmark":"دليلنا المحلي","heroKicker":"طبريا العليا · السوق المتنقل","title":"الشوق يوم الثلاثاء!","intro":"جولة لطيفة واكتشافات كثيرة: زهور ونباتات وأغراض مفيدة وأجواء سوق جميلة. كل المعلومات في صفحة واحدة.","when":"كل يوم ثلاثاء","where":"طبريا العليا","landmark":"قرب قاعة أولامي حِن","mapButton":"عرض الخريطة","goodsButton":"ماذا يوجد في السوق؟","illustration":"رسم توضيحي للزهور، وليس صورة حقيقية للسوق","goodsEyebrow":"لنتمشَّ بين البسطات","goodsTitle":"ماذا يمكنك أن تجد؟","goodsIntro":"يجلب الباعة بضائع مختلفة، وقد يتغير المعروض من أسبوع إلى آخر.","flowerTitle":"الزهور والنباتات","flowerDesc":"زاوية جميلة للورود والنباتات المزروعة في الأصص. أحياناً تكفي الزهور وحدها لزيارة السوق!","clothesTitle":"الملابس","clothesDesc":"ملابس يومية وموسمية وأشياء أخرى على البسطات.","bagsTitle":"الحقائب والإكسسوارات","bagsDesc":"حقائب وإكسسوارات صغيرة يمكنك تصفحها على مهل.","homeTitle":"أدوات المنزل","homeDesc":"أدوات منزلية وأشياء عملية للاستعمال اليومي.","textileTitle":"المنسوجات","textileDesc":"مفارش وأقمشة وستائر وأغراض منزلية أخرى.","toysTitle":"الألعاب","toysDesc":"ألعاب وهدايا صغيرة، مع تشكيلة متغيرة.","flowersEyebrow":"زاويتنا المفضلة","flowersHeading":"توقف عند الزهور 🌸","flowersStory":"خذ وقتك في اختيار الزهور. لا تنظر إلى جمال البتلات فقط، بل افحص الأوراق والسيقان وتربة الأصيص. امنح النبات الجديد وقتاً ليتأقلم في المنزل.","flowerTip1":"🌿 الأوراق — قوية وغير ذابلة بشدة","flowerTip2":"🌱 الأصيص — فيه فتحات لتصريف الماء","flowerTip3":"💧 اسقِ حسب رطوبة التربة","mapEyebrow":"كيف تصل؟","mapTitle":"السوق قرب قاعة أولامي حِن","mapText":"نقطة الاستدلال هي قاعة أولامي حِن (אולמי חן)، شارع أور حاييم 25، طبريا العليا (شيكون داليت). السوق قريب منها، وعلامة الخريطة تشير إلى القاعة لا إلى بسطة بعينها.","mapLink":"فتح الاتجاهات في خرائط Google","mapCaption":"تُظهر الخريطة معلماً قريباً؛ قد يتغير ترتيب البسطات.","important":"قبل الزيارة","note":"يُقام السوق عادة أيام الثلاثاء. قد تتغير ساعات الباعة والبضائع وترتيبات الأعياد. من الأفضل التأكد قبل رحلة خاصة.","sources":"مصادر المعلومات","sourceFattal":"وصف السوق","sourceHall":"عنوان القاعة","footer":"دليل محلي مستقل، وليس الموقع الرسمي للسوق أو الباعة أو الجهات المحلية.","theme":"المظهر","auto":"🌗 تلقائي","light":"☀️ فاتح","beige":"🏖️ بيج ناعم","navy":"🌌 أزرق داكن","forest":"🌲 أخضر داكن"}};
+const keys=["ru","en","he","ar"];
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let lang=keys.includes(store.get("ohotnik-lang"))?store.get("ohotnik-lang"):"ru";
+let appearance=["auto","beige","light","navy","forest"].includes(store.get("ohotnik-theme"))?store.get("ohotnik-theme"):"auto";
+const theme=document.getElementById("theme");
+function applyLanguage(){
+ const d=translations[lang]||translations.ru;
+ for(const el of document.querySelectorAll("[data-t]"))el.textContent=d[el.dataset.t]||translations.ru[el.dataset.t]||"";
+ for(const el of document.querySelectorAll(".languages button"))el.setAttribute("aria-pressed",String(el.dataset.lang===lang));
+ document.documentElement.lang=lang;
+ document.documentElement.dir=["he","ar"].includes(lang)?"rtl":"ltr";
+ document.title=d.title+" · "+d.where;
+}
+function israelHour(){
+ try{return Number(new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Jerusalem",hour:"2-digit",hourCycle:"h23"}).format(new Date()))}
+ catch(e){return new Date().getHours()}
+}
+function applyTheme(){
+ const auto=israelHour()>=19||israelHour()<7?"navy":"beige";
+ document.documentElement.dataset.theme=appearance==="auto"?auto:appearance;
+ theme.value=appearance;
+}
+document.querySelector(".languages").addEventListener("click",e=>{
+ const b=e.target.closest("button[data-lang]");if(!b)return;
+ lang=b.dataset.lang;store.set("ohotnik-lang",lang);applyLanguage();
+});
+theme.addEventListener("change",e=>{appearance=e.target.value;store.set("ohotnik-theme",appearance);applyTheme();});
+applyTheme();applyLanguage();setInterval(()=>{if(appearance==="auto")applyTheme()},60000);
+})();
+</script>
+</body></html>
