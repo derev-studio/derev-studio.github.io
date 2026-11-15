@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/ohotnik-source-probe.yml'
+      - 'ohotnik/tools/source_probe.py'
 permissions:
   contents: read
 jobs:
