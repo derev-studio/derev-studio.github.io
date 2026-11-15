@@ -375,7 +375,7 @@ html[data-theme="beige"] .hero .beta-note{
 </select></label>
 </div>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 51</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 52</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -432,11 +432,11 @@ html[data-theme="beige"] .hero .beta-note{
 <button type="button" class="tag" data-type="help">🥗 Помощь</button>
 <button type="button" class="tag" data-type="dating">❤️ Знакомства</button>
 </div></section>
-<section aria-live="polite" aria-atomic="false">
-<h2 id="heading">Что будем искать?</h2>
-<p class="info" id="subtitle">Выбери пример или напиши свой запрос.</p>
+<section id="search-results-section" aria-live="polite" aria-atomic="false" hidden>
+<h2 id="heading"></h2>
+<p class="info" id="subtitle"></p>
 <div id="filters" class="tags hidden"></div>
-<div id="results"><div class="message">Начни поиск: название товара, цена и магазин появятся здесь, а не в Google.</div></div>
+<div id="results"></div>
 </section>
 <footer><strong>Создатель — Александр Деревяшкин</strong><div>Новые технологии и искусственный интеллект · Израиль</div><div>Цены и наличие меняются; перед покупкой проверяйте у продавца. Сайт не является магазином.</div><div class="footer-legal"><a href="./sources.html" id="rights-link">Источники и авторские права</a></div></footer>
 </main>
@@ -1687,6 +1687,7 @@ function revealResults(){
 
 async function search(){
  const q=query.value.trim();if(!q){query.focus();return}
+ el('search-results-section').hidden=false;
  const mySeq=++seq;clear();
  const type=mode(q);
  // Сразу перейти к заголовку результата; после загрузки карточек повторим.
