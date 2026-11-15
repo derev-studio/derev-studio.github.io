@@ -450,41 +450,6 @@ function makeFoodImage(name,meta,small){
  return wrap;
 }
 
-const retailerProducts=[
- {kind:'whole',title:'Целая свежая курица',desc:'Carrefour · товар с фотографией на странице магазина',url:'https://www.carrefour.co.il/?catalogProduct=4057177',emoji:'🍗'},
- {kind:'breast',title:'Свежая куриная грудка',desc:'Carrefour · товар с фотографией на странице магазина',url:'https://www.carrefour.co.il/categories/79710/products?catalogProduct=6431963',emoji:'🍗'},
- {kind:'thigh',title:'Свежие куриные бёдра',desc:'Carrefour · товар с фотографией на странице магазина',url:'https://www.carrefour.co.il/categories/79643/products?catalogProduct=4057027',emoji:'🍗'},
- {kind:'salmon',title:'Кусочки филе лосося',desc:'Carrefour · товар с фотографией на странице магазина',url:'https://www.carrefour.co.il/?catalogProduct=15254',emoji:'🐟'}
-];
-function retailerMatches(name,meta){
- if(meta.salmon)return retailerProducts.filter(p=>p.kind==='salmon');
- if(!meta.chicken)return [];
- const n=String(name||'').toLowerCase();
- let kind='whole';
- if(/חזה|груд|breast/.test(n))kind='breast';
- else if(/ירך|כרע|бедр|thigh/.test(n))kind='thigh';
- else if(/שוק|drum|голен|כנפ|крыл|wing/.test(n))return [];
- return retailerProducts.filter(p=>p.kind===kind);
-}
-function showRetailerSuggestions(meta){
- const products=meta.chicken?retailerProducts.filter(p=>p.kind!=='salmon'):(meta.salmon?retailerProducts.filter(p=>p.kind==='salmon'):[]);
- if(!products.length)return;
- const section=node('section','panel');
- section.append(node('h2','', '🛒 Товары с настоящими страницами и фотографиями'));
- section.append(node('p','info','Эти товары можно открыть непосредственно в Carrefour. Они подобраны по виду продукта и могут отличаться от товаров в таблице цен. Цены других магазинов к ним не относятся.'));
- const wrap=node('div','grid');
- for(const p of products){
-   const c=node('div','card');
-   const photo=node('div','product-symbol',p.emoji);
-   photo.style.fontSize='34px';c.append(photo);
-   c.append(node('h3','',p.title));
-   c.append(node('p','',p.desc));
-   c.append(action('🛍 Открыть похожий товар с фотографией',p.url,true));
-   wrap.append(c);
- }
- section.append(wrap);
- res.prepend(section);
-}
 function showFoodDetail(p,meta,priceArea){
  const name=titleOf(p),code=String(codeOf(p)||''),label=productLabel(name,meta);
  const exact=exactGroceryPage(code),dialog=node('dialog','food-detail-dialog');
@@ -1241,89 +1206,6 @@ function retailerQuery(q){
 }
 // Общий механизм для ЛЮБОГО товара. Магазины подключаются как источники,
 // а не как отдельные кнопки под каждую модель или категорию.
-function retailerDestinations(q){
- const term=searchVariants(q).find(x=>/[א-ת]/.test(x))||retailerQuery(q),raw=String(q||'').toLowerCase();
- const tools=/отв[её]рт|מברג|дрел|шурупов|молот|сверл|ключ[иеё]|инструмент|пил[аы]|рулетк|гаечн|ножовк|перфоратор|болгарк|screwdriver|drill/.test(raw);
- const electronics=/принтер|ноутбук|монитор|смартфон|кабел|плеер|fiio|xerox|компьют|телефон|клавиатур|мышк|наушник|планшет|телевизор/.test(raw);
- const stores=[
-  {
-   name:'KSP',icon:'🔵',
-   desc:'Поиск '+term+' на сайте KSP. Если магазин не распознает запрос, скопируй слово из строки выше.',
-   url:'https://ksp.co.il/web/cat/?search='+encodeURIComponent(term),
-   button:'Найти в KSP',type:'search'
-  },
-  {
-   name:'Ivory',icon:'🟣',
-   desc:'Каталог электроники, техники, инструментов и товаров для дома.',
-   url:'https://www.ivory.co.il/',
-   button:'Открыть Ivory',type:'category'
-  },
-  {
-   name:'Zap',icon:'🟠',
-   desc:'Независимый поиск и сравнение цен разных магазинов Израиля.',
-   url:'https://www.zap.co.il/',
-   button:'Открыть Zap',type:'category'
-  },
-  {
-   name:'Home Center',icon:'🏠',
-   desc:'Поиск товаров для дома, ремонта, садоводства и инструмента.',
-   url:'https://www.homecenter.co.il/search?q='+encodeURIComponent(term),
-   button:'Найти «'+term+'» в Home Center',type:'search'
-  },
-  {
-   name:'PriceDrop',icon:'📉',
-   desc:'Каталог KSP с фотографиями и историей цен. Это сторонний сервис, не источник данных нашего сайта.',
-   url:'https://pricedrop.co.il/items',
-   button:'Открыть каталог PriceDrop',type:'category'
-  },
-  {
-   name:'ACE',icon:'🛠️',
-   desc:tools?'Ручные инструменты и отвёртки':'Товары для дома, ремонта и сада',
-   url:tools?'https://www.ace.co.il/tools-paint-affixing/work-tools/hand-weilded-tools':'https://www.ace.co.il/',
-   button:tools?'Открыть инструменты ACE':'Открыть ACE',type:'category'
-  }
- ];
- if(tools){
-  // Категории помогают ускорить выбор, но остаются вторичными.
-  stores[1].url='https://www.ivory.co.il/catalog.php?act=cat&f=8284&id=168670';
-  stores[1].desc='Раздел инструментов и наборов отвёрток Ivory. Для других инструментов пользуйся поиском магазина.';
- }
- if(!electronics&&!tools){
-   stores[1].url='https://www.ivory.co.il/';
- }
- return {translated:term,stores};
-}
-
-function showStoreFallback(q,hadItems){
- const data=retailerDestinations(q),section=node('details','panel retail-search');
- section.open=!hadItems;
- section.append(node('summary','','Другие варианты поиска по магазинам'));
- section.append(node('h3','',hadItems?'Поискать ещё в магазинах':'Найти «'+q+'» непосредственно в магазинах'));
- const descr=hadItems?
-  'Дополнительные источники. Реальные карточки товаров находятся выше; ссылки на каталоги ниже не являются товарными карточками.':
-  'Точных карточек по этому запросу пока нет в нашей базе. Ниже есть поиск с уже подставленным названием товара.';
- section.append(node('p','retail-help',descr));
- const phrase=node('div','retail-query',data.translated);phrase.dir='auto';section.append(phrase);
- const copy=node('button','action','📋 Скопировать название для поиска');
- copy.type='button';
- copy.addEventListener('click',async()=>{
-  try{await navigator.clipboard.writeText(data.translated);copy.textContent='✓ Скопировано';}
-  catch(e){copy.textContent='Выдели название выше для копирования';}
- });
- section.append(copy);
- const note=node('div','message','Переход к магазину — запасной способ поиска. Он не заменяет карточку товара: проверенные фото, цены и прямые ссылки появляются здесь только когда товар есть в нашем каталоге.');
- section.append(note);
- const list=node('div','retail-stores');
- for(const store of data.stores){
-  const c=node('div','retail-store');
-  c.append(node('h4','',store.icon+' '+store.name));
-  c.append(node('p','',store.desc));
-  c.append(action(store.button,store.url,store.type==='search'));
-  list.append(c);
- }
- section.append(list);res.append(section);
-}
-
 function showCatalogResult(products,q,failed){
  res.replaceChildren();
  if(!products.length){
