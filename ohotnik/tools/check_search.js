@@ -31,3 +31,37 @@ for (const test of cases) {
   console.log('PASS:', test.query, results.length, 'first:', first.slice(0, 75));
 }
 console.log('Russian search regression checks passed over', items.length, 'products.');
+
+
+// Grocery and general goods are two sources, not two incompatible search UIs.
+// Check real filtering and ensure we never substitute a store homepage for a product.
+const relevanceStart = inline.indexOf('function foodRelevant(');
+const relevanceEnd = inline.indexOf('function productLabel(', relevanceStart);
+if (relevanceStart < 0 || relevanceEnd <= relevanceStart) throw new Error('Food relevancy function missing');
+const {foodRelevant} = new Function(
+  "const titleOf=p=>p.name;let variation='all';" +
+  inline.slice(relevanceStart, relevanceEnd) + "\nreturn {foodRelevant};"
+)();
+const foodCases = [
+  ['fresh chicken', {name:'עוף טרי שלם'}, {chicken:true,term:'עוף'}, true],
+  ['chicken soup', {name:'מרק עוף אינסטנט'}, {chicken:true,term:'עוף'}, false],
+  ['fresh salmon fillet', {name:'פילה סלמון טרי'}, {salmon:true,fillet:true,term:'פילה סלמון'}, true],
+  ['canned salmon', {name:'סלמון בשימורים קופסה'}, {salmon:true,fillet:true,term:'פילה סלמון'}, false],
+  ['milk', {name:'חלב טרי 3%'}, {term:'חלב'}, true],
+  ['unrelated perfume', {name:'בושם נשים'}, {term:'חלב'}, false]
+];
+for (const [label, item, meta, expected] of foodCases) {
+  if (foodRelevant(item,meta)!==expected) throw new Error('Bad food match: '+label);
+}
+const compactStart = inline.indexOf('function makeCompactFood(');
+const compactEnd = inline.indexOf('function renderMarket(', compactStart);
+const compact = inline.slice(compactStart, compactEnd);
+if (compactStart < 0 || compactEnd <= compactStart ||
+    compact.includes('merchant.site') || compact.includes('searchLink') ||
+    compact.includes('Каталог '+String.fromCharCode(39))) {
+  throw new Error('Food card redirects into generic store catalogue');
+}
+if (/showStoreFallback\(q,(true|false)\)/.test(inline)) {
+  throw new Error('Store homepages still appear as search result fallback');
+}
+console.log('PASS: unrelated food filtered, no generic store links in product cards');
