@@ -162,8 +162,10 @@ function mode(q){
  if(has(t,words.help))return 'help';
  if(has(t,words.dating))return 'dating';
  if(has(t,words.free))return 'free';
+ // Слова в названиях бытовой техники не должны превращаться в продукты.
+ if(/кофемашин|кофеварк|водонагревател|мясорубк|соковыжимал|рыболов|корм для|корм собак|корм кош|электрогрил|морозильник|молокоотсос/.test(t))return 'tech';
  // Продукты питания определяются явно. Все прочие покупки — товары, не продукты.
- const foodWords=['куриц','цыплен','лосос','сёмг','семг','рыб','молок','яйц','яйк','хлеб','кофе','сыр','помидор','огур','карто','масло','сахар','рис','мяс','колбас','йогурт','кетчуп','макарон','овощ','фрукт','яблок','банан','виноград','апельсин','йогур','сок','вод','шоколад','конфет','печень','грудка','бедро','голень','супермаркет','магазин еды','круп','творог','греч','йогурт'];
+ const foodWords=['куриц','цыплен','лосос','сёмг','семг','рыб','молок','яйц','яйк','хлеб','кофе','сыр','помидор','огур','карто','масло','сахар','рис','мяс','колбас','йогурт','кетчуп','макарон','овощ','фрукт','яблок','банан','виноград','апельсин','йогур','сок','вода','воды','шоколад','конфет','печень','грудка','бедро','голень','супермаркет','магазин еды','круп','творог','греч','йогурт'];
  if(has(t,foodWords)||/[א-ת]/.test(t)&&/(עוף|חלב|לחם|גבינה|סלמון|בשר|דג)/.test(t))return 'food';
  return 'tech';
 }
@@ -557,7 +559,7 @@ async function showTech(q,mySeq){
  if(seq!==mySeq)return;
  showCatalogResult(seed,q,true);
  try{
-   const live=await liveKsp(q);if(seq!==mySeq)return;
+   const live=(await liveKsp(q)).map(p=>({...p,category:inferredCategory(q),name_ru:productRu(p,q)}));if(seq!==mySeq)return;
    const seen=new Set(),all=[];
    for(const p of [...live,...seed]){if(seen.has(String(p.id)))continue;seen.add(String(p.id));all.push(p)}
    if(live.length)showCatalogResult(all,q,false);
@@ -608,6 +610,7 @@ async function search(){
  if(type==='dating')return showDating(q);
 }
 el('search-form').addEventListener('submit',e=>{e.preventDefault();variation='all';search()});
+city.addEventListener('change',()=>{if(query.value.trim())search()});
 el('examples').addEventListener('click',e=>{const b=e.target.closest('[data-query]');if(!b)return;query.value=b.dataset.query;chosen='auto';variation='all';document.querySelectorAll('#categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='auto'));search()});
 el('categories').addEventListener('click',e=>{const b=e.target.closest('[data-type]');if(!b)return;chosen=b.dataset.type;document.querySelectorAll('#categories button').forEach(x=>x.classList.toggle('active',x===b));if(query.value.trim()){variation='all';search()}});
 const q=new URLSearchParams(location.search).get('q');if(q){query.value=q;search()}
