@@ -214,12 +214,30 @@ footer strong{color:#2b4364}
 
 .photo-credit{font-size:11px!important;color:#5b7491!important;background:none!important;border:0!important;text-decoration:underline;box-shadow:none!important;text-align:left!important;padding:4px 0!important}
 .catalog-picture .grocery-photo-hint,.product-focus-photo .grocery-photo-hint{z-index:1}
+
+/* Быстрый доступ к действующим акциям KSP и независимой истории цен. */
+.deals-hub{background:#fff;border:1px solid #dce5f1;border-radius:19px;padding:17px;margin-top:16px;box-shadow:0 4px 14px #132b4410}
+.deals-hub h2{font-size:21px;margin:0 0 4px;color:#193857}
+.deals-hub .deals-intro{font-size:13px;color:#526b89;margin:0 0 13px}
+.deals-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.deal-link{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:82px;padding:13px 12px;border:1px solid #cbd9ec;border-radius:13px;color:#184d7e;background:#f0f6ff;text-decoration:none;line-height:1.25}
+.deal-link strong{font-size:16px;font-weight:850}
+.deal-link small{font-size:12px;color:#536b86;line-height:1.32}
+.deal-link.hot{background:#213751;color:#fff;border-color:#213751}
+.deal-link.hot small{color:#d9e6f6}
+.deal-link.history{background:#e7f7f6;border-color:#93c9c5;color:#0d5551}
+.deal-link.history small{color:#396c68}
+.deal-link:focus-visible{outline:3px solid #f49d14;outline-offset:2px}
+.deal-link:hover{border-color:#3974ba;transform:translateY(-1px)}
+.deals-note{font-size:12px;color:#64768d;margin:11px 1px 0}
+@media(max-width:710px){.deals-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.deal-link{min-height:82px;padding:12px}.deal-link strong{font-size:15px}.deals-hub{padding:14px}}
+@media(max-width:335px){.deals-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 41</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 42</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -244,6 +262,20 @@ footer strong{color:#2b4364}
 <button class="tag" type="button" data-query="женщины">❤️ Знакомства</button>
 </div>
 </div>
+
+<section class="deals-hub" id="ksp-deals" aria-label="Скидки KSP и история цен">
+<h2>🔥 Охота за скидками KSP</h2>
+<p class="deals-intro">Одна кнопка — сразу нужный раздел. Картинки и цены там показывает сам магазин.</p>
+<div class="deals-grid">
+<a class="deal-link hot" href="https://ksp.co.il/mob/cat/44346" target="_blank" rel="noopener noreferrer"><strong>🖤 Black Friday</strong><small>KSP · акции ноября</small></a>
+<a class="deal-link" href="https://ksp.co.il/mob/sale/44346" target="_blank" rel="noopener noreferrer"><strong>🟠 Ноябрьские скидки</strong><small>KSP · товары по акции</small></a>
+<a class="deal-link" href="https://ksp.co.il/mob/outlet" target="_blank" rel="noopener noreferrer"><strong>♻️ Уценка и остатки</strong><small>KSP · מציאון ועודפים</small></a>
+<a class="deal-link" href="https://ksp.co.il/mob/promotions" target="_blank" rel="noopener noreferrer"><strong>🔥 Все акции KSP</strong><small>Купоны и предложения</small></a>
+<a class="deal-link history" href="https://pricedrop.co.il/" target="_blank" rel="noopener noreferrer"><strong>📉 PriceDrop</strong><small>История цен KSP — бесплатно</small></a>
+<a class="deal-link" href="https://ksp.co.il/mob/item/179538" target="_blank" rel="noopener noreferrer"><strong>🖨️ Мой Xerox B230</strong><small>Сразу карточка принтера KSP</small></a>
+</div>
+<p class="deals-note">Black Friday и ноябрьская распродажа частично пересекаются. Реальность скидки сравнивай с историей цен в PriceDrop; цены и наличие проверяй у продавца.</p>
+</section>
 <section><div class="tags" id="categories">
 <button type="button" class="tag active" data-type="auto">Все разделы</button>
 <button type="button" class="tag" data-type="food">🛒 Еда</button>
