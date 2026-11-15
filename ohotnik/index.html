@@ -96,12 +96,31 @@ footer strong{color:#2b4364}
 #category-guide{color:#60748e;font-size:14px}
 @media(max-width:580px){.catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.catalog-picture{height:140px}.catalog-content{padding:11px}.catalog-card{min-height:304px}.catalog-price{font-size:22px}.catalog-title{font-size:14px}.catalog-actions .action{padding:8px 4px;font-size:12px}.place input{width:92px;max-width:102px}}
 @media(max-width:355px){.catalog-grid{grid-template-columns:1fr}.catalog-picture{height:165px}}
+
+/* Крупная кнопка и карточка с подробностями конкретного продукта */
+.food-detail-dialog{width:min(660px,calc(100vw - 24px));max-height:90vh;overflow:auto;margin:auto;border:0;border-radius:22px;padding:0;background:#fff;color:#20344e;box-shadow:0 28px 90px #0005}
+.food-detail-dialog::backdrop{background:rgba(11,27,49,.65)}
+.food-detail-inner{padding:22px}
+.food-detail-top{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}
+.food-detail-top h2{font-size:24px;margin:0}
+.food-detail-close{border:1px solid #becde0;background:#f1f6fd;color:#254568;border-radius:10px;padding:9px 12px;font-weight:800;white-space:nowrap}
+.food-detail-photo{height:240px;display:grid;place-items:center;border:1px solid #dce7f3;border-radius:16px;background:#f5f8fc;margin:14px 0;overflow:hidden;text-align:center;color:#526982}
+.food-detail-photo img{display:block;width:100%;height:100%;object-fit:contain;padding:12px}
+.food-detail-caption{font-size:12px;color:#6a7d95;margin-top:8px}
+.food-detail-original{font-size:15px;color:#4d6280;direction:rtl;text-align:left;margin-top:7px}
+.food-detail-price{font-size:26px;font-weight:850;color:#185d92;margin:10px 0 5px}
+.food-detail-seller{font-size:14px;color:#425e7e}
+.food-detail-dialog .price-row{margin-top:7px}
+.food-detail-dialog .price-row .action{padding:7px 10px}
+.food-detail-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.view-food-btn{background:#245f9c;color:#fff!important;border-color:#245f9c!important;min-width:186px;text-align:center}
+@media(max-width:580px){.food-detail-inner{padding:14px}.food-detail-top h2{font-size:20px}.food-detail-photo{height:200px}.view-food-btn{flex:1}}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 16</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 17</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -274,6 +293,91 @@ async function fetchPriceProducts(term){
   return extractRows(await response.json());
  }finally{clearTimeout(timeout)}
 }
+
+// Детали товара всегда открываются ВНУТРИ сайта. Изображение берём
+// только по совпавшему штрихкоду; чужие картинки не подставляем.
+const foodPhotoCache=new Map();
+async function getFoodPhoto(code){
+ const barcode=String(code||'').replace(/\D/g,'');
+ if(!/^\d{8,14}$/.test(barcode))return null;
+ if(foodPhotoCache.has(barcode))return foodPhotoCache.get(barcode);
+ const promise=(async()=>{
+  const control=new AbortController(),timeout=setTimeout(()=>control.abort(),9000);
+  try{
+   const url='https://world.openfoodfacts.org/api/v2/product/'+encodeURIComponent(barcode)+'.json?fields=code,product_name,image_front_url,image_url,brands,quantity';
+   const r=await fetch(url,{signal:control.signal,headers:{Accept:'application/json'}});
+   if(!r.ok)return null;
+   const data=await r.json();
+   if(Number(data.status)!==1||!data.product)return null;
+   const product=data.product;
+   const returned=String(product.code||data.code||'').replace(/^0+/,'');
+   if(returned!==barcode.replace(/^0+/,''))return null;
+   const src=product.image_front_url||product.image_url;
+   if(typeof src!=='string'||!/^https:\/\/images\.openfoodfacts\.org\//.test(src))return null;
+   return {src,productName:product.product_name||'',brand:product.brands||'',quantity:product.quantity||'',url:'https://world.openfoodfacts.org/product/'+encodeURIComponent(barcode)};
+  }catch(e){return null}
+  finally{clearTimeout(timeout)}
+ })();
+ foodPhotoCache.set(barcode,promise);
+ return promise;
+}
+function showFoodDetail(p,meta,priceArea){
+ const heName=titleOf(p),barcode=String(codeOf(p)||''),label=productLabel(heName,meta);
+ const dialog=node('dialog','food-detail-dialog');
+ dialog.setAttribute('aria-label','Карточка продукта: '+label.ru);
+ const body=node('div','food-detail-inner'),top=node('div','food-detail-top');
+ top.append(node('h2','',label.ru));
+ const close=node('button','food-detail-close','✕ Закрыть');close.type='button';
+ close.addEventListener('click',()=>dialog.close());
+ top.append(close);body.append(top);
+ const original=node('div','food-detail-original',heName);
+ original.dir='auto';body.append(original);
+ body.append(node('div','pill',barcode?'Штрихкод: '+barcode:'Штрихкод не указан'));
+ const picture=node('div','food-detail-photo');
+ const photoNotice=node('div','', '🖼 Проверяю, есть ли фотография именно этого товара…');
+ picture.append(photoNotice);body.append(picture);
+ const photoSource=node('div','food-detail-caption','Фотографию можно показать только при совпадении штрихкода.');
+ body.append(photoSource);
+ body.append(node('h3','', 'Цены и магазины'));
+ const priceItems=priceArea.querySelectorAll('.price-row');
+ if(priceItems.length){
+   for(const sourceRow of [...priceItems].slice(0,10)){
+      body.append(sourceRow.cloneNode(true));
+   }
+ }else{
+   body.append(node('div','message','Для этого товара пока нет подтверждённой цены в выбранном городе.'));
+ }
+ const controls=node('div','food-detail-actions');
+ controls.append(action('📍 Найти магазин на карте',map('סופרמרקט')));
+ const additional=node('div','');controls.append(additional);
+ body.append(controls);dialog.append(body);document.body.append(dialog);
+ dialog.addEventListener('close',()=>dialog.remove());
+ dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+ dialog.showModal();
+ if(barcode){
+   getFoodPhoto(barcode).then(info=>{
+     if(!dialog.isConnected)return;
+     picture.replaceChildren();
+     if(info){
+       const img=document.createElement('img');
+       img.alt='Фотография товара '+label.ru+' (штрихкод '+barcode+')';
+       img.loading='eager';
+       img.onload=()=>{photoSource.textContent='Фото товара из Open Food Facts · по штрихкоду '+barcode};
+       img.onerror=()=>{picture.replaceChildren(node('div','', 'Фотография товара не загрузилась'));photoSource.textContent='Фото пока недоступно.'};
+       img.src=info.src;picture.append(img);
+       additional.append(action('Открыть оригинальную карточку с фото',info.url));
+       if(info.quantity)body.insertBefore(node('div','pill','Размер упаковки: '+info.quantity),picture);
+     }else{
+       picture.append(node('div','', 'Фото этого товара пока не найдено. Название, цена и магазины показаны ниже.'));
+       photoSource.textContent='Изображение не найдено по точному штрихкоду. Не подставляем чужое.';
+     }
+   });
+ }else{
+   picture.replaceChildren(node('div','', 'Для фотографии нужен штрихкод товара.'));
+   photoSource.textContent='Штрихкод отсутствует.';
+ }
+}
+
 function displayGroceryCard(p,meta){
  const item=node('article','priceitem'), head=node('div','product-head');
  const title=titleOf(p), code=String(codeOf(p)),label=productLabel(title,meta);
@@ -286,11 +390,16 @@ function displayGroceryCard(p,meta){
  const prices=node('div','price-loading','Проверяю цены магазинов в '+city.value+'…');
  item.append(prices);
  const actions=node('div','actions');
+ const view=node('button','action view-food-btn','👁 Посмотреть товар');
+ view.type='button';
+ view.setAttribute('aria-label','Посмотреть товар: '+label.ru);
+ view.addEventListener('click',()=>showFoodDetail(p,meta,prices));
+ actions.append(view);
  let btn=null;
- if(code){btn=node('button','action primary','🔄 Обновить цены');btn.type='button';btn.addEventListener('click',()=>comparePrices(code,item,btn,prices));actions.append(btn)}
+ if(code){btn=node('button','action','🔄 Обновить цены');btn.type='button';btn.addEventListener('click',()=>comparePrices(code,item,btn,prices));actions.append(btn)}
  actions.append(action('📍 Найти магазин на карте',map('סופרמרקט')));
  item.append(actions);
- return {item,code,btn,prices};
+ return {item,code,btn,prices,view};
 }
 
 // Прямой поиск предложений супермаркетов по товару и городу.
