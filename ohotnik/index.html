@@ -78,6 +78,7 @@ footer strong{color:#2b4364}
 @media(max-width:580px){.product-main strong{font-size:18px}.price-row{padding:9px}.tech-item{min-height:0}}
 
 /* Карточки как в товарном каталоге */
+#heading{scroll-margin-top:15px}
 #city{width:128px;max-width:160px;min-width:96px}
 .place{flex-shrink:0}.place input{max-width:160px;width:128px;cursor:text}
 .catalog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px}
@@ -172,7 +173,7 @@ footer strong{color:#2b4364}
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 24</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 25</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -312,7 +313,7 @@ function foodRelevant(p,meta){
  }
  if(meta.salmon){
   if(!/סלמון|salmon|лосос|семг/.test(n))return false;
-  if(/מיקס|סלט|תבלין|ממרח|בכוס|בטעם|אינסטנט|קציצ|פאוץ|גבינה|מרק|רוטב|נודל|תערובת|תיבול|מזון|חתול|כלב|חטיף|חטיפ|סושי מוכן|mix|salad|sauce|spice|seasoning|корм|суп|соус/.test(n))return false;
+  if(/מיקס|סלט|תבלין|ממרח|בכוס|בטעם|אינסטנט|קציצ|פאוץ|גבינה|מרק|רוטב|נודל|תערובת|תיבול|מזון|חתול|כלב|חטיף|חטיפ|סושי מוכן|שימור|קופס|טונה|מעדן|mix|salad|sauce|spice|seasoning|canned|tin|корм|суп|соус|консерв/.test(n))return false;
  }
  return true;
 }
@@ -625,7 +626,6 @@ function pricedMarketGroups(rows,meta){
 const exactStorePages={
  '7290106728127':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/חלב-ביצים-וסלטים/חלב/חלב-טרי/חלב-יטבתה-לי',name:'Молоко Yotvata 3,6%'},
  '7290017947105':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/לחם-מאפים-והמאפייה-הטריה/לחם-פיתה-לחמניה/לחמים/לחם-סגנון-אמריקה',name:'Хлеб в американском стиле'},
- '7290117261538':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/search?item=7290117261538',name:'Атлантический лосось 120 г'},
  '2680338':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/בשר-ודגים/עוף-טרי/עוף-טרי-ארוז/שוקיים-עוף-טרי',name:'Куриные голени'},
  '8899130':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/לחם-מאפים-והמאפייה-הטריה/המאפיה-הטריה-אפיה-במקום/לחמי-מאפייה/לחם-חיטה-מלאה',name:'Цельнозерновой хлеб'},
  '7290015603188':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/שימורים-בישול-ואפיה/המטבח-האסייאתי/נודלס-ודפי-אורז/אטריות-ביצים-ג-כ-fu',name:'Яичная лапша'},
@@ -731,6 +731,7 @@ function showFarmTrout(){
  const notice=node('div','message','Цены за килограмм, кроме упаковки холодного копчения. Итоговая сумма рассчитывается после взвешивания. Доставка только в обслуживаемые населённые пункты; на сайте продавца указан минимум заказа, он может меняться.');
  res.append(notice);
  const grid=node('div','farm-grid');farmTroutProducts.forEach(p=>grid.append(farmProductCard(p)));res.append(grid);
+ revealResults();
 }
 function shopChoice(name){
  const t=String(name||'').toLowerCase();
@@ -841,6 +842,7 @@ function renderMarket(groups,meta,cityText){
   }else if(more){more.remove();more=null}
  }
  rebuild();
+ revealResults();
 }
 function previousKnownChicken(meta){
  if(!meta.chicken||variation==='breast'||variation==='thigh'||variation==='wing'||variation==='drum')return false;
@@ -890,11 +892,12 @@ async function loadFood(mySeq,q){
     seen.add(barcode);groups.push({code:barcode,name:titleOf(p),offers:[]});
    }
   }
-  if(groups.length){renderMarket(groups.slice(0,35),meta,city.value);res.prepend(node('div','message warn','Названия продуктов есть, но цены магазинов сейчас не загрузились.'));return}
+  if(groups.length){renderMarket(groups.slice(0,35),meta,city.value);res.prepend(node('div','message warn','Названия продуктов есть, но цены магазинов сейчас не загрузились.'));revealResults();return}
  }catch(e){/* Don’t mistake backend errors for zero products. */}
  if(seq!==mySeq)return;
  res.replaceChildren();
  message('Источник цен сейчас не ответил. Это не значит, что товары отсутствуют в магазинах. Попробуй повторить поиск.',true);
+ revealResults();
 }
 
 function flattenPrices(obj,depth){
@@ -1098,11 +1101,13 @@ function showCatalogResult(products,q,moreLoading){
  res.replaceChildren();
  if(!products.length){
    message('Пока нет проверенных карточек по запросу «'+q+'». Поиск по другим магазинам ещё расширяется; случайные результаты не показываю.',true);
+   if(!moreLoading)revealResults();
    return;
  }
  const title=node('p','result-count','Найдено товаров: '+products.length+' · все ссылки ведут на конкретный товар');
  res.append(title);
  const g=node('div','catalog-grid');products.slice(0,48).forEach(p=>g.append(catalogCard(p,q)));res.append(g);
+ revealResults();
  if(moreLoading)res.append(node('div','loading-line','Ищу дополнительные модели в каталоге KSP…'));
 }
 async function showTech(q,mySeq){
@@ -1153,15 +1158,30 @@ function showDating(q){
  ]);
  message('Фотографии конкретных людей появятся только там, где сервис разрешает их просмотр. Чужие анкеты без согласия мы не копируем.');
 }
+
+// Переход к результатам: кнопки быстрого поиска должны вести к найденным
+// карточкам, а не оставлять пользователя вверху у строки ввода.
+function revealResults(){
+ const heading=el('heading');
+ if(!heading)return;
+ requestAnimationFrame(()=>{
+   if(!heading.isConnected)return;
+   const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+   heading.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+ });
+}
+
 async function search(){
  const q=query.value.trim();if(!q){query.focus();return}
  const mySeq=++seq;clear();
  const type=mode(q);
+ // Сразу перейти к заголовку результата; после загрузки карточек повторим.
+ revealResults();
  if(type==='food')return loadFood(mySeq,q);
  if(type==='tech')return showTech(q,mySeq);
- if(type==='free')return showFree();
- if(type==='help')return showHelp();
- if(type==='dating')return showDating(q);
+ if(type==='free'){showFree();revealResults();return}
+ if(type==='help'){showHelp();revealResults();return}
+ if(type==='dating'){showDating(q);revealResults();return}
 }
 el('search-form').addEventListener('submit',e=>{e.preventDefault();variation='all';search()});
 city.addEventListener('change',()=>{if(query.value.trim())search()});
