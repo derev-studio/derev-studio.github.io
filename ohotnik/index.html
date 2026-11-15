@@ -1184,7 +1184,7 @@ function searchVariants(q){
  return [...new Set(variants.map(x=>x.toLowerCase().trim()))];
 }
 function rankCatalog(items,q,translated){
- const variants=[...searchVariants(q),...(translated&&/\u005bא-ת\u005d/.test(translated)?[translated.toLowerCase().trim()]:[])];
+ const variants=[...searchVariants(q),...(translated&&/[א-ת]/.test(translated)?[translated.toLowerCase().trim()]:[])];
  const queryLatin=tokenize(q).filter(t=>/[a-z]/i.test(t)&&/\d/.test(t));
  const queryTerms=tokenize(q).filter(t=>/[a-z0-9]/i.test(t)&&t.length>1);
  const results=[];
