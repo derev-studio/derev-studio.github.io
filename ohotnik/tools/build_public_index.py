@@ -177,6 +177,62 @@ def enrich_product(p,rb):
     except Exception as e:print("HTML product failed",type(e).__name__,str(e)[:90],flush=True)
     return p
 
+
+def ingest_shopify_public_feed(existing, origin, max_pages=26):
+    """Home Center public Shopify products.json with exact shekel prices."""
+    rb=robots(origin)
+    created=0;priced=0;count=0
+    for page in range(1,max_pages+1):
+        u=origin+"/products.json?limit=250&page="+str(page)
+        if not rb.can_fetch(AGENT,u):
+            print("Public Shopify feed disallowed by robots; stop",flush=True);break
+        try:
+            data=json.loads(request(u,limit=3600000))
+            products=data.get("products") if isinstance(data,dict) else []
+            if not isinstance(products,list) or not products:break
+            for obj in products:
+                handle=trim(obj.get("handle"));title=trim(obj.get("title"))
+                if not handle or not title:continue
+                url=origin+"/products/"+handle
+                if not rb.can_fetch(AGENT,url):continue
+                variants=obj.get("variants") or []
+                valid=[]
+                in_stock=any(v.get("available") for v in variants)
+                for v in variants:
+                    try:
+                        value=float(str(v.get("price","")).replace(",",""))
+                        if 0<value<1000000:valid.append((value,bool(v.get("available"))))
+                    except (TypeError,ValueError):pass
+                available=[p for p,yes in valid if yes]
+                price=min(available) if available else (min(p for p,yes in valid) if valid else None)
+                photo=None;imgs=obj.get("images") or []
+                if imgs:
+                    photo=imgs[0]
+                    if isinstance(photo,dict):photo=photo.get("src")
+                    if isinstance(photo,str) and photo.startswith("//"):photo="https:"+photo
+                    if not isinstance(photo,str) or not photo.startswith("https://"):photo=None
+                old=existing.get(url) or {}
+                entry={
+                    "id":"home-center-"+hashlib.sha1(url.encode()).hexdigest()[:16],
+                    "name":title,"name_he":title,"price":price,
+                    "img":photo or old.get("img") or "",
+                    "brand":trim(obj.get("vendor")),"category":"all",
+                    "store":"Home Center","url":url,"as_of":TODAY,
+                    "in_stock":in_stock,"verified":"store_public_product_feed"
+                }
+                if url not in existing:created+=1
+                existing[url]=entry
+                if price is not None:priced+=1
+                count+=1
+            if page==1 or page%5==0:
+                print("Shopify feed page",page,"items read",count,flush=True)
+            time.sleep(0.65)
+        except Exception as e:
+            print("Shopify feed error",page,type(e).__name__,str(e)[:150],flush=True)
+            break
+    print("SHOPIFY INDEX",count,"priced",priced,"new",created,flush=True)
+    return count
+
 def main():
     existing={}
     if DEST.exists():
@@ -199,18 +255,23 @@ def main():
                     for item in items:
                         prev=existing.get(item["url"])
                         if prev:
-                            if prev.get("price") is not None:item["price"]=prev.get("price")
+                            if prev.get("price") is not None:
+                                item["price"]=prev.get("price")
+                                item["as_of"]=prev.get("as_of") or TODAY
+                                item["in_stock"]=prev.get("in_stock")
                             for k in ("brand","img"):
                                 if prev.get(k) and not item.get(k):item[k]=prev[k]
                             if prev.get("name") and len(prev["name"])>len(item["name"]):
                                 item["name"]=prev["name"];item["name_he"]=prev["name_he"]
-                            if prev.get("verified") in ("store_product_api","store_product_schema"):
+                            if prev.get("verified") in ("store_product_api","store_product_schema","store_public_product_feed"):
                                 item["verified"]=prev["verified"];item["as_of"]=prev.get("as_of")
                         else:updates+=1
                         existing[item["url"]]=item
                 except Exception as e:print("FEED ERROR",source,type(e).__name__,str(e)[:180],flush=True)
                 time.sleep(DELAY_SECONDS)
         except Exception as e:print("SOURCE ERROR",source,type(e).__name__,str(e)[:180],flush=True)
+    shopify_count=ingest_shopify_public_feed(existing,"https://www.homecenter.co.il")
+    if shopify_count:network_ok+=1
     if network_ok==0:
         print("No permitted source returned data; preserving existing file.",file=sys.stderr)
         return 1
@@ -232,7 +293,7 @@ def main():
         detail_done[source]=count
     # Each source is independent. Keep date and price provenance per item.
     all_items=list(existing.values())
-    doc={"generated_at":TODAY,"source":"Public product sitemaps Home Center & ACE; exact retail URLs; price only where merchant page available","items":all_items}
+    doc={"generated_at":TODAY,"source":"Home Center public Shopify feed plus Home Center/ACE sitemaps; merchant prices when available","items":all_items}
     DEST.write_text(json.dumps(doc,ensure_ascii=False,separators=(",",":"))+"\n",encoding="utf-8")
     with_photo=sum(bool(p.get("img")) for p in all_items)
     with_price=sum(isinstance(p.get("price"),(int,float)) and p["price"]>0 for p in all_items)
