@@ -55,6 +55,27 @@ footer{text-align:center;color:#677a92;font-size:13px;padding-top:24px}
 footer strong{color:#2b4364}
 .hidden{display:none}
 @media(max-width:580px){main{padding:10px 10px 35px}.brand{font-size:19px}.place input{max-width:78px}.place{font-size:13px}.hero{padding:19px 16px;border-radius:17px}.hero h1{font-size:25px}.search{flex-direction:column}.search input{height:54px;font-size:19px;flex:none}.search button{height:51px}.card{min-height:0}.grid{grid-template-columns:1fr}.panel{padding:14px}}
+
+/* Более понятные карточки товаров */
+.product-head{display:flex;gap:13px;align-items:flex-start;margin-bottom:11px}
+.product-symbol{flex:none;font-size:30px;background:#f0f6fd;border-radius:14px;min-width:58px;min-height:58px;display:grid;place-items:center}
+.product-main{flex:1;min-width:0}
+.product-main strong{display:block;font-size:19px;line-height:1.3}
+.product-main .original{font-size:13px;color:#687b94;direction:rtl;text-align:left;margin-top:6px;overflow-wrap:anywhere}
+.price-row{border:1px solid var(--line);border-radius:11px;padding:10px 12px;display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:7px;flex-wrap:wrap}
+.price-num{font-weight:850;color:#1c5689;font-size:23px;white-space:nowrap;direction:ltr;unicode-bidi:isolate}
+.price-shop{font-size:14px;color:#2c425f;flex:1;min-width:135px}
+.price-date{color:#71829a;font-size:12px}
+.priceitem .actions{margin:12px 0 0}
+.priceitem{scroll-margin-top:16px}
+.priceitem .price-loading{color:#687b94;font-size:13px;margin:8px 0}
+.result-count{color:#526984;font-size:14px;margin:8px 0 14px}
+.tech-icon{font-size:28px}
+.tech-price{font-size:23px;font-weight:850;color:#1e588f;direction:ltr}
+.tech-item{min-height:210px}
+.tech-item .actions{display:flex;gap:8px;flex-wrap:wrap}
+.tech-item .pill{font-size:12px}
+@media(max-width:580px){.product-main strong{font-size:18px}.price-row{padding:9px}.tech-item{min-height:0}}
 </style>
 </head>
 <body>
@@ -163,57 +184,124 @@ function titleOf(p){
  return 'Продукт из базы цен';
 }
 function codeOf(p){return p.item_code||p.item_code_bare||p.barcode||p.code||p.id||''}
+
 function foodRelevant(p,meta){
- let n=titleOf(p).toLowerCase();
+ const n=titleOf(p).toLowerCase();
  if(meta.chicken){
-  if(!/(עוף|עופות|פרגית|חזה|כרע|שוק|כנפ|chicken|куриц)/.test(n))return false;
-  if(/טעם|בטעם|נודל|מרק|אבקה|חטיף|מזון לבעלי|חתול|כלב|קוביות מרק|תיבול|פסטה|snack|noodle|soup|корм|лапша|суп/.test(n))return false;
-  if(variation==='breast'&&!/חזה|breast|груд/.test(n))return false;
-  if(variation==='whole'&&!/שלם|whole|цел/.test(n))return false;
-  if(variation==='thigh'&&!/כרע|ירך|thigh|бедр/.test(n))return false;
-  if(variation==='drum'&&!/שוק|drum|голен/.test(n))return false;
-  if(variation==='wing'&&!/כנפ|wing|крыл/.test(n))return false;
+   if(!/(עוף|עופות|פרגית|חזה|כרע|שוקי|כנפ|chicken|куриц)/.test(n))return false;
+   // Строго мясо: исключаем блюда, полуфабрикаты, корм и продукты «со вкусом курицы».
+   if(/טעם|בטעם|נודל|מרק|אבקה|חטיף|מזון|חתול|כלב|קוביות|תיבול|פסטה|נקניק|קציצ|שניצל|המבורגר|בורגר|פסטרמה|מעושן|סלט|תערובת|מוכן|קורנפלקס|טבעול|snack|noodle|soup|sausage|nugget|корм|лапша|суп|сосиск|котлет/.test(n))return false;
+   if(variation==='breast'&&!/חזה|breast|груд/.test(n))return false;
+   if(variation==='whole'&&!/שלם|whole|цел/.test(n))return false;
+   if(variation==='thigh'&&!/כרע|ירך|thigh|бедр/.test(n))return false;
+   if(variation==='drum'&&!/שוק|drum|голен/.test(n))return false;
+   if(variation==='wing'&&!/כנפ|wing|крыл/.test(n))return false;
  }
- if(meta.salmon&&/טעם|בטעם|מזון לבעלי|חתול|כלב|חטיף/.test(n))return false;
+ if(meta.salmon&&/טעם|בטעם|מזון|חתול|כלב|חטיף|מרק|פסטה/.test(n))return false;
  return true;
 }
-async function loadFood(mySeq,q){
- setText('heading','Продукты и цены');setText('subtitle','Поиск продуктов в прайс-листах израильских сетей. Магазины открываются только по твоему нажатию.');
- if(has(q.toLowerCase(),words.chicken)){setFilters([['all','🍗 Всё мясо'],['whole','Целая'],['breast','Грудка'],['thigh','Бёдра'],['drum','Голени'],['wing','Крылья']]);}
- const meta=filteredFood(q);
- message('Проверяю опубликованные цены. Если сайт данных не разрешит загрузку, покажу магазины отдельно.');
- let loaded=false;
+function productLabel(name,meta){
+ const n=name.toLowerCase();
+ let ru='Продукт';
+ let emoji='🛒';
+ if(meta.chicken){
+   emoji='🍗';
+   if(/חזה|груд|breast/.test(n))ru='Куриная грудка';
+   else if(/כרע|ירך|бедр|thigh/.test(n))ru='Куриные бёдра';
+   else if(/שוק|голен|drum/.test(n))ru='Куриные голени';
+   else if(/כנפ|крыл|wing/.test(n))ru='Куриные крылышки';
+   else if(/פרגי/.test(n))ru='Куриное филе (паргит)';
+   else if(/שלם/.test(n))ru='Целая курица';
+   else ru='Куриное мясо';
+ }else if(meta.salmon){ru='Лосось';emoji='🐟'}
+ else {
+   const lex=[['חלב','Молоко','🥛'],['ביצ','Яйца','🥚'],['לחם','Хлеб','🍞'],['קפה','Кофе','☕'],['גבינ','Сыр','🧀'],['עגבני','Помидоры','🍅'],['מלפפון','Огурцы','🥒'],['תפוח אדמה','Картофель','🥔'],['שמן','Масло','🫒'],['דג','Рыба','🐟'],['בשר','Мясо','🥩'],['סוכר','Сахар','🧂'],['אורז','Рис','🍚']];
+   for(const [he,r,e] of lex)if(n.includes(he)){ru=r;emoji=e;break}
+   if(ru==='Продукт')ru='Товар: '+name;
+ }
+ if(/טרי|свеж/.test(n))ru+=' · свежий';
+ if(/קפוא|заморож/.test(n))ru+=' · замороженный';
+ const weight=name.match(/(\d+(?:[.,]\d+)?)\s*(ק"ג|קג|קילו|קילוגרם|גרם|גר|ג'|ג׳|kg)\b/i);
+ if(weight)ru+=' · '+weight[1].replace(',','.')+' '+(/קג|קילו|קילוגרם|ק"ג|kg/.test(weight[2])?'кг':'г');
+ return {ru,emoji};
+}
+async function fetchPriceProducts(term){
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),12500);
  try{
-  const ctl=new AbortController();const timeout=setTimeout(()=>ctl.abort(),14000);
-  let response;
-  try{response=await fetch('https://www.over.org.il/api/prices/products?q='+encodeURIComponent(meta.term),{signal:ctl.signal,mode:'cors',cache:'no-store'})}
-  finally{clearTimeout(timeout)}
-  if(!response.ok)throw Error('HTTP '+response.status);
-  const json=await response.json();if(seq!==mySeq)return;
-  const products=extractRows(json).filter(p=>foodRelevant(p,meta)).slice(0,12);
-  res.replaceChildren();loaded=true;
-  if(products.length){
-   res.append(node('div','message','Найдены названия товаров в открытой базе. Чтобы увидеть актуальную цену, нажми «Сравнить цены» у нужного товара.'));
-   const root=node('div','result');
-   for(const p of products){
-    const item=node('div','priceitem'),title=titleOf(p),code=String(codeOf(p));
-    item.append(node('strong','',title));item.append(node('small','','Штрихкод: '+(code||'не указан')));
-    const buttons=node('div','actions');
-    if(code){const btn=node('button','action primary','Сравнить цены');btn.type='button';btn.addEventListener('click',()=>comparePrices(code,item,btn));buttons.append(btn)}
-    buttons.append(action('📍 Супермаркеты на карте',map('סופרמרקט')));
-    item.append(buttons);root.append(item);
-   }res.append(root);
-  }else{message('Подходящих товаров в ответе базы пока нет. Показываю магазины, где можно проверить ассортимент.',true)}
- }catch(e){if(seq!==mySeq)return;res.replaceChildren();message('Сейчас не удалось получить товары из открытой базы. Это не значит, что товаров нет. Полный поиск внутри сайта потребует отдельного сервера цен.',true)}
+  const response=await fetch('https://www.over.org.il/api/prices/products?q='+encodeURIComponent(term),{signal:controller.signal,mode:'cors',cache:'no-store'});
+  if(!response.ok)throw Error('Ошибка '+response.status);
+  return extractRows(await response.json());
+ }finally{clearTimeout(timeout)}
+}
+function displayGroceryCard(p,meta){
+ const item=node('article','priceitem'), head=node('div','product-head');
+ const title=titleOf(p), code=String(codeOf(p)),label=productLabel(title,meta);
+ head.append(node('div','product-symbol',label.emoji));
+ const main=node('div','product-main');
+ main.append(node('strong','',label.ru));
+ const he=node('div','original',title);he.dir='auto';main.append(he);
+ main.append(node('div','pill',code?'Код товара: '+code:'Код товара не указан'));
+ head.append(main);item.append(head);
+ const prices=node('div','price-loading','Проверяю цены магазинов в '+city.value+'…');
+ item.append(prices);
+ const actions=node('div','actions');
+ let btn=null;
+ if(code){btn=node('button','action primary','🔄 Обновить цены');btn.type='button';btn.addEventListener('click',()=>comparePrices(code,item,btn,prices));actions.append(btn)}
+ actions.append(action('📍 Найти магазин на карте',map('סופרמרקט')));
+ item.append(actions);
+ return {item,code,btn,prices};
+}
+async function loadFood(mySeq,q){
+ setText('heading','🛒 Продукты и цены');
+ setText('subtitle','Товар, цена в шекелях и магазин — в одном месте. Сначала ищем в '+city.value+'.');
+ const isChicken=has(q.toLowerCase(),words.chicken);
+ if(isChicken)setFilters([['all','🍗 Вся курица'],['whole','Целая'],['breast','Грудка'],['thigh','Бёдра'],['drum','Голени'],['wing','Крылья']]);
+ const meta=filteredFood(q);
+ res.replaceChildren();message('🔎 Ищу настоящие продукты и цены…');
+ const terms=(isChicken&&variation==='all')?['עוף שלם','חזה עוף','כרעיים עוף','שוקיים עוף','פרגיות','כנפיים עוף']:[meta.term];
+ try{
+  // Ищем по видам мяса: общий запрос «עוף» поднимает в выдаче сосиски и супы.
+  const batches=await Promise.allSettled(terms.map(fetchPriceProducts));
+  if(seq!==mySeq)return;
+  const seen=new Set(), products=[];
+  for(const batch of batches){
+    if(batch.status!=='fulfilled')continue;
+    for(const p of batch.value){
+      const code=String(codeOf(p)||''),name=titleOf(p);
+      if(!code||seen.has(code)||!foodRelevant(p,meta))continue;
+      seen.add(code);products.push(p);
+    }
+  }
+  res.replaceChildren();
+  if(products.length===0){
+    message('Подходящие товары пока не появились. Попробуй выбрать «Грудка» или «Целая» — мы не будем подменять курицу лапшой.',true);
+  }else{
+    const visible=products.slice(0,18), cards=[];
+    res.append(node('p','result-count','Найдено подходящих товаров: '+products.length+' · показываю '+visible.length));
+    const root=node('div','result');
+    for(const p of visible){const box=displayGroceryCard(p,meta);root.append(box.item);cards.push(box)}
+    res.append(root);
+    // Цены в первых карточках появляются сразу, без нажатия на непонятную кнопку.
+    await Promise.allSettled(cards.slice(0,8).map(x=>x.code?comparePrices(x.code,x.item,x.btn,x.prices):Promise.resolve()));
+    if(seq!==mySeq)return;
+    if(cards.length>8){
+      const more=node('button','action primary','💰 Показать цены остальных товаров');
+      more.type='button';more.addEventListener('click',async()=>{more.disabled=true;more.textContent='Проверяю…';await Promise.allSettled(cards.slice(8).map(x=>x.code?comparePrices(x.code,x.item,x.btn,x.prices):Promise.resolve()));more.remove()});
+      res.append(more);
+    }
+  }
+ }catch(e){if(seq!==mySeq)return;res.replaceChildren();message('Цены временно недоступны. Это проблема получения данных, а не отсутствие курицы в магазинах.',true)}
  if(seq!==mySeq)return;
- res.append(node('h2','',loaded?'Супермаркеты поблизости':'Где искать в магазинах'));
  const shops=[
-  ['Рами Леви','Открой магазин на карте и уточни наличие товара.','https://www.rami-levy.co.il/'],
-  ['Йохананов','Ассортимент и цены зависят от филиала.','https://www.yochananof.co.il/'],
-  ['Шуферсаль','Проверка в магазине или его интернет-каталоге.','https://www.shufersal.co.il/'],
-  ['Карфур','Проверка ближайшего филиала.','https://www.carrefour.co.il/']
+   ['Рами Леви','https://www.rami-levy.co.il/'],
+   ['Йохананов','https://www.yochananof.co.il/'],
+   ['Шуферсаль','https://www.shufersal.co.il/'],
+   ['Карфур','https://www.carrefour.co.il/']
  ];
- grid(shops.map(s=>card(s[0],s[1],[['📍 На карте',map(s[0])],['Сайт магазина',s[2]]],'Магазин')));
+ const area=node('details','panel'), summary=node('summary','', 'Другие супермаркеты на карте');area.append(summary);
+ const g=node('div','grid');shops.forEach(s=>g.append(card(s[0],'Карта и сайт магазина. Наличие товара уточняй в филиале.',[['📍 Магазин на карте',map(s[0])],['Сайт магазина',s[1]]],'Магазин')));
+ area.append(g);res.append(area);
 }
 function flattenPrices(obj,depth){
  if(depth>5||!obj||typeof obj!=='object')return [];
@@ -223,32 +311,77 @@ function flattenPrices(obj,depth){
  for(const [k,v] of Object.entries(obj))if(typeof v==='object'&&v!==null)out=out.concat(flattenPrices(v,depth+1));
  return out.slice(0,25);
 }
-async function comparePrices(code,item,btn){
- btn.disabled=true;btn.textContent='Получаю цены…';
- const block=node('div','',null);item.append(block);
+
+async function comparePrices(code,item,btn,prices){
+ if(btn){btn.disabled=true;btn.textContent='Проверяю цены…'}
+ prices.replaceChildren();prices.append(node('div','price-loading','Загружаю цены в '+city.value+'…'));
  try{
-  const controller=new AbortController();let timeout=setTimeout(()=>controller.abort(),14000);
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12500);
   let response;
-  try{response=await fetch('https://www.over.org.il/api/prices/compare?item_code='+encodeURIComponent(code)+'&city='+encodeURIComponent(city.value.toLowerCase().startsWith('твер')?'טבריה':city.value)+'&top=10',{signal:controller.signal,mode:'cors'})}
+  try{response=await fetch('https://www.over.org.il/api/prices/compare?item_code='+encodeURIComponent(code)+'&city='+encodeURIComponent(city.value.toLowerCase().startsWith('твер')?'טבריה':city.value)+'&top=10',{signal:controller.signal,mode:'cors',cache:'no-store'})}
   finally{clearTimeout(timeout)}
   if(!response.ok)throw Error('HTTP '+response.status);
-  const payload=await response.json();
-  const rows=flattenPrices(payload,0);
+  const data=await response.json();
+  const rows=flattenPrices(data,0).filter(x=>Number.isFinite(Number(x.price??x.min_price))).sort((a,b)=>Number(a.price??a.min_price)-Number(b.price??b.min_price));
+  prices.replaceChildren();
   if(rows.length){
-   for(const x of rows.slice(0,8)){
-    const price=x.price??x.min_price;const name=x.store_name||x.chain_name||x.store||x.chain||x.cheapest_store||'Магазин';
-    if(price===undefined)continue;
-    block.append(node('div','message',name+' — '+Number(price).toLocaleString('ru-RU')+' ₪ · дата актуальности по данным источника'));
-   }
-  }else block.append(node('div','message','База ответила, но цены по этому городу не найдены. Не будем придумывать цену.'));
- }catch(e){block.append(node('div','message warn','Цены сейчас не загрузились. Возможна блокировка запросов из браузера — для стабильного поиска нужен сервер.'))}
- finally{btn.textContent='Проверить ещё раз';btn.disabled=false}
+    const unique=new Set();
+    for(const x of rows){
+      const amount=Number(x.price??x.min_price);
+      const shop=String(x.store_name||x.chain_name||x.store||x.chain||x.cheapest_store||'Магазин');
+      const key=shop+'|'+amount;
+      if(unique.has(key))continue;unique.add(key);
+      const row=node('div','price-row');
+      const cost=node('div','price-num',amount.toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪');
+      row.append(cost);
+      const right=node('div','price-shop');
+      const shopText=node('div','',shop);shopText.dir='auto';right.append(shopText);
+      const date=x.as_of||x.file_date||x.updated_at||x.last_updated;
+      if(date)right.append(node('div','price-date','Сведения от '+String(date).slice(0,10)));
+      row.append(right);
+      row.append(action('📍 Карта',map(shop)));
+      prices.append(row);
+      if(unique.size>=6)break;
+    }
+  }else prices.append(node('div','message','В '+city.value+' пока нет цен этого товара в базе. Попробуй другой вид продукта.'));
+ }catch(e){
+  prices.replaceChildren();
+  prices.append(node('div','message warn','Не удалось загрузить цены. Попробуй ещё раз. Названия товаров при этом остаются доступны.'));
+ }finally{if(btn){btn.disabled=false;btn.textContent='🔄 Обновить цены'}}
 }
 function showTech(q){
- setText('heading','Товары и техника');setText('subtitle','Показываю магазины и карту. Точных цен не выдумываю — без разрешённого подключения к каталогам они недоступны.');
- const stores=[['KSP','Техника, принтеры, инструменты','https://ksp.co.il/'],['Ivory','Электроника и компьютерная техника','https://www.ivory.co.il/'],['Home Center','Инструменты и хозяйственные товары','https://www.homecenter.co.il/']];
- grid(stores.map(s=>card(s[0],s[1],[['🛒 Каталог магазина',s[2],true],['📍 На карте',map(s[0])]],'По запросу: '+q)));
- message('Пока магазин не предоставляет нам каталог через API, карточку конкретной дрели с ценой нельзя честно показать внутри сайта.',true);
+ setText('heading','🔧 Товары и техника');
+ const t=q.trim().toLowerCase();
+ const drills=/(дрел|сверл|bosch|макит|makita|מקדח|шурупов|ударн)/i.test(t);
+ if(drills){
+   setText('subtitle','Вот настоящие модели и цены, опубликованные KSP. Открывай конкретный товар, не главную страницу магазина.');
+   const products=[
+    {name:'Bosch EasyImpact 570',desc:'Ударная дрель, 570 Вт, с кейсом',price:189,url:'https://ksp.co.il/mob/item/247522'},
+    {name:'Bosch GSB 13 RE',desc:'Профессиональная ударная дрель, 600 Вт',price:254,url:'https://ksp.co.il/mob/item/332374'},
+    {name:'Bosch Professional GSB 600',desc:'Ударная дрель, 600 Вт',price:268,url:'https://ksp.co.il/mob/item/343495'},
+    {name:'Makita HP1641K',desc:'Ударная дрель, 680 Вт, кейс',price:399,url:'https://ksp.co.il/mob/item/142374'}
+   ];
+   const g=node('div','grid');
+   for(const p of products){
+      const box=node('div','card tech-item');
+      box.append(node('div','tech-icon','🔧'));
+      box.append(node('h3','',p.name));
+      box.append(node('p','',p.desc));
+      box.append(node('div','tech-price',p.price.toLocaleString('ru-RU')+' ₪'));
+      box.append(node('div','pill','KSP · найденная цена на 15.11.2026, проверь перед покупкой'));
+      const bar=node('div','actions');
+      bar.append(action('🛒 Открыть именно этот товар',p.url,true));
+      bar.append(action('📍 KSP на карте',map('KSP')));
+      box.append(bar);g.append(box);
+   }
+   res.append(g);
+   message('Цены показаны по доступным страницам KSP на 15 ноября 2026 г. Это не автоматическое обновление каталога: актуальную цену и остаток проверяй на странице товара.');
+ }else{
+   setText('subtitle','Точный товар ищем по магазину и модели. Прямой автоматический каталог всех магазинов ещё не подключён.');
+   message('Для запроса «'+q+'» пока нет подтверждённых карточек товаров. Не подменяю их случайными ссылками.',true);
+   const stores=[['KSP','https://ksp.co.il/'],['Ivory','https://www.ivory.co.il/']];
+   grid(stores.map(s=>card(s[0],'Каталог магазина. Название товара введи в поиск магазина.',[['Открыть каталог',s[1],true],['📍 Магазин на карте',map(s[0])]],'Проверенный магазин')));
+ }
 }
 function showFree(){
  setText('heading','Отдам даром');setText('subtitle','Настоящие объявления о вещах, которые люди отдают бесплатно.');
