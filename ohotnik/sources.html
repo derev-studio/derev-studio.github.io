@@ -14,7 +14,7 @@ body{margin:0;background:var(--page);color:var(--text);font:16px/1.7 -apple-syst
 main{max-width:860px;margin:auto;padding:18px 18px 60px}
 header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:4px 0 18px}
 .home{display:inline-block;color:var(--accent);font-weight:750;text-decoration:none;border:1px solid var(--border);background:var(--card);border-radius:10px;padding:9px 12px}
-.language{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));direction:ltr;width:min(350px,100%);border:1px solid var(--border);background:var(--card);border-radius:10px;overflow:hidden}
+.language{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));direction:ltr;width:min(420px,100%);border:1px solid var(--border);background:var(--card);border-radius:10px;overflow:hidden}
 .language button{font:inherit;font-size:14px;color:var(--text);background:transparent;border:0;border-right:1px solid var(--border);padding:10px;cursor:pointer}
 .language button:last-child{border:0}
 .language button[aria-pressed="true"]{background:var(--accent-bg);color:var(--accent);font-weight:800}
@@ -48,6 +48,7 @@ html[data-theme="forest"]{color-scheme:dark;--page:#0d211b;--card:#19362c;--text
 <button type="button" lang="ru" data-lang="ru" aria-pressed="true">Русский</button>
 <button type="button" lang="en" data-lang="en" aria-pressed="false">English</button>
 <button type="button" lang="he" dir="rtl" data-lang="he" aria-pressed="false">עברית</button>
+<button type="button" lang="ar" dir="rtl" data-lang="ar" aria-pressed="false">العربية</button>
 </div>
 </header>
 <article lang="ru" data-content-lang="ru">
@@ -115,11 +116,32 @@ html[data-theme="forest"]{color-scheme:dark;--page:#0d211b;--card:#19362c;--text
 <div class="contact"><p>אם יש לכם זכויות בתוכן המוצג באתר או שמצאתם טעות, אנא שלחו קישור לדף, הסבר על התוכן הרלוונטי ובמידת הצורך מידע על זכויותיכם. נבדוק את הפנייה ונתקן או נסיר תוכן שנוי במחלוקת לפי הצורך.</p><p><a href="https://github.com/derev-studio/derev-studio.github.io/issues/new" target="_blank" rel="noopener noreferrer">✉️ דיווח על בעיה או פנייה לבעל האתר</a></p><small>פניות ב-GitHub גלויות לציבור ועשויות לדרוש חשבון. אין למסור שם פרטים אישיים רגישים.</small></div>
 <p><small>מידע זה נועד לשקיפות ואינו מהווה ייעוץ משפטי.</small></p>
 </article>
+<article lang="ar" dir="rtl" data-content-lang="ar" hidden>
+<h1>مصادر المعلومات وحقوق النشر</h1>
+<p class="lead">هدفنا تسهيل البحث عن المنتجات ومقارنة الأسعار في إسرائيل بطريقة واضحة ومفيدة.</p>
+<h2>عن هذا الموقع</h2>
+<p>«صياد التخفيضات» مشروع معلوماتي مستقل، وليس متجراً إلكترونياً، ولا يبيع المنتجات أو يعالج المدفوعات، ولا يُعدّ ممثلاً رسمياً للمتاجر المذكورة. ذكر أي متجر أو علامة تجارية لا يعني وجود شراكة أو رعاية أو تأييد من طرفها.</p>
+<h2>مصادر أسماء المنتجات والأسعار</h2>
+<p>قد نستعين بمعلومات الأسعار التي تنشرها سلاسل المتاجر الإسرائيلية، بما في ذلك البيانات المتاحة عبر خدمة Over، لعرض أسعار المواد الغذائية. وبالنسبة للإلكترونيات وغيرها، نستخدم الأوصاف المتاحة للعامة وروابط صفحات المنتجات لدى البائعين عندما تتوفر. قد تتغير مصادر البيانات مع الوقت.</p>
+<p>قد تكون الأسعار والعروض والتوفر والأوصاف والصور غير مكتملة أو غير محدّثة. تحقق دائماً من المعلومات لدى البائع مباشرة قبل الشراء. لا نضمن توفر أي منتج أو دقة كل سعر معروض.</p>
+<div class="sources"><a href="https://www.over.org.il/" target="_blank" rel="noopener noreferrer">Over · مقارنة الأسعار</a><a href="https://ksp.co.il/" target="_blank" rel="noopener noreferrer">KSP</a><a href="https://www.erco.co.il/" target="_blank" rel="noopener noreferrer">ARKA</a></div>
+<h2>الصور والرسوم التوضيحية</h2>
+<p>قد تأتي صور المنتجات من صفحات البائعين المتاحة للعامة، ومن Open Food Facts وWikimedia Commons. أحياناً نعرض صورة توضيحية لنوع المنتج بدلاً من صورة العبوة الدقيقة، ونوضح ذلك، وقد تختلف الصورة عن المنتج المعروض للبيع.</p>
+<p>تظل حقوق الصور لأصحابها. وقد يخضع استخدام الصور لشروط تراخيص معينة ومتطلبات ذكر المصدر والمؤلف. نسعى إلى إظهار المصدر والترخيص عند توفر المعلومات. ذكر المصدر وحده لا يُغني عن إذن صاحب الحقوق عندما يكون الإذن مطلوباً.</p>
+<div class="sources"><a href="https://world.openfoodfacts.org/" target="_blank" rel="noopener noreferrer">Open Food Facts</a><a href="https://openfoodfacts.github.io/documentation/docs/Product-Opener/api/tutorials/license-be-on-the-legal-side/" target="_blank" rel="noopener noreferrer">تراخيص Open Food Facts</a><a href="https://commons.wikimedia.org/" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a></div>
+<h2>العلامات التجارية والروابط الخارجية</h2>
+<p>تعود العلامات التجارية وأسماء المتاجر وشعاراتها إلى أصحاب الحقوق المعنيين. تؤدي الروابط إلى مواقع مستقلة يتحمل مالكوها مسؤولية محتواها وشروط استخدامها.</p>
+<h2>التفضيلات والخدمات الخارجية</h2>
+<p>يحتفظ المتصفح بتفضيلات اللغة والمظهر. قد تُرسل طلبات البحث إلى خدمات خارجية للأسعار والترجمة. عند الانتقال إلى موقع خارجي تسري شروطه وسياسة الخصوصية الخاصة به.</p>
+<h2>هل وجدت خطأ أو لديك استفسار عن الحقوق؟</h2>
+<div class="contact"><p>إذا كنت صاحب حق في محتوى منشور هنا أو لاحظت خطأ، يرجى إرسال رابط الصفحة وتحديد المادة المعنية، وإرفاق معلومات عن حقوقك عند الحاجة. سنراجع الرسالة ونصحح المعلومات أو نزيل المادة محل الخلاف عند الاقتضاء.</p><p><a href="https://github.com/derev-studio/derev-studio.github.io/issues/new" target="_blank" rel="noopener noreferrer">✉️ الإبلاغ عن مشكلة أو التواصل مع صاحب الموقع</a></p><small>بلاغات GitHub علنية وقد تتطلب حساباً. يُرجى عدم نشر معلومات شخصية أو سرية هناك.</small></div>
+<p><small>هذه الصفحة مخصصة لشفافية المشروع ولا تُعدّ استشارة قانونية.</small></p>
+</article>
 <footer>© 2026 · Alexander Derevyashkin · <span id="footer-note">Независимый информационный проект</span></footer>
 </main>
 <script>
 (function(){
- const languages=['ru','en','he'],langButtons=[...document.querySelectorAll('[data-lang]')];
+ const languages=['ru','en','he','ar'],langButtons=[...document.querySelectorAll('[data-lang]')];
  const get=(key)=>{try{return localStorage.getItem(key)}catch(e){return null}};
  const set=(key,value)=>{try{localStorage.setItem(key,value)}catch(e){}};
  let lang=languages.includes(get('ohotnik-lang'))?get('ohotnik-lang'):'ru';
@@ -131,10 +153,10 @@ html[data-theme="forest"]{color-scheme:dark;--page:#0d211b;--card:#19362c;--text
  function show(){
   for(const article of document.querySelectorAll('article[data-content-lang]'))article.hidden=article.dataset.contentLang!==lang;
   for(const button of langButtons)button.setAttribute('aria-pressed',String(button.dataset.lang===lang));
-  document.documentElement.lang=lang;document.documentElement.dir=lang==='he'?'rtl':'ltr';
-  document.getElementById('back').textContent=lang==='he'?'→ חזרה לחיפוש':lang==='en'?'← Back to search':'← Вернуться к поиску';
-  document.getElementById('footer-note').textContent=lang==='he'?'מיזם מידע עצמאי':lang==='en'?'Independent information project':'Независимый информационный проект';
-  document.title=lang==='he'?'מקורות וזכויות יוצרים · צייד המבצעים':lang==='en'?'Sources & copyright · Deal Hunter':'Источники и авторские права · Охотник за скидками';
+  document.documentElement.lang=lang;document.documentElement.dir=['he','ar'].includes(lang)?'rtl':'ltr';
+  document.getElementById('back').textContent=lang==='ar'?'→ العودة إلى البحث':lang==='he'?'→ חזרה לחיפוש':lang==='en'?'← Back to search':'← Вернуться к поиску';
+  document.getElementById('footer-note').textContent=lang==='ar'?'مشروع معلوماتي مستقل':lang==='he'?'מיזם מידע עצמאי':lang==='en'?'Independent information project':'Независимый информационный проект';
+  document.title=lang==='ar'?'مصادر المعلومات وحقوق النشر · صياد التخفيضات':lang==='he'?'מקורות וזכויות יוצרים · צייד המבצעים':lang==='en'?'Sources & copyright · Deal Hunter':'Источники и авторские права · Охотник за скидками';
   set('ohotnik-lang',lang);
  }
  document.querySelector('.language').addEventListener('click',e=>{const button=e.target.closest('button[data-lang]');if(!button)return;lang=button.dataset.lang;show()});
