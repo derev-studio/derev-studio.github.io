@@ -206,12 +206,17 @@ footer strong{color:#2b4364}
 .grocery-image[role=button]:focus-visible{outline:3px solid #3a87e8;outline-offset:3px}
 .product-focus-dialog .action{display:block;text-align:center}
 @media(max-width:580px){.product-focus-dialog .product-focus-photo{height:220px!important}.product-focus-dialog .food-detail-inner{padding:14px}}
+
+.real-photo-missing{width:100%;height:100%;display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center;background:linear-gradient(145deg,#f0f5fa,#fff);color:#6b7f95;text-align:center;font-size:13px;padding:10px}
+.real-photo-icon{font-size:44px;line-height:1.3}
+.product-focus-photo .real-photo-icon{font-size:70px}
+.product-focus-dialog .product-focus-photo{margin:14px 0!important}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 37</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 38</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -337,12 +342,22 @@ function titleOf(p){
 }
 function codeOf(p){return p.item_code||p.item_code_bare||p.barcode||p.code||p.id||''}
 
+// A word match alone is not a product match. "Salmon" can describe cat food,
+// shampoo or sauce. For fresh fish searches, require a real fish cut.
+function genuineFishCut(name){
+ const n=String(name||'').toLowerCase();
+ // Most obvious cat/dog food brands, flavours and ready-made foods.
+ if(/לה\s*קט|לקט\s|le\s*cat|la\s*cat|פריסקיז|פריסק|friskies|purina|whiskas|וויסקס|מיאו|meow|מזון|חתול|חתולים|לחתול|לחתולים|כלב|כלבים|לכלב|חיות|בעח|לחיות|לבעלי|pet\b|kitten|cat food|dog food|animal feed|פטה|פאטה|p[aâ]t[eé]|שימור|שימורים|קופס|טונה|ממרח|מעדן|מיקס|סלט|תבלין|בכוס|בטעם|אינסטנט|קציצ|פאוץ|גבינה|מרק|רוטב|נודל|תערובת|תיבול|חטיף|חטיפ|סושי מוכן|שמן|קפסול|תוסף|ויטמין|קרם|סרום|שמפו|סבון|בושם|mix|salad|sauce|spice|seasoning|canned|tin\b|snack|treat|cosmetic|perfume|fragrance|корм|суп|соус|консерв|духи|крем|паштет|готовый салат/.test(n))return false;
+ // Require a fish format: fillet, steak, whole fresh/frozen fish, pieces,
+ // or smoked/salted fish explicitly labelled as such (no invented products).
+ if(!/(פילה|פילט|פלט|נתח|סטייק|פרוס|דג\s*סלמון|סלמון.{0,35}(?:טרי|קפוא|שלם|נורווגי|אטלנטי|מעושן|מלוח)|(?:טרי|קפוא|שלם|נורווגי|אטלנטי|מעושן|מלוח).{0,35}סלמון|salmon.{0,30}(?:fillet|steak|fresh|frozen|whole|smoked)|(?:fillet|steak|fresh|frozen|whole|smoked).{0,30}salmon|филе|стейк|свежий лосось|замороженный лосось|копчёный лосось)/.test(n))return false;
+ return true;
+}
 function foodRelevant(p,meta){
  const n=titleOf(p).toLowerCase().replace(/[״׳"']/g,'');
- // Не показываем специи, лапшу, корм, полуфабрикаты как сырое куриное мясо.
  if(meta.chicken){
   if(!/(עוף|עופות|פרגית|חזה עוף|כרעיים|שוקיים|כנפיים|chicken|куриц)/.test(n))return false;
-  if(/תבלין|גריל|נמס|בכוס|שקדי|פריסקיז|פריסק|knorr|קנור|עוף דל קל|קרוטו|מיקס|אבקה|מרק|אינסטנט|שניצל|פסטרמה|נקניק|נקנק|קציצ|טבעות|גיוזה|לקט|ירקות|אסיית|תערובת|רוטב|חטיף|פסטה|חומוס|סלט|בצק|אמנון|סלמון|דג|טבעול|מזון|חתול|כלב|נודל|בטעם|טעם|חטיפ|מרינדה|תיבול|קפוא מוכן|פאוץ|קרקר|קורנפלקס|מתכון|ציר|רצועות קראנץ|soup|noodle|sausage|spice|seasoning|snack|cat|dog|sauce|קציצה|корм|лапша|суп|приправ|соус|сосиск|котлет|рыба/.test(n))return false;
+  if(/תבלין|גריל|נמס|בכוס|שקדי|פריסקיז|פריסק|לה\s*קט|לקט\s|פטה|פאטה|knorr|קנור|עוף דל קל|קרוטו|מיקס|אבקה|מרק|אינסטנט|שניצל|פסטרמה|נקניק|נקנק|קציצ|טבעות|גיוזה|לקט|ירקות|אסיית|תערובת|רוטב|חטיף|פסטה|חומוס|סלט|בצק|אמנון|סלמון|דג|טבעול|מזון|חתול|כלב|נודל|בטעם|טעם|חטיפ|מרינדה|תיבול|קפוא מוכן|פאוץ|קרקר|קורנפלקס|מתכון|ציר|רצועות קראנץ|soup|noodle|sausage|spice|seasoning|snack|cat|dog|sauce|קציצה|корм|лапша|суп|приправ|соус|сосиск|котлет|рыба/.test(n))return false;
   if(variation==='whole'&&!/עוף שלם|עוף טרי שלם|whole|цел/.test(n))return false;
   if(variation==='breast'&&!/חזה|breast|груд/.test(n))return false;
   if(variation==='thigh'&&!/כרע|ירך|thigh|бедр/.test(n))return false;
@@ -350,23 +365,17 @@ function foodRelevant(p,meta){
   if(variation==='wing'&&!/כנפ|wing|крыл/.test(n))return false;
  }
  if(meta.salmon){
-  if(!/סלמון|salmon|лосос|семг/.test(n))return false;
-  // Explicit "salmon fillet" requests must never turn into a generic fish item.
-  if(meta.fillet&&!/פילה|fillet|filet|филе/.test(n))return false;
-  // Search for actual salmon food, not products merely 'with salmon' such as cat food,
-  // cosmetics, fragrances, spreads, sauces, prepared meals, supplements or pet treats.
-  if(/פריסקיז|פריסק|friskies|purina|whiskas|וויסקס|מיאו|meow|מזון|חתול|חתולים|כלב|כלבים|חיות|בעח|לחיות|לבעלי|pet|kitten|cat food|dog food|animal feed|לחתול|לכלב|בשרי לחתול|מיקס|סלט|תבלין|ממרח|בכוס|בטעם|אינסטנט|קציצ|פאוץ|גבינה|מרק|רוטב|נודל|תערובת|תיבול|חטיף|חטיפ|סושי מוכן|שימור|שימורים|קופס|טונה|מעדן|שמן|קפסול|תוסף|ויטמין|קרם|סרום|שמפו|סבון|בושם|mix|salad|sauce|spice|seasoning|canned|tin|snack|treat|cosmetic|perfume|fragrance|корм|суп|соус|консерв|духи|крем|масло для|добавк/.test(n))return false;
+  if(!/סלמון|salmon|лосос|семг|сёмг/.test(n))return false;
+  if(!genuineFishCut(n))return false;
+  if(meta.fillet&&!/פילה|פילט|פלט|fillet|filet|филе/.test(n))return false;
  }
- // For every other grocery query, require the actual requested product
- // words inside the merchant's name. Broad API results (cosmetics, perfume,
- // animal food or unrelated categories) must never leak into the cards.
  if(!meta.chicken&&!meta.salmon){
   const words=String(meta.term||'').toLowerCase().split(/\s+/).filter(Boolean);
   if(words.length&&!words.every(word=>n.includes(word)))return false;
  }
-
  return true;
 }
+
 function productLabel(name,meta){
  const n=name.toLowerCase();
  let ru='Продукт';
@@ -684,14 +693,27 @@ function realImage(box,code){
 }
 function foodRuTitle(name,meta){
  const n=String(name||'').toLowerCase();
- const known=actualStorePage((name&&name.code)||'');
+ if(meta.salmon){
+  let result=/פילה|פילט|פלט|fillet|filet|филе/.test(n)?'Филе лосося':
+    /סטייק|steak|стейк/.test(n)?'Стейк лосося':
+    /נתח|פרוס|portion|pieces|кусоч/.test(n)?'Кусочки лосося':
+    /שלם|whole|целый/.test(n)?'Лосось целиком':'Лосось';
+  if(/מעושן|smoked|копч/.test(n))result+=' · копчёный';
+  else if(/מלוח|salted|сол[её]н/.test(n))result+=' · солёный';
+  else if(/קפוא|frozen|заморож/.test(n))result+=' · замороженный';
+  else if(/טרי|fresh|свеж/.test(n))result+=' · свежий';
+  if(/נורווגי|norweg|норвеж/.test(n))result+=' · норвежский';
+  const weight=n.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(קג|ק"ג|ק״ג|קילו|גרם|גר'|ג'|ג׳|kg|g|гр|г|кг)(?:\s|$)/i);
+  if(weight)result+=' · '+weight[1].replace(',','.')+' '+(/קג|קילו|kg|кг/.test(weight[2])?'кг':'г');
+  return result;
+ }
  let result=productLabel(String(name||''),meta).ru;
- if(meta.chicken||meta.salmon)return result;
+ if(meta.chicken)return result;
  const dict=[
   [/חלב/,'Молоко'],[/לחם/,'Хлеб'],[/ביצים|ביצי/,'Яйца'],[/גבינה/,'Сыр'],[/קוטג/,'Творог'],[/יוגורט/,'Йогурт'],[/שוקולד/,'Шоколад'],[/פסטה|מקרוני|אטריות/,'Макароны'],[/אורז/,'Рис'],
   [/בשר/,'Мясо'],[/תפוחי אדמה/,'Картофель'],[/תפוח/,'Яблоки'],[/בננ/,'Бананы'],[/עגבני/,'Помидоры'],[/מלפפון/,'Огурцы'],[/קפה/,'Кофе'],
   [/חומוס/,'Хумус'],[/טונה/,'Тунец'],[/סוכר/,'Сахар'],[/מים/,'Вода'],[/מיץ/,'Сок'],[/חמאה/,'Масло'],[/שמן זית/,'Оливковое масло'],[/שמן/,'Масло'],
-  [/נקניק/,'Колбаса'],[/גלידה/,'Мороженое'],[/עוף/,'Курица'],[/מלח/,'Соль'],[/קטשופ/,'Кетчуп'],[/ביסקוויט/,'Печенье'],
+  [/גלידה/,'Мороженое'],[/נקניק/,'Колбаса'],[/מלח/,'Соль'],[/קטשופ/,'Кетчуп'],[/ביסקוויט/,'Печенье'],
   [/תפוז/,'Апельсины'],[/ענב/,'Виноград'],[/קולה/,'Кола'],[/קמח/,'Мука'],[/דבש/,'Мёд'],[/קפיר/,'Кефир'],[/גזר/,'Морковь'],
   [/בורקס/,'Бурекас'],[/פיתה/,'Пита'],[/עוגה/,'Торт'],[/חטיף/,'Снэк'],[/מלון/,'Дыня'],[/אבטיח/,'Арбуз']
  ];
@@ -767,6 +789,18 @@ function compactOfferText(offer){
 // distinct retailer offers without redirecting to an unrelated store catalogue.
 // One item per click: its picture, exact product, current published price and seller.
 // Other shop prices are optional and collapsed rather than covering the item itself.
+// One product per card. Never display a category stock photograph as
+// the photograph of an individual SKU: images must be barcode matched.
+function exactProductImage(code,title,large=false){
+ const box=node('div',large?'food-detail-photo product-focus-photo':'catalog-picture grocery-image');
+ const placeholder=node('div','real-photo-missing');
+ const emoji=node('div','real-photo-icon',/סלמון|salmon|лосос/i.test(title)?'🐟':/עוף|chicken|куриц/i.test(title)?'🍗':'🛒');
+ placeholder.append(emoji);
+ placeholder.append(node('span','','Фото товара пока нет'));
+ box.append(placeholder);
+ realImage(box,code);
+ return box;
+}
 function showProductPriceDetail(group,meta){
  const code=String(group.code||''),name=String(group.name||'').trim();
  const offers=Array.isArray(group.offers)?group.offers:[];
@@ -779,40 +813,8 @@ function showProductPriceDetail(group,meta){
  const close=node('button','food-detail-close','✕');close.type='button';close.setAttribute('aria-label','Закрыть');
  close.addEventListener('click',()=>dialog.close());top.append(close);body.append(top);
  const original=node('div','food-detail-original',name);original.dir='auto';body.append(original);
- // A generic illustration is explicitly marked. Replace it only with a barcode photo.
- const image=makeFoodImage(name,meta,false);
- image.classList.add('product-focus-photo');
- body.append(image);
- const hint=node('div','food-detail-caption','Если нет фотографии по штрихкоду, показана иллюстрация вида продукта.');
- body.append(hint);
- const fallback=categoryPicture(name,meta);
- if(fallback)body.append(node('div','food-detail-caption','Иллюстрация не означает фотографию конкретной упаковки.'));
- const photoTarget=image;
- if(code){
-  const matchPhoto=async()=>{
-   const item=await getFoodPhoto(code);
-   if(!item||!dialog.isConnected)return;
-   const img=document.createElement('img');
-   img.alt='Фотография конкретного товара по штрихкоду '+code;
-   img.onload=()=>{
-    if(!dialog.isConnected)return;
-    photoTarget.replaceChildren(img);
-    hint.textContent='Фото конкретного товара по штрихкоду · Open Food Facts';
-   };
-   img.onerror=()=>{};
-   img.src=item.src;
-  };
-  matchPhoto();
-  const candidate='https://img.rami-levy.co.il/product/'+encodeURIComponent(code)+'/small.jpg';
-  const img=document.createElement('img');
-  img.alt='Фото товара из магазина';
-  img.onload=()=>{
-   if(!dialog.isConnected||photoTarget.querySelector('img')?.alt.startsWith('Фотография конкретного'))return;
-   photoTarget.replaceChildren(img);
-   hint.textContent='Фото по коду товара · Рами Леви';
-  };
-  img.onerror=()=>{};img.src=candidate;
- }
+ const image=exactProductImage(code,name,true);body.append(image);
+ // Confirmed source: matched GTIN or product code only. No random fish illustrations.
  const section=node('div','product-focus-purchase');
  if(best){
   section.append(node('div','product-focus-price',Number(best.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
@@ -821,10 +823,10 @@ function showProductPriceDetail(group,meta){
  }else section.append(node('div','product-focus-price','Цена не получена'));
  body.append(section);
  if(known&&offers.some(o=>known.chain==='Rami Levy'&&shopChoice(o.shop)?.id==='rami'))
-  body.append(action('🛒 Открыть эту страницу товара в Рами Леви',known.url,true));
+  body.append(action('🛒 Открыть этот товар в Рами Леви',known.url,true));
  if(offers.length>1){
   const more=node('details','product-focus-other');
-  more.append(node('summary','','Цены в других магазинах · '+(offers.length-1)));
+  more.append(node('summary','','Сравнить цены других магазинов · '+(offers.length-1)));
   for(const offer of offers.slice(1,16)){
    const line=node('div','grocery-offer');
    const store=node('span','',compactOfferText(offer));store.dir='auto';line.append(store);
@@ -833,27 +835,23 @@ function showProductPriceDetail(group,meta){
   }
   body.append(more);
  }
- body.append(node('div','food-detail-caption','Наличие проверяй у продавца. Прямая ссылка на покупку отображается только когда удалось установить точное совпадение товара.'));
+ body.append(node('div','food-detail-caption','Если вместо фотографии значок, подтверждённого фото этого товара пока нет. Наличие проверяй у продавца.'));
  dialog.append(body);document.body.append(dialog);
  dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
  dialog.addEventListener('close',()=>dialog.remove(),{once:true});
  if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
 }
-
 function makeCompactFood(group,meta){
  const code=String(group.code||''),title=String(group.name||'').trim();
  const offers=Array.isArray(group.offers)?group.offers:[];
  const known=actualStorePage(code),best=offers[0];
  const card=node('article','catalog-card grocery-card');
- const picture=makeFoodImage(title,meta,false);
- picture.classList.add('catalog-picture','grocery-image');
+ const picture=exactProductImage(code,title,false);
  picture.setAttribute('role','button');picture.tabIndex=0;
- picture.setAttribute('aria-label','Открыть фото, цену и магазин: '+(known?known.name:foodRuTitle(title,meta)));
+ picture.setAttribute('aria-label','Открыть товар: '+(known?known.name:foodRuTitle(title,meta)));
  picture.addEventListener('click',()=>showProductPriceDetail(group,meta));
  picture.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showProductPriceDetail(group,meta)}});
  card.append(picture);
- // Try only barcode-based imagery; fallback remains a plainly labelled illustration.
- realImage(picture,code);
  const info=node('div','catalog-content grocery-info');
  info.append(node('h3','catalog-title',known?known.name:foodRuTitle(title,meta)));
  const original=node('div','catalog-sub grocery-original',title);original.dir='auto';info.append(original);
@@ -863,11 +861,11 @@ function makeCompactFood(group,meta){
   if(best.date)info.append(node('div','grocery-date','Цена от '+best.date));
  }else info.append(node('div','grocery-price','Цена не получена'));
  const actions=node('div','catalog-actions grocery-actions');
- const view=node('button','action primary','📷 Фото · товар · цена');
+ const view=node('button','action primary','📷 Открыть товар');
  view.type='button';view.addEventListener('click',()=>showProductPriceDetail(group,meta));
  actions.append(view);
  if(known&&offers.some(o=>known.chain==='Rami Levy'&&shopChoice(o.shop)?.id==='rami'))
-  actions.append(action('🛒 Открыть товар в Рами Леви',known.url,false));
+  actions.append(action('🛒 Страница этого товара в Рами Леви',known.url,false));
  info.append(actions);card.append(info);return card;
 }
 
@@ -893,7 +891,10 @@ function renderMarket(groups,meta,cityText){
    });
    return {...group,offers};
   }).filter(group=>group.offers.length||selected==='all');
-  visible=data.sort((a,b)=>(actualStorePage(b.code)?1:0)-(actualStorePage(a.code)?1:0)||((a.offers[0]?.price??Infinity)-(b.offers[0]?.price??Infinity)));
+  visible=data.sort((a,b)=>{
+   const fishRank=g=>meta.salmon?(/פילה|פילט|פלט|fillet|filet/i.test(g.name)?0:/סטייק|steak|נתח|פרוס/i.test(g.name)?1:2):0;
+   return fishRank(a)-fishRank(b)||((a.offers[0]?.price??Infinity)-(b.offers[0]?.price??Infinity));
+  });
   position=0;root.replaceChildren();if(more){more.remove();more=null}
   toolbar.replaceChildren();
   for(const choice of choices){
@@ -928,7 +929,7 @@ function previousKnownChicken(meta){
 }
 async function loadFood(mySeq,q,translatedTerm){
  setText('heading','🛒 Продукты и цены');
- setText('subtitle','Такие же карточки, как в технике: фото по штрихкоду, название, цена, конкретный магазин.');
+ setText('subtitle','Конкретные товары и цены в магазинах. Чужие фотографии вместо товара не показываем.');
  const isChicken=has(q.toLowerCase(),words.chicken);
  if(isChicken)setFilters([['all','🍗 Вся курица'],['whole','Целая'],['breast','Грудка'],['thigh','Бёдра'],['drum','Голени'],['wing','Крылья']]);
  const meta=filteredFood(q);
