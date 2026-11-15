@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/ohotnik-universal-index.yml'
       - 'ohotnik/tools/build_public_index.py'
+      - 'ohotnik/tools/check_public_index.py'
   schedule:
     - cron: '18 4,16 * * *'
 permissions:
@@ -23,6 +24,18 @@ jobs:
           python-version: '3.11'
       - name: Build index from permitted public product sitemaps
         run: python -u ohotnik/tools/build_public_index.py
+      - name: Verify merchant ownership, prices and direct links
+        run: python -u ohotnik/tools/check_public_index.py
+      - name: Check storefront JavaScript syntax
+        run: |
+          node <<'JS'
+          const fs = require('fs');
+          const html = fs.readFileSync('ohotnik/index.html', 'utf8');
+          const m = html.match(/<script>([\s\S]*?)<\/script>/);
+          if (!m) throw new Error('No inline application script');
+          new Function(m[1]);
+          console.log('UI JavaScript syntax OK');
+          JS
       - name: Publish searchable product index
         run: |
           if git diff --quiet -- ohotnik/catalog-auto.json; then
