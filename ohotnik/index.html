@@ -249,14 +249,14 @@ function foodRelevant(p,meta){
  if(meta.chicken){
    if(!/(עוף|עופות|פרגית|חזה|כרע|שוקי|כנפ|chicken|куриц)/.test(n))return false;
    // Строго мясо: исключаем блюда, полуфабрикаты, корм и продукты «со вкусом курицы».
-   if(/טעם|בטעם|נודל|מרק|אבקה|חטיף|מזון|חתול|כלב|קוביות|תיבול|פסטה|נקניק|קציצ|שניצל|המבורגר|בורגר|פסטרמה|מעושן|סלט|תערובת|מוכן|קורנפלקס|טבעול|snack|noodle|soup|sausage|nugget|корм|лапша|суп|сосиск|котлет/.test(n))return false;
+   if(/טעם|בטעם|נודל|מרק|אבקה|חטיף|מזון|חתול|כלב|קוביות|תיבול|פסטה|נקניק|קציצ|שניצל|המבורגר|בורגר|פסטרמה|מעושן|סלט|תערובת|מוכן|קורנפלקס|טבעול|אמנון|סלמון|דג|snack|noodle|soup|sausage|nugget|tilapia|fish|корм|лапша|суп|сосиск|котлет|рыба/.test(n))return false;
    if(variation==='breast'&&!/חזה|breast|груд/.test(n))return false;
    if(variation==='whole'&&!/שלם|whole|цел/.test(n))return false;
    if(variation==='thigh'&&!/כרע|ירך|thigh|бедр/.test(n))return false;
    if(variation==='drum'&&!/שוק|drum|голен/.test(n))return false;
    if(variation==='wing'&&!/כנפ|wing|крыл/.test(n))return false;
  }
- if(meta.salmon&&/טעם|בטעם|מזון|חתול|כלב|חטיף|מרק|פסטה/.test(n))return false;
+ if(meta.salmon&&(/טעם|בטעם|מזון|חתול|כלב|חטיף|מרק|פסטה|מיקס|סלט|גבינה|קציצ|פאוץ|ממרח|תיבול/.test(n)||!/סלמון|salmon|лосос|семг/.test(n)))return false;
  return true;
 }
 function productLabel(name,meta){
