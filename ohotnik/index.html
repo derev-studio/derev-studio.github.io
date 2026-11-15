@@ -376,7 +376,7 @@ html[data-theme="beige"] .hero .beta-note{
 </select></label>
 </div>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 59</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 60</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -452,14 +452,14 @@ const el=id=>document.getElementById(id);
 const query=el('query'), city=el('city'), res=el('results'), filters=el('filters');
 let chosen='auto', seq=0, variation='all';
 const words={
- chicken:['куриц','цыплен','chicken','עוף','פרגית'],
- salmon:['лосос','сёмг','семг','salmon','סלמון'],
- free:['отдам','даром','подарю','бесплатн','למסירה','חינם'],
- help:['помощ','бесплатная еда','продуктовая помощь','продукты бесплатно'],
- dating:['женщин','мужчин','знакомств','девушк','мужчин','ищу пару','dating'],
- pets:['собак','кошк','кошеч','котён','котен','котят','котика','щенк','питомц','питомец','приют для животн','adopt a dog','adopt a cat','pet adoption','puppy adoption','kitten adoption','adopt dog','adopt cat','כלב','חתול','אימוץ','חיות מחמד','בעלי חיים לאימוץ'],
- housing:['аренд','квартир','жиль','недвижим','снять дом','купить дом','комнату','комнаты в аренду','снять комнат','ипотек','real estate','apartment','housing','flat for rent','rent a room','דירה','דירות','נדלן','נדל״ן','השכרה','למכירה'],
- organicStore:['ницат','ницан','ницат ха','дубдеван','дувдеван','nizat','ניצת הדובדבן','магазин три вишни','магазин с вишенками','organic shop tiberias'],
+ chicken:['куриц','цыплен','chicken','עוף','פרגית','دجاج','فروج'],
+ salmon:['лосос','сёмг','семг','salmon','סלמון','سلمون'],
+ free:['отдам','даром','подарю','бесплатн','למסירה','חינם','للتبرع','أشياء مجانية'],
+ help:['помощ','бесплатная еда','продуктовая помощь','продукты бесплатно','مساعدة','مساعدات','طعام مجاني'],
+ dating:['женщин','мужчин','знакомств','девушк','мужчин','ищу пару','dating','تعارف','التعارف','بحث عن شريك'],
+ pets:['собак','кошк','кошеч','котён','котен','котят','котика','щенк','питомц','питомец','приют для животн','adopt a dog','adopt a cat','pet adoption','puppy adoption','kitten adoption','adopt dog','adopt cat','כלב','חתול','אימוץ','חיות מחמד','בעלי חיים לאימוץ','تبني قطة','تبني كلب','حيوانات أليفة','كلب','قطط','قطة'],
+ housing:['аренд','квартир','жиль','недвижим','снять дом','купить дом','комнату','комнаты в аренду','снять комнат','ипотек','real estate','apartment','housing','flat for rent','rent a room','דירה','דירות','נדלן','נדל״ן','השכרה','למכירה','شقة','شقق','سكن','إيجار','عقار','بيع بيت','استئجار غرفة'],
+ organicStore:['ницат','ницан','ницат ха','дубдеван','дувдеван','nizat','ניצת הדובדבן','магазин три вишни','магазин с вишенками','organic shop tiberias','نيتسات','نيتسات هَدوفدفان'],
  market:['вторничн','верхний рынок','выездной рынок','рынок по вторникам','тверия илит рынок','tuesday market tiberias','שוק נודד','שוק יום שלישי','سوق الثلاثاء في طبريا','السوق المتنقل'],
  tech:['дрел','принтер','кабел','монитор','ноутбук','ксерокс','шурупов','техник','bosch','makita','xerox']
 };
@@ -473,14 +473,14 @@ function mode(q){
  if(has(t,words.market))return 'market';
  if(has(t,words.housing))return 'housing';
  // Pet-food or pet-accessory queries should remain product searches.
- const petSupplies=/(?:корм|лакомств|игрушк|поводок|ошейник|лоток|наполнитель|клетк|переноск|шампун|ветеринар|dog food|cat food|pet food|collar|leash|pet toy|מזון|אוכל לכלב|אוכל לחתול|רצועה|קולר)/.test(t);
+ const petSupplies=/(?:корм|лакомств|игрушк|поводок|ошейник|лоток|наполнитель|клетк|переноск|шампун|ветеринар|dog food|cat food|pet food|collar|leash|pet toy|מזון|אוכל לכלב|אוכל לחתול|רצועה|קולר|طعام|أكل|علف|قلادة|طوق|مقود)/.test(t);
  if(has(t,words.pets)&&!petSupplies)return 'pets';
  if(has(t,words.free))return 'free';
  if(/форел|форель|кибуц дан|киббуц дан|кибуц дан|forel|trout|פורל|דגי דן|קיבוץ דן/.test(t))return 'food';
  // Слова в названиях бытовой техники не должны превращаться в продукты.
  if(/кофемашин|кофеварк|водонагревател|мясорубк|соковыжимал|рыболов|корм для|корм собак|корм кош|электрогрил|морозильник|молокоотсос/.test(t))return 'tech';
  // Продукты питания определяются явно. Все прочие покупки — товары, не продукты.
- const foodWords=['куриц','цыплен','лосос','сёмг','семг','рыб','молок','яйц','яйк','хлеб','кофе','сыр','помидор','огур','карто','масло','сахар','рис','мяс','колбас','йогурт','кетчуп','макарон','овощ','фрукт','яблок','банан','виноград','апельсин','йогур','сок','вода','воды','шоколад','форел','конфет','печень','грудка','бедро','голень','супермаркет','магазин еды','круп','творог','греч','йогурт','chicken','salmon','fish','milk','bread','cheese','tomato','egg','rice','coffee','potato','meat','sugar','apple','banana','yogurt','orange','vegetable','fruit','chocolate'];
+ const foodWords=['куриц','цыплен','лосос','сёмг','семг','рыб','молок','яйц','яйк','хлеб','кофе','сыр','помидор','огур','карто','масло','сахар','рис','мяс','колбас','йогурт','кетчуп','макарон','овощ','фрукт','яблок','банан','виноград','апельсин','йогур','сок','вода','воды','шоколад','форел','конфет','печень','грудка','бедро','голень','супермаркет','магазин еды','круп','творог','греч','йогурт','chicken','salmon','fish','milk','bread','cheese','tomato','egg','rice','coffee','potato','meat','sugar','apple','banana','yogurt','orange','vegetable','fruit','chocolate','دجاج','سلمون','سمك','حليب','خبز','جبنة','جبن','بيض','أرز','قهوة','بطاطا','لحم','سكر','تفاح','موز','لبن','زبادي','خضار','فاكهة','شوكولاتة','طماطم','خيار','ماء','زيت','طحين'];
  if(has(t,foodWords)||/[א-ת]/.test(t)&&/(עוף|חלב|לחם|גבינה|סלמון|בשר|דג)/.test(t))return 'food';
  return 'tech';
 }
@@ -520,8 +520,8 @@ function filteredFood(q){
   const names={all:'עוף',whole:'עוף שלם',breast:'חזה עוף',thigh:'כרעיים עוף',drum:'שוקיים עוף',wing:'כנפיים עוף'};
   return {term:names[variation]||'עוף',chicken:true};
  }
- if(salmon)return {term:/филе|fillet|filet|פילה/i.test(t)?'פילה סלמון':'סלמון',salmon:true,fillet:/филе|fillet|filet|פילה/i.test(t)};
- const dict=[['сливочное масло','חמאה'],['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז'],['йогурт','יוגורט'],['макарон','פסטה'],['яблок','תפוח'],['банан','בננה'],['сок','מיץ'],['шоколад','שוקולד'],['печень','ביסקוויט'],['вод','מים'],['колбас','נקניק'],['творог','קוטג'],['сливочное масло','חמאה'],['хумус','חומוס'],['milk','חלב'],['bread','לחם'],['egg','ביצים'],['cheese','גבינה'],['tomato','עגבניות'],['potato','תפוח אדמה'],['rice','אורז'],['coffee','קפה'],['sugar','סוכר'],['meat','בשר'],['chocolate','שוקולד'],['banana','בננה'],['apple','תפוח'],['yogurt','יוגורט'],['fish','דג']];
+ if(salmon)return {term:/филе|fillet|filet|פילה|فيليه|فيلية/i.test(t)?'פילה סלמון':'סלמון',salmon:true,fillet:/филе|fillet|filet|פילה|فيليه|فيلية/i.test(t)};
+ const dict=[['сливочное масло','חמאה'],['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז'],['йогурт','יוגורט'],['макарон','פסטה'],['яблок','תפוח'],['банан','בננה'],['сок','מיץ'],['шоколад','שוקולד'],['печень','ביסקוויט'],['вод','מים'],['колбас','נקניק'],['творог','קוטג'],['сливочное масло','חמאה'],['хумус','חומוס'],['milk','חלב'],['bread','לחם'],['egg','ביצים'],['cheese','גבינה'],['tomato','עגבניות'],['potato','תפוח אדמה'],['rice','אורז'],['coffee','קפה'],['sugar','סוכר'],['meat','בשר'],['chocolate','שוקולד'],['banana','בננה'],['apple','תפוח'],['yogurt','יוגורט'],['fish','דג'],['حليب','חלב'],['خبز','לחם'],['بيض','ביצים'],['جبنة','גבינה'],['جبن','גבינה'],['طماطم','עגבניות'],['خيار','מלפפון'],['بطاطا','תפוח אדמה'],['أرز','אורז'],['قهوة','קפה'],['سكر','סוכר'],['لحم','בשר'],['شوكولاتة','שוקולד'],['موز','בננה'],['تفاح','תפוח'],['لبن','יוגורט'],['زبادي','יוגורט'],['سمك','דג'],['ماء','מים'],['زيت','שמן'],['طحين','קמח']];
  for(const [ru,he] of dict)if(t.includes(ru))return {term:he};
  return {term:q};
 }
@@ -1618,14 +1618,17 @@ function showCatalogResult(products,q,failed){
 // merchant product titles: a translation alone never creates a product.
 const productTranslations=new Map();
 function translateProductName(q){
- if(!/[а-яё]/i.test(q)||q.length>95)return Promise.resolve(null);
+ if(!/[а-яё\u0600-\u06ff]/i.test(q)||q.length>95)return Promise.resolve(null);
+ const input=q.toLowerCase().trim();
+ const commonArabic={'مثقاب':'מקדחה','دريل':'מקדחה','مفك':'מברג','طابعة':'מדפסת','سلك تمديد':'כבל מאריך','حقيبة ظهر':'תיק גב','حاسوب محمول':'מחשב נייד','لابتوب':'מחשב נייד','شاشة':'מסך','مقبس كهربائي':'שקע חשמל'};
+ if(commonArabic[input])return Promise.resolve(commonArabic[input]);
  if(productTranslations.has(q))return productTranslations.get(q);
  const promise=(async()=>{
   const ctrl=new AbortController(),timeout=setTimeout(()=>ctrl.abort(),6500);
   try{
    const u=new URL('https://api.mymemory.translated.net/get');
    u.searchParams.set('q',q);
-   u.searchParams.set('langpair','ru|he');
+   u.searchParams.set('langpair',/[ء-ي]/.test(q)?'ar|he':'ru|he');
    const r=await fetch(u,{signal:ctrl.signal,mode:'cors'});
    if(!r.ok)return null;
    const data=await r.json();
@@ -1721,7 +1724,7 @@ function showOrganic(){
 function showTuesdayMarket(){
  setText('heading','🌷 Вторничный рынок · Верхняя Тверия');
  setText('subtitle','Выездной рынок в Тверии-Илит (טבריה עילית), по вторникам, возле зала «Уламей Хен» (אולמי חן).');
- const marketMap='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('אולמי חן טבריה עילית');
+ const marketMap='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('אולמי חן אור חיים 25 טבריה עילית');
  grid([
   card('שוק נודד בטבריה עילית · выездной рынок',
    'Цветы и растения, одежда, сумки, игрушки, текстиль и товары для дома. Ассортимент меняется.',[
