@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#172b47">
+<meta name="description" content="Охотник за скидками — поиск продуктов, товаров, бесплатных вещей и полезных услуг в Израиле">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Охотник за скидками — Александр Деревяшкин</title>
+<style>
+:root{color-scheme:light;--navy:#152943;--blue:#245f9c;--amber:#ffbd4b;--paper:#f3f6fa;--white:#fff;--text:#21344f;--gray:#60748e;--line:#dfe8f2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:16px;line-height:1.45}
+main{max-width:960px;margin:0 auto;padding:18px 16px 48px}
+header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:15px}
+.brand{font-weight:850;font-size:24px;letter-spacing:-.02em}
+.brand small{display:block;font-size:12px;font-weight:500;color:var(--gray)}
+.place{padding:8px 11px;background:white;border:1px solid var(--line);border-radius:10px;display:flex;gap:8px;align-items:center;font-weight:700;white-space:nowrap}
+.place input{font:inherit;border:0;max-width:110px;outline:0;background:white;color:var(--text)}
+.hero{background:linear-gradient(120deg,#162946,#304e7b);color:#fff;padding:27px;border-radius:24px}
+.hero h1{font-size:31px;line-height:1.16;margin:0 0 7px}
+.hero p{color:#d8e6f5;margin:0 0 16px}
+.search{display:flex;gap:10px}
+.search input{border:0;border-radius:12px;height:58px;padding:0 16px;font:inherit;font-size:22px;min-width:0;flex:1}
+button{font:inherit;cursor:pointer}
+.search button{background:var(--amber);border:0;border-radius:12px;font-weight:850;padding:0 24px;color:#162843;white-space:nowrap}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.tag{border:1px solid #b8c9df;background:white;border-radius:24px;padding:9px 13px;font-weight:700;color:#2b4a70}
+.hero .tag{background:#ffffff16;border-color:#ffffff50;color:#fff}
+.tag.active{background:#245e9b;border-color:#245e9b;color:#fff}
+section{margin-top:19px}
+h2{font-size:22px;margin:0 0 9px}
+.info{color:var(--gray);font-size:14px}
+.panel{background:var(--white);border:1px solid var(--line);border-radius:17px;padding:18px;margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.card{background:white;border:1px solid var(--line);border-radius:17px;padding:17px;display:flex;flex-direction:column;gap:8px;min-height:165px}
+.card h3{margin:0;font-size:17px;line-height:1.3}
+.card p{margin:0;color:var(--gray);font-size:13px;flex:1}
+.pill{font-size:12px;color:#4d6a8e;font-weight:750}
+.card .actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:5px}
+.action{border:1px solid #c4d8ee;border-radius:9px;padding:10px 12px;display:inline-block;text-decoration:none;color:#1e5184;background:#eaf3ff;font-weight:750;font-size:13px;white-space:normal}
+.action.primary{background:#235f9b;color:#fff;border-color:#235f9b}
+.action:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #f39e1b;outline-offset:2px}
+button.action{font:inherit;font-size:13px;font-weight:750}
+.message{padding:14px;border-radius:13px;background:#fff;border:1px solid var(--line);margin-top:12px;color:var(--gray)}
+.message.warn{background:#fff9ed;border-color:#f0d9aa;color:#765326}
+.result{display:flex;flex-direction:column;gap:10px}
+.priceitem{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px}
+.priceitem strong{font-size:18px}
+.priceitem small{display:block;color:var(--gray);margin-top:4px}
+.priceitem .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+#results{min-height:70px}
+footer{text-align:center;color:#677a92;font-size:13px;padding-top:24px}
+footer strong{color:#2b4364}
+.hidden{display:none}
+@media(max-width:580px){main{padding:10px 10px 35px}.brand{font-size:19px}.place input{max-width:78px}.place{font-size:13px}.hero{padding:19px 16px;border-radius:17px}.hero h1{font-size:25px}.search{flex-direction:column}.search input{height:54px;font-size:19px;flex:none}.search button{height:51px}.card{min-height:0}.grid{grid-template-columns:1fr}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · веб-версия</small></div>
+<label class="place">📍 <input id="city" aria-label="Город" value="Тверия"></label>
+</header>
+<div class="hero">
+<h1>Один поиск — всё, что нужно</h1>
+<p>Продукты, техника, бесплатные вещи, помощь и знакомства. Никуда не переходим без твоего нажатия.</p>
+<form class="search" id="search-form">
+<input id="query" placeholder="Например: курица, дрель, отдам даром" autocomplete="off" aria-label="Что ищем">
+<button type="submit">🔎 НАЙТИ</button>
+</form>
+<div class="tags" id="examples">
+<button class="tag" type="button" data-query="курица">🍗 Курица</button>
+<button class="tag" type="button" data-query="лосось">🐟 Лосось</button>
+<button class="tag" type="button" data-query="дрель">🔧 Дрель</button>
+<button class="tag" type="button" data-query="отдам даром">🎁 Даром</button>
+<button class="tag" type="button" data-query="бесплатная еда">🥗 Помощь</button>
+<button class="tag" type="button" data-query="женщины">❤️ Знакомства</button>
+</div>
+</div>
+<section><div class="tags" id="categories">
+<button type="button" class="tag active" data-type="auto">Все разделы</button>
+<button type="button" class="tag" data-type="food">🛒 Еда</button>
+<button type="button" class="tag" data-type="tech">🔧 Товары</button>
+<button type="button" class="tag" data-type="free">🎁 Бесплатно</button>
+<button type="button" class="tag" data-type="help">🥗 Помощь</button>
+<button type="button" class="tag" data-type="dating">❤️ Знакомства</button>
+</div></section>
+<section aria-live="polite" aria-atomic="false">
+<h2 id="heading">Что будем искать?</h2>
+<p class="info" id="subtitle">Выбери пример или напиши свой запрос.</p>
+<div id="filters" class="tags hidden"></div>
+<div id="results"><div class="message">Результаты появятся здесь, на нашем сайте. Ссылки на другие сайты открываются только по твоему желанию.</div></div>
+</section>
+<footer><strong>Создатель — Александр Деревяшкин</strong><div>Новые технологии и искусственный интеллект · Израиль</div><div>Цены и наличие меняются; перед покупкой проверяйте у продавца. Сайт не является магазином.</div></footer>
+</main>
+<script>
+(function(){
+'use strict';
+const el=id=>document.getElementById(id);
+const query=el('query'), city=el('city'), res=el('results'), filters=el('filters');
+let chosen='auto', seq=0, variation='all';
+const words={
+ chicken:['куриц','цыплен','chicken','עוף','פרגית'],
+ salmon:['лосос','сёмг','семг','salmon','סלמון'],
+ free:['отдам','даром','подарю','бесплатн','למסירה','חינם'],
+ help:['помощ','бесплатная еда','продуктовая помощь','продукты бесплатно'],
+ dating:['женщин','мужчин','знакомств','девушк','мужчин','ищу пару','dating'],
+ tech:['дрел','принтер','кабел','монитор','ноутбук','ксерокс','шурупов','техник','bosch','makita','xerox']
+};
+function has(t,arr){return arr.some(x=>t.includes(x))}
+function mode(q){
+ if(chosen!=='auto')return chosen;
+ const t=q.toLowerCase();
+ if(has(t,words.help))return 'help';
+ if(has(t,words.dating))return 'dating';
+ if(has(t,words.free))return 'free';
+ if(has(t,words.tech))return 'tech';
+ return 'food';
+}
+function setText(id,t){el(id).textContent=t}
+function clear(){res.replaceChildren();filters.replaceChildren();filters.classList.add('hidden')}
+function node(tag,cl,txt){let x=document.createElement(tag);if(cl)x.className=cl;if(txt!=null)x.textContent=txt;return x}
+function action(caption,url,primary){
+ if(!/^https:\/\//.test(url))return node('span','pill','Нет адреса сайта');
+ const a=node('a','action'+(primary?' primary':''),caption);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a;
+}
+function card(title,desc,links,badge){
+ const c=node('div','card');if(badge)c.append(node('div','pill',badge));c.append(node('h3','',title));
+ c.append(node('p','',desc));const bar=node('div','actions');for(const l of links)bar.append(action(l[0],l[1],!!l[2]));c.append(bar);return c;
+}
+function grid(cards){const g=node('div','grid');cards.forEach(c=>g.append(c));res.append(g)}
+function message(t,warn){res.append(node('div','message'+(warn?' warn':''),t))}
+function map(name){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+' '+city.value+' Israel')}
+function setFilters(options){
+ filters.classList.remove('hidden');
+ for(const o of options){let b=node('button','tag'+(variation===o[0]?' active':''),o[1]);b.type='button';b.addEventListener('click',()=>{variation=o[0];search()});filters.append(b)}
+}
+function filteredFood(q){
+ let t=q.toLowerCase();
+ const chicken=has(t,words.chicken), salmon=has(t,words.salmon);
+ if(chicken){
+  const names={all:'עוף',whole:'עוף שלם',breast:'חזה עוף',thigh:'כרעיים עוף',drum:'שוקיים עוף',wing:'כנפיים עוף'};
+  return {term:names[variation]||'עוף',chicken:true};
+ }
+ if(salmon)return {term:'סלמון',salmon:true};
+ const dict=[['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז']];
+ for(const [ru,he] of dict)if(t.includes(ru))return {term:he};
+ return {term:q};
+}
+function extractRows(d){
+ if(Array.isArray(d))return d;
+ const keys=['products','items','results','rows','data','product_groups'];
+ for(const k of keys){if(Array.isArray(d?.[k]))return d[k];if(d?.[k]&&typeof d[k]==='object'){
+   const v=Object.values(d[k]);if(v.length&&v.every(x=>x&&typeof x==='object'))return v;
+ }}
+ return [];
+}
+function titleOf(p){
+ for(const k of ['item_name','product_name','name','title','itemName','description','display_name'])if(typeof p[k]==='string'&&p[k].length>1)return p[k];
+ for(const k of ['names','product_names','chain_names'])if(Array.isArray(p[k]))return typeof p[k][0]==='string'?p[k][0]:JSON.stringify(p[k][0]||'');
+ return 'Продукт из базы цен';
+}
+function codeOf(p){return p.item_code||p.item_code_bare||p.barcode||p.code||p.id||''}
+function foodRelevant(p,meta){
+ let n=titleOf(p).toLowerCase();
+ if(meta.chicken){
+  if(!/(עוף|עופות|פרגית|חזה|כרע|שוק|כנפ|chicken|куриц)/.test(n))return false;
+  if(/טעם|בטעם|נודל|מרק|אבקה|חטיף|מזון לבעלי|חתול|כלב|קוביות מרק|תיבול|פסטה|snack|noodle|soup|корм|лапша|суп/.test(n))return false;
+  if(variation==='breast'&&!/חזה|breast|груд/.test(n))return false;
+  if(variation==='whole'&&!/שלם|whole|цел/.test(n))return false;
+  if(variation==='thigh'&&!/כרע|ירך|thigh|бедр/.test(n))return false;
+  if(variation==='drum'&&!/שוק|drum|голен/.test(n))return false;
+  if(variation==='wing'&&!/כנפ|wing|крыл/.test(n))return false;
+ }
+ if(meta.salmon&&/טעם|בטעם|מזון לבעלי|חתול|כלב|חטיף/.test(n))return false;
+ return true;
+}
+async function loadFood(mySeq,q){
+ setText('heading','Продукты и цены');setText('subtitle','Поиск продуктов в прайс-листах израильских сетей. Магазины открываются только по твоему нажатию.');
+ if(has(q.toLowerCase(),words.chicken)){setFilters([['all','🍗 Всё мясо'],['whole','Целая'],['breast','Грудка'],['thigh','Бёдра'],['drum','Голени'],['wing','Крылья']]);}
+ const meta=filteredFood(q);
+ message('Проверяю опубликованные цены. Если сайт данных не разрешит загрузку, покажу магазины отдельно.');
+ let loaded=false;
+ try{
+  const ctl=new AbortController();const timeout=setTimeout(()=>ctl.abort(),14000);
+  let response;
+  try{response=await fetch('https://www.over.org.il/api/prices/products?q='+encodeURIComponent(meta.term),{signal:ctl.signal,mode:'cors',cache:'no-store'})}
+  finally{clearTimeout(timeout)}
+  if(!response.ok)throw Error('HTTP '+response.status);
+  const json=await response.json();if(seq!==mySeq)return;
+  const products=extractRows(json).filter(p=>foodRelevant(p,meta)).slice(0,12);
+  res.replaceChildren();loaded=true;
+  if(products.length){
+   res.append(node('div','message','Найдены названия товаров в открытой базе. Чтобы увидеть актуальную цену, нажми «Сравнить цены» у нужного товара.'));
+   const root=node('div','result');
+   for(const p of products){
+    const item=node('div','priceitem'),title=titleOf(p),code=String(codeOf(p));
+    item.append(node('strong','',title));item.append(node('small','','Штрихкод: '+(code||'не указан')));
+    const buttons=node('div','actions');
+    if(code){const btn=node('button','action primary','Сравнить цены');btn.type='button';btn.addEventListener('click',()=>comparePrices(code,item,btn));buttons.append(btn)}
+    buttons.append(action('📍 Супермаркеты на карте',map('סופרמרקט')));
+    item.append(buttons);root.append(item);
+   }res.append(root);
+  }else{message('Подходящих товаров в ответе базы пока нет. Показываю магазины, где можно проверить ассортимент.',true)}
+ }catch(e){if(seq!==mySeq)return;res.replaceChildren();message('Сейчас не удалось получить товары из открытой базы. Это не значит, что товаров нет. Полный поиск внутри сайта потребует отдельного сервера цен.',true)}
+ if(seq!==mySeq)return;
+ res.append(node('h2','',loaded?'Супермаркеты поблизости':'Где искать в магазинах'));
+ const shops=[
+  ['Рами Леви','Открой магазин на карте и уточни наличие товара.','https://www.rami-levy.co.il/'],
+  ['Йохананов','Ассортимент и цены зависят от филиала.','https://www.yochananof.co.il/'],
+  ['Шуферсаль','Проверка в магазине или его интернет-каталоге.','https://www.shufersal.co.il/'],
+  ['Карфур','Проверка ближайшего филиала.','https://www.carrefour.co.il/']
+ ];
+ grid(shops.map(s=>card(s[0],s[1],[['📍 На карте',map(s[0])],['Сайт магазина',s[2]]],'Магазин')));
+}
+function flattenPrices(obj,depth){
+ if(depth>5||!obj||typeof obj!=='object')return [];
+ if(Array.isArray(obj))return obj.flatMap(x=>flattenPrices(x,depth+1));
+ let out=[];
+ if((typeof obj.price==='number'||typeof obj.min_price==='number')&&(obj.chain||obj.chain_name||obj.store||obj.store_name||obj.cheapest_store))out.push(obj);
+ for(const [k,v] of Object.entries(obj))if(typeof v==='object'&&v!==null)out=out.concat(flattenPrices(v,depth+1));
+ return out.slice(0,25);
+}
+async function comparePrices(code,item,btn){
+ btn.disabled=true;btn.textContent='Получаю цены…';
+ const block=node('div','',null);item.append(block);
+ try{
+  const controller=new AbortController();let timeout=setTimeout(()=>controller.abort(),14000);
+  let response;
+  try{response=await fetch('https://www.over.org.il/api/prices/compare?item_code='+encodeURIComponent(code)+'&city='+encodeURIComponent(city.value.toLowerCase().startsWith('твер')?'טבריה':city.value)+'&top=10',{signal:controller.signal,mode:'cors'})}
+  finally{clearTimeout(timeout)}
+  if(!response.ok)throw Error('HTTP '+response.status);
+  const payload=await response.json();
+  const rows=flattenPrices(payload,0);
+  if(rows.length){
+   for(const x of rows.slice(0,8)){
+    const price=x.price??x.min_price;const name=x.store_name||x.chain_name||x.store||x.chain||x.cheapest_store||'Магазин';
+    if(price===undefined)continue;
+    block.append(node('div','message',name+' — '+Number(price).toLocaleString('ru-RU')+' ₪ · дата актуальности по данным источника'));
+   }
+  }else block.append(node('div','message','База ответила, но цены по этому городу не найдены. Не будем придумывать цену.'));
+ }catch(e){block.append(node('div','message warn','Цены сейчас не загрузились. Возможна блокировка запросов из браузера — для стабильного поиска нужен сервер.'))}
+ finally{btn.textContent='Проверить ещё раз';btn.disabled=false}
+}
+function showTech(q){
+ setText('heading','Товары и техника');setText('subtitle','Показываю магазины и карту. Точных цен не выдумываю — без разрешённого подключения к каталогам они недоступны.');
+ const stores=[['KSP','Техника, принтеры, инструменты','https://ksp.co.il/'],['Ivory','Электроника и компьютерная техника','https://www.ivory.co.il/'],['Home Center','Инструменты и хозяйственные товары','https://www.homecenter.co.il/']];
+ grid(stores.map(s=>card(s[0],s[1],[['🛒 Каталог магазина',s[2],true],['📍 На карте',map(s[0])]],'По запросу: '+q)));
+ message('Пока магазин не предоставляет нам каталог через API, карточку конкретной дрели с ценой нельзя честно показать внутри сайта.',true);
+}
+function showFree(){
+ setText('heading','Отдам даром');setText('subtitle','Настоящие объявления о вещах, которые люди отдают бесплатно.');
+ grid([
+  card('Agora — Агóра','Израильская площадка бесплатных вещей.',['https://www.agora.co.il/'].map(x=>['🎁 Смотреть объявления',x,true]),'Без покупки'),
+  card('LeMesira','Объявления о вещах для передачи другим людям.',[['Открыть объявления','https://lemesira.co.il/',true]],'Бесплатные вещи')
+ ]);
+ message('Сами объявления принадлежат другим сайтам; без открытого интерфейса их нельзя автоматически копировать сюда. Не публикуем вымышленные предложения.');
+}
+function showHelp(){
+ setText('heading','Бесплатная еда и помощь');setText('subtitle','Пункты помощи могут менять расписание и условия выдачи.');
+ grid([
+  card('Меир Паним','Социальная помощь и питание. Уточняй условия и время.',[['📍 На карте',map('מאיר פנים')]],'Помощь'),
+  card('Хабад','Общественные программы помощи, условия надо уточнять.',[['📍 На карте',map('חב"ד')]],'Помощь'),
+  card('Социальные службы','Узнать, какие программы доступны в твоём городе.',[['📍 На карте',map('לשכת רווחה')]],'Помощь')
+ ]);
+}
+function showDating(q){
+ setText('heading','Знакомства · женщины и мужчины');
+ setText('subtitle','Здесь только настоящие сервисы знакомств. Их анкеты нельзя показывать без разрешения и авторизации.');
+ setFilters([['women','👩 Ищу женщину'],['men','👨 Ищу мужчину']]);
+ if(variation==='all')variation=has(q.toLowerCase(),['мужчин'])?'men':'women';
+ grid([
+  card('2Date — знакомства в Израиле','Сервис заявляет, что публичные анкеты можно смотреть без регистрации, а переписываться бесплатно.',[['❤️ Открыть анкеты','https://2date.co.il/',true]],variation==='men'?'Поиск мужчин':'Поиск женщин'),
+  card('OkCupid','Профили и фильтры знакомства доступны по правилам самого сервиса.',[['❤️ Перейти к знакомствам','https://www.okcupid.com/',true]],'Израиль'),
+  card('Bumble','Знакомства и анкеты внутри сервиса после входа.',[['❤️ Перейти к знакомствам','https://bumble.com/',true]],'Израиль')
+ ]);
+ message('Фотографии конкретных людей появятся только там, где сервис разрешает их просмотр. Чужие анкеты без согласия мы не копируем.');
+}
+async function search(){
+ const q=query.value.trim();if(!q){query.focus();return}
+ const mySeq=++seq;clear();
+ const type=mode(q);
+ if(type==='food')return loadFood(mySeq,q);
+ if(type==='tech')return showTech(q);
+ if(type==='free')return showFree();
+ if(type==='help')return showHelp();
+ if(type==='dating')return showDating(q);
+}
+el('search-form').addEventListener('submit',e=>{e.preventDefault();variation='all';search()});
+el('examples').addEventListener('click',e=>{const b=e.target.closest('[data-query]');if(!b)return;query.value=b.dataset.query;chosen='auto';variation='all';document.querySelectorAll('#categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='auto'));search()});
+el('categories').addEventListener('click',e=>{const b=e.target.closest('[data-type]');if(!b)return;chosen=b.dataset.type;document.querySelectorAll('#categories button').forEach(x=>x.classList.toggle('active',x===b));if(query.value.trim()){variation='all';search()}});
+const q=new URLSearchParams(location.search).get('q');if(q){query.value=q;search()}
+})();
+</script>
+</body></html>
