@@ -312,7 +312,7 @@ html:is([data-theme="navy"],[data-theme="forest"]) .grocery-image img{background
 </select></label>
 </div>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 46</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 47</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -401,7 +401,7 @@ function mode(q){
  // Слова в названиях бытовой техники не должны превращаться в продукты.
  if(/кофемашин|кофеварк|водонагревател|мясорубк|соковыжимал|рыболов|корм для|корм собак|корм кош|электрогрил|морозильник|молокоотсос/.test(t))return 'tech';
  // Продукты питания определяются явно. Все прочие покупки — товары, не продукты.
- const foodWords=['куриц','цыплен','лосос','сёмг','семг','рыб','молок','яйц','яйк','хлеб','кофе','сыр','помидор','огур','карто','масло','сахар','рис','мяс','колбас','йогурт','кетчуп','макарон','овощ','фрукт','яблок','банан','виноград','апельсин','йогур','сок','вода','воды','шоколад','форел','конфет','печень','грудка','бедро','голень','супермаркет','магазин еды','круп','творог','греч','йогурт'];
+ const foodWords=['куриц','цыплен','лосос','сёмг','семг','рыб','молок','яйц','яйк','хлеб','кофе','сыр','помидор','огур','карто','масло','сахар','рис','мяс','колбас','йогурт','кетчуп','макарон','овощ','фрукт','яблок','банан','виноград','апельсин','йогур','сок','вода','воды','шоколад','форел','конфет','печень','грудка','бедро','голень','супермаркет','магазин еды','круп','творог','греч','йогурт','chicken','salmon','fish','milk','bread','cheese','tomato','egg','rice','coffee','potato','meat','sugar','apple','banana','yogurt','orange','vegetable','fruit','chocolate'];
  if(has(t,foodWords)||/[א-ת]/.test(t)&&/(עוף|חלב|לחם|גבינה|סלמון|בשר|דג)/.test(t))return 'food';
  return 'tech';
 }
@@ -442,7 +442,7 @@ function filteredFood(q){
   return {term:names[variation]||'עוף',chicken:true};
  }
  if(salmon)return {term:/филе|fillet|filet|פילה/i.test(t)?'פילה סלמון':'סלמון',salmon:true,fillet:/филе|fillet|filet|פילה/i.test(t)};
- const dict=[['сливочное масло','חמאה'],['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז'],['йогурт','יוגורט'],['макарон','פסטה'],['яблок','תפוח'],['банан','בננה'],['сок','מיץ'],['шоколад','שוקולד'],['печень','ביסקוויט'],['вод','מים'],['колбас','נקניק'],['творог','קוטג'],['сливочное масло','חמאה'],['хумус','חומוס']];
+ const dict=[['сливочное масло','חמאה'],['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז'],['йогурт','יוגורט'],['макарон','פסטה'],['яблок','תפוח'],['банан','בננה'],['сок','מיץ'],['шоколад','שוקולד'],['печень','ביסקוויט'],['вод','מים'],['колбас','נקניק'],['творог','קוטג'],['сливочное масло','חמאה'],['хумус','חומוס'],['milk','חלב'],['bread','לחם'],['egg','ביצים'],['cheese','גבינה'],['tomato','עגבניות'],['potato','תפוח אדמה'],['rice','אורז'],['coffee','קפה'],['sugar','סוכר'],['meat','בשר'],['chocolate','שוקולד'],['banana','בננה'],['apple','תפוח'],['yogurt','יוגורט'],['fish','דג']];
  for(const [ru,he] of dict)if(t.includes(ru))return {term:he};
  return {term:q};
 }
@@ -1215,6 +1215,10 @@ function inferredCategory(q){
 function searchHebrew(q){
  const t=q.toLowerCase();
  const dict=[
+ [/extension cord|power extension|extension cable|כבל מאריך/i,'כבל מאריך'],
+ [/power strip|multi.socket|multi plug|power bar|מפצל חשמל|רב שקע/i,'רב שקע'],
+ [/drill|hammer drill|מקדחה/i,'מקדחה'],
+ [/printer|laser printer|מדפסת/i,'מדפסת'],
  [/рюкзак|портфел|сумк|ранц|backpack/,'תיק גב'],
  [/отв[её]рт|screwdriver|מברג/,'מברג'],
  [/крестов[а-яё]*\s+отв[её]рт|отв[её]рт[а-яё]*\s+крестов/,'מברג פיליפס'],
@@ -1366,7 +1370,13 @@ function searchVariants(q){
  const trans=retailerQuery(raw);
  const he=searchHebrew(raw);
  const variants=[raw,trans,he].filter(Boolean);
+ if(/удлинител|extension cord|power strip|multi.socket|power bar|מפצל|רב שקע|כבל מאריך/i.test(raw)){
+  variants.push('רב שקע','כבל מאריך','מפצל חשמל');
+ }
  const synonyms=[
+  [/screwdriver/i,'מברג'],[/phillips screwdriver/i,'מברג פיליפס'],
+  [/extension cord|power strip|multi.socket|power bar/i,'רב שקע'],
+  [/drill/i,'מקדחה'],[/printer/i,'מדפסת'],[/backpack/i,'תיק גב'],
   [/молоток|молотки/i,'פטיש'],[/пила|пилы|ножовка/i,'מסור'],
   [/отв[её]рт/i,'מברג'],[/дюбел/i,'דיבל'],[/шуруп|винт|саморез/i,'בורג'],
   [/гайка/i,'אום'],[/рулетка/i,'מטר'],[/строительн.*уровень/i,'פלס'],
@@ -1734,8 +1744,13 @@ function translateVisible(){
   const active=button.dataset.lang===currentLang;
   button.setAttribute('aria-pressed',String(active));
  }
- document.getElementById('theme-label').textContent=currentLang==='en'?'🎨 Theme':currentLang==='he'?'🎨 ערכת נושא':'🎨 Тема';
- for(const [i,option] of [...document.querySelectorAll('#site-theme option')].entries())option.textContent=themeLabels[currentLang][i];
+ const label=document.getElementById('theme-label');
+ const labelText=currentLang==='en'?'🎨 Theme':currentLang==='he'?'🎨 ערכת נושא':'🎨 Тема';
+ if(label.textContent!==labelText)label.textContent=labelText;
+ for(const [i,option] of [...document.querySelectorAll('#site-theme option')].entries()){
+  const desired=themeLabels[currentLang][i];
+  if(option.textContent!==desired)option.textContent=desired;
+ }
 }
 let scheduled=false;
 function scheduleTranslation(){
