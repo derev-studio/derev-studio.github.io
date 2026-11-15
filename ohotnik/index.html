@@ -292,7 +292,7 @@ function filteredFood(q){
   return {term:names[variation]||'עוף',chicken:true};
  }
  if(salmon)return {term:/филе|fillet|filet|פילה/i.test(t)?'פילה סלמון':'סלמון',salmon:true,fillet:/филе|fillet|filet|פילה/i.test(t)};
- const dict=[['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז'],['йогурт','יוגורט'],['макарон','פסטה'],['яблок','תפוח'],['банан','בננה'],['сок','מיץ'],['шоколад','שוקולד'],['печень','ביסקוויט'],['вод','מים'],['колбас','נקניק'],['творог','קוטג'],['сливочное масло','חמאה'],['хумус','חומוס']];
+ const dict=[['сливочное масло','חמאה'],['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז'],['йогурт','יוגורט'],['макарон','פסטה'],['яблок','תפוח'],['банан','בננה'],['сок','מיץ'],['шоколад','שוקולד'],['печень','ביסקוויט'],['вод','מים'],['колбас','נקניק'],['творог','קוטג'],['сливочное масло','חמאה'],['хумус','חומוס']];
  for(const [ru,he] of dict)if(t.includes(ru))return {term:he};
  return {term:q};
 }
@@ -329,6 +329,14 @@ function foodRelevant(p,meta){
   if(meta.fillet&&!/פילה|fillet|filet|филе/.test(n))return false;
   if(/מיקס|סלט|תבלין|ממרח|בכוס|בטעם|אינסטנט|קציצ|פאוץ|גבינה|מרק|רוטב|נודל|תערובת|תיבול|מזון|חתול|כלב|חטיף|חטיפ|סושי מוכן|שימור|קופס|טונה|מעדן|mix|salad|sauce|spice|seasoning|canned|tin|корм|суп|соус|консерв/.test(n))return false;
  }
+ // For every other grocery query, require the actual requested product
+ // words inside the merchant's name. Broad API results (cosmetics, perfume,
+ // animal food or unrelated categories) must never leak into the cards.
+ if(!meta.chicken&&!meta.salmon){
+  const words=String(meta.term||'').toLowerCase().split(/\s+/).filter(Boolean);
+  if(words.length&&!words.every(word=>n.includes(word)))return false;
+ }
+
  return true;
 }
 function productLabel(name,meta){
