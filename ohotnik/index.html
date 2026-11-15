@@ -291,7 +291,7 @@ function filteredFood(q){
   const names={all:'עוף',whole:'עוף שלם',breast:'חזה עוף',thigh:'כרעיים עוף',drum:'שוקיים עוף',wing:'כנפיים עוף'};
   return {term:names[variation]||'עוף',chicken:true};
  }
- if(salmon)return {term:'סלמון',salmon:true};
+ if(salmon)return {term:/филе|fillet|filet|פילה/i.test(t)?'פילה סלמון':'סלמון',salmon:true,fillet:/филе|fillet|filet|פילה/i.test(t)};
  const dict=[['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז'],['йогурт','יוגורט'],['макарон','פסטה'],['яблок','תפוח'],['банан','בננה'],['сок','מיץ'],['шоколад','שוקולד'],['печень','ביסקוויט'],['вод','מים'],['колбас','נקניק'],['творог','קוטג'],['сливочное масло','חמאה'],['хумус','חומוס']];
  for(const [ru,he] of dict)if(t.includes(ru))return {term:he};
  return {term:q};
@@ -325,6 +325,8 @@ function foodRelevant(p,meta){
  }
  if(meta.salmon){
   if(!/סלמון|salmon|лосос|семг/.test(n))return false;
+  // Explicit "salmon fillet" requests must never turn into a generic fish item.
+  if(meta.fillet&&!/פילה|fillet|filet|филе/.test(n))return false;
   if(/מיקס|סלט|תבלין|ממרח|בכוס|בטעם|אינסטנט|קציצ|פאוץ|גבינה|מרק|רוטב|נודל|תערובת|תיבול|מזון|חתול|כלב|חטיף|חטיפ|סושי מוכן|שימור|קופס|טונה|מעדן|mix|salad|sauce|spice|seasoning|canned|tin|корм|суп|соус|консерв/.test(n))return false;
  }
  return true;
@@ -880,7 +882,7 @@ async function loadFood(mySeq,q){
  message('🔎 Ищу товары и цены…');
  let terms=[meta.term];
  if(isChicken&&variation==='all')terms=['עוף טרי','חזה עוף','עוף שלם','פרגיות'];
- if(meta.salmon)terms=['פילה סלמון','סלמון'];
+ if(meta.salmon)terms=meta.fillet?['פילה סלמון']:['פילה סלמון','סלמון'];
  let marketError=null;
  try{
   const searches=await Promise.allSettled(terms.map(term=>marketSearch(term,cityHe())));
@@ -1076,7 +1078,7 @@ function productPhoto(item,emoji){
  let u;
  try{u=new URL(src)}catch(e){return wrap}
  if(u.protocol!=='https:')return wrap;
- // Ссылки изображений получаем только из опубликованных карточек KSP
+ // Ссылки изображений получаем только из опубликованных карточек самого продавца
  const img=document.createElement('img');img.loading='lazy';img.alt='Фото товара: '+productRu(item,query.value);
  img.referrerPolicy='no-referrer';
  img.onload=()=>{ph.remove()};img.onerror=()=>{img.remove()};
@@ -1092,7 +1094,7 @@ function catalogCard(p,q){
  if(Number.isFinite(amount)&&amount>0){
    const prefix=p.price_is_from?'от ':'';
    content.append(node('div','catalog-price',prefix+amount.toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
- }else content.append(node('div','catalog-price','Цена не указана'));
+ }else content.append(node('div','catalog-price','Цена не получена'));
  if(p.in_stock===false)content.append(node('div','pill','Сейчас нет в наличии'));
  else if(p.in_stock===true)content.append(node('div','pill','В наличии у продавца (на дату проверки)'));
  const source=p.store||'Магазин';const dated=p.as_of?' · данные от '+p.as_of:' · дата не указана';
@@ -1337,7 +1339,7 @@ function showCatalogResult(products,q,failed){
   }
  }
  refresh();
- const note=node('p','info','Фотография и ссылка ведут к конкретному товару магазина. Цена появляется только там, где источник её подтвердил.');
+ const note=node('p','info','Название на иврите, фотографии и ссылки взяты из карточек продавцов. Цена появляется только там, где её подтвердил магазин. Город пока используется для карты: наличие в конкретном филиале не проверяется.');
  res.append(note);
  showStoreFallback(q,true);
  revealResults();
