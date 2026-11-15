@@ -151,12 +151,28 @@ footer strong{color:#2b4364}
 .grocery-detail-links a{font-size:12px;padding:8px}
 @media(max-width:580px){.grocery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.grocery-image{height:140px}.grocery-card{min-height:305px}.grocery-info{padding:11px;gap:7px}.grocery-info h3{font-size:14px}.grocery-price{font-size:21px}.grocery-actions .action,.grocery-actions button{min-width:0;font-size:12px;padding:9px 6px}.grocery-actions{flex-direction:column}}
 @media(max-width:350px){.grocery-grid{grid-template-columns:1fr}}
+
+.shop-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.shop-filter{background:#fff;border:1px solid #b9cce4;border-radius:20px;padding:9px 12px;color:#1f4e7e;font-weight:750;font-size:13px}
+.shop-filter.active{background:#245f9c;color:#fff}
+.farm-intro{font-size:14px;color:#536a85;margin:8px 0 15px}
+.farm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:13px}
+.farm-image{height:174px;position:relative;background:linear-gradient(125deg,#e5effa,#f6f9ff);display:grid;place-items:center;font-size:57px}
+.farm-image img{width:100%;height:100%;object-fit:contain;background:#fff;padding:6px}
+.farm-info{padding:15px;display:flex;flex-direction:column;gap:8px;flex:1}
+.farm-info h3{margin:0;font-size:17px}
+.farm-info .grocery-price{margin-top:auto}
+.farm-price-note{font-size:12px;color:#586d84}
+.farm-card{min-height:340px}
+.farm-card .action{display:block;text-align:center;margin-top:8px}
+@media(max-width:580px){.farm-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.farm-image{height:140px}.farm-info{padding:11px}.farm-info h3{font-size:14px}.farm-card{min-height:306px}}
+@media(max-width:360px){.farm-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 22</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 23</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
@@ -217,10 +233,11 @@ function mode(q){
  if(has(t,words.help))return 'help';
  if(has(t,words.dating))return 'dating';
  if(has(t,words.free))return 'free';
+ if(/форел|форель|кибуц дан|киббуц дан|кибуц дан|forel|trout|פורל|דגי דן|קיבוץ דן/.test(t))return 'food';
  // Слова в названиях бытовой техники не должны превращаться в продукты.
  if(/кофемашин|кофеварк|водонагревател|мясорубк|соковыжимал|рыболов|корм для|корм собак|корм кош|электрогрил|морозильник|молокоотсос/.test(t))return 'tech';
  // Продукты питания определяются явно. Все прочие покупки — товары, не продукты.
- const foodWords=['куриц','цыплен','лосос','сёмг','семг','рыб','молок','яйц','яйк','хлеб','кофе','сыр','помидор','огур','карто','масло','сахар','рис','мяс','колбас','йогурт','кетчуп','макарон','овощ','фрукт','яблок','банан','виноград','апельсин','йогур','сок','вода','воды','шоколад','конфет','печень','грудка','бедро','голень','супермаркет','магазин еды','круп','творог','греч','йогурт'];
+ const foodWords=['куриц','цыплен','лосос','сёмг','семг','рыб','молок','яйц','яйк','хлеб','кофе','сыр','помидор','огур','карто','масло','сахар','рис','мяс','колбас','йогурт','кетчуп','макарон','овощ','фрукт','яблок','банан','виноград','апельсин','йогур','сок','вода','воды','шоколад','форел','конфет','печень','грудка','бедро','голень','супермаркет','магазин еды','круп','творог','греч','йогурт'];
  if(has(t,foodWords)||/[א-ת]/.test(t)&&/(עוף|חלב|לחם|גבינה|סלמון|בשר|דג)/.test(t))return 'food';
  return 'tech';
 }
@@ -668,6 +685,67 @@ function foodRuTitle(name,meta){
  if(/קפוא/.test(n)&&!/заморож/i.test(result))result+=' · замороженный';
  return result;
 }
+
+// Проверенные страницы конкретных продуктов фермы Форель Дана, кибуц Дан.
+// Цены опубликованы на сайте продавца, за килограмм, если unit='кг'.
+const farmTroutProducts=[
+ {id:'white-whole',name:'Форель белая · целая очищенная',price:65,unit:'кг',url:'https://forel-dan.co.il/product/white-trout/',icon:'🐟',imageKey:'white-trout'},
+ {id:'white-fillet',name:'Форель белая · филе',price:95,unit:'кг',url:'https://forel-dan.co.il/product/white-trout/',icon:'🐟',imageKey:'white-trout'},
+ {id:'pink-whole',name:'Форель розовая · целая очищенная',price:68,unit:'кг',url:'https://forel-dan.co.il/product/pink-trout/',icon:'🐟',imageKey:'pink-trout'},
+ {id:'pink-fillet',name:'Форель розовая · филе',price:97,unit:'кг',url:'https://forel-dan.co.il/product/pink-trout/',icon:'🐟',imageKey:'pink-trout'},
+ {id:'family-whole',name:'Форель семейная · целая очищенная',price:72,unit:'кг',url:'https://forel-dan.co.il/shop/',icon:'🐟',imageKey:'family-trout'},
+ {id:'family-fillet',name:'Форель семейная · филе',price:104,unit:'кг',url:'https://forel-dan.co.il/shop/',icon:'🐟',imageKey:'family-trout'},
+ {id:'frozen-five',name:'Форель замороженная · набор',price:50,unit:'кг',url:'https://forel-dan.co.il/product/פורל-חמישיות-קפוא/',icon:'🐟',imageKey:'frozen-trout'},
+ {id:'smoked-fillet',name:'Форель · филе горячего копчения',price:160,unit:'кг',url:'https://forel-dan.co.il/product/פילה-פורל-מעושן/',icon:'🐟',imageKey:'smoked-trout'},
+ {id:'cold-smoked',name:'Форель холодного копчения · упаковка около 100 г',price:22,unit:'упаковка',url:'https://forel-dan.co.il/product/פורל-בעישון-קר/',icon:'🐟',imageKey:'cold-smoked-trout'}
+];
+let farmPhotosPromise=null;
+function farmPhotos(){
+ if(!farmPhotosPromise)farmPhotosPromise=fetch('./farm-photos.json',{cache:'no-cache'}).then(r=>r.ok?r.json():{}).catch(()=>({}));
+ return farmPhotosPromise;
+}
+function farmProductCard(p){
+ const card=node('article','grocery-card farm-card'),image=node('div','farm-image');
+ image.append(node('span','',p.icon));card.append(image);
+ farmPhotos().then(photos=>{
+  const src=photos[p.imageKey];
+  if(!image.isConnected||typeof src!=='string'||!/^https:\/\/forel-dan\.co\.il\//.test(src))return;
+  const img=document.createElement('img');img.alt='Фото товара '+p.name+' на сайте Форель Дана';
+  img.onload=()=>image.replaceChildren(img);
+  img.onerror=()=>{};
+  img.loading='lazy';img.src=src;
+ });
+ const info=node('div','farm-info');
+ info.append(node('h3','',p.name));
+ info.append(node('div','grocery-store','Магазин: Форель Дана · кибуц Дан'));
+ info.append(node('div','grocery-price',p.price+' ₪ / '+p.unit));
+ info.append(node('div','farm-price-note','Цена продавца · проверено 15.11.2026'));
+ info.append(action('🛒 Открыть товар в Форель Дана',p.url,true));
+ card.append(info);return card;
+}
+function showFarmTrout(){
+ setText('heading','🐟 Форель из кибуца Дан');
+ setText('subtitle','Товар и цена от самой фермы. Нажми на карточку — откроется товар на сайте продавца, с выбором веса и покупки.');
+ res.replaceChildren();
+ const notice=node('div','message','Цены за килограмм, кроме упаковки холодного копчения. Итоговая сумма рассчитывается после взвешивания. Доставка только в обслуживаемые населённые пункты; на сайте продавца указан минимум заказа, он может меняться.');
+ res.append(notice);
+ const grid=node('div','farm-grid');farmTroutProducts.forEach(p=>grid.append(farmProductCard(p)));res.append(grid);
+}
+function shopChoice(name){
+ const t=String(name||'').toLowerCase();
+ if(/יוחננוף|yochananof/.test(t))return {id:'yoch',label:'Йохананов',site:'https://www.yochananof.co.il/'};
+ if(/שופרסל|יש חסד|shufersal/.test(t))return {id:'shuf',label:'Шуферсаль',site:'https://www.shufersal.co.il/'};
+ if(/רמי לוי|rami/.test(t))return {id:'rami',label:'Рами Леви',site:'https://www.rami-levy.co.il/'};
+ if(/קרפור|carrefour|יינות ביתן/.test(t))return {id:'carrefour',label:'Карфур',site:'https://www.carrefour.co.il/'};
+ if(/מחסני השוק|m-shuk/.test(t))return {id:'mah',label:'Махсаней ха-Шук',site:'https://m-shuk.net/'};
+ if(/ויקטורי|victory/.test(t))return {id:'victory',label:'Виктори',site:'https://www.victoryonline.co.il/'};
+ return null;
+}
+function compactOfferText(offer){
+ const merchant=shopChoice(offer.shop);
+ return merchant?merchant.label+' · '+offer.shop:offer.shop;
+}
+
 function makeCompactFood(group,meta){
  const code=String(group.code||''),title=String(group.name||'').trim();
  const card=node('article','grocery-card');
@@ -684,7 +762,7 @@ function makeCompactFood(group,meta){
  const best=offers[0];
  if(best){
   info.append(node('div','grocery-price',Number(best.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
-  const st=node('div','grocery-store','Магазин: '+best.shop);st.dir='auto';info.append(st);
+  const st=node('div','grocery-store','Магазин: '+compactOfferText(best));st.dir='auto';info.append(st);
   if(best.date)info.append(node('div','grocery-date','Обновлено '+best.date));
  }else info.append(node('div','grocery-price','Цена не получена'));
  const btns=node('div','grocery-actions');
@@ -692,8 +770,10 @@ function makeCompactFood(group,meta){
   btns.append(action('🛍 Открыть товар в '+known.chain,known.url,true));
  }else{
   const searchLink=code?'https://www.rami-levy.co.il/he/online/search?item='+encodeURIComponent(code):null;
-  if(searchLink)btns.append(action('Проверить код в Rami Levy',searchLink,false));
-  else btns.append(node('div','grocery-disabled','Нет подтверждённой ссылки магазина'));
+  const merchant=best?shopChoice(best.shop):null;
+  if(merchant)btns.append(action('🏪 Каталог '+merchant.label,merchant.site,false));
+  else btns.append(node('div','grocery-disabled','Ссылка на товар не подтверждена'));
+  if(searchLink&&merchant?.id==='rami')btns.append(action('Поиск штрихкода Rami Levy',searchLink,false));
  }
  info.append(btns);
  if(offers.length>0){
@@ -701,11 +781,13 @@ function makeCompactFood(group,meta){
   detail.append(node('summary','','Сравнить цены · '+offers.length+' предложений'));
   for(const offer of offers.slice(0,14)){
    const line=node('div','grocery-detail-row');
-   const st=node('div','',offer.shop);st.dir='auto';line.append(st);
+   const st=node('div','',compactOfferText(offer));st.dir='auto';line.append(st);
    line.append(node('strong','',Number(offer.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
    if(offer.date)line.append(node('div','grocery-date','Данные от '+offer.date));
    const links=node('div','grocery-detail-links');
    if(known&&/רמי|rami/i.test(offer.shop)&&known.chain==='Rami Levy')links.append(action('Открыть в Rami Levy',known.url,true));
+   const merchant=shopChoice(offer.shop);
+   if(merchant)links.append(action('🏪 Сайт '+merchant.label,merchant.site));
    links.append(action('📍 Карта',map(offer.shop)));
    line.append(links);detail.append(line);
   }
@@ -716,22 +798,45 @@ function makeCompactFood(group,meta){
 }
 function renderMarket(groups,meta,cityText){
  res.replaceChildren();
- res.append(node('p','result-count','Товаров: '+groups.length+' · цены из прайс-листов магазинов '+(cityText||'Израиля')));
- const grid=node('div','grocery-grid');res.append(grid);
- const ordered=[...groups].sort((a,b)=>(actualStorePage(b.code)?1:0)-(actualStorePage(a.code)?1:0)||((a.offers[0]?.price??Infinity)-(b.offers[0]?.price??Infinity)));
- let position=0,more=null;
- function show(){
-  for(const g of ordered.slice(position,position+12))grid.append(makeCompactFood(g,meta));
-  position=Math.min(groups.length,position+12);
-  if(more&&position>=groups.length)more.remove();
+ res.append(node('p','result-count','Товаров: '+groups.length+' · прайс-листы супермаркетов · '+(cityText||'Израиль')));
+ const filters=node('div','shop-filter-bar');
+ res.append(filters);
+ const root=node('div','grocery-grid');res.append(root);
+ const stores=new Map();
+ for(const g of groups){
+  for(const o of (g.offers||[])){
+   const s=shopChoice(o.shop);if(s)stores.set(s.id,s);
+  }
  }
- show();
- if(groups.length>12){
-  more=node('button','action primary','Показать ещё продукты');
-  more.type='button';more.addEventListener('click',show);res.append(more);
+ const choices=[{id:'all',label:'Все магазины'},...stores.values()];
+ let selected='all',visible=[],position=0,more=null;
+ function paintFilter(){
+  filters.replaceChildren();
+  for(const choice of choices){
+   const button=node('button','shop-filter'+(selected===choice.id?' active':''),choice.label);
+   button.type='button';
+   button.addEventListener('click',()=>{selected=choice.id;rebuild()});
+   filters.append(button);
+  }
  }
+ function rebuild(){
+  const data=groups.map(g=>{
+   const offers=selected==='all'?g.offers:(g.offers||[]).filter(o=>shopChoice(o.shop)?.id===selected);
+   return {...g,offers};
+  }).filter(g=>g.offers?.length||selected==='all');
+  visible=data.sort((a,b)=>(actualStorePage(b.code)?1:0)-(actualStorePage(a.code)?1:0)||((a.offers[0]?.price??Infinity)-(b.offers[0]?.price??Infinity)));
+  position=0;root.replaceChildren();if(more)more.remove();more=null;paintFilter();showMore();
+  if(!visible.length)root.append(node('div','message','В этом городе подходящих предложений выбранного магазина пока не найдено.'));
+ }
+ function showMore(){
+  for(const group of visible.slice(position,position+12))root.append(makeCompactFood(group,meta));
+  position=Math.min(visible.length,position+12);
+  if(position<visible.length){
+   if(!more){more=node('button','action primary','Показать ещё товары');more.type='button';more.addEventListener('click',showMore);res.append(more)}
+  }else if(more){more.remove();more=null}
+ }
+ rebuild();
 }
-
 function previousKnownChicken(meta){
  if(!meta.chicken||variation==='breast'||variation==='thigh'||variation==='wing'||variation==='drum')return false;
  if(!/^(тверия|טבריה)$/i.test(city.value.trim()))return false;
@@ -750,6 +855,7 @@ async function loadFood(mySeq,q){
  const isChicken=has(q.toLowerCase(),words.chicken);
  if(isChicken)setFilters([['all','🍗 Вся курица'],['whole','Целая'],['breast','Грудка'],['thigh','Бёдра'],['drum','Голени'],['wing','Крылья']]);
  const meta=filteredFood(q);
+ if(/форел|форель|кибуц дан|киббуц дан|forel|trout|פורל|דגי דן|קיבוץ דן/.test(q.toLowerCase())){showFarmTrout();return}
  res.replaceChildren();
  message('🔎 Ищу товары и цены…');
  let terms=[meta.term];
