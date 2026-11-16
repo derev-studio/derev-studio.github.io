@@ -401,6 +401,21 @@ html:is([data-theme="navy"],[data-theme="forest"]) .top-categories .tag.active{b
 html[data-theme="beige"] #examples .tag.active{background:#fff3df!important;color:#304c66!important;border-color:#eaa139!important}
 html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{background:#173f5c!important;color:#fff!important;border-color:#ffbe58!important}
 @media(max-width:800px){#examples{grid-auto-columns:minmax(115px,max-content);overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity}#examples .tag{scroll-snap-align:start;font-size:13px}}
+
+/* Optional photo search: no layout changes to the existing search and cards. */
+.photo-search-launch{background:#e7f4ff!important;color:#17436d!important;border:2px solid #8bc6ed!important;min-width:58px;padding:0 14px!important}
+.photo-search-launch:hover{background:#d0ebff!important}
+.photo-search-panel{margin-top:12px;padding:13px;background:#ffffff12;border:1px solid #ffffff55;border-radius:13px}
+.photo-search-panel[hidden]{display:none}
+.photo-search-content{display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px}
+.photo-search-preview{width:95px;height:95px;object-fit:contain;border-radius:10px;background:#fff}
+.photo-search-details{flex:1;min-width:190px}
+.photo-search-details p{margin:4px 0 8px;font-size:13px;line-height:1.45;color:#eff5ff}
+.photo-search-picks{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.photo-search-picks button{font-size:14px;min-height:39px;padding:7px 11px;border:2px solid #79c3ff;border-radius:10px;background:#fff;color:#184c80;font-weight:800}
+.photo-search-picks button:hover,.photo-search-picks button:focus-visible{border-color:#faad43;background:#fff3de}
+.photo-search-close{border:1px solid #cbdceb;border-radius:9px;background:#fff;color:#31506e;padding:5px 9px;font-weight:800}
+@media(max-width:580px){.search .search-actions .photo-search-launch{flex:0 0 56px;padding:0 5px!important}.photo-search-preview{width:80px;height:80px}}
 </style>
 </head>
 <body>
@@ -442,8 +457,20 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 <div class="search-actions">
 <button type="submit">🔎 НАЙТИ</button>
 <button type="button" id="deals-shortcut" aria-controls="ksp-deals" title="Открыть раздел акций">🔥 СКИДКИ</button>
+<button type="button" class="photo-search-launch" id="photo-search-open" title="Найти по фотографии" aria-label="Найти товар по фотографии">📷</button>
 </div>
 </form>
+<input type="file" accept="image/*" id="photo-search-file" hidden aria-label="Выбрать фотографию товара">
+<div class="photo-search-panel" id="photo-search-panel" hidden>
+ <div class="photo-search-content">
+  <img class="photo-search-preview" id="photo-search-preview" alt="Выбранная фотография" hidden>
+  <div class="photo-search-details">
+   <div style="display:flex;justify-content:space-between;gap:8px"><strong>📷 Поиск по фотографии</strong><button type="button" class="photo-search-close" id="photo-search-close" aria-label="Закрыть поиск по фото">✕</button></div>
+   <p id="photo-search-status" aria-live="polite">Выберите фотографию товара.</p>
+   <div class="photo-search-picks" id="photo-search-picks"></div>
+  </div>
+ </div>
+</div>
 <div class="tags" id="examples">
 <button class="tag" type="button" data-query="курица">🍗 Курица</button>
 <button class="tag" type="button" data-query="лосось">🐟 Лосось</button>
@@ -2039,5 +2066,101 @@ setInterval(()=>{if(themeChoice==='auto')setAppearance()},60000);
 translateVisible();
 new MutationObserver(scheduleTranslation).observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
+</script>
+
+<script type="module">
+/* Photo recognition runs locally in the visitor's browser. No uploaded photos
+   or API secrets: lazily download a public CLIP model only on photo selection. */
+const open=document.getElementById('photo-search-open');
+const fileInput=document.getElementById('photo-search-file');
+const panel=document.getElementById('photo-search-panel');
+const preview=document.getElementById('photo-search-preview');
+const status=document.getElementById('photo-search-status');
+const picks=document.getElementById('photo-search-picks');
+const close=document.getElementById('photo-search-close');
+const queryInput=document.getElementById('query');
+const searchForm=document.getElementById('search-form');
+let classifierPromise=null;
+let selectionId=0;
+const choices=[
+ ['whole chicken','курица'],['chicken breast','куриная грудка'],['salmon fillet','филе лосося'],
+ ['fish','рыба'],['trout','форель'],['milk carton','молоко'],['cheese','сыр'],
+ ['eggs','яйца'],['bread','хлеб'],['tomatoes','помидоры'],['potatoes','картофель'],
+ ['apples','яблоки'],['bananas','бананы'],['coffee','кофе'],['rice','рис'],
+ ['chocolate','шоколад'],['bottled water','вода'],['cooking oil','масло'],
+ ['electric drill','дрель'],['screwdriver','отвёртка'],['stapler','степлер'],
+ ['paper clips','скрепки'],['printer','принтер'],['computer monitor','монитор'],
+ ['laptop','ноутбук'],['smartphone','смартфон'],['headphones','наушники'],
+ ['computer keyboard','клавиатура'],['computer mouse','мышь'],
+ ['electrical power strip','удлинитель'],['power cable','кабель'],
+ ['backpack','рюкзак'],['handbag','сумка'],['shoes','обувь'],
+ ['shirt','рубашка'],['jacket','куртка'],['pants','брюки'],
+ ['chair','стул'],['table','стол'],['lamp','лампа'],
+ ['sofa','диван'],['vacuum cleaner','пылесос'],['electric heater','обогреватель'],
+ ['houseplant','растение'],['cactus','кактус'],['flower pot','горшок'],
+ ['cat','кошка'],['dog','собака'],['pet food','корм для животных'],
+ ['bicycle','велосипед'],['toy','игрушка'],['book','книга']
+];
+open.addEventListener('click',()=>fileInput.click());
+close.addEventListener('click',()=>{selectionId++;panel.hidden=true;picks.replaceChildren();fileInput.value='';preview.removeAttribute('src');preview.hidden=true});
+function setStatus(message){status.textContent=message}
+function addChoice(label,searchTerm){
+ const b=document.createElement('button');
+ b.type='button';b.textContent='🔎 '+label;
+ b.addEventListener('click',()=>{
+  queryInput.value=searchTerm;
+  queryInput.dispatchEvent(new Event('input',{bubbles:true}));
+  // The existing search engine decides whether the term is food or goods.
+  searchForm.requestSubmit();
+  panel.hidden=true;
+ });
+ picks.append(b);
+}
+async function photoData(file){
+ const bitmap=await createImageBitmap(file);
+ const scale=Math.min(1,512/Math.max(bitmap.width,bitmap.height));
+ const canvas=document.createElement('canvas');
+ canvas.width=Math.max(1,Math.round(bitmap.width*scale));
+ canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+ canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);
+ bitmap.close?.();
+ return canvas.toDataURL('image/jpeg',0.85);
+}
+fileInput.addEventListener('change',async()=>{
+ const file=fileInput.files?.[0];if(!file)return;
+ const runId=++selectionId;
+ panel.hidden=false;picks.replaceChildren();preview.hidden=true;
+ if(!file.type.startsWith('image/')){setStatus('Нужна фотография JPG, PNG или HEIC, которую браузер умеет открыть.');return}
+ if(file.size>15*1024*1024){setStatus('Фотография слишком большая: выбери файл до 15 МБ.');return}
+ setStatus('Готовлю фотографию…');
+ try{
+  const data=await photoData(file);
+  if(runId!==selectionId)return;
+  preview.src=data;preview.hidden=false;
+  setStatus('Загружаю бесплатную модель ИИ в браузер. Первый запуск может занять время и потребовать загрузки большого файла…');
+  if(!classifierPromise)classifierPromise=import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/+esm')
+   .then(({pipeline})=>pipeline('zero-shot-image-classification','Xenova/clip-vit-base-patch32',{device:'wasm',dtype:'q8'}))
+   .catch(e=>{classifierPromise=null;throw e});
+  const classifier=await classifierPromise;
+  if(runId!==selectionId)return;
+  setStatus('Распознаю предмет на фотографии…');
+  const labels=choices.map(([english])=>'a photo of '+english);
+  const results=await classifier(data,labels);
+  if(runId!==selectionId)return;
+  const best=(Array.isArray(results)?results:[]).slice(0,3).filter(r=>r&&Number.isFinite(r.score));
+  if(!best.length){setStatus('Не удалось распознать товар. Попробуй написать название.');return}
+  setStatus('Возможно, это один из этих товаров. Нажми подходящий вариант — поиск начнётся по названию. Модель может ошибаться: точная марка и штрихкод не определяются.');
+  for(const hit of best){
+   const idx=labels.indexOf(hit.label);
+   if(idx<0)continue;
+   const term=choices[idx][1];
+   addChoice(term.charAt(0).toUpperCase()+term.slice(1),term);
+  }
+ }catch(err){
+  if(runId!==selectionId)return;
+  setStatus('ИИ не загрузился или формат фото не поддерживается. Попробуй JPG/PNG в Chrome или Safari либо введи название товара вручную.');
+  picks.replaceChildren();
+ }finally{fileInput.value=''}
+});
 </script>
 </body></html>
