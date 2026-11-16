@@ -7,6 +7,11 @@
 <meta name="description" content="Шук — выездной рынок Верхней Тверии по вторникам возле зала Уламей Хен. Цветы, растения, товары для дома и карта.">
 <title>Шук — вторничный рынок Верхней Тверии</title>
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
+<!-- Google is used for identity and comment metadata only; photos live in ImgBB. -->
+<script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script defer src="./shuk-community.js?v=1"></script>
 <!-- Shared Derev Studio Google Analytics; distinct /ohotnik/ and /ohotnik/shuk.html site IDs. -->
 <script defer src="https://derev-studio.github.io/photo-gallery/analytics-client.js"></script>
 <style>
@@ -81,6 +86,48 @@ html[dir="rtl"] h1{letter-spacing:normal}
 @media(max-width:900px){.bouquet{opacity:.24}.hero-copy{max-width:100%}.map-grid{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.wrap{width:min(100% - 20px,1080px)}.site-header{align-items:stretch}.back{text-align:center}.controls{width:100%;justify-content:space-between}.languages{flex:1;min-width:0}.languages button{padding:9px 6px;font-size:12px}.theme-wrap{width:100%;justify-content:flex-end}.hero{padding:28px 18px;border-radius:22px;min-height:0}.bouquet{font-size:56px;bottom:22px}.grid{grid-template-columns:1fr}.tile{min-height:0}.flowers-feature{grid-template-columns:1fr}.bigflower{display:none}.map-shell iframe{height:310px}footer{flex-direction:column}.button{justify-content:center}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tile{transition:none}}
+
+/* Shuk visitors' contributions: theme-compatible and mobile-friendly. */
+.shuk-community{padding-top:2px}
+.shuk-community-panel{border:1px solid var(--line);border-radius:24px;background:var(--surface);padding:clamp(17px,3vw,28px);box-shadow:0 5px 22px var(--shadow)}
+.shuk-auth{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.shuk-auth button,.shuk-submit,.shuk-clear,.shuk-mod-actions button{cursor:pointer;border-radius:12px;font-weight:800;border:1px solid var(--line);padding:11px 14px;color:var(--ink);background:var(--soft)}
+.shuk-account{font-size:13px;color:var(--muted)}
+.shuk-form{display:grid;gap:12px}
+.shuk-field{display:grid;gap:6px}
+.shuk-field label{font-size:14px;font-weight:800}
+.shuk-field textarea,.shuk-field select{width:100%;background:var(--page);border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:12px 13px;font:inherit;font-size:16px;min-width:0}
+.shuk-field textarea{min-height:118px;resize:vertical;line-height:1.5}
+.shuk-field textarea:focus-visible,.shuk-field select:focus-visible,.shuk-field input:focus-visible{outline:3px solid var(--sun);outline-offset:1px}
+.shuk-photo-picker{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.shuk-photo-picker input{max-width:100%;font:inherit;font-size:13px;color:var(--muted)}
+.shuk-photo-file{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+#shukPreview{display:block;max-width:min(340px,100%);max-height:300px;object-fit:contain;border-radius:14px;border:1px solid var(--line)}
+#shukPreview[hidden],.shuk-clear[hidden]{display:none}
+.shuk-clear{padding:8px 11px;font-size:13px}
+.shuk-submit{background:var(--accent);color:var(--surface);border:1px solid var(--accent);font-size:16px;padding:13px 18px;justify-self:start}
+.shuk-submit:disabled,.shuk-mod-actions button:disabled{opacity:.55;cursor:wait}
+.shuk-note{font-size:13px;color:var(--muted);margin:0}
+.shuk-status{font-size:14px;font-weight:700;color:var(--accent);min-height:1.4em;margin:11px 0}
+.shuk-status.error{color:#bd553d}
+.shuk-feed{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.shuk-entry{background:var(--page);border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0}
+.shuk-entry-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center}
+.shuk-entry-head strong{overflow-wrap:anywhere}
+.shuk-entry-head small{color:var(--muted)}
+.shuk-entry-category{display:inline-flex;font-size:12px;font-weight:700;padding:4px 8px;border-radius:8px;background:var(--soft);margin:10px 0 3px}
+.shuk-entry-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;margin:10px 0}
+.shuk-photo-link{display:block;margin-top:10px}
+.shuk-entry-photo{display:block;object-fit:cover;max-height:320px;width:100%;border-radius:12px}
+.shuk-muted{color:var(--muted);margin:2px 0;font-size:14px}
+.shuk-awaiting{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:11px;color:var(--ink);margin:0}
+.shuk-moderation{margin-top:23px;padding-top:20px;border-top:1px solid var(--line)}
+.shuk-moderation h3{font-size:18px;margin:0 0 12px}
+.shuk-mod-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.shuk-mod-actions .shuk-green{background:#dff4e1;color:#215e3a}
+.shuk-mod-actions .shuk-red{background:#fce5e1;color:#993e2a}
+@media(max-width:650px){.shuk-feed{grid-template-columns:1fr}.shuk-auth{align-items:stretch}.shuk-submit{width:100%;justify-self:stretch}}
+
 </style>
 </head>
 <body>
@@ -141,6 +188,34 @@ html[dir="rtl"] h1{letter-spacing:normal}
    <div class="map-copy"><h3>📍 אולמי חן</h3><p data-t="mapText">Ориентир — зал אולמי חן, улица Ор Хаим, 25, Верхняя Тверия (Шикун-Далет). Рынок размещается рядом; отметка на карте показывает зал, а не точное место каждого торгового ряда.</p><a class="button primary" href="https://www.google.com/maps/search/?api=1&query=%D7%90%D7%95%D7%9C%D7%9E%D7%99%20%D7%97%D7%9F%20%D7%90%D7%95%D7%A8%20%D7%97%D7%99%D7%99%D7%9D%2025%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%A2%D7%99%D7%9C%D7%99%D7%AA%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C" target="_blank" rel="noopener noreferrer" data-t="mapLink">Открыть маршрут в Google Maps</a></div>
  </div>
 </section>
+<section class="shuk-community" id="community">
+ <div class="section-top"><h2 id="shukCommunityTitle" data-shuk-t="title">💬 Разговоры и фотографии с рынка</h2>
+ <p id="shukCommunityIntro" data-shuk-t="intro">Расскажи о находке, задай вопрос или покажи цветы. Для отправки нужен вход через Google. Фото хранятся в ImgBB, не в Google.</p></div>
+ <div class="shuk-community-panel">
+  <div class="shuk-auth"><button id="shukLogin" type="button">🔐 Войти через Google</button><span class="shuk-account" id="shukAccount">Читать можно без регистрации</span></div>
+  <form id="shukForm" class="shuk-form">
+    <div class="shuk-field"><label for="shukCategory" data-shuk-t="category">Раздел</label>
+      <select id="shukCategory" name="category"><option value="flowers">🌷 Цветы и растения</option><option value="finds">🛍️ Находки на рынке</option><option value="question">❓ Вопрос</option></select>
+    </div>
+    <div class="shuk-field"><label for="shukText" data-shuk-t="text">Твой комментарий</label>
+      <textarea id="shukText" maxlength="900" placeholder="Что интересного ты увидел на рынке?"></textarea>
+    </div>
+    <div class="shuk-field"><label for="shukPhoto" data-shuk-t="photo">📷 Добавить фотографию (необязательно)</label>
+      <div class="shuk-photo-picker"><input id="shukPhoto" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" />
+        <span id="shukFileName" class="shuk-photo-file">Фото не выбрано</span>
+        <button id="shukClearPhoto" type="button" class="shuk-clear" data-shuk-t="remove" hidden>Убрать фото</button>
+      </div>
+      <img id="shukPreview" hidden alt="Предпросмотр фотографии" />
+    </div>
+    <p class="shuk-note" data-shuk-t="pending">Сначала запись проверит редактор. Пожалуйста, публикуй только свои фотографии, а людей — с их согласия.</p>
+    <p class="shuk-note" data-shuk-t="photosExternal">Фото загружается в ImgBB и может быть доступно всем, у кого есть его ссылка. Не загружай документы и личные данные.</p>
+    <button id="shukSubmit" class="shuk-submit" type="submit" data-shuk-t="publish">Опубликовать</button>
+  </form>
+  <div id="shukStatus" class="shuk-status" role="status" aria-live="polite"></div>
+  <div id="shukEntries" class="shuk-feed" aria-live="polite"></div>
+  <div id="shukModeration" class="shuk-moderation" hidden><h3 id="shukModerationTitle">🛡️ Проверка публикаций</h3><div id="shukPending" class="shuk-feed"></div></div>
+ </div>
+</section>
 <section class="notice"><strong>💡 <span data-t="important">Полезно знать</span></strong><p data-t="note">Рынок обычно проходит по вторникам. Точные часы отдельных продавцов, ассортимент и работа в праздничные дни могут меняться. Перед специальной поездкой лучше уточнить.</p></section>
 </main>
 <footer><span data-t="footer">Независимая страница о местном рынке. Не официальный сайт администрации или торговцев.</span>
@@ -164,6 +239,7 @@ function applyLanguage(){
  document.documentElement.lang=lang;
  document.documentElement.dir=["he","ar"].includes(lang)?"rtl":"ltr";
  document.title=d.title+" · "+d.where;
+ window.dispatchEvent(new CustomEvent("shuk:language-change",{detail:{lang}}));
 }
 function israelHour(){
  try{return Number(new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Jerusalem",hour:"2-digit",hourCycle:"h23"}).format(new Date()))}
