@@ -1,5 +1,12 @@
-// Fill only after configuring and checking Firebase Authentication + Firestore.
-// Firebase web configuration is a project identifier, not an administrator secret.
-// Do not paste service account keys, private keys, or admin credentials here.
-// Existing public photo-gallery API key was reported exposed in 2026 and must not be reused.
-window.OHOTNIK_FIREBASE_CONFIG = null;
+// Reuse the EXISTING Google sign-in and Realtime Database from photo-gallery.
+// These are public Firebase web-app identifiers, not admin credentials.
+// Visitor permissions are enforced by Firebase Authentication and RTDB rules.
+window.OHOTNIK_FIREBASE_CONFIG = {
+            apiKey: "AIzaSyB2X3o7KwYFkMfsskKoWpQYBrws8L-Mn9w",
+            authDomain: "photo-gallery-18193.firebaseapp.com",
+            projectId: "photo-gallery-18193",
+            databaseURL: "https://photo-gallery-18193-default-rtdb.firebaseio.com",
+            storageBucket: "photo-gallery-18193.firebasestorage.app",
+            messagingSenderId: "329094770221",
+            appId: "1:329094770221:web:b9d076f195f968668212a4"
+        };
