@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 590" role="img" aria-label="Девушка с Жужей на пляже и три дельфина">
+<defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#2ca9c4"/><stop offset=".55" stop-color="#b6ebe0"/><stop offset="1" stop-color="#fae4b8"/></linearGradient>
+<linearGradient id="sea" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#128ca4"/><stop offset="1" stop-color="#5ecbbf"/></linearGradient>
+<linearGradient id="sand"><stop stop-color="#f2d8a7"/><stop offset="1" stop-color="#ffe8bf"/></linearGradient>
+<radialGradient id="sun"><stop stop-color="#fffbd3"/><stop offset="1" stop-color="#fffbd3" stop-opacity="0"/></radialGradient></defs>
+<rect width="1200" height="590" fill="url(#sky)"/><circle cx="910" cy="155" r="185" fill="url(#sun)"/><circle cx="905" cy="151" r="63" fill="#fff4b6" opacity=".8"/>
+<path d="M0 302Q320 293 590 304T1200 297V590H0Z" fill="url(#sea)"/>
+<path d="M0 419Q340 383 650 424T1200 386V590H0Z" fill="#b6e6d5" opacity=".5"/>
+<path d="M0 455Q180 414 390 450T780 440Q985 416 1200 458V590H0Z" fill="url(#sand)"/>
+<path d="M0 484Q200 446 385 465T770 466T1200 471" fill="none" stroke="#fff6dc" stroke-width="7" opacity=".8"/>
+<path d="M158 520Q195 367 187 212Q180 156 211 84" fill="none" stroke="#654c31" stroke-width="37" stroke-linecap="round"/>
+<path d="M205 96Q96 25 9 83Q134 69 185 113Z" fill="#1b7c69"/><path d="M205 96Q278 5 413 35Q290 62 218 123Z" fill="#206f5b"/><path d="M210 97Q324 95 401 185Q289 118 203 121Z" fill="#2d9c7d"/><path d="M201 96Q163 9 219 -8Q218 62 213 118Z" fill="#286e5d"/><path d="M201 96Q90 98 69 210Q123 134 203 115Z" fill="#349c77"/>
+<g fill="#f6fbf3" stroke="#d7f4eb" stroke-width="1" opacity=".94">
+<path d="M640 280Q688 210 743 254Q771 275 801 240Q784 287 745 286Q715 285 697 320L691 287Z"/>
+<path d="M795 346Q829 306 878 327Q902 348 926 315Q916 357 876 359Q850 357 834 382L835 349Z"/>
+<path d="M992 291Q1025 239 1074 261Q1094 279 1118 256Q1110 297 1072 298Q1040 299 1023 329L1025 297Z"/>
+</g>
+<g opacity=".74" fill="#fff"><path d="M610 376q24 -11 47 1q-24 7 -47 -1"/><path d="M785 404q22 -9 44 3q-20 6 -44 -3"/><path d="M994 372q28 -8 48 4q-23 7 -48 -4"/></g>
+<ellipse cx="465" cy="512" rx="126" ry="15" fill="#ae8d63" opacity=".18"/>
+<g stroke-linecap="round" stroke-linejoin="round">
+<path d="M423 452Q440 429 449 396" fill="none" stroke="#b56e4e" stroke-width="21"/>
+<circle cx="458" cy="377" r="30" fill="#d3a174"/>
+<path d="M430 379Q427 345 457 341Q490 346 486 374Q469 358 450 355Q438 367 430 379Z" fill="#4c332c"/>
+<path d="M448 409Q494 418 499 462L469 478L434 451Z" fill="#ff8e70"/>
+<path d="M479 474Q541 480 562 515" fill="none" stroke="#d3a174" stroke-width="22"/>
+<path d="M455 470Q418 487 398 512" fill="none" stroke="#d3a174" stroke-width="20"/>
+<path d="M497 432Q532 418 558 438" fill="none" stroke="#d3a174" stroke-width="12"/>
+<path d="M420 432Q392 442 373 472" fill="none" stroke="#d3a174" stroke-width="12"/>
+<ellipse cx="564" cy="437" rx="22" ry="9" fill="#f6cf65" transform="rotate(-15 564 437)"/>
+</g>
+<g><ellipse cx="651" cy="507" rx="46" ry="27" fill="#b88756"/><circle cx="610" cy="483" r="29" fill="#b88756"/><path d="M588 467l-10 -29 28 15M624 465l14 -28 -4 32" fill="#8c6442"/><circle cx="601" cy="481" r="3" fill="#332a21"/><circle cx="618" cy="481" r="3" fill="#332a21"/><path d="M654 491Q689 457 700 474" fill="none" stroke="#b88756" stroke-width="12" stroke-linecap="round"/><path d="M626 527v15M667 525v16" stroke="#8c6442" stroke-width="9" stroke-linecap="round"/></g>
+<g opacity=".9"><circle cx="306" cy="514" r="14" fill="#e59b42"/><circle cx="335" cy="515" r="16" fill="#dd5747"/><circle cx="357" cy="530" r="12" fill="#83ab55"/><path d="M299 495l8 -18 5 15" fill="#3d8d62"/></g>
+</svg>
