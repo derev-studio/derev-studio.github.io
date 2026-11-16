@@ -386,13 +386,14 @@ html[data-theme="beige"] .search .search-actions #deals-shortcut{background:#fff
 @media(prefers-reduced-motion:reduce){.search #query{transition:none}}
 
 /* Search colours: orange = empty, blue = typing, green = matching results. */
-.search-query-wrap{flex:1;min-width:0}
+.search-query-wrap{flex:1;min-width:0;position:relative}
 .search-query-wrap #query{width:100%;box-sizing:border-box;flex:none}
+.search #query.is-found{padding-bottom:18px!important}
 .search #query.has-text{border-color:#2486ee!important;box-shadow:0 0 0 3px rgba(65,144,248,.24),0 5px 17px rgba(31,111,212,.15)!important}
 .search #query.is-found{border-color:#15944f!important;box-shadow:0 0 0 3px rgba(37,174,99,.24),0 5px 17px rgba(13,123,58,.16)!important}
 .search #query.has-text:focus-visible{outline-color:#87b9ff!important}
 .search #query.is-found:focus-visible{outline-color:#75df9d!important}
-.search-feedback{color:#a1f1bc;font-weight:850;font-size:14px;margin:6px 0 0;line-height:1.45;overflow-wrap:anywhere}
+.search-feedback{position:absolute;inset-inline-start:16px;bottom:5px;max-width:calc(100% - 32px);color:#147a3f!important;font-weight:850;font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;margin:0}
 .search-feedback:empty{display:none}
 html[data-theme="beige"] .search-feedback{color:#237751}
 .top-categories{margin:0 0 15px}
@@ -423,7 +424,7 @@ html:is([data-theme="navy"],[data-theme="forest"]) .top-categories .tag.active{b
 </select></label>
 </div>
 <header>
-<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 64</small></div>
+<div class="brand">🔎 Охотник за скидками <small>Поиск полезного в Израиле · версия 65</small></div>
 <label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
 <datalist id="city-options">
 <option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
