@@ -1179,7 +1179,7 @@ function showProductPriceDetail(group,meta){
   if(best.date)section.append(node('div','grocery-date','Цена опубликована '+best.date));
  }else section.append(node('div','product-focus-price','Цена не получена'));
  body.append(section);
- if(known&&offers.some(o=>known.chain==='Rami Levy'&&shopChoice(o.shop)?.id==='rami'))
+ if(known&&best&&known.chain==='Rami Levy'&&shopChoice(best.shop)?.id==='rami')
   body.append(action('🛒 Открыть этот товар в Рами Леви',known.url,true));
  else appendChickenStoreLink(body,name,best);
  if(offers.length>1){
@@ -1222,7 +1222,7 @@ function makeCompactFood(group,meta){
  const view=node('button','action primary','📷 Открыть товар');
  view.type='button';view.addEventListener('click',()=>showProductPriceDetail(group,meta));
  actions.append(view);
- if(known&&offers.some(o=>known.chain==='Rami Levy'&&shopChoice(o.shop)?.id==='rami'))
+ if(known&&best&&known.chain==='Rami Levy'&&shopChoice(best.shop)?.id==='rami')
   actions.append(action('🛒 Открыть этот товар в Рами Леви',known.url,true));
  else appendChickenStoreLink(actions,title,best);
  info.append(actions);card.append(info);return card;
