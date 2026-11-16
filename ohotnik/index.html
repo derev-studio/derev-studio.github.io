@@ -405,6 +405,15 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 /* Optional photo search: no layout changes to the existing search and cards. */
 .photo-search-launch{background:#e7f4ff!important;color:#17436d!important;border:2px solid #8bc6ed!important;min-width:58px;padding:0 14px!important}
 .photo-search-launch:hover{background:#d0ebff!important}
+.photo-search-launch{display:inline-flex;align-items:center;justify-content:center;gap:9px}
+.photo-camera-icon{font-size:32px;line-height:1;display:inline-block}
+.photo-drop-zone{margin:10px 0 4px;border:2px dashed #9fdaff;border-radius:12px;min-height:95px;display:flex;align-items:center;justify-content:center;gap:7px;flex-direction:column;cursor:pointer;padding:10px;background:#10284133}
+.photo-drop-zone span{font-size:32px;line-height:1}
+.photo-drop-zone strong{font-size:17px}
+.photo-drop-zone small{font-size:12px;color:#e5f3ff}
+.photo-drop-zone:focus-visible{outline:3px solid #fff1ac;outline-offset:2px}
+.photo-search-panel.drag-over,.photo-drop-zone.drag-over,.search.drag-over{outline:3px dashed #5dd8ff!important;outline-offset:3px;background:#2c709955!important}
+.search .search-actions .photo-search-launch{min-width:148px}
 .photo-search-panel{margin-top:12px;padding:13px;background:#ffffff12;border:1px solid #ffffff55;border-radius:13px}
 .photo-search-panel[hidden]{display:none}
 .photo-search-content{display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px}
@@ -415,7 +424,7 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 .photo-search-picks button{font-size:14px;min-height:39px;padding:7px 11px;border:2px solid #79c3ff;border-radius:10px;background:#fff;color:#184c80;font-weight:800}
 .photo-search-picks button:hover,.photo-search-picks button:focus-visible{border-color:#faad43;background:#fff3de}
 .photo-search-close{border:1px solid #cbdceb;border-radius:9px;background:#fff;color:#31506e;padding:5px 9px;font-weight:800}
-@media(max-width:580px){.search .search-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.search .search-actions button{width:100%;height:49px;font-size:14px;padding:0 8px}.search .search-actions .photo-search-launch{grid-column:1/-1;min-height:47px;padding:0 12px!important}.photo-search-preview{width:80px;height:80px}}
+@media(max-width:580px){.search .search-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.search .search-actions button{width:100%;height:49px;font-size:14px;padding:0 8px}.search .search-actions .photo-search-launch{grid-column:1/-1;min-height:56px;padding:0 12px!important}.photo-search-preview{width:80px;height:80px}}
 </style>
 </head>
 <body>
@@ -453,11 +462,11 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 </div>
 <label class="search-label" for="query">🔎 Поиск товаров</label>
 <form class="search" id="search-form">
-<div class="search-query-wrap"><input id="query" placeholder="Название товара или штрихкод" autocomplete="off" aria-label="Что ищем"><div class="search-feedback" id="search-feedback" aria-live="polite"></div></div>
+<div class="search-query-wrap"><input id="query" placeholder="Товар, описание или штрихкод" autocomplete="off" aria-label="Что ищем"><div class="search-feedback" id="search-feedback" aria-live="polite"></div></div>
 <div class="search-actions">
 <button type="submit">🔎 НАЙТИ</button>
 <button type="button" id="deals-shortcut" aria-controls="ksp-deals" title="Открыть раздел акций">🔥 СКИДКИ</button>
-<button type="button" class="photo-search-launch" id="photo-search-open" title="Загрузить фото и найти товар" aria-label="Загрузить фотографию товара">📷 ПО ФОТО</button>
+<button type="button" class="photo-search-launch" id="photo-search-open" title="Загрузить фото и найти товар" aria-label="Загрузить фотографию товара"><span class="photo-camera-icon" aria-hidden="true">📷</span> <span>ПО ФОТО</span></button>
 </div>
 </form>
 <input type="file" accept="image/*" id="photo-search-file" hidden aria-label="Выбрать фотографию товара">
@@ -466,7 +475,10 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
   <img class="photo-search-preview" id="photo-search-preview" alt="Выбранная фотография" hidden>
   <div class="photo-search-details">
    <div style="display:flex;justify-content:space-between;gap:8px"><strong>📷 Загрузить фотографию товара</strong><button type="button" class="photo-search-close" id="photo-search-close" aria-label="Закрыть поиск по фото">✕</button></div>
-   <p id="photo-search-status" aria-live="polite">Выберите фотографию товара.</p>
+   <p id="photo-search-status" aria-live="polite">Выберите фотографию, вставьте её из буфера или перетащите сюда.</p>
+   <div class="photo-drop-zone" id="photo-drop-zone" tabindex="0" role="button" aria-label="Выбрать фотографию или перетащить сюда">
+    <span aria-hidden="true">📷</span><strong>Выбрать фото</strong><small>Или вставить ⌘V / Ctrl+V · или перетащить сюда</small>
+   </div>
    <div class="photo-search-picks" id="photo-search-picks"></div>
   </div>
  </div>
@@ -2101,7 +2113,27 @@ const choices=[
  ['cat','кошка'],['dog','собака'],['pet food','корм для животных'],
  ['bicycle','велосипед'],['toy','игрушка'],['book','книга']
 ];
-open.addEventListener('click',()=>fileInput.click());
+const dropZone=document.getElementById('photo-drop-zone');
+const dropTargets=[document.getElementById('search-form'),panel,dropZone];
+function revealPhotoPanel(){panel.hidden=false;panel.scrollIntoView({behavior:'smooth',block:'nearest'});}
+open.addEventListener('click',()=>{revealPhotoPanel();dropZone.focus({preventScroll:true});});
+dropZone.addEventListener('click',()=>fileInput.click());
+dropZone.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click()}});
+function firstImage(files){return Array.from(files||[]).find(f=>f.type&&f.type.startsWith('image/'));}
+document.addEventListener('paste',e=>{
+ const img=firstImage(e.clipboardData?.files)||Array.from(e.clipboardData?.items||[]).filter(i=>i.type.startsWith('image/')).map(i=>i.getAsFile()).find(Boolean);
+ if(!img)return;
+ e.preventDefault();handlePhoto(img);
+});
+dropTargets.forEach(target=>{
+ target.addEventListener('dragover',e=>{if(!Array.from(e.dataTransfer?.types||[]).includes('Files'))return;e.preventDefault();e.dataTransfer.dropEffect='copy';target.classList.add('drag-over')});
+ target.addEventListener('dragleave',e=>{if(!target.contains(e.relatedTarget))target.classList.remove('drag-over')});
+ target.addEventListener('drop',e=>{
+  const img=firstImage(e.dataTransfer?.files);
+  if(!img)return;
+  e.preventDefault();e.stopPropagation();dropTargets.forEach(x=>x.classList.remove('drag-over'));handlePhoto(img);
+ });
+});
 close.addEventListener('click',()=>{selectionId++;panel.hidden=true;picks.replaceChildren();fileInput.value='';preview.removeAttribute('src');preview.hidden=true});
 function setStatus(message){status.textContent=message}
 function addChoice(label,searchTerm){
@@ -2126,8 +2158,8 @@ async function photoData(file){
  bitmap.close?.();
  return canvas.toDataURL('image/jpeg',0.85);
 }
-fileInput.addEventListener('change',async()=>{
- const file=fileInput.files?.[0];if(!file)return;
+fileInput.addEventListener('change',()=>{const file=fileInput.files?.[0];if(file)handlePhoto(file)});
+async function handlePhoto(file){
  const runId=++selectionId;
  panel.hidden=false;picks.replaceChildren();preview.hidden=true;
  if(!file.type.startsWith('image/')){setStatus('Нужна фотография JPG, PNG или HEIC, которую браузер умеет открыть.');return}
@@ -2137,6 +2169,33 @@ fileInput.addEventListener('change',async()=>{
   const data=await photoData(file);
   if(runId!==selectionId)return;
   preview.src=data;preview.hidden=false;
+  // Decode retail barcodes/QR locally when supported; fall back to image AI.
+  if('BarcodeDetector' in window){
+   try{
+    const supported=await BarcodeDetector.getSupportedFormats();
+    const formats=['ean_13','ean_8','upc_a','upc_e','qr_code'].filter(x=>supported.includes(x));
+    if(formats.length){
+     const detector=new BarcodeDetector({formats});
+     const codes=await detector.detect(preview);
+     if(runId!==selectionId)return;
+     const found=(codes||[]).map(x=>String(x.rawValue||'').trim()).find(Boolean);
+     if(found){
+      picks.replaceChildren();
+      if(/^\\d{7,14}$/.test(found)){
+       setStatus('Найден штрихкод: '+found+'. Нажми, чтобы найти точный товар.');
+       addChoice('Найти по коду '+found,found);return;
+      }
+      if(/^https?:\\/\\//i.test(found)){
+       setStatus('Обнаружен QR-код с веб-ссылкой. Для безопасности он не открывается автоматически. Для поиска товара используй его название или фотографию.');
+      }else{
+       setStatus('Распознан QR-код. Можно попробовать поиск по его содержимому.');
+       addChoice(found.slice(0,48),found);
+       return;
+      }
+     }
+    }
+   }catch(e){/* QR scanning unsupported; continue with image recognition */}
+  }
   setStatus('Загружаю бесплатную модель ИИ в браузер. Первый запуск может занять время и потребовать загрузки большого файла…');
   if(!classifierPromise)classifierPromise=import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/+esm')
    .then(({pipeline})=>pipeline('zero-shot-image-classification','Xenova/clip-vit-base-patch32',{device:'wasm',dtype:'q8'}))
@@ -2161,6 +2220,6 @@ fileInput.addEventListener('change',async()=>{
   setStatus('ИИ не загрузился или формат фото не поддерживается. Попробуй JPG/PNG в Chrome или Safari либо введи название товара вручную.');
   picks.replaceChildren();
  }finally{fileInput.value=''}
-});
+}
 </script>
 </body></html>
