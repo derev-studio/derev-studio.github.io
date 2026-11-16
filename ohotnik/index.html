@@ -437,6 +437,16 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 @keyframes hunt-move{from{transform:translateX(-65%)}to{transform:translateX(215%)}}
 @keyframes hunt-shine{from{background-position:0 0}to{background-position:200% 0}}
 @media(prefers-reduced-motion:reduce){.hunt-progress-bar{animation:none;width:100%}}
+
+.community-panel{border:1px solid var(--line);background:var(--white);border-radius:18px;padding:18px;margin-top:24px}
+.community-panel .community-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0;font-size:14px}
+.community-panel button{border:1px solid #7db2db;background:#256b9e;color:white;border-radius:10px;padding:10px 13px;font-weight:800}
+.community-panel button[hidden],.community-panel form[hidden]{display:none!important}
+.community-panel form{display:grid;gap:8px;max-width:680px}
+.community-panel textarea{font:inherit;border:2px solid var(--line);border-radius:12px;padding:12px;min-height:90px;background:var(--white);color:var(--text)}
+.community-list{display:grid;gap:8px;margin-top:12px}
+.community-comment{border:1px solid var(--line);border-radius:12px;padding:11px;overflow-wrap:anywhere}
+.community-comment p{margin:6px 0 0;white-space:pre-wrap}
 </style>
 </head>
 <body>
@@ -550,6 +560,21 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 <p class="info" id="subtitle"></p>
 <div id="filters" class="tags hidden"></div>
 <div id="results"></div>
+</section>
+<section id="community" class="community-panel" aria-label="Комментарии и вход через Google">
+<h2>💬 Отзывы и предложения</h2>
+<p class="info" id="community-status">Подключаем комментарии…</p>
+<div class="community-controls">
+<button id="community-login" type="button" hidden>Войти через Google</button>
+<button id="community-logout" type="button" hidden>Выйти</button>
+<span id="community-user">Комментарии можно читать без входа.</span>
+</div>
+<form id="community-form" hidden>
+<label for="community-text">Ваш комментарий</label>
+<textarea id="community-text" rows="3" maxlength="1000" minlength="2" placeholder="Что улучшить в Охотнике?" required></textarea>
+<button type="submit">Опубликовать</button>
+</form>
+<div id="community-list" class="community-list"></div>
 </section>
 <footer><div class="beta-note">🧪 Бета · сайт тестируется</div><strong>Создатель — Александр Деревяшкин</strong><div>Новые технологии и искусственный интеллект · Израиль</div><div>Цены и наличие меняются; перед покупкой проверяйте у продавца. Сайт не является магазином.</div><div class="footer-legal"><a href="./sources.html" id="rights-link">Источники и авторские права</a></div></footer>
 </main>
@@ -2282,4 +2307,5 @@ async function handlePhoto(file){
  }finally{fileInput.value=''}
 }
 </script>
+<script type="module" src="./community.js"></script>
 </body></html>
