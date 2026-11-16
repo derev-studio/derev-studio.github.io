@@ -425,6 +425,18 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 .photo-search-picks button:hover,.photo-search-picks button:focus-visible{border-color:#faad43;background:#fff3de}
 .photo-search-close{border:1px solid #cbdceb;border-radius:9px;background:#fff;color:#31506e;padding:5px 9px;font-weight:800}
 @media(max-width:580px){.search .search-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.search .search-actions button{width:100%;height:49px;font-size:14px;padding:0 8px}.search .search-actions .photo-search-launch{grid-column:1/-1;min-height:56px;padding:0 12px!important}.photo-search-preview{width:80px;height:80px}}
+
+/* A real indeterminate indicator: never invent a percentage of completed searches. */
+.hunt-progress{position:sticky;top:8px;z-index:18;margin:0 0 15px;border:1px solid #77b8ef;border-radius:16px;background:#173b62;color:#f4faff;padding:12px 15px;box-shadow:0 8px 25px #001c3960}
+.hunt-progress[hidden]{display:none!important}
+.hunt-progress-top{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:850;margin-bottom:10px}
+.hunt-progress-icon{font-size:24px}
+.hunt-progress-track{height:11px;border-radius:20px;overflow:hidden;background:#ffffff2a;position:relative}
+.hunt-progress-bar{height:100%;width:43%;border-radius:20px;background:linear-gradient(90deg,#32aaff,#35d29c,#f6d75c,#36a8ff);background-size:200% 100%;animation:hunt-move 1.45s ease-in-out infinite alternate,hunt-shine 2.5s linear infinite}
+.hunt-progress small{display:block;margin-top:7px;color:#d8eafa;font-size:12px}
+@keyframes hunt-move{from{transform:translateX(-65%)}to{transform:translateX(215%)}}
+@keyframes hunt-shine{from{background-position:0 0}to{background-position:200% 0}}
+@media(prefers-reduced-motion:reduce){.hunt-progress-bar{animation:none;width:100%}}
 </style>
 </head>
 <body>
@@ -529,6 +541,11 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 <button type="button" class="tag" data-type="housing">🏠 Жильё</button>
 </div></section>
 <section id="search-results-section" aria-live="polite" aria-atomic="false" hidden>
+<div class="hunt-progress" id="hunt-progress" role="status" aria-live="polite" hidden>
+ <div class="hunt-progress-top"><span class="hunt-progress-icon" aria-hidden="true">🔎</span><span id="hunt-progress-text">Ищем товар…</span></div>
+ <div class="hunt-progress-track"><div class="hunt-progress-bar"></div></div>
+ <small>Проверяем товары и предложения магазинов</small>
+</div>
 <h2 id="heading"></h2>
 <p class="info" id="subtitle"></p>
 <div id="filters" class="tags hidden"></div>
@@ -593,7 +610,16 @@ function card(title,desc,links,badge){
  c.append(node('p','',desc));const bar=node('div','actions');for(const l of links)bar.append(action(l[0],l[1],!!l[2]));c.append(bar);return c;
 }
 function grid(cards){const g=node('div','grid');cards.forEach(c=>g.append(c));res.append(g);if(cards.length)markSearchFound()}
-function message(t,warn){res.append(node('div','message'+(warn?' warn':''),t))}
+function message(t,warn){
+ res.append(node('div','message'+(warn?' warn':''),t));
+ if(warn||(!/^(🔎|Проверяю|Загружаю|Ищу )/.test(String(t))))finishHuntProgress();
+}
+function startHuntProgress(term){
+ const box=el('hunt-progress'),label=el('hunt-progress-text');
+ label.textContent='Ищем: '+(term||'товары')+'…';
+ box.hidden=false;
+}
+function finishHuntProgress(){el('hunt-progress').hidden=true;}
 const citiesRU={
  'тверия':'טבריה','хайфа':'חיפה','тель-авив':'תל אביב','тель авив':'תל אביב','иерусалим':'ירושלים','афула':'עפולה',
  'назарет':'נצרת','ноф-ха-галиль':'נוף הגליל','беэр-шева':'באר שבע','ашдод':'אשדוד','ашкелон':'אשקלון',
@@ -969,7 +995,19 @@ function photoFitsItem(photo,name){
  const label=String(photo?.productName||'').toLowerCase();
  if(!label||/friskies|whiskas|purina|cat food|dog food|kitten|חתול|כלב|מזון|לה קט|לקט|פטה|pate|pâté|корм/.test(label))return false;
  if(/סלמון|salmon|лосос|семг|сёмг/.test(expected))return /סלמון|salmon|лосос|семг|сёмг/.test(label);
- if(/עוף|פרגי|כרע|שוק|כנפ|חזה|chicken|куриц|цыпл/.test(expected))return /עוף|chicken|куриц|цыпл/.test(label);
+ if(/עוף|פרגי|כרע|שוק|כנפ|חזה|chicken|куриц|цыпл/.test(expected)){
+  if(!/עוף|chicken|куриц|цыпл/.test(label))return false;
+  const cutGroups=[
+   /שלם|whole|цел(ая|ый)/,
+   /חזה|breast|груд/,
+   /כנפ|wing|крыл/,
+   /שוק|drumstick|голен/,
+   /כרע|ירך|thigh|бедр/,
+   /פרגי|boneless|филе/
+  ];
+  const wanted=cutGroups.find(x=>x.test(expected));
+  return wanted?wanted.test(label):true;
+ }
  return true;
 }
 function realImage(box,code,name){
@@ -1149,8 +1187,8 @@ function chickenRetailLink(name,offer){
  const store=shopChoice(offer.shop);
  if(!store)return null;
  if(store.id==='rami')return {url:'https://www.rami-levy.co.il/he/online/market/בשר-ודגים/עוף-טרי',label:'🛒 Курица в Рами Леви'};
- if(store.id==='shuf')return {url:'https://www.shufersal.co.il/',label:'🛒 Найти курицу в Шуферсале'};
- if(store.id==='yoch')return {url:'https://www.yochananof.co.il/',label:'🛒 Найти курицу в Йохананове'};
+ if(store.id==='shuf')return {url:'https://www.shufersal.co.il/',label:'🏬 Шуферсаль — перейти к поиску курицы'};
+ if(store.id==='yoch')return {url:'https://yochananof.co.il/',label:'🏬 Йохананов — перейти к поиску курицы'};
  return null;
 }
 function appendChickenStoreLink(parent,name,offer){
@@ -1919,25 +1957,26 @@ async function searchBarcode(code,mySeq){
 async function search(){
  updateQueryAppearance();
  const q=query.value.trim();
+ startHuntProgress(q);
  const exactCode=barcodeQuery(q);
  if(exactCode){el('search-results-section').hidden=false;const mySeq=++seq;clear();revealResults();return searchBarcode(exactCode,mySeq)}
  const browseOnly=['pets','housing','free','help','dating','organicStore','market','stationery'].includes(chosen);
- if(!q&&!browseOnly){query.focus();return}
+ if(!q&&!browseOnly){finishHuntProgress();query.focus();return}
  el('search-results-section').hidden=false;
  const mySeq=++seq;clear();
  const type=mode(q);
  // Сразу перейти к заголовку результата; после загрузки карточек повторим.
  revealResults();
  if(type==='food')return loadFood(mySeq,q);
- if(type==='stationery'){showStationery(q);revealResults();return}
+ if(type==='stationery'){showStationery(q);finishHuntProgress();revealResults();return}
  if(type==='tech')return showTech(q,mySeq);
- if(type==='free'){showFree();revealResults();return}
- if(type==='help'){showHelp();revealResults();return}
- if(type==='dating'){showDating(q);revealResults();return}
- if(type==='pets'){showPets();revealResults();return}
- if(type==='housing'){showHousing();revealResults();return}
- if(type==='organicStore'){showOrganic();revealResults();return}
- if(type==='market'){showTuesdayMarket();revealResults();return}
+ if(type==='free'){showFree();finishHuntProgress();revealResults();return}
+ if(type==='help'){showHelp();finishHuntProgress();revealResults();return}
+ if(type==='dating'){showDating(q);finishHuntProgress();revealResults();return}
+ if(type==='pets'){showPets();finishHuntProgress();revealResults();return}
+ if(type==='housing'){showHousing();finishHuntProgress();revealResults();return}
+ if(type==='organicStore'){showOrganic();finishHuntProgress();revealResults();return}
+ if(type==='market'){showTuesdayMarket();finishHuntProgress();revealResults();return}
 }
 function updateQueryAppearance(){
  query.classList.toggle('has-text',Boolean(query.value.trim()));
@@ -1945,6 +1984,7 @@ function updateQueryAppearance(){
  el('search-feedback').textContent='';
 }
 function markSearchFound(value=query.value.trim()){
+ finishHuntProgress();
  if(!value||query.value.trim()!==value)return;
  query.classList.add('is-found');
  const lang=document.documentElement.lang||'ru';
