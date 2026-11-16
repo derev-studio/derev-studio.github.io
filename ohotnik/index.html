@@ -1187,8 +1187,11 @@ function chickenRetailLink(name,offer){
  const store=shopChoice(offer.shop);
  if(!store)return null;
  if(store.id==='rami')return {url:'https://www.rami-levy.co.il/he/online/market/בשר-ודגים/עוף-טרי',label:'🛒 Курица в Рами Леви'};
- if(store.id==='shuf')return {url:'https://www.shufersal.co.il/',label:'🏬 Шуферсаль — перейти к поиску курицы'};
- if(store.id==='yoch')return {url:'https://yochananof.co.il/',label:'🏬 Йохананов — перейти к поиску курицы'};
+ // Verified category pages rather than misleading links to retailer homepages.
+ // Wolt is one specific Shufersal branch, not a nationwide online price.
+ if(store.id==='shuf')return {url:'https://wolt.com/he/isr/tel-aviv/venue/shufersal-max-brod/items/menucategory-50',label:'🐔 Курица Шуферсаль · Wolt (филиал Тель-Авива)'};
+ // This is a third-party category of Yochananof chicken/meat offers, not its checkout.
+ if(store.id==='yoch')return {url:'https://avrum.online/deals/yohananof/meat',label:'🐔 Мясо и курица Йохананов · предложения'};
  return null;
 }
 function appendChickenStoreLink(parent,name,offer){
