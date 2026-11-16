@@ -438,7 +438,7 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 </div>
 <label class="search-label" for="query">🔎 Поиск товаров</label>
 <form class="search" id="search-form">
-<div class="search-query-wrap"><input id="query" placeholder="Например: курица, дрель, отдам даром" autocomplete="off" aria-label="Что ищем"><div class="search-feedback" id="search-feedback" aria-live="polite"></div></div>
+<div class="search-query-wrap"><input id="query" placeholder="Название товара или штрихкод" autocomplete="off" aria-label="Что ищем"><div class="search-feedback" id="search-feedback" aria-live="polite"></div></div>
 <div class="search-actions">
 <button type="submit">🔎 НАЙТИ</button>
 <button type="button" id="deals-shortcut" aria-controls="ksp-deals" title="Открыть раздел акций">🔥 СКИДКИ</button>
@@ -1831,9 +1831,39 @@ function revealResults(){
  });
 }
 
+// Additional exact-code lookup. Ordinary words still use the existing search.
+function barcodeQuery(text){
+ const value=String(text||'').trim().replace(/[\s-]/g,'');
+ return /^\d{7,14}$/.test(value)?value:'';
+}
+async function searchBarcode(code,mySeq){
+ setText('heading','🔢 Товар по штрихкоду: '+code);
+ setText('subtitle','Поиск точного номера в каталогах и прайс-листах Израиля.');
+ res.replaceChildren();message('🔎 Проверяю штрихкод…');
+ // Product pages for electronics and other goods already have verified URLs.
+ const products=await catalogData();
+ if(seq!==mySeq)return;
+ const matched=products.filter(p=>[p.barcode,p.item_code,p.code,p.id].some(v=>v!=null&&String(v).replace(/\D/g,'')===code));
+ if(matched.length){showCatalogResult(matched,code,false);return}
+ let rows=[],failed=false;
+ try{rows=await marketSearch(code,cityHe())}catch(e){failed=true}
+ if(seq!==mySeq)return;
+ // Market search may return partial or fuzzy matches: never show a different barcode.
+ const exact=rows.filter(p=>String(codeOf(p)).replace(/\D/g,'')===code);
+ if(exact.length){
+  const groups=pricedMarketGroups(exact,{term:'',chicken:false,salmon:false});
+  if(groups.length){renderMarket(groups,{term:'',chicken:false,salmon:false},city.value);return}
+ }
+ // No claimed product match when the source does not actually return this code.
+ res.replaceChildren();
+ message(failed?'Не удалось проверить штрихкод в базе цен. Попробуй ещё раз.':'Товар с таким штрихкодом в выбранном городе пока не найден. Попробуй искать по названию или выбрать «Весь Израиль».',true);
+ revealResults();
+}
 async function search(){
  updateQueryAppearance();
  const q=query.value.trim();
+ const exactCode=barcodeQuery(q);
+ if(exactCode){el('search-results-section').hidden=false;const mySeq=++seq;clear();revealResults();return searchBarcode(exactCode,mySeq)}
  const browseOnly=['pets','housing','free','help','dating','organicStore','market','stationery'].includes(chosen);
  if(!q&&!browseOnly){query.focus();return}
  el('search-results-section').hidden=false;
