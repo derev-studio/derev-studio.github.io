@@ -796,7 +796,8 @@ function showFoodDetail(p,meta,priceArea){
  const illustration=categoryPicture(name,meta);
  const hint=node('div','food-detail-caption',illustration?illustration.credit:'Фотография конкретной упаковки пока отсутствует');
  body.append(hint);
- if(illustration)body.append(action('Источник иллюстрации и лицензия',illustration.source));
+ // Photo attribution remains available in the footer's Sources page.
+ appendChickenStoreLink(body,name);
  if(exact){
   body.append(node('h3','', '✅ Страница товара по точному штрихкоду'));
   body.append(node('div','info','Штрихкод совпадает. Это каталог сравнения цен '+exact.site+', а не оформление покупки в супермаркете.'));
@@ -868,8 +869,9 @@ function displayGroceryCard(p,meta){
  view.addEventListener('click',()=>showFoodDetail(p,meta,prices));
  actions.append(view);
  const exact=exactGroceryPage(code);
+ appendChickenStoreLink(actions,title);
  if(exact){
-   actions.append(action('📦 Страница товара · '+exact.site,exact.url,true));
+   actions.append(action('📦 Сравнить этот штрихкод · '+exact.site,exact.url,false));
  }
  let btn=null;
  if(code){btn=node('button','action','🔄 Обновить цены');btn.type='button';btn.addEventListener('click',()=>comparePrices(code,item,btn,prices));actions.append(btn)}
@@ -1137,6 +1139,16 @@ function exactProductImage(code,title,large=false){
  return box;
 }
 
+// Verified retailer category link: never label it as the exact listed SKU.
+function chickenRetailLink(name){
+ if(!/(עוף|עופות|פרגי|כרע|שוקיים|כנפיים|חזה עוף|chicken|куриц|цыплен)/i.test(String(name||'')))return null;
+ return 'https://www.rami-levy.co.il/he/online/market/בשר-ודגים/עוף-טרי';
+}
+function appendChickenStoreLink(parent,name){
+ const url=chickenRetailLink(name);
+ if(!url)return;
+ parent.append(action('🛒 Смотреть курицу в Рами Леви',url,true));
+}
 function showProductPriceDetail(group,meta){
  const code=String(group.code||''),name=String(group.name||'').trim();
  const offers=Array.isArray(group.offers)?group.offers:[];
@@ -1150,11 +1162,7 @@ function showProductPriceDetail(group,meta){
  close.addEventListener('click',()=>dialog.close());top.append(close);body.append(top);
  const original=node('div','food-detail-original',name);original.dir='auto';body.append(original);
  const image=exactProductImage(code,name,true);body.append(image);
- const example=groceryExampleImage(name);
- if(example){
-  const credit=action('Источник иллюстрации · '+example.credit,example.source,false);
-  credit.classList.add('photo-credit');body.append(credit);
- }
+ // Attribution is provided on the site's Sources and Copyright page.
  // Confirmed source: matched GTIN or product code only. No random fish illustrations.
  const section=node('div','product-focus-purchase');
  if(best){
@@ -1165,6 +1173,7 @@ function showProductPriceDetail(group,meta){
  body.append(section);
  if(known&&offers.some(o=>known.chain==='Rami Levy'&&shopChoice(o.shop)?.id==='rami'))
   body.append(action('🛒 Открыть этот товар в Рами Леви',known.url,true));
+ else appendChickenStoreLink(body,name);
  if(offers.length>1){
   const more=node('details','product-focus-other');
   more.append(node('summary','','Сравнить цены других магазинов · '+(offers.length-1)));
@@ -1206,7 +1215,8 @@ function makeCompactFood(group,meta){
  view.type='button';view.addEventListener('click',()=>showProductPriceDetail(group,meta));
  actions.append(view);
  if(known&&offers.some(o=>known.chain==='Rami Levy'&&shopChoice(o.shop)?.id==='rami'))
-  actions.append(action('🛒 Страница этого товара в Рами Леви',known.url,false));
+  actions.append(action('🛒 Открыть этот товар в Рами Леви',known.url,true));
+ else appendChickenStoreLink(actions,title);
  info.append(actions);card.append(info);return card;
 }
 
