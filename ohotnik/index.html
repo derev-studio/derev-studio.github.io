@@ -2176,16 +2176,18 @@ async function handlePhoto(file){
     const formats=['ean_13','ean_8','upc_a','upc_e','qr_code'].filter(x=>supported.includes(x));
     if(formats.length){
      const detector=new BarcodeDetector({formats});
+     await preview.decode();
+     if(runId!==selectionId)return;
      const codes=await detector.detect(preview);
      if(runId!==selectionId)return;
      const found=(codes||[]).map(x=>String(x.rawValue||'').trim()).find(Boolean);
      if(found){
       picks.replaceChildren();
-      if(/^\\d{7,14}$/.test(found)){
+      if(/^\d{7,14}$/.test(found)){
        setStatus('Найден штрихкод: '+found+'. Нажми, чтобы найти точный товар.');
        addChoice('Найти по коду '+found,found);return;
       }
-      if(/^https?:\\/\\//i.test(found)){
+      if(/^https?:\/\//i.test(found)){
        setStatus('Обнаружен QR-код с веб-ссылкой. Для безопасности он не открывается автоматически. Для поиска товара используй его название или фотографию.');
       }else{
        setStatus('Распознан QR-код. Можно попробовать поиск по его содержимому.');
