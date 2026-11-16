@@ -1986,7 +1986,7 @@ function markSearchFound(value=query.value.trim()){
 }
 query.addEventListener('input',updateQueryAppearance);
 updateQueryAppearance();
-el('deals-shortcut').addEventListener('click',()=>{window.location.href='./';});
+el('deals-shortcut').addEventListener('click',()=>{window.location.href=new URL('./',document.baseURI).href;});
 el('search-form').addEventListener('submit',e=>{e.preventDefault();chosen='food';variation='all';document.querySelectorAll('#top-categories button, #categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='food'));search()});
 city.addEventListener('change',()=>{if(query.value.trim())search()});
 el('examples').addEventListener('click',e=>{const b=e.target.closest('[data-query]');if(!b)return;document.querySelectorAll('#examples .tag').forEach(x=>x.classList.toggle('active',x===b));query.value=b.dataset.query;chosen='food';variation='all';document.querySelectorAll('#top-categories button, #categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='food'));search()});
