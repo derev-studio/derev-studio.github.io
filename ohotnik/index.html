@@ -1223,7 +1223,7 @@ function appendChickenStoreLink(parent,name,offer){
 function showProductPriceDetail(group,meta){
  const code=String(group.code||''),name=String(group.name||'').trim();
  const offers=Array.isArray(group.offers)?group.offers:[];
- const known=actualStorePage(code),best=offers[0],label=known?known.name:foodRuTitle(name,meta);
+ const best=offers[0],candidate=actualStorePage(code),known=candidate&&best&&candidate.chain==='Rami Levy'&&shopChoice(best.shop)?.id==='rami'?candidate:null,label=known?known.name:foodRuTitle(name,meta);
  const dialog=node('dialog','food-detail-dialog product-focus-dialog');
  dialog.setAttribute('aria-label','Товар: '+label);
  const body=node('div','food-detail-inner');
@@ -1265,7 +1265,7 @@ function showProductPriceDetail(group,meta){
 function makeCompactFood(group,meta){
  const code=String(group.code||''),title=String(group.name||'').trim();
  const offers=Array.isArray(group.offers)?group.offers:[];
- const known=actualStorePage(code),best=offers[0];
+ const best=offers[0],candidate=actualStorePage(code),known=candidate&&best&&candidate.chain==='Rami Levy'&&shopChoice(best.shop)?.id==='rami'?candidate:null;
  const card=node('article','catalog-card grocery-card');
  const picture=exactProductImage(code,title,false);
  picture.setAttribute('role','button');picture.tabIndex=0;
