@@ -70,6 +70,8 @@ html[data-theme="forest"]{color-scheme:dark;--page:#0d211b;--card:#19362c;--text
 <p>Торговые марки, названия и логотипы магазинов и производителей принадлежат соответствующим правообладателям. Ссылки ведут на сторонние сайты, содержание и условия работы которых определяются их владельцами.</p>
 <h2>Настройки и сторонние сервисы</h2>
 <p>Выбранные язык и оформление сохраняются в браузере пользователя. При поиске запросы могут направляться внешним источникам цен и перевода; при переходе по ссылке действуют условия и правила конфиденциальности стороннего сайта.</p>
+<h2>Комментарии и фотографии рынка</h2>
+<p>В разделе «Шук» вход осуществляется через Google (Firebase Authentication). Имя автора и текст публикации, а также ссылка на фотографию хранятся в Firebase Realtime Database. Сам файл фотографии загружается через защищённый посредник в сторонний сервис ImgBB — не в Google Storage. Фотография может быть доступна по прямой ссылке ещё до проверки публикации. Не загружайте документы, личные сведения и фотографии людей без их согласия.</p>
 <h2>Аналитика посещений</h2>
 <p>Для оценки посещаемости сайтов «Охотник за скидками» и «Шук» используется Google Analytics (GA4). Сервис может собирать сведения о посещённых страницах, устройстве, языке и источнике перехода, а также использовать идентификаторы браузера. Статистику двух сайтов мы просматриваем отдельно. Подробнее — <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">политика конфиденциальности Google</a>.</p>
 <h2>Нашли ошибку или вопрос по правам?</h2>
@@ -94,6 +96,8 @@ html[data-theme="forest"]{color-scheme:dark;--page:#0d211b;--card:#19362c;--text
 <p>All trademarks, store names and logos belong to their respective rights holders. External websites are operated by their respective owners and have their own content and terms.</p>
 <h2>Preferences and external services</h2>
 <p>Language and appearance preferences are stored in your browser. Searches may contact third-party price or translation services. Following an external link takes you to a website governed by its own terms and privacy practices.</p>
+<h2>Market comments and photos</h2>
+<p>Shuk uses Google sign-in via Firebase Authentication. Author display names, post text and photo links are stored in Firebase Realtime Database. Image files are sent to ImgBB through a protected upload service, not Google Storage. Uploaded images can be accessible via a direct URL even before a post is reviewed. Do not upload documents, private details or pictures of people without their permission.</p>
 <h2>Visitor analytics</h2>
 <p>We use Google Analytics (GA4) to understand visits to Deal Hunter and Shuk. The service may collect page views, device and language information, traffic sources and browser identifiers. We review statistics for the two sites separately. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google’s privacy policy</a>.</p>
 <h2>Questions, corrections or rights concerns?</h2>
@@ -118,6 +122,8 @@ html[data-theme="forest"]{color-scheme:dark;--page:#0d211b;--card:#19362c;--text
 <p>סימני מסחר, שמות חנויות וסמלים מסחריים שייכים לבעלי הזכויות המתאימים. הקישורים מפנים לאתרים חיצוניים שהבעלים שלהם אחראים לתוכן ולתנאי השימוש בהם.</p>
 <h2>העדפות ושירותים חיצוניים</h2>
 <p>בחירת שפה ועיצוב נשמרת בדפדפן. חיפושים עשויים לשלוח בקשות לשירותי מחירים ותרגום חיצוניים. בכניסה לאתר חיצוני חלים התנאים ומדיניות הפרטיות שלו.</p>
+<h2>תגובות ותמונות מהשוק</h2>
+<p>באתר השוק מתחברים עם Google באמצעות Firebase Authentication. שם התצוגה של הכותב, הטקסט והקישור לתמונה נשמרים ב-Firebase Realtime Database. קובץ התמונה עצמו מועלה לשירות ImgBB דרך שירות העלאה מוגן, ולא ל-Google Storage. תמונה שהועלתה עשויה להיות זמינה בקישור ישיר עוד לפני אישור הפרסום. אין להעלות מסמכים, פרטים אישיים או תמונות אנשים ללא הסכמתם.</p>
 <h2>ניתוח נתוני ביקורים</h2>
 <p>אנחנו משתמשים ב-Google Analytics ‏(GA4) כדי להבין את היקף הביקורים באתרי ״צייד המבצעים״ ו״שוק״. השירות עשוי לאסוף מידע על דפים שנצפו, מכשירים, שפות, מקורות הגעה ומזהים של הדפדפן. נתוני שני האתרים נבדקים בנפרד. למידע נוסף ראו <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">מדיניות הפרטיות של Google</a>.</p>
 <h2>טעות במידע או פנייה בנושא זכויות?</h2>
@@ -141,6 +147,8 @@ html[data-theme="forest"]{color-scheme:dark;--page:#0d211b;--card:#19362c;--text
 <p>تعود العلامات التجارية وأسماء المتاجر وشعاراتها إلى أصحاب الحقوق المعنيين. تؤدي الروابط إلى مواقع مستقلة يتحمل مالكوها مسؤولية محتواها وشروط استخدامها.</p>
 <h2>التفضيلات والخدمات الخارجية</h2>
 <p>يحتفظ المتصفح بتفضيلات اللغة والمظهر. قد تُرسل طلبات البحث إلى خدمات خارجية للأسعار والترجمة. عند الانتقال إلى موقع خارجي تسري شروطه وسياسة الخصوصية الخاصة به.</p>
+<h2>تعليقات وصور السوق</h2>
+<p>يستخدم موقع السوق تسجيل الدخول عبر Google من خلال Firebase Authentication. يُخزّن اسم عرض الناشر ونص المنشور ورابط الصورة في Firebase Realtime Database. أما ملف الصورة فيُرفع إلى خدمة ImgBB عبر وسيط محمي، وليس إلى Google Storage. قد تكون الصورة متاحة عبر رابط مباشر حتى قبل مراجعة المنشور. يُرجى عدم رفع مستندات أو بيانات خاصة أو صور أشخاص دون موافقتهم.</p>
 <h2>تحليلات الزيارات</h2>
 <p>نستخدم Google Analytics ‏(GA4) لفهم الزيارات إلى موقعي «صياد التخفيضات» و«السوق». قد تجمع الخدمة معلومات عن الصفحات التي تمت زيارتها والأجهزة واللغات ومصادر الزيارات ومعرّفات المتصفح. نراجع إحصاءات الموقعين بشكل منفصل. للمزيد، راجع <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">سياسة خصوصية Google</a>.</p>
 <h2>هل وجدت خطأ أو لديك استفسار عن الحقوق؟</h2>
