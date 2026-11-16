@@ -393,6 +393,14 @@ html[data-theme="beige"] .top-categories .tag{border-color:#d4b998}
 html[data-theme="beige"] .top-categories .tag.active{background:#fff6e4!important;color:#395a71!important;border-color:#e7a549!important}
 html:is([data-theme="navy"],[data-theme="forest"]) .top-categories .tag.active{background:#f0f8ff!important;color:#204460!important;border-color:#ffc569!important}
 @media(max-width:580px){.top-categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.top-categories .tag{font-size:14px;padding:9px 8px;text-align:center}.search-query-wrap{width:100%}}
+/* Two neat rows of quick-search buttons beneath the search field. */
+#examples{display:grid;grid-template-rows:repeat(2,max-content);grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:9px;margin-top:22px;align-items:stretch}
+#examples .tag{display:flex;align-items:center;justify-content:center;min-width:0;min-height:41px;padding:8px 7px;border:2px solid rgba(255,255,255,.5);border-radius:13px;font-size:13px;line-height:1.2;text-align:center;white-space:normal;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s}
+#examples .tag.active{border-color:#ffb13d!important;background:#fff!important;color:#1c4d7c!important;box-shadow:0 0 0 2px rgba(255,177,61,.3)!important}
+#examples .tag:focus-visible{outline:3px solid #67d4ff;outline-offset:2px}
+html[data-theme="beige"] #examples .tag.active{background:#fff3df!important;color:#304c66!important;border-color:#eaa139!important}
+html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{background:#173f5c!important;color:#fff!important;border-color:#ffbe58!important}
+@media(max-width:800px){#examples{grid-auto-columns:minmax(115px,max-content);overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity}#examples .tag{scroll-snap-align:start;font-size:13px}}
 </style>
 </head>
 <body>
@@ -443,7 +451,6 @@ html:is([data-theme="navy"],[data-theme="forest"]) .top-categories .tag.active{b
 <button class="tag" type="button" data-query="дрель">🔧 Дрель</button>
 <button class="tag" type="button" data-query="рюкзак">🎒 Рюкзак</button>
 <button class="tag" type="button" data-query="скрепки">📎 Скрепки</button>
-<button class="tag" type="button" data-query="поворотный степлер">📖 Поворотный степлер</button>
 <button class="tag" type="button" data-query="FiiO DM13">🎵 FiiO DM13</button>
 <a class="tag" href="https://ksp.co.il/mob/item/179538" target="_blank" rel="noopener noreferrer">🖨️ Xerox</a>
 <button class="tag" type="button" data-query="отдам даром">🎁 Даром</button>
@@ -1867,7 +1874,7 @@ el('deals-shortcut').addEventListener('click',()=>{
 });
 el('search-form').addEventListener('submit',e=>{e.preventDefault();chosen='auto';variation='all';document.querySelectorAll('#top-categories button, #categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='auto'));search()});
 city.addEventListener('change',()=>{if(query.value.trim())search()});
-el('examples').addEventListener('click',e=>{const b=e.target.closest('[data-query]');if(!b)return;query.value=b.dataset.query;chosen='auto';variation='all';document.querySelectorAll('#top-categories button, #categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='auto'));search()});
+el('examples').addEventListener('click',e=>{const b=e.target.closest('[data-query]');if(!b)return;document.querySelectorAll('#examples .tag').forEach(x=>x.classList.toggle('active',x===b));query.value=b.dataset.query;chosen='auto';variation='all';document.querySelectorAll('#top-categories button, #categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='auto'));search()});
 function handleCategoryClick(e){
  const b=e.target.closest('[data-type]');if(!b)return;
  chosen=b.dataset.type;
