@@ -1,0 +1,2275 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#172b47">
+<meta name="description" content="Охотник за скидками — отдельный поиск продуктов и цен в супермаркетах Израиля">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<!-- Shared Derev Studio Google Analytics; distinct /ohotnik/ and /ohotnik/shuk.html site IDs. -->
+<script defer src="https://derev-studio.github.io/photo-gallery/analytics-client.js"></script>
+<title>Продукты и цены — Охотник за скидками</title>
+<style>
+:root{color-scheme:light;--navy:#152943;--blue:#245f9c;--amber:#ffbd4b;--paper:#f3f6fa;--white:#fff;--text:#21344f;--gray:#60748e;--line:#dfe8f2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:16px;line-height:1.45}
+main{max-width:960px;margin:0 auto;padding:18px 16px 48px}
+header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:15px}
+.brand{font-weight:850;font-size:24px;letter-spacing:-.02em}
+.brand small{display:block;font-size:12px;font-weight:500;color:var(--gray)}
+.place{padding:8px 11px;background:white;border:1px solid var(--line);border-radius:10px;display:flex;gap:8px;align-items:center;font-weight:700;white-space:nowrap}
+.place input{font:inherit;border:0;max-width:110px;outline:0;background:white;color:var(--text)}
+.hero{background:linear-gradient(120deg,#162946,#304e7b);color:#fff;padding:27px;border-radius:24px}
+.hero h1{font-size:31px;line-height:1.16;margin:0 0 7px}
+.hero p{color:#d8e6f5;margin:0 0 16px}
+.search{display:flex;gap:10px}
+.search input{border:0;border-radius:12px;height:58px;padding:0 16px;font:inherit;font-size:22px;min-width:0;flex:1}
+button{font:inherit;cursor:pointer}
+.search button{background:var(--amber);border:0;border-radius:12px;font-weight:850;padding:0 24px;color:#162843;white-space:nowrap}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.tag{border:1px solid #b8c9df;background:white;border-radius:24px;padding:9px 13px;font-weight:700;color:#2b4a70}
+.hero .tag{background:#ffffff16;border-color:#ffffff50;color:#fff}
+.tag.active{background:#245e9b;border-color:#245e9b;color:#fff}
+section{margin-top:19px}
+h2{font-size:22px;margin:0 0 9px}
+.info{color:var(--gray);font-size:14px}
+.panel{background:var(--white);border:1px solid var(--line);border-radius:17px;padding:18px;margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.card{background:white;border:1px solid var(--line);border-radius:17px;padding:17px;display:flex;flex-direction:column;gap:8px;min-height:165px}
+.card h3{margin:0;font-size:17px;line-height:1.3}
+.card p{margin:0;color:var(--gray);font-size:13px;flex:1}
+.pill{font-size:12px;color:#4d6a8e;font-weight:750}
+.card .actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:5px}
+.action{border:1px solid #c4d8ee;border-radius:9px;padding:10px 12px;display:inline-block;text-decoration:none;color:#1e5184;background:#eaf3ff;font-weight:750;font-size:13px;white-space:normal}
+.action.primary{background:#235f9b;color:#fff;border-color:#235f9b}
+.action:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #f39e1b;outline-offset:2px}
+button.action{font:inherit;font-size:13px;font-weight:750}
+.message{padding:14px;border-radius:13px;background:#fff;border:1px solid var(--line);margin-top:12px;color:var(--gray)}
+.message.warn{background:#fff9ed;border-color:#f0d9aa;color:#765326}
+.result{display:flex;flex-direction:column;gap:10px}
+.priceitem{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px}
+.priceitem strong{font-size:18px}
+.priceitem small{display:block;color:var(--gray);margin-top:4px}
+.priceitem .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+#results{min-height:70px}
+footer{text-align:center;color:#677a92;font-size:13px;padding-top:24px}
+footer strong{color:#2b4364}
+.hidden{display:none}
+@media(max-width:580px){main{padding:10px 10px 35px}.brand{font-size:19px}.place input{max-width:78px}.place{font-size:13px}.hero{padding:19px 16px;border-radius:17px}.hero h1{font-size:25px}.search{flex-direction:column}.search input{height:54px;font-size:19px;flex:none}.search button{height:51px}.card{min-height:0}.grid{grid-template-columns:1fr}.panel{padding:14px}}
+
+/* Более понятные карточки товаров */
+.product-head{display:flex;gap:13px;align-items:flex-start;margin-bottom:11px}
+.product-symbol{flex:none;font-size:30px;background:#f0f6fd;border-radius:14px;min-width:58px;min-height:58px;display:grid;place-items:center}
+.product-main{flex:1;min-width:0}
+.product-main strong{display:block;font-size:19px;line-height:1.3}
+.product-main .original{font-size:13px;color:#687b94;direction:rtl;text-align:left;margin-top:6px;overflow-wrap:anywhere}
+.price-row{border:1px solid var(--line);border-radius:11px;padding:10px 12px;display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:7px;flex-wrap:wrap}
+.price-num{font-weight:850;color:#1c5689;font-size:23px;white-space:nowrap;direction:ltr;unicode-bidi:isolate}
+.price-shop{font-size:14px;color:#2c425f;flex:1;min-width:135px}
+.price-date{color:#71829a;font-size:12px}
+.priceitem .actions{margin:12px 0 0}
+.priceitem{scroll-margin-top:16px}
+.priceitem .price-loading{color:#687b94;font-size:13px;margin:8px 0}
+.result-count{color:#526984;font-size:14px;margin:8px 0 14px}
+.tech-icon{font-size:28px}
+.tech-price{font-size:23px;font-weight:850;color:#1e588f;direction:ltr}
+.tech-item{min-height:210px}
+.tech-item .actions{display:flex;gap:8px;flex-wrap:wrap}
+.tech-item .pill{font-size:12px}
+@media(max-width:580px){.product-main strong{font-size:18px}.price-row{padding:9px}.tech-item{min-height:0}}
+
+/* Карточки как в товарном каталоге */
+#heading{scroll-margin-top:15px}
+#city{width:128px;max-width:160px;min-width:96px}
+.place{flex-shrink:0}.place input{max-width:160px;width:128px;cursor:text}
+.catalog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px}
+.catalog-card{background:white;border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;min-height:340px}
+.catalog-picture{height:168px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#edf4fd,#f8fbff);position:relative}
+.catalog-picture img{width:100%;height:100%;object-fit:contain;padding:9px}
+.catalog-placeholder{font-size:70px;line-height:1}
+.catalog-content{padding:16px;display:flex;flex-direction:column;flex:1;gap:8px}
+.catalog-title{font-size:17px;line-height:1.34;font-weight:800;margin:0}
+.catalog-sub{font-size:12px;line-height:1.3;color:#7386a0;max-height:34px;overflow:hidden}
+.catalog-price{font-size:26px;color:#1d5689;font-weight:900;margin-top:auto}
+.catalog-source{font-size:12px;color:#58718f}
+.catalog-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.catalog-actions .action{flex:1;text-align:center}
+.loading-line{color:#60748e;padding:8px 0;font-size:14px}
+#category-guide{color:#60748e;font-size:14px}
+@media(max-width:580px){.catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.catalog-picture{height:140px}.catalog-content{padding:11px}.catalog-card{min-height:304px}.catalog-price{font-size:22px}.catalog-title{font-size:14px}.catalog-actions .action{padding:8px 4px;font-size:12px}.place input{width:92px;max-width:102px}}
+@media(max-width:355px){.catalog-grid{grid-template-columns:1fr}.catalog-picture{height:165px}}
+
+/* Крупная кнопка и карточка с подробностями конкретного продукта */
+.food-detail-dialog{width:min(660px,calc(100vw - 24px));max-height:90vh;overflow:auto;margin:auto;border:0;border-radius:22px;padding:0;background:#fff;color:#20344e;box-shadow:0 28px 90px #0005}
+.food-detail-dialog::backdrop{background:rgba(11,27,49,.65)}
+.food-detail-inner{padding:22px}
+.food-detail-top{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}
+.food-detail-top h2{font-size:24px;margin:0}
+.food-detail-close{border:1px solid #becde0;background:#f1f6fd;color:#254568;border-radius:10px;padding:9px 12px;font-weight:800;white-space:nowrap}
+.food-detail-photo{height:240px;display:grid;place-items:center;border:1px solid #dce7f3;border-radius:16px;background:#f5f8fc;margin:14px 0;overflow:hidden;text-align:center;color:#526982}
+.food-detail-photo img{display:block;width:100%;height:100%;object-fit:contain;padding:12px}
+.food-detail-caption{font-size:12px;color:#6a7d95;margin-top:8px}
+.food-detail-original{font-size:15px;color:#4d6280;direction:rtl;text-align:left;margin-top:7px}
+.food-detail-price{font-size:26px;font-weight:850;color:#185d92;margin:10px 0 5px}
+.food-detail-seller{font-size:14px;color:#425e7e}
+.food-detail-dialog .price-row{margin-top:7px}
+.food-detail-dialog .price-row .action{padding:7px 10px}
+.food-detail-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.view-food-btn{background:#245f9c;color:#fff!important;border-color:#245f9c!important;min-width:186px;text-align:center}
+@media(max-width:580px){.food-detail-inner{padding:14px}.food-detail-top h2{font-size:20px}.food-detail-photo{height:200px}.view-food-btn{flex:1}}
+
+.food-thumb{width:100px;height:92px;flex:none;border-radius:12px;overflow:hidden;background:#f0f4fa;display:grid;place-items:center;position:relative}
+.food-thumb img{width:100%;height:100%;object-fit:cover}
+.food-thumb small{position:absolute;bottom:0;right:0;left:0;text-align:center;background:#102c46cc;color:white;font-size:10px;line-height:1.4}
+.food-photo-note{font-size:12px;color:#60748e;margin:0 0 9px}
+.food-detail-photo{height:240px!important;min-height:0!important;padding:0!important}
+.food-detail-photo img{width:100%;height:100%;object-fit:contain}
+.exact-photo-link{background:#23639c!important;color:white!important;border-color:#23639c!important}
+.priceitem .actions .view-food-btn{font-weight:850}
+@media(max-width:580px){.food-thumb{width:80px;height:78px}.food-detail-photo{height:200px!important}}
+
+/* Еда теперь показывается в тех же карточках, что и техника */
+.grocery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px;margin-top:12px}
+.grocery-card{background:var(--white);border:1px solid var(--line);border-radius:19px;overflow:hidden;display:flex;flex-direction:column;min-height:330px}
+.grocery-image{height:170px;background:#edf4fb;display:grid;place-items:center;position:relative;overflow:hidden}
+.grocery-image img{width:100%;height:100%;object-fit:contain;padding:8px;background:#fff}
+.grocery-placeholder{font-size:54px}
+.grocery-photo-hint{position:absolute;right:0;bottom:0;left:0;background:#1e385cb8;color:#fff;font-size:11px;text-align:center;padding:3px}
+.grocery-info{padding:15px;display:flex;flex:1;flex-direction:column;gap:8px}
+.grocery-info h3{margin:0;font-size:17px;line-height:1.3}
+.grocery-original{font-size:12px;line-height:1.3;color:#6c7d90}
+.grocery-price{color:#1e5689;font-size:25px;font-weight:850;margin-top:auto}
+.grocery-store{font-size:13px;color:#536985}
+.grocery-date{font-size:12px;color:#627b96}
+.grocery-actions{display:flex;gap:8px;flex-wrap:wrap}
+.grocery-actions .action,.grocery-actions button{flex:1;min-width:130px;text-align:center}
+.grocery-disabled{border-radius:9px;padding:10px 12px;color:#60748e;background:#f1f4f8;font-size:12px}
+.grocery-detail{border-top:1px solid var(--line);margin-top:8px;padding-top:9px}
+.grocery-detail summary{cursor:pointer;color:#205c95;font-weight:750;font-size:14px}
+.grocery-detail-row{border-top:1px solid var(--line);padding:8px 0;font-size:13px}
+.grocery-detail-row:first-of-type{margin-top:7px}
+.grocery-detail-row strong{color:#18578c}
+.grocery-detail-links{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}
+.grocery-detail-links a{font-size:12px;padding:8px}
+@media(max-width:580px){.grocery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.grocery-image{height:140px}.grocery-card{min-height:305px}.grocery-info{padding:11px;gap:7px}.grocery-info h3{font-size:14px}.grocery-price{font-size:21px}.grocery-actions .action,.grocery-actions button{min-width:0;font-size:12px;padding:9px 6px}.grocery-actions{flex-direction:column}}
+@media(max-width:350px){.grocery-grid{grid-template-columns:1fr}}
+
+.shop-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.shop-filter{background:#fff;border:1px solid #b9cce4;border-radius:20px;padding:9px 12px;color:#1f4e7e;font-weight:750;font-size:13px}
+.shop-filter.active{background:#245f9c;color:#fff}
+.farm-intro{font-size:14px;color:#536a85;margin:8px 0 15px}
+.farm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:13px}
+.farm-image{height:174px;position:relative;background:linear-gradient(125deg,#e5effa,#f6f9ff);display:grid;place-items:center;font-size:57px}
+.farm-image img{width:100%;height:100%;object-fit:contain;background:#fff;padding:6px}
+.farm-info{padding:15px;display:flex;flex-direction:column;gap:8px;flex:1}
+.farm-info h3{margin:0;font-size:17px}
+.farm-info .grocery-price{margin-top:auto}
+.farm-price-note{font-size:12px;color:#586d84}
+.farm-card{min-height:340px}
+.farm-card .action{display:block;text-align:center;margin-top:8px}
+@media(max-width:580px){.farm-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.farm-image{height:140px}.farm-info{padding:11px}.farm-info h3{font-size:14px}.farm-card{min-height:306px}}
+@media(max-width:360px){.farm-grid{grid-template-columns:1fr}}
+
+/* Поиск сразу в магазинах — безопасный запасной путь при недоступности API */
+.retail-search{margin-top:16px}
+.retail-search h3{font-size:18px;margin:0 0 6px}
+.retail-stores{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
+.retail-store{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.retail-store h4{margin:0;font-size:17px}
+.retail-store p{margin:0;font-size:13px;color:#59708b;flex:1}
+.retail-store .action{display:block;text-align:center}
+.retail-query{direction:auto;unicode-bidi:plaintext;font-size:18px;font-weight:700;color:#264c76;padding:9px 11px;background:#f0f5fb;border-radius:9px}
+.retail-help{font-size:13px;color:#60748e;margin:4px 0}
+@media(max-width:580px){.retail-stores{grid-template-columns:1fr}.retail-store{padding:12px}}
+
+/* Price rows are deliberately visible on the card; no need to open a whole catalogue. */
+.grocery-offer{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid #e3eaf3;padding:8px 0;font-size:13px}
+.grocery-offer span{flex:1;min-width:0;overflow-wrap:anywhere;color:#334e6c}
+.grocery-offer strong{white-space:nowrap;color:#14598e;font-size:16px}
+.food-detail-dialog{border:1px solid #d5e0ed;border-radius:18px;max-width:min(620px,95vw);width:95vw;max-height:85vh;overflow:auto;padding:20px;box-shadow:0 16px 60px #112d4d60}
+.food-detail-dialog::backdrop{background:#0b213b90}
+.food-detail-body{display:flex;flex-direction:column;gap:10px}
+.food-detail-body h2{font-size:21px;margin:0}
+.food-detail-body .grocery-detail-row{background:#f7faff;padding:10px;border-radius:10px}
+
+/* V37: one clear, photo-first product viewer */
+.product-focus-dialog{padding:0;max-width:560px!important}
+.product-focus-dialog .food-detail-inner{padding:18px}
+.product-focus-dialog .product-focus-photo{height:245px!important;margin:13px 0 6px!important}
+.product-focus-dialog .product-focus-photo img{object-fit:contain;width:100%;height:100%}
+.product-focus-purchase{padding:12px 0 6px}
+.product-focus-price{font-size:36px;font-weight:900;color:#175b91;line-height:1.2}
+.product-focus-store{font-size:17px;font-weight:700;color:#27476b;margin-top:7px}
+.product-focus-other{margin-top:13px;border-top:1px solid #dce6f0;padding-top:12px}
+.product-focus-other summary{font-weight:800;cursor:pointer;color:#205c95}
+.product-focus-dialog .food-detail-caption{font-size:12px}
+.grocery-image[role=button]{cursor:pointer}
+.grocery-image[role=button]:focus-visible{outline:3px solid #3a87e8;outline-offset:3px}
+.product-focus-dialog .action{display:block;text-align:center}
+@media(max-width:580px){.product-focus-dialog .product-focus-photo{height:220px!important}.product-focus-dialog .food-detail-inner{padding:14px}}
+
+.real-photo-missing{width:100%;height:100%;display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center;background:linear-gradient(145deg,#f0f5fa,#fff);color:#6b7f95;text-align:center;font-size:13px;padding:10px}
+.real-photo-icon{font-size:44px;line-height:1.3}
+.product-focus-photo .real-photo-icon{font-size:70px}
+.product-focus-dialog .product-focus-photo{margin:14px 0!important}
+
+.photo-credit{font-size:11px!important;color:#5b7491!important;background:none!important;border:0!important;text-decoration:underline;box-shadow:none!important;text-align:left!important;padding:4px 0!important}
+.catalog-picture .grocery-photo-hint,.product-focus-photo .grocery-photo-hint{z-index:1}
+
+/* Быстрый доступ к действующим акциям KSP и независимой истории цен. */
+.deals-hub{background:#fff;border:1px solid #dce5f1;border-radius:19px;padding:17px;margin-top:16px;box-shadow:0 4px 14px #132b4410}
+.deals-hub h2{font-size:21px;margin:0 0 4px;color:#193857}
+.deals-hub .deals-intro{font-size:13px;color:#526b89;margin:0 0 13px}
+.deals-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.deal-link{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:82px;padding:13px 12px;border:1px solid #cbd9ec;border-radius:13px;color:#184d7e;background:#f0f6ff;text-decoration:none;line-height:1.25}
+.deal-link strong{font-size:16px;font-weight:850}
+.deal-link small{font-size:12px;color:#536b86;line-height:1.32}
+.deal-link.hot{background:#213751;color:#fff;border-color:#213751}
+.deal-link.hot small{color:#d9e6f6}
+.deal-link.history{background:#e7f7f6;border-color:#93c9c5;color:#0d5551}
+.deal-link.history small{color:#396c68}
+.deal-link:focus-visible{outline:3px solid #f49d14;outline-offset:2px}
+.deal-link:hover{border-color:#3974ba;transform:translateY(-1px)}
+.deals-note{font-size:12px;color:#64768d;margin:11px 1px 0}
+@media(max-width:710px){.deals-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.deal-link{min-height:82px;padding:12px}.deal-link strong{font-size:15px}.deals-hub{padding:14px}}
+@media(max-width:335px){.deals-grid{grid-template-columns:1fr}}
+ .hero a.tag{display:inline-flex;align-items:center;text-decoration:none}
+
+/* Favorite local hardware stores have real locations, not invented inventory. */
+.local-shops{background:#fff;border:1px solid #dfe8f2;border-radius:17px;padding:15px;margin-top:14px}
+.local-shops h2{font-size:18px;margin:0 0 9px}
+.local-shops-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.local-shop{background:#f6f9fd;border:1px solid #dae5f3;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.local-shop strong{font-size:16px}
+.local-shop small{font-size:12px;color:#526b87}
+.local-shop-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.local-shop-actions a{display:inline-block;background:#e5f0ff;color:#154d80;text-decoration:none;border:1px solid #b6d2ee;border-radius:8px;padding:8px 11px;font-weight:750;font-size:12px}
+.local-shop-note{font-size:12px;margin:10px 0 0;color:#718099}
+@media(max-width:570px){.local-shops-grid{grid-template-columns:1fr}.local-shops{padding:12px}}
+
+.local-search-info{display:flex;flex-direction:column;gap:6px;padding:12px;background:#edf5ff;border:1px solid #cddff2;border-radius:11px;margin:12px 0}
+.local-search-info strong{font-size:15px;color:#183c63}.local-search-info span{font-size:12px;color:#56708d}
+
+/* Language selection: RU, EN, HE, AR. Hebrew and Arabic are RTL. */
+.site-customizer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.lang-switch{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));direction:ltr;gap:0;border:1px solid var(--line);border-radius:13px;overflow:hidden;min-width:360px;background:var(--white)}
+.lang-switch button{background:transparent;border:0;border-right:1px solid var(--line);padding:10px 15px;color:var(--text);font-weight:750;font-size:14px}
+.lang-switch button:last-child{border:0}
+.lang-switch button[aria-pressed=true]{background:#235f9b;color:#fff}
+.theme-picker{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:750;color:var(--text)}
+.theme-picker select{min-width:195px;max-width:240px;height:42px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:5px 8px;font:inherit;font-size:13px;color:var(--text)}
+@media(max-width:700px){.site-customizer{gap:8px}.lang-switch{flex:1;min-width:0;width:100%}.lang-switch button{padding:10px 8px;font-size:13px}.theme-picker{width:100%;justify-content:flex-end}.theme-picker select{max-width:100%;min-width:0}}
+html[dir="rtl"] .lang-switch{direction:ltr}
+html[dir="rtl"] .hero,html[dir="rtl"] .catalog-content,html[dir="rtl"] .local-shop{text-align:start}
+html[dir="rtl"] #query{direction:auto;text-align:start}
+html[dir="rtl"] .grocery-original,html[dir="rtl"] .catalog-sub{unicode-bidi:plaintext}
+html[dir="rtl"] .grocery-price,html[dir="rtl"] .catalog-price,html[dir="rtl"] .tech-price{direction:ltr;unicode-bidi:isolate;text-align:start}
+/* Pastel cream and sand: no dark brown header, surfaces or controls. */
+html[data-theme="beige"]{
+ color-scheme:light;
+ --paper:#f9f5ec;--white:#fffdf8;--text:#45596c;--gray:#788898;
+ --line:#e8e0d4;--blue:#608ba3;--amber:#f4d7a9;
+}
+html[data-theme="beige"] body{background:#f9f5ec;color:var(--text)}
+html[data-theme="beige"] .hero{
+ background:linear-gradient(125deg,#f5e5ce 0%,#fbf1e3 54%,#e7f0ed 100%);
+ border:1px solid #ebdbc5;color:#41596c;
+ box-shadow:0 8px 28px #c9b99a16;
+}
+html[data-theme="beige"] .hero h1{color:#435b6d}
+html[data-theme="beige"] .hero p{color:#687c89}
+html[data-theme="beige"] .hero .tag{background:#fffaf2;border-color:#e6d8c3;color:#516777}
+html[data-theme="beige"] .hero .tag:hover{background:#fdf2e2}
+html[data-theme="beige"] .search input{
+ background:#fffefa;color:#344b60;border:1px solid #e8e0d4;
+ box-shadow:0 3px 9px #b9a68416;
+}
+html[data-theme="beige"] .search button{
+ background:#d1e4e8;color:#2a5269;border:1px solid #b8d8df;
+}
+html[data-theme="beige"] :is(.deals-hub,.local-shops,.catalog-card,.card,.panel,.priceitem,.food-detail-dialog,.farm-card,.retail-store,.place){
+ background:#fffdf8;border-color:var(--line);color:var(--text);
+}
+html[data-theme="beige"] :is(.tag,.shop-filter,.local-shop,.local-search-info,.retail-query,.message){
+ background:#fffaf1;border-color:#e9dfcf;color:#526779;
+}
+html[data-theme="beige"] .shop-filter.active,
+html[data-theme="beige"] .tag.active{background:#d9e9eb;border-color:#aecbd4;color:#2f5971}
+html[data-theme="beige"] :is(.grocery-price,.catalog-price,.tech-price,.product-focus-price,.price-num){color:#527d93}
+html[data-theme="beige"] :is(.deal-link,.action:not(.primary),.local-shop-actions a){
+ background:#fdf8ef;border-color:#e5d9c7;color:#4b6d83;
+}
+html[data-theme="beige"] .deal-link.hot{
+ background:#f7e6e3;border-color:#eecfce;color:#735968;
+}
+html[data-theme="beige"] .deal-link.hot small{color:#826e78}
+html[data-theme="beige"] .deal-link.history{
+ background:#eaf5f0;border-color:#cbe2d7;color:#456f67;
+}
+html[data-theme="beige"] .deal-link.history small{color:#63847b}
+html[data-theme="beige"] .deal-link small{color:#758595}
+html[data-theme="beige"] .action.primary{
+ background:#648ba3;border-color:#648ba3;color:#fff;
+}
+html[data-theme="beige"] :is(.catalog-picture,.food-detail-photo,.farm-image){
+ background:linear-gradient(135deg,#faf5eb,#edf5f2);
+}
+html[data-theme="beige"] .lang-switch button[aria-pressed=true]{
+ background:#d4e6eb;color:#315c72;
+}
+html[data-theme="beige"] .lang-switch,
+html[data-theme="beige"] #site-theme{background:#fffdf8;border-color:var(--line)}
+html[data-theme="beige"] .real-photo-missing{background:#f8f5ee;color:#6c8291}
+html[data-theme="navy"]{color-scheme:dark;--paper:#0c1728;--white:#192a42;--text:#eaf2fc;--gray:#a4b8cf;--line:#34506e;--blue:#8dbdff;--amber:#f4bd67;--ui-alt:#223956;--ui-link:#a6d5ff}
+html[data-theme="forest"]{color-scheme:dark;--paper:#0d211b;--white:#19362c;--text:#ebf7ef;--gray:#a5c5b5;--line:#365849;--blue:#9bd7ad;--amber:#d5c28b;--ui-alt:#244536;--ui-link:#b7e6bb}
+html[data-theme="navy"] body,html[data-theme="forest"] body{background:var(--paper);color:var(--text)}
+html[data-theme="navy"] .hero{background:linear-gradient(125deg,#182945,#294969)}
+html[data-theme="forest"] .hero{background:linear-gradient(125deg,#193c30,#2f5842)}
+html[data-theme="navy"] .hero p,html[data-theme="forest"] .hero p{color:#d0e4dd}
+html:is([data-theme="navy"],[data-theme="forest"]) :is(.deals-hub,.local-shops,.catalog-card,.card,.panel,.grocery-card,.food-detail-dialog,.priceitem,.retail-store,.farm-card,.message,.place,.local-shop,.local-search-info,.retail-query,.shop-filter,.tag,.grocery-detail-row,.price-row,.grocery-image,.catalog-picture,.grocery-disabled,.food-detail-photo){background:var(--white)!important;color:var(--text)!important;border-color:var(--line)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) :is(.local-shop,.retail-store,.retail-query,.local-search-info){background:var(--ui-alt)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) :is(.card p,.catalog-sub,.catalog-source,.grocery-original,.grocery-store,.grocery-date,.info,.pill,.deals-note,.local-shops small,.local-shop-note,.result-count,.food-detail-caption,.food-detail-original,.catalog-actions small,.retail-help,.brand small,.local-search-info span,footer){color:var(--gray)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) :is(.grocery-price,.catalog-price,.tech-price,.product-focus-price,.product-focus-store,.catalog-title,.price-num,.price-shop,.grocery-offer strong,.retail-store h4){color:var(--text)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) :is(.deal-link:not(.hot),.local-shop-actions a,.action:not(.primary),.shop-filter,.food-detail-close){background:var(--ui-alt)!important;color:var(--ui-link)!important;border-color:var(--line)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .deal-link.hot{background:#354f75!important;color:#fff!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .deal-link.history{background:var(--ui-alt)!important;color:var(--ui-link)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .deal-link small{color:var(--gray)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .tag.active,html:is([data-theme="navy"],[data-theme="forest"]) .shop-filter.active{background:#32669b!important;color:#fff!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .hero .tag{background:#ffffff15!important;color:#fff!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .hero input,html:is([data-theme="navy"],[data-theme="forest"]) .place input{background:var(--ui-alt)!important;color:var(--text)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .grocery-photo-hint{color:white!important;background:#122940db!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .real-photo-missing{background:var(--ui-alt);color:var(--gray)}
+html:is([data-theme="navy"],[data-theme="forest"]) .photo-credit{color:var(--ui-link)!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .search button{color:#15223a}
+html:is([data-theme="navy"],[data-theme="forest"]) .grocery-image img{background:transparent}
+.footer-legal{margin-top:10px;font-size:13px}.footer-legal a{color:var(--blue);text-decoration:underline;text-underline-offset:3px;font-weight:700}.footer-legal a:focus-visible{outline:3px solid #efa63f;outline-offset:3px}
+
+/* Beta status stays quiet and out of the way in the footer. */
+footer .beta-note{display:inline-block;margin:0 0 8px;color:var(--gray);font-size:12px;font-weight:500}
+
+/* Prominent input: bright orange when empty, bright green when text is entered. */
+.search-label{display:block;margin:0 0 9px;font-size:16px;font-weight:850;color:inherit}
+.search .search-actions{display:flex;gap:9px;flex:none;min-width:0}
+.search .search-actions button{height:58px;padding:0 18px;font-weight:850;border-radius:12px}
+.search .search-actions #deals-shortcut{background:#fff0d3;color:#76420a;border:2px solid #f6bd57}
+.search .search-actions #deals-shortcut:hover{background:#ffe3b0}
+.search #query{
+ background:#fff!important;color:#23344a!important;
+ border:4px solid #f39a18!important;
+ box-shadow:0 0 0 3px rgba(255,185,58,.27),0 5px 17px rgba(230,120,14,.22)!important;
+ font-weight:620;outline:none;transition:border-color .15s,box-shadow .15s;
+}
+.search #query::placeholder{color:#667483;opacity:1;font-weight:500}
+.search #query.has-text{
+ border-color:#15944f!important;
+ box-shadow:0 0 0 3px rgba(37,174,99,.23),0 5px 17px rgba(13,123,58,.17)!important;
+}
+.search #query:focus-visible{outline:3px solid #ffcf77!important;outline-offset:2px}
+.search #query.has-text:focus-visible{outline-color:#75df9d!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .search #query{background:#fff!important;color:#23344a!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .search .search-actions #deals-shortcut{color:#76420a}
+html[data-theme="beige"] .search .search-actions #deals-shortcut{background:#fff0d3;border-color:#f6bd57;color:#76420a}
+#ksp-deals{scroll-margin-top:14px}
+@media(max-width:700px){.search{flex-direction:column}.search .search-actions{width:100%}.search .search-actions button{flex:1;min-width:0;min-height:53px}}
+@media(max-width:580px){.search .search-actions button{height:53px;padding:0 8px;font-size:15px}.search #query{height:58px;font-size:20px}}
+@media(prefers-reduced-motion:reduce){.search #query{transition:none}}
+
+/* Search colours: orange = empty, blue = typing, green = matching results. */
+.search-query-wrap{flex:1;min-width:0;position:relative}
+.search-query-wrap #query{width:100%;box-sizing:border-box;flex:none}
+.search #query.is-found{padding-bottom:18px!important}
+.search #query.has-text{border-color:#2486ee!important;box-shadow:0 0 0 3px rgba(65,144,248,.24),0 5px 17px rgba(31,111,212,.15)!important}
+.search #query.is-found{border-color:#15944f!important;box-shadow:0 0 0 3px rgba(37,174,99,.24),0 5px 17px rgba(13,123,58,.16)!important}
+.search #query.has-text:focus-visible{outline-color:#87b9ff!important}
+.search #query.is-found:focus-visible{outline-color:#75df9d!important}
+.search-feedback{position:absolute;inset-inline-start:16px;bottom:5px;max-width:calc(100% - 32px);color:#147a3f!important;font-weight:850;font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;margin:0}
+.search-feedback:empty{display:none}
+html[data-theme="beige"] .search-feedback{color:#237751}
+.top-categories{margin:0 0 15px}
+.top-categories .tag{padding:10px 15px;border:2px solid rgba(255,255,255,.55);font-size:15px}
+.top-categories .tag.active{background:#fff!important;color:#21456d!important;border-color:#ffbb54!important;box-shadow:0 1px 9px #0002}
+html[data-theme="beige"] .top-categories .tag{border-color:#d4b998}
+html[data-theme="beige"] .top-categories .tag.active{background:#fff6e4!important;color:#395a71!important;border-color:#e7a549!important}
+html:is([data-theme="navy"],[data-theme="forest"]) .top-categories .tag.active{background:#f0f8ff!important;color:#204460!important;border-color:#ffc569!important}
+@media(max-width:580px){.top-categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.top-categories .tag{font-size:14px;padding:9px 8px;text-align:center}.search-query-wrap{width:100%}}
+/* Two neat rows of quick-search buttons beneath the search field. */
+#examples{display:grid;grid-template-rows:repeat(2,max-content);grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:9px;margin-top:22px;align-items:stretch}
+#examples .tag{display:flex;align-items:center;justify-content:center;min-width:0;min-height:41px;padding:8px 7px;border:2px solid rgba(255,255,255,.5);border-radius:13px;font-size:13px;line-height:1.2;text-align:center;white-space:normal;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s}
+#examples .tag.active{border-color:#ffb13d!important;background:#fff!important;color:#1c4d7c!important;box-shadow:0 0 0 2px rgba(255,177,61,.3)!important}
+#examples .tag:focus-visible{outline:3px solid #67d4ff;outline-offset:2px}
+html[data-theme="beige"] #examples .tag.active{background:#fff3df!important;color:#304c66!important;border-color:#eaa139!important}
+html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{background:#173f5c!important;color:#fff!important;border-color:#ffbe58!important}
+@media(max-width:800px){#examples{grid-auto-columns:minmax(115px,max-content);overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity}#examples .tag{scroll-snap-align:start;font-size:13px}}
+
+/* Optional photo search: no layout changes to the existing search and cards. */
+.photo-search-launch{background:#e7f4ff!important;color:#17436d!important;border:2px solid #8bc6ed!important;min-width:58px;padding:0 14px!important}
+.photo-search-launch:hover{background:#d0ebff!important}
+.photo-search-launch{display:inline-flex;align-items:center;justify-content:center;gap:9px}
+.photo-camera-icon{font-size:32px;line-height:1;display:inline-block}
+.photo-drop-zone{margin:10px 0 4px;border:2px dashed #9fdaff;border-radius:12px;min-height:95px;display:flex;align-items:center;justify-content:center;gap:7px;flex-direction:column;cursor:pointer;padding:10px;background:#10284133}
+.photo-drop-zone span{font-size:32px;line-height:1}
+.photo-drop-zone strong{font-size:17px}
+.photo-drop-zone small{font-size:12px;color:#e5f3ff}
+.photo-drop-zone:focus-visible{outline:3px solid #fff1ac;outline-offset:2px}
+.photo-search-panel.drag-over,.photo-drop-zone.drag-over,.search.drag-over{outline:3px dashed #5dd8ff!important;outline-offset:3px;background:#2c709955!important}
+.search .search-actions .photo-search-launch{min-width:148px}
+.photo-search-panel{margin-top:12px;padding:13px;background:#ffffff12;border:1px solid #ffffff55;border-radius:13px}
+.photo-search-panel[hidden]{display:none}
+.photo-search-content{display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px}
+.photo-search-preview{width:95px;height:95px;object-fit:contain;border-radius:10px;background:#fff}
+.photo-search-details{flex:1;min-width:190px}
+.photo-search-details p{margin:4px 0 8px;font-size:13px;line-height:1.45;color:#eff5ff}
+.photo-search-picks{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.photo-search-picks button{font-size:14px;min-height:39px;padding:7px 11px;border:2px solid #79c3ff;border-radius:10px;background:#fff;color:#184c80;font-weight:800}
+.photo-search-picks button:hover,.photo-search-picks button:focus-visible{border-color:#faad43;background:#fff3de}
+.photo-search-close{border:1px solid #cbdceb;border-radius:9px;background:#fff;color:#31506e;padding:5px 9px;font-weight:800}
+@media(max-width:580px){.search .search-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.search .search-actions button{width:100%;height:49px;font-size:14px;padding:0 8px}.search .search-actions .photo-search-launch{grid-column:1/-1;min-height:56px;padding:0 12px!important}.photo-search-preview{width:80px;height:80px}}
+
+/* A real indeterminate indicator: never invent a percentage of completed searches. */
+.hunt-progress{position:sticky;top:8px;z-index:18;margin:0 0 15px;border:1px solid #77b8ef;border-radius:16px;background:#173b62;color:#f4faff;padding:12px 15px;box-shadow:0 8px 25px #001c3960}
+.hunt-progress[hidden]{display:none!important}
+.hunt-progress-top{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:850;margin-bottom:10px}
+.hunt-progress-icon{font-size:24px}
+.hunt-progress-track{height:11px;border-radius:20px;overflow:hidden;background:#ffffff2a;position:relative}
+.hunt-progress-bar{height:100%;width:43%;border-radius:20px;background:linear-gradient(90deg,#32aaff,#35d29c,#f6d75c,#36a8ff);background-size:200% 100%;animation:hunt-move 1.45s ease-in-out infinite alternate,hunt-shine 2.5s linear infinite}
+.hunt-progress small{display:block;margin-top:7px;color:#d8eafa;font-size:12px}
+@keyframes hunt-move{from{transform:translateX(-65%)}to{transform:translateX(215%)}}
+@keyframes hunt-shine{from{background-position:0 0}to{background-position:200% 0}}
+@media(prefers-reduced-motion:reduce){.hunt-progress-bar{animation:none;width:100%}}
+
+.community-panel{border:1px solid var(--line);background:var(--white);border-radius:18px;padding:18px;margin-top:24px}
+.community-panel .community-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0;font-size:14px}
+.community-panel button{border:1px solid #7db2db;background:#256b9e;color:white;border-radius:10px;padding:10px 13px;font-weight:800}
+.community-panel button[hidden],.community-panel form[hidden]{display:none!important}
+.community-panel form{display:grid;gap:8px;max-width:680px}
+.community-panel textarea{font:inherit;border:2px solid var(--line);border-radius:12px;padding:12px;min-height:90px;background:var(--white);color:var(--text)}
+.community-list{display:grid;gap:8px;margin-top:12px}
+.community-comment{border:1px solid var(--line);border-radius:12px;padding:11px;overflow-wrap:anywhere}
+.community-comment p{margin:6px 0 0;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<main>
+<div class="site-customizer" aria-label="Язык и оформление">
+<nav class="lang-switch" aria-label="Язык сайта">
+<button type="button" data-lang="ru" lang="ru" aria-pressed="true">Русский</button>
+<button type="button" data-lang="en" lang="en" aria-pressed="false">English</button>
+<button type="button" data-lang="he" lang="he" dir="rtl" aria-pressed="false">עברית</button>
+<button type="button" data-lang="ar" lang="ar" dir="rtl" aria-pressed="false">العربية</button>
+</nav>
+<label class="theme-picker" for="site-theme"><span id="theme-label">🎨 Тема</span>
+<select id="site-theme" aria-label="Оформление сайта">
+<option value="auto">🌙 Авто: день / ночь</option>
+<option value="light">☀️ Светлая</option>
+<option value="beige">🏖️ Нежно-бежевая</option>
+<option value="navy">🌌 Тёмно-синяя</option>
+<option value="forest">🌲 Тёмно-зелёная</option>
+</select></label>
+</div>
+<header>
+<div class="brand">🔎 Охотник за скидками <small>Продукты и супермаркеты Израиля</small></div>
+<label class="place">📍 <input id="city" aria-label="Город (можно выбрать любой)" value="Тверия" list="city-options" autocomplete="off" title="Впиши город или выбери из списка"></label>
+<datalist id="city-options">
+<option value="Весь Израиль"><option value="Тверия"><option value="Хайфа"><option value="Тель-Авив"><option value="Иерусалим"><option value="Афула"><option value="Назарет"><option value="Ноф-ха-Галиль"><option value="Беэр-Шева"><option value="Ашдод"><option value="Ашкелон"><option value="Нетания"><option value="Ришон-ле-Цион"><option value="Петах-Тиква"><option value="Бней-Брак"><option value="Рамат-Ган"><option value="Цфат"><option value="Акко"><option value="Эйлат"><option value="Нагария"><option value="Хадера"><option value="Герцлия"><option value="Кармиэль"><option value="Кфар-Саба"><option value="Реховот"><option value="Бат-Ям"><option value="Холон"><option value="Кирьят-Шмона"><option value="Йокнеам"><option value="Лод"><option value="Рамла"><option value="Кирьят-Бялик"><option value="Кирьят-Ата">
+</datalist>
+</header>
+<div class="hero">
+<h1>🥬 Продукты и цены</h1>
+<p>Ищем еду и сравниваем цены супермаркетов. Техника теперь на отдельной главной странице.</p>
+<div class="tags top-categories" id="top-categories" aria-label="Основные разделы">
+<a class="tag" href="./">🔧 Техника и товары</a>
+<button type="button" class="tag active" data-type="food">🥬 Продукты и еда</button>
+</div>
+<label class="search-label" for="query">🔎 Поиск товаров</label>
+<form class="search" id="search-form">
+<div class="search-query-wrap"><input id="query" placeholder="Товар, описание или штрихкод" autocomplete="off" aria-label="Что ищем"><div class="search-feedback" id="search-feedback" aria-live="polite"></div></div>
+<div class="search-actions">
+<button type="submit">🔎 НАЙТИ</button>
+<button type="button" id="deals-shortcut" title="Вернуться к технике">🔧 ТЕХНИКА</button>
+<button type="button" class="photo-search-launch" id="photo-search-open" title="Загрузить фото и найти товар" aria-label="Загрузить фотографию товара"><span class="photo-camera-icon" aria-hidden="true">📷</span> <span>ПО ФОТО</span></button>
+</div>
+</form>
+<input type="file" accept="image/*" id="photo-search-file" hidden aria-label="Выбрать фотографию товара">
+<div class="photo-search-panel" id="photo-search-panel" hidden>
+ <div class="photo-search-content">
+  <img class="photo-search-preview" id="photo-search-preview" alt="Выбранная фотография" hidden>
+  <div class="photo-search-details">
+   <div style="display:flex;justify-content:space-between;gap:8px"><strong>📷 Загрузить фотографию товара</strong><button type="button" class="photo-search-close" id="photo-search-close" aria-label="Закрыть поиск по фото">✕</button></div>
+   <p id="photo-search-status" aria-live="polite">Выберите фотографию, вставьте её из буфера или перетащите сюда.</p>
+   <div class="photo-drop-zone" id="photo-drop-zone" tabindex="0" role="button" aria-label="Выбрать фотографию или перетащить сюда">
+    <span aria-hidden="true">📷</span><strong>Выбрать фото</strong><small>Или вставить ⌘V / Ctrl+V · или перетащить сюда</small>
+   </div>
+   <div class="photo-search-picks" id="photo-search-picks"></div>
+  </div>
+ </div>
+</div>
+<div class="tags" id="examples">
+<button class="tag" type="button" data-query="курица">🍗 Курица</button>
+<button class="tag" type="button" data-query="лосось">🐟 Лосось</button>
+<button class="tag" type="button" data-query="форель">🐟 Форель</button>
+<button class="tag" type="button" data-query="молоко">🥛 Молоко</button>
+<button class="tag" type="button" data-query="яйца">🥚 Яйца</button>
+<button class="tag" type="button" data-query="хлеб">🍞 Хлеб</button>
+<button class="tag" type="button" data-query="помидоры">🍅 Помидоры</button>
+</div>
+</div>
+
+<section class="panel"><h2>Цены супермаркетов</h2><p class="info">На этой странице мы продолжаем улучшать поиск продуктов. Цены из прайс-листов не всегда сопровождаются ссылкой на покупку. Если точной страницы нет, чужую страницу не подставляем.</p></section>
+<section><div class="tags" id="categories"></div></section>
+<section id="search-results-section" aria-live="polite" aria-atomic="false" hidden>
+<div class="hunt-progress" id="hunt-progress" role="status" aria-live="polite" hidden>
+ <div class="hunt-progress-top"><span class="hunt-progress-icon" aria-hidden="true">🔎</span><span id="hunt-progress-text">Ищем товар…</span></div>
+ <div class="hunt-progress-track"><div class="hunt-progress-bar"></div></div>
+ <small>Проверяем товары и предложения магазинов</small>
+</div>
+<h2 id="heading"></h2>
+<p class="info" id="subtitle"></p>
+<div id="filters" class="tags hidden"></div>
+<div id="results"></div>
+</section>
+<section id="community" class="community-panel" aria-label="Комментарии и вход через Google">
+<h2>💬 Комментарии и предложения</h2>
+<p class="info" id="community-status">Подключаем комментарии…</p>
+<div class="community-controls">
+<button id="community-login" type="button" hidden>Войти через Google</button>
+<button id="community-logout" type="button" hidden>Выйти</button>
+<span id="community-user">Комментарии можно читать без входа.</span>
+</div>
+<form id="community-form" hidden>
+<label for="community-text">Ваш комментарий</label>
+<textarea id="community-text" rows="3" maxlength="500" minlength="2" placeholder="Напишите комментарий или предложение…" required></textarea>
+<button type="submit">Опубликовать</button>
+</form>
+<div id="community-list" class="community-list"></div>
+</section>
+<footer><div class="beta-note">🧪 Бета · сайт тестируется</div><strong>Создатель — Александр Деревяшкин</strong><div>Новые технологии и искусственный интеллект · Израиль</div><div>Цены и наличие меняются; перед покупкой проверяйте у продавца. Сайт не является магазином.</div><div class="footer-legal"><a href="./sources.html" id="rights-link">Источники и авторские права</a></div></footer>
+</main>
+<script>
+(function(){
+'use strict';
+const el=id=>document.getElementById(id);
+const query=el('query'), city=el('city'), res=el('results'), filters=el('filters');
+let chosen='food', seq=0, variation='all';
+const words={
+ chicken:['куриц','цыплен','chicken','עוף','פרגית','دجاج','فروج'],
+ salmon:['лосос','сёмг','семг','salmon','סלמון','سلمون'],
+ free:['отдам','даром','подарю','бесплатн','למסירה','חינם','للتبرع','أشياء مجانية'],
+ help:['помощ','бесплатная еда','продуктовая помощь','продукты бесплатно','مساعدة','مساعدات','طعام مجاني'],
+ dating:['женщин','мужчин','знакомств','девушк','мужчин','ищу пару','dating','تعارف','التعارف','بحث عن شريك'],
+ pets:['собак','кошк','кошеч','котён','котен','котят','котика','щенк','питомц','питомец','приют для животн','adopt a dog','adopt a cat','pet adoption','puppy adoption','kitten adoption','adopt dog','adopt cat','כלב','חתול','אימוץ','חיות מחמד','בעלי חיים לאימוץ','تبني قطة','تبني كلب','حيوانات أليفة','كلب','قطط','قطة'],
+ housing:['аренд','квартир','жиль','недвижим','снять дом','купить дом','комнату','комнаты в аренду','снять комнат','ипотек','real estate','apartment','housing','flat for rent','rent a room','דירה','דירות','נדלן','נדל״ן','השכרה','למכירה','شقة','شقق','سكن','إيجار','عقار','بيع بيت','استئجار غرفة'],
+ organicStore:['ницат','ницан','ницат ха','дубдеван','дувдеван','nizat','ניצת הדובדבן','магазин три вишни','магазин с вишенками','organic shop tiberias','نيتسات','نيتسات هَدوفدفان'],
+ market:['вторничн','верхний рынок','выездной рынок','рынок по вторникам','тверия илит рынок','tuesday market tiberias','שוק נודד','שוק יום שלישי','سوق الثلاثاء في طبريا','السوق المتنقل'],
+ stationery:['скрепк','скобк','скоб для степлер','скобы для степлер','степлер','сшивател','канцтовар','paper clip','paperclip','swivel stapler','rotating stapler','long arm stapler','staples for stapler','שדכן','אטבי נייר','אטבים','סיכות לשדכן','מהדקי נייר','שדכן מסתובב','دباسة','مشابك ورق','دبابيس ورق'],
+ tech:['дрел','принтер','кабел','монитор','ноутбук','ксерокс','шурупов','техник','bosch','makita','xerox']
+};
+function has(t,arr){return arr.some(x=>t.includes(x))}
+function mode(q){
+ if(chosen!=='auto')return chosen;
+ const t=q.toLowerCase();
+ if(has(t,words.help))return 'help';
+ if(has(t,words.dating))return 'dating';
+ if(has(t,words.organicStore))return 'organicStore';
+ if(has(t,words.market))return 'market';
+ if(has(t,words.stationery)||/(?:поворотн|вращающ|разворотн).{0,20}степлер|степлер.{0,20}(?:поворотн|вращающ|разворотн)/i.test(t))return 'stationery';
+ if(has(t,words.housing))return 'housing';
+ // Pet-food or pet-accessory queries should remain product searches.
+ const petSupplies=/(?:корм|лакомств|игрушк|поводок|ошейник|лоток|наполнитель|клетк|переноск|шампун|ветеринар|dog food|cat food|pet food|collar|leash|pet toy|מזון|אוכל לכלב|אוכל לחתול|רצועה|קולר|طعام|أكل|علف|قلادة|طوق|مقود)/.test(t);
+ if(has(t,words.pets)&&!petSupplies)return 'pets';
+ if(has(t,words.free))return 'free';
+ if(/форел|форель|кибуц дан|киббуц дан|кибуц дан|forel|trout|פורל|דגי דן|קיבוץ דן/.test(t))return 'food';
+ // Слова в названиях бытовой техники не должны превращаться в продукты.
+ if(/кофемашин|кофеварк|водонагревател|мясорубк|соковыжимал|рыболов|корм для|корм собак|корм кош|электрогрил|морозильник|молокоотсос/.test(t))return 'tech';
+ // Продукты питания определяются явно. Все прочие покупки — товары, не продукты.
+ const foodWords=['куриц','цыплен','лосос','сёмг','семг','рыб','молок','яйц','яйк','хлеб','кофе','сыр','помидор','огур','карто','масло','сахар','рис','мяс','колбас','йогурт','кетчуп','макарон','овощ','фрукт','яблок','банан','виноград','апельсин','йогур','сок','вода','воды','шоколад','форел','конфет','печень','грудка','бедро','голень','супермаркет','магазин еды','круп','творог','греч','йогурт','chicken','salmon','fish','milk','bread','cheese','tomato','egg','rice','coffee','potato','meat','sugar','apple','banana','yogurt','orange','vegetable','fruit','chocolate','دجاج','سلمون','سمك','حليب','خبز','جبنة','جبن','بيض','أرز','قهوة','بطاطا','لحم','سكر','تفاح','موز','لبن','زبادي','خضار','فاكهة','شوكولاتة','طماطم','خيار','ماء','زيت','طحين'];
+ if(has(t,foodWords)||/[א-ת]/.test(t)&&/(עוף|חלב|לחם|גבינה|סלמון|בשר|דג)/.test(t))return 'food';
+ return 'tech';
+}
+function setText(id,t){el(id).textContent=t}
+function clear(){res.replaceChildren();filters.replaceChildren();filters.classList.add('hidden')}
+function node(tag,cl,txt){let x=document.createElement(tag);if(cl)x.className=cl;if(txt!=null)x.textContent=txt;return x}
+function action(caption,url,primary){
+ const ownPage=/^\.\/[a-z0-9-]+\.html(?:#[a-z0-9-]+)?$/i.test(url);
+ if(!ownPage&&!/^https:\/\//.test(url))return node('span','pill','Нет адреса сайта');
+ const a=node('a','action'+(primary?' primary':''),caption);
+ a.href=url;
+ if(!ownPage){a.target='_blank';a.rel='noopener noreferrer'}
+ return a;
+}
+function card(title,desc,links,badge){
+ const c=node('div','card');if(badge)c.append(node('div','pill',badge));c.append(node('h3','',title));
+ c.append(node('p','',desc));const bar=node('div','actions');for(const l of links)bar.append(action(l[0],l[1],!!l[2]));c.append(bar);return c;
+}
+function grid(cards){const g=node('div','grid');cards.forEach(c=>g.append(c));res.append(g);if(cards.length)markSearchFound()}
+function message(t,warn){
+ res.append(node('div','message'+(warn?' warn':''),t));
+ if(warn||(!/^(🔎|Проверяю|Загружаю|Ищу )/.test(String(t))))finishHuntProgress();
+}
+function startHuntProgress(term){
+ const box=el('hunt-progress'),label=el('hunt-progress-text');
+ label.textContent='Ищем: '+(term||'товары')+'…';
+ box.hidden=false;
+}
+function finishHuntProgress(){el('hunt-progress').hidden=true;}
+const citiesRU={
+ 'тверия':'טבריה','хайфа':'חיפה','тель-авив':'תל אביב','тель авив':'תל אביב','иерусалим':'ירושלים','афула':'עפולה',
+ 'назарет':'נצרת','ноф-ха-галиль':'נוף הגליל','беэр-шева':'באר שבע','ашдод':'אשדוד','ашкелон':'אשקלון',
+ 'нетания':'נתניה','ришон-ле-цион':'ראשון לציון','петах-тиква':'פתח תקווה','бней-брак':'בני ברק','рамат-ган':'רמת גן',
+ 'цфат':'צפת','акко':'עכו','эйлат':'אילת','нагария':'נהריה','хадера':'חדרה','герцлия':'הרצליה','кармиэль':'כרמיאל',
+ 'кфар-саба':'כפר סבא','реховот':'רחובות','бат-ям':'בת ים','холон':'חולון','кириат-шмона':'קריית שמונה',
+ 'йокнеам':'יקנעם','лод':'לוד','рамла':'רמלה','кирьят-бялик':'קריית ביאליק','кирьят-ата':'קריית אתא',
+ 'весь израиль':''
+};
+function cityHe(){const t=city.value.trim().toLowerCase();return Object.prototype.hasOwnProperty.call(citiesRU,t)?citiesRU[t]:city.value.trim()}
+function map(name){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+' '+cityHe()+' Israel')}
+
+function setFilters(options){
+ filters.classList.remove('hidden');
+ for(const o of options){let b=node('button','tag'+(variation===o[0]?' active':''),o[1]);b.type='button';b.addEventListener('click',()=>{variation=o[0];search()});filters.append(b)}
+}
+function filteredFood(q){
+ let t=q.toLowerCase();
+ const chicken=has(t,words.chicken), salmon=has(t,words.salmon);
+ if(chicken){
+  const names={all:'עוף',whole:'עוף שלם',breast:'חזה עוף',thigh:'כרעיים עוף',drum:'שוקיים עוף',wing:'כנפיים עוף'};
+  return {term:names[variation]||'עוף',chicken:true};
+ }
+ if(salmon)return {term:/филе|fillet|filet|פילה|فيليه|فيلية/i.test(t)?'פילה סלמון':'סלמון',salmon:true,fillet:/филе|fillet|filet|פילה|فيليه|فيلية/i.test(t)};
+ const dict=[['сливочное масло','חמאה'],['молок','חלב'],['яйц','ביצים'],['хлеб','לחם'],['кофе','קפה'],['сыр','גבינה'],['помидор','עגבניות'],['огур','מלפפון'],['карто','תפוח אדמה'],['масло','שמן'],['рыб','דג'],['мяс','בשר'],['сахар','סוכר'],['рис','אורז'],['йогурт','יוגורט'],['макарон','פסטה'],['яблок','תפוח'],['банан','בננה'],['сок','מיץ'],['шоколад','שוקולד'],['печень','ביסקוויט'],['вод','מים'],['колбас','נקניק'],['творог','קוטג'],['сливочное масло','חמאה'],['хумус','חומוס'],['milk','חלב'],['bread','לחם'],['egg','ביצים'],['cheese','גבינה'],['tomato','עגבניות'],['potato','תפוח אדמה'],['rice','אורז'],['coffee','קפה'],['sugar','סוכר'],['meat','בשר'],['chocolate','שוקולד'],['banana','בננה'],['apple','תפוח'],['yogurt','יוגורט'],['fish','דג'],['حليب','חלב'],['خبز','לחם'],['بيض','ביצים'],['جبنة','גבינה'],['جبن','גבינה'],['طماطم','עגבניות'],['خيار','מלפפון'],['بطاطا','תפוח אדמה'],['أرز','אורז'],['قهوة','קפה'],['سكر','סוכר'],['لحم','בשר'],['شوكولاتة','שוקולד'],['موز','בננה'],['تفاح','תפוח'],['لبن','יוגורט'],['زبادي','יוגורט'],['سمك','דג'],['ماء','מים'],['زيت','שמן'],['طحين','קמח']];
+ for(const [ru,he] of dict)if(t.includes(ru))return {term:he};
+ return {term:q};
+}
+function extractRows(d){
+ if(Array.isArray(d))return d;
+ const keys=['products','items','results','rows','data','product_groups'];
+ for(const k of keys){if(Array.isArray(d?.[k]))return d[k];if(d?.[k]&&typeof d[k]==='object'){
+   const v=Object.values(d[k]);if(v.length&&v.every(x=>x&&typeof x==='object'))return v;
+ }}
+ return [];
+}
+function titleOf(p){
+ for(const k of ['item_name','product_name','name','title','itemName','description','display_name'])if(typeof p[k]==='string'&&p[k].length>1)return p[k];
+ for(const k of ['names','product_names','chain_names'])if(Array.isArray(p[k]))return typeof p[k][0]==='string'?p[k][0]:JSON.stringify(p[k][0]||'');
+ return 'Продукт из базы цен';
+}
+function codeOf(p){return p.item_code||p.item_code_bare||p.barcode||p.code||p.id||''}
+
+// A word match alone is not a product match. "Salmon" can describe cat food,
+// shampoo or sauce. For fresh fish searches, require a real fish cut.
+function genuineFishCut(name){
+ const n=String(name||'').toLowerCase();
+ // Most obvious cat/dog food brands, flavours and ready-made foods.
+ if(/לה\s*קט|לקט\s|le\s*cat|la\s*cat|פריסקיז|פריסק|friskies|purina|whiskas|וויסקס|מיאו|meow|מזון|חתול|חתולים|לחתול|לחתולים|כלב|כלבים|לכלב|חיות|בעח|לחיות|לבעלי|pet\b|kitten|cat food|dog food|animal feed|פטה|פאטה|p[aâ]t[eé]|שימור|שימורים|קופס|טונה|ממרח|מעדן|מיקס|סלט|תבלין|בכוס|בטעם|אינסטנט|קציצ|פאוץ|גבינה|מרק|רוטב|נודל|תערובת|תיבול|חטיף|חטיפ|סושי מוכן|שמן|קפסול|תוסף|ויטמין|קרם|סרום|שמפו|סבון|בושם|mix|salad|sauce|spice|seasoning|canned|tin\b|snack|treat|cosmetic|perfume|fragrance|корм|суп|соус|консерв|духи|крем|паштет|готовый салат/.test(n))return false;
+ // Require a fish format: fillet, steak, whole fresh/frozen fish, pieces,
+ // or smoked/salted fish explicitly labelled as such (no invented products).
+ if(!/(פילה|פילט|פלט|נתח|סטייק|פרוס|דג\s*סלמון|סלמון.{0,35}(?:טרי|קפוא|שלם|נורווגי|אטלנטי|מעושן|מלוח)|(?:טרי|קפוא|שלם|נורווגי|אטלנטי|מעושן|מלוח).{0,35}סלמון|salmon.{0,30}(?:fillet|steak|fresh|frozen|whole|smoked)|(?:fillet|steak|fresh|frozen|whole|smoked).{0,30}salmon|филе|стейк|свежий лосось|замороженный лосось|копчёный лосось)/.test(n))return false;
+ return true;
+}
+function foodRelevant(p,meta){
+ const n=titleOf(p).toLowerCase().replace(/[״׳"']/g,'');
+ if(meta.chicken){
+  if(!/(עוף|עופות|פרגית|חזה עוף|כרעיים|שוקיים|כנפיים|chicken|куриц)/.test(n))return false;
+  if(/תבלין|גריל|נמס|בכוס|שקדי|פריסקיז|פריסק|לה\s*קט|לקט\s|פטה|פאטה|knorr|קנור|עוף דל קל|קרוטו|מיקס|אבקה|מרק|אינסטנט|שניצל|פסטרמה|נקניק|נקנק|קציצ|טבעות|גיוזה|לקט|ירקות|אסיית|תערובת|רוטב|חטיף|פסטה|חומוס|סלט|בצק|אמנון|סלמון|דג|טבעול|מזון|חתול|כלב|נודל|בטעם|טעם|חטיפ|מרינדה|תיבול|קפוא מוכן|פאוץ|קרקר|קורנפלקס|מתכון|ציר|רצועות קראנץ|soup|noodle|sausage|spice|seasoning|snack|cat|dog|sauce|קציצה|корм|лапша|суп|приправ|соус|сосиск|котлет|рыба/.test(n))return false;
+  if(variation==='whole'&&!/עוף שלם|עוף טרי שלם|whole|цел/.test(n))return false;
+  if(variation==='breast'&&!/חזה|breast|груд/.test(n))return false;
+  if(variation==='thigh'&&!/כרע|ירך|thigh|бедр/.test(n))return false;
+  if(variation==='drum'&&!/שוק|drum|голен/.test(n))return false;
+  if(variation==='wing'&&!/כנפ|wing|крыл/.test(n))return false;
+ }
+ if(meta.salmon){
+  if(!/סלמון|salmon|лосос|семг|сёмг/.test(n))return false;
+  if(!genuineFishCut(n))return false;
+  if(meta.fillet&&!/פילה|פילט|פלט|fillet|filet|филе/.test(n))return false;
+ }
+ if(!meta.chicken&&!meta.salmon){
+  const words=String(meta.term||'').toLowerCase().split(/\s+/).filter(Boolean);
+  if(words.length&&!words.every(word=>n.includes(word)))return false;
+ }
+ return true;
+}
+
+function productLabel(name,meta){
+ const n=name.toLowerCase();
+ let ru='Продукт';
+ let emoji='🛒';
+ if(meta.chicken){
+   emoji='🍗';
+   if(/חזה|груд|breast/.test(n))ru='Куриная грудка';
+   else if(/כרע|ירך|бедр|thigh/.test(n))ru='Куриные бёдра';
+   else if(/שוק|голен|drum/.test(n))ru='Куриные голени';
+   else if(/כנפ|крыл|wing/.test(n))ru='Куриные крылышки';
+   else if(/פרגי/.test(n))ru='Куриное филе (паргит)';
+   else if(/שלם/.test(n))ru='Целая курица';
+   else ru='Куриное мясо';
+ }else if(meta.salmon){emoji='🐟';ru=/מעושן|копчен|smok/i.test(n)?'Лосось копчёный':(/פילה|filet/i.test(n)?'Филе лосося':'Лосось'); if(/נתחי|куск|portion/i.test(n))ru+=' · кусочки'}
+ else {
+   const lex=[['חלב','Молоко','🥛'],['ביצ','Яйца','🥚'],['לחם','Хлеб','🍞'],['קפה','Кофе','☕'],['גבינ','Сыр','🧀'],['עגבני','Помидоры','🍅'],['מלפפון','Огурцы','🥒'],['תפוח אדמה','Картофель','🥔'],['שמן','Масло','🫒'],['דג','Рыба','🐟'],['בשר','Мясо','🥩'],['סוכר','Сахар','🧂'],['אורז','Рис','🍚'],['יוגורט','Йогурт','🥛'],['גלידה','Мороженое','🍦'],['פסטה','Макароны','🍝'],['תפוח','Яблоки','🍏'],['בננה','Бананы','🍌'],['שוקולד','Шоколад','🍫'],['ביסקוויט','Печенье','🍪'],['טונה','Тунец','🐟'],['מיץ','Сок','🧃'],['מים','Вода','💧'],['נקניק','Колбаса','🥓'],['קוטג','Творог','🥣'],['חמאה','Сливочное масло','🧈'],['חומוס','Хумус','🥣']];
+   for(const [he,r,e] of lex)if(n.includes(he)){ru=r;emoji=e;break}
+   if(ru==='Продукт')ru='Продукт: '+(query.value.trim()||'продукты');
+ }
+ if(/טרי|свеж/.test(n))ru+=' · свежий';
+ if(/קפוא|заморож/.test(n))ru+=' · замороженный';
+ const weight=name.match(/(\d+(?:[.,]\d+)?)\s*(ק"ג|קג|קילו|קילוגרם|גרם|גר|ג'|ג׳|kg)\b/i);
+ if(weight)ru+=' · '+weight[1].replace(',','.')+' '+(/קג|קילו|קילוגרם|ק"ג|kg/.test(weight[2])?'кг':'г');
+ return {ru,emoji};
+}
+async function fetchPriceProducts(term){
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),12500);
+ try{
+  const response=await fetch('https://www.over.org.il/api/prices/products?q='+encodeURIComponent(term),{signal:controller.signal,mode:'cors',cache:'no-store'});
+  if(!response.ok)throw Error('Ошибка '+response.status);
+  return extractRows(await response.json());
+ }finally{clearTimeout(timeout)}
+}
+
+// Детали товара всегда открываются ВНУТРИ сайта. Изображение берём
+// только по совпавшему штрихкоду; чужие картинки не подставляем.
+const foodPhotoCache=new Map();
+async function getFoodPhoto(code){
+ const barcode=String(code||'').replace(/\D/g,'');
+ if(!/^\d{8,14}$/.test(barcode))return null;
+ if(foodPhotoCache.has(barcode))return foodPhotoCache.get(barcode);
+ const promise=(async()=>{
+  const control=new AbortController(),timeout=setTimeout(()=>control.abort(),9000);
+  try{
+   const url='https://world.openfoodfacts.org/api/v2/product/'+encodeURIComponent(barcode)+'.json?fields=code,product_name,image_front_url,image_url,brands,quantity';
+   const r=await fetch(url,{signal:control.signal,headers:{Accept:'application/json'}});
+   if(!r.ok)return null;
+   const data=await r.json();
+   if(Number(data.status)!==1||!data.product)return null;
+   const product=data.product;
+   const returned=String(product.code||data.code||'').replace(/^0+/,'');
+   if(returned!==barcode.replace(/^0+/,''))return null;
+   const src=product.image_front_url||product.image_url;
+   if(typeof src!=='string'||!/^https:\/\/images\.openfoodfacts\.org\//.test(src))return null;
+   return {src,productName:product.product_name||'',brand:product.brands||'',quantity:product.quantity||'',url:'https://world.openfoodfacts.org/product/'+encodeURIComponent(barcode)};
+  }catch(e){return null}
+  finally{clearTimeout(timeout)}
+ })();
+ foodPhotoCache.set(barcode,promise);
+ return promise;
+}
+
+/* Настоящие адреса карточек товаров Carrefour, найденные и проверенные отдельно.
+   НЕ приписываем им штрихкоды и цены других сетей. */
+
+// Verified product pages with matching barcode and their own product imagery.
+// Product pages belong to price-comparison services, NOT the supermarkets themselves.
+const exactGroceryPages={
+ '7290004194529':{url:'https://avrum.online/price/7290004194529',site:'А́врум',type:'Этот штрихкод, изображение и цены магазинов'},
+ '7290000611860':{url:'https://avrum.online/price/7290000611860',site:'А́врум',type:'Этот штрихкод, изображение и цены магазинов'},
+ '7290003361441':{url:'https://deally.co.il/products/7290003361441',site:'Deally',type:'Этот штрихкод, изображение и цены магазинов'},
+ '7290014435704':{url:'https://avrum.online/price/7290014435704',site:'А́врум',type:'Этот штрихкод, изображение и цены магазинов'},
+ '7290000659312':{url:'https://avrum.online/price/7290000659312',site:'А́врум',type:'Этот штрихкод, изображение и цены магазинов'}
+};
+function exactGroceryPage(code){return exactGroceryPages[String(code||'').replace(/\D/g,'')]||null}
+// Openly licensed category photographs: examples of the type, NEVER claim to be the actual package.
+function categoryPicture(name,meta){
+ const n=String(name||'').toLowerCase();
+ if(meta.salmon||/סלמון/.test(n))return {
+  url:'https://commons.wikimedia.org/wiki/Special:FilePath/Raw_salmon_fillets.jpg?width=520',
+  credit:'Фото вида продукта · FULVIO_TOGNON · CC0 (Wikimedia Commons)',
+  source:'https://commons.wikimedia.org/wiki/File:Raw_salmon_fillets.jpg'
+ };
+ if(meta.chicken){
+  if(/כרע|ירך|thigh|бедр|פרגית/.test(n))return {
+   url:'https://commons.wikimedia.org/wiki/Special:FilePath/Raw_chicken_thighs.jpg?width=520',
+   credit:'Фото вида продукта · Gran · CC BY 3.0 (Wikimedia Commons)',
+   source:'https://commons.wikimedia.org/wiki/File:Raw_chicken_thighs.jpg'
+  };
+  return {
+   url:'https://commons.wikimedia.org/wiki/Special:FilePath/Raw_broiler_chicken.jpg?width=520',
+   credit:'Фото вида продукта · Obasi Ogbeyialu Precious · CC BY 4.0 (Wikimedia Commons)',
+   source:'https://commons.wikimedia.org/wiki/File:Raw_broiler_chicken.jpg'
+  };
+ }
+ return null;
+}
+function makeFoodImage(name,meta,small){
+ const spec=categoryPicture(name,meta),wrap=node('div',small?'food-thumb':'food-detail-photo');
+ if(!spec){wrap.append(node('div','product-symbol',meta.chicken?'🍗':(meta.salmon?'🐟':'🛒')));return wrap}
+ const img=document.createElement('img');
+ img.loading=small?'lazy':'eager';
+ img.alt='Иллюстрация вида продукта, НЕ фото конкретной упаковки';
+ img.onerror=()=>{wrap.replaceChildren(node('div','',meta.chicken?'🍗':(meta.salmon?'🐟':'🛒')))};
+ img.src=spec.url;
+ wrap.append(img);
+ if(small)wrap.append(node('small','','Иллюстрация'));
+ return wrap;
+}
+
+function showFoodDetail(p,meta,priceArea){
+ const name=titleOf(p),code=String(codeOf(p)||''),label=productLabel(name,meta);
+ const exact=exactGroceryPage(code),dialog=node('dialog','food-detail-dialog');
+ dialog.setAttribute('aria-label','Товар: '+label.ru);
+ const body=node('div','food-detail-inner'),top=node('div','food-detail-top');
+ top.append(node('h2','',label.ru));
+ const close=node('button','food-detail-close','✕ Закрыть');close.type='button';
+ close.addEventListener('click',()=>dialog.close());top.append(close);body.append(top);
+ const he=node('div','food-detail-original',name);he.dir='auto';body.append(he);
+ body.append(node('div','pill','Код товара: '+(code||'не указан')));
+ const photo=makeFoodImage(name,meta,false);body.append(photo);
+ const illustration=categoryPicture(name,meta);
+ const hint=node('div','food-detail-caption',illustration?illustration.credit:'Фотография конкретной упаковки пока отсутствует');
+ body.append(hint);
+ // Photo attribution remains available in the footer's Sources page.
+ appendChickenStoreLink(body,name,Array.from(priceArea.querySelectorAll('.price-shop')).map(x=>({shop:x.textContent})).find(x=>chickenRetailLink(name,x))); 
+ if(exact){
+  body.append(node('h3','', '✅ Страница товара по точному штрихкоду'));
+  body.append(node('div','info','Штрихкод совпадает. Это каталог сравнения цен '+exact.site+', а не оформление покупки в супермаркете.'));
+  body.append(action('📦 Открыть ЭТОТ товар с фото · '+exact.site,exact.url,true));
+ }else{
+  body.append(node('div','message','Пока не найдена подтверждённая страница этого штрихкода в интернет-магазине. Название магазина на карте не означает, что открылась карточка товара.'));
+ }
+ body.append(node('h3','', 'Цены магазинов'));
+ const rows=priceArea.querySelectorAll('.price-row');
+ if(rows.length){for(const row of [...rows].slice(0,10))body.append(row.cloneNode(true))}
+ else body.append(node('div','message','Цена по выбранному городу пока не подтверждена.'));
+ body.append(node('div','info','В прайс-листе супермаркета часто есть только штрихкод, цена и адрес магазина. Ссылки на покупку именно этого товара в нём нет.'));
+ dialog.append(body);document.body.append(dialog);
+ dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+ dialog.addEventListener('close',()=>dialog.remove());
+ dialog.showModal();
+ if(code){
+  getFoodPhoto(code).then(info=>{
+   if(!dialog.isConnected||!info)return;
+   const img=document.createElement('img');
+   img.alt='Фото упаковки по точному штрихкоду '+code;
+   img.onload=()=>{photo.replaceChildren(img);hint.textContent='Фото той же упаковки по штрихкоду '+code+' · Open Food Facts';};
+   img.onerror=()=>{};
+   img.src=info.src;
+  });
+ }
+}
+
+
+function enrichFoodThumbnail(el,barcode){
+ if(!/^\d{8,14}$/.test(String(barcode||'')))return;
+ async function load(){
+  const imgInfo=await getFoodPhoto(barcode);
+  if(!imgInfo||!el.isConnected)return;
+  const img=document.createElement('img');
+  img.alt='Фото именно этого продукта по штрихкоду '+barcode;
+  img.loading='lazy';
+  img.onload=()=>{
+    if(!el.isConnected)return;
+    el.replaceChildren(img,node('small','','Фото товара'));
+    el.title='Фото того же штрихкода из Open Food Facts (сообщество, CC BY-SA)';
+  };
+  img.onerror=()=>{};
+  img.src=imgInfo.src;
+ }
+ if('IntersectionObserver' in window){
+  const observer=new IntersectionObserver((entries)=>{
+   if(entries.some(e=>e.isIntersecting)){observer.disconnect();load()}
+  },{rootMargin:'120px'});
+  observer.observe(el);
+ }else load();
+}
+
+function displayGroceryCard(p,meta){
+ const item=node('article','priceitem'), head=node('div','product-head');
+ const title=titleOf(p), code=String(codeOf(p)),label=productLabel(title,meta);
+ const thumbnail=makeFoodImage(title,meta,true);head.append(thumbnail);enrichFoodThumbnail(thumbnail,code);
+ const main=node('div','product-main');
+ main.append(node('strong','',label.ru));
+ const he=node('div','original',title);he.dir='auto';main.append(he);
+ main.append(node('div','pill',code?'Код товара: '+code:'Код товара не указан'));
+ head.append(main);item.append(head);
+ const prices=node('div','price-loading','Проверяю цены магазинов в '+city.value+'…');
+ item.append(prices);
+ const actions=node('div','actions');
+ const view=node('button','action view-food-btn','👁 Фото, товар и цены');
+ view.type='button';
+ view.setAttribute('aria-label','Посмотреть товар: '+label.ru);
+ view.addEventListener('click',()=>showFoodDetail(p,meta,prices));
+ actions.append(view);
+ const exact=exactGroceryPage(code);
+ // A comparison row may include several retailers; no store is implied here.
+ if(exact){
+   actions.append(action('📦 Сравнить этот штрихкод · '+exact.site,exact.url,false));
+ }
+ let btn=null;
+ if(code){btn=node('button','action','🔄 Обновить цены');btn.type='button';btn.addEventListener('click',()=>comparePrices(code,item,btn,prices));actions.append(btn)}
+ actions.append(action('📍 Найти магазин на карте',map('סופרמרקט')));
+ item.append(actions);
+ return {item,code,btn,prices,view};
+}
+
+// Прямой поиск предложений супермаркетов по товару и городу.
+// Раньше сайт делал до 6 запросов на поиск и ещё 8 за ценами, что
+// приводило к частым пустым ответам и задержкам.
+function marketRows(payload){
+ const paths=['rows','items','records','results','data','result','entries'];
+ function read(value,depth){
+  if(depth>5||!value)return [];
+  if(Array.isArray(value)){
+   if(value.some(x=>x&&typeof x==='object'&&('item_price' in x||'itemPrice' in x)))return value;
+   for(const v of value){const found=read(v,depth+1);if(found.length)return found}
+   return [];
+  }
+  if(typeof value==='object'){
+   for(const k of paths){if(k in value){const found=read(value[k],depth+1);if(found.length)return found}}
+  }
+  return [];
+ }
+ return read(payload,0);
+}
+async function marketSearch(term,cityName){
+ const u=new URL('https://www.over.org.il/api/prices/table/prices_market');
+ u.searchParams.set('q',term);
+ if(cityName)u.searchParams.set('city',cityName);
+ u.searchParams.set('columns','item_code,item_name,item_price,chain_name,store_name,as_of');
+ u.searchParams.set('limit','800');
+ const control=new AbortController(),timeout=setTimeout(()=>control.abort(),11500);
+ try{
+  const response=await fetch(u.toString(),{signal:control.signal,cache:'no-store',mode:'cors',headers:{Accept:'application/json'}});
+  if(!response.ok)throw Error('HTTP '+response.status);
+  return marketRows(await response.json());
+ }finally{clearTimeout(timeout)}
+}
+function numberPrice(value){
+ if(typeof value==='number')return value;
+ if(value===null||value===undefined)return NaN;
+ const s=String(value).replace('₪','').replace(/\s/g,'').replace(',','.');
+ return Number(s);
+}
+function pricedMarketGroups(rows,meta){
+ const groups=new Map();
+ for(const row of rows){
+  if(!row||!foodRelevant({item_name:row.item_name||row.product_name||row.name||''},meta))continue;
+  const price=numberPrice(row.item_price??row.itemPrice??row.price);
+  if(!Number.isFinite(price)||price<=0||price>100000)continue;
+  const code=String(row.item_code_bare||row.item_code||row.barcode||row.code||'');
+  const name=String(row.item_name||row.product_name||row.name||'').trim();
+  if(!name)continue;
+  const key=code||name;
+  let group=groups.get(key);
+  if(!group){group={code,name,offers:[],seen:new Set()};groups.set(key,group)}
+  const chain=String(row.chain_name||row.chain||'').trim();
+  const branch=String(row.store_name||row.store||'').trim();
+  const shop=chain&&branch&&chain!==branch?(chain+' · '+branch):(chain||branch||'Магазин');
+  const key2=shop+'|'+price;
+  if(group.seen.has(key2))continue;
+  group.seen.add(key2);
+  group.offers.push({shop,price,date:String(row.as_of||row.file_date||row.updated_at||'').slice(0,10)});
+ }
+ const result=[...groups.values()];
+ for(const p of result)p.offers.sort((a,b)=>a.price-b.price);
+ result.sort((a,b)=>(a.offers[0]?.price??999999)-(b.offers[0]?.price??999999));
+ return result;
+}
+
+const exactStorePages={
+ '7290106728127':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/חלב-ביצים-וסלטים/חלב/חלב-טרי/חלב-יטבתה-לי',name:'Молоко Yotvata 3,6%'},
+ '7290017947105':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/לחם-מאפים-והמאפייה-הטריה/לחם-פיתה-לחמניה/לחמים/לחם-סגנון-אמריקה',name:'Хлеб в американском стиле'},
+ '2680338':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/בשר-ודגים/עוף-טרי/עוף-טרי-ארוז/שוקיים-עוף-טרי',name:'Куриные голени'},
+ '8899130':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/לחם-מאפים-והמאפייה-הטריה/המאפיה-הטריה-אפיה-במקום/לחמי-מאפייה/לחם-חיטה-מלאה',name:'Цельнозерновой хлеб'},
+ '7290015603188':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/שימורים-בישול-ואפיה/המטבח-האסייאתי/נודלס-ודפי-אורז/אטריות-ביצים-ג-כ-fu',name:'Яичная лапша'},
+ '7290019382835':{chain:'Rami Levy',url:'https://www.rami-levy.co.il/he/online/market/חטיפים-ומתוקים/ממתקים/שוקולד-טבלאות/מאצ-שוקולד-חלב-קרם-וקורנפלקס-גר-עלית',name:'Шоколад с кремом'}
+};
+function actualStorePage(code){
+ return exactStorePages[String(code||'').replace(/\D/g,'')]||null;
+}
+// Barcode URLs from retail websites must not be guessed: they were returning
+// unrelated photos. Try Open Food Facts only for a valid retail GTIN.
+function validFoodGTIN(code){
+ const num=String(code||'').replace(/\D/g,'');
+ if(![8,12,13,14].includes(num.length))return false;
+ let sum=0,weight=3;
+ for(let i=num.length-2;i>=0;i--){sum+=Number(num[i])*weight;weight=weight===3?1:3;}
+ return (10-sum%10)%10===Number(num[num.length-1]);
+}
+function photoFitsItem(photo,name){
+ const expected=String(name||'').toLowerCase();
+ const label=String(photo?.productName||'').toLowerCase();
+ if(!label||/friskies|whiskas|purina|cat food|dog food|kitten|חתול|כלב|מזון|לה קט|לקט|פטה|pate|pâté|корм/.test(label))return false;
+ if(/סלמון|salmon|лосос|семг|сёмг/.test(expected))return /סלמון|salmon|лосос|семг|сёмг/.test(label);
+ if(/עוף|פרגי|כרע|שוק|כנפ|חזה|chicken|куриц|цыпл/.test(expected)){
+  if(!/עוף|chicken|куриц|цыпл/.test(label))return false;
+  const cutGroups=[
+   /שלם|whole|цел(ая|ый)/,
+   /חזה|breast|груд/,
+   /כנפ|wing|крыл/,
+   /שוק|drumstick|голен/,
+   /כרע|ירך|thigh|бедр/,
+   /פרגי|boneless|филе/
+  ];
+  const wanted=cutGroups.find(x=>x.test(expected));
+  return wanted?wanted.test(label):true;
+ }
+ return true;
+}
+function realImage(box,code,name){
+ if(!validFoodGTIN(code))return;
+ requestAnimationFrame(async()=>{
+  if(!box.isConnected)return;
+  const data=await getFoodPhoto(code);
+  if(!data||!box.isConnected||!photoFitsItem(data,name))return;
+  const img=document.createElement('img');
+  img.loading='lazy';img.alt='Фото конкретной упаковки по штрихкоду';
+  img.onload=()=>{
+   if(!box.isConnected)return;
+   box.dataset.kind='exact';
+   box.replaceChildren(img,node('span','grocery-photo-hint','Фото товара по штрихкоду'));
+  };
+  img.onerror=()=>{};
+  img.src=data.src;
+ });
+}
+
+function foodRuTitle(name,meta){
+ const n=String(name||'').toLowerCase();
+ if(meta.salmon){
+  let result=/פילה|פילט|פלט|fillet|filet|филе/.test(n)?'Филе лосося':
+    /סטייק|steak|стейк/.test(n)?'Стейк лосося':
+    /נתח|פרוס|portion|pieces|кусоч/.test(n)?'Кусочки лосося':
+    /שלם|whole|целый/.test(n)?'Лосось целиком':'Лосось';
+  if(/מעושן|smoked|копч/.test(n))result+=' · копчёный';
+  else if(/מלוח|salted|сол[её]н/.test(n))result+=' · солёный';
+  else if(/קפוא|frozen|заморож/.test(n))result+=' · замороженный';
+  else if(/טרי|fresh|свеж/.test(n))result+=' · свежий';
+  if(/נורווגי|norweg|норвеж/.test(n))result+=' · норвежский';
+  const weight=n.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(קג|ק"ג|ק״ג|קילו|גרם|גר'|ג'|ג׳|kg|g|гр|г|кг)(?:\s|$)/i);
+  if(weight)result+=' · '+weight[1].replace(',','.')+' '+(/קג|קילו|kg|кг/.test(weight[2])?'кг':'г');
+  return result;
+ }
+ let result=productLabel(String(name||''),meta).ru;
+ if(meta.chicken)return result;
+ const dict=[
+  [/חלב/,'Молоко'],[/לחם/,'Хлеб'],[/ביצים|ביצי/,'Яйца'],[/גבינה/,'Сыр'],[/קוטג/,'Творог'],[/יוגורט/,'Йогурт'],[/שוקולד/,'Шоколад'],[/פסטה|מקרוני|אטריות/,'Макароны'],[/אורז/,'Рис'],
+  [/בשר/,'Мясо'],[/תפוחי אדמה/,'Картофель'],[/תפוח/,'Яблоки'],[/בננ/,'Бананы'],[/עגבני/,'Помидоры'],[/מלפפון/,'Огурцы'],[/קפה/,'Кофе'],
+  [/חומוס/,'Хумус'],[/טונה/,'Тунец'],[/סוכר/,'Сахар'],[/מים/,'Вода'],[/מיץ/,'Сок'],[/חמאה/,'Масло'],[/שמן זית/,'Оливковое масло'],[/שמן/,'Масло'],
+  [/גלידה/,'Мороженое'],[/נקניק/,'Колбаса'],[/מלח/,'Соль'],[/קטשופ/,'Кетчуп'],[/ביסקוויט/,'Печенье'],
+  [/תפוז/,'Апельсины'],[/ענב/,'Виноград'],[/קולה/,'Кола'],[/קמח/,'Мука'],[/דבש/,'Мёд'],[/קפיר/,'Кефир'],[/גזר/,'Морковь'],
+  [/בורקס/,'Бурекас'],[/פיתה/,'Пита'],[/עוגה/,'Торт'],[/חטיף/,'Снэк'],[/מלון/,'Дыня'],[/אבטיח/,'Арбуз']
+ ];
+ for(const [rx,ru] of dict)if(rx.test(n)){result=ru;break}
+ if(result.startsWith('Продукт:'))result='Продукт питания';
+ if(/טרי/.test(n)&&!/свеж/i.test(result))result+=' · свежий';
+ if(/קפוא/.test(n)&&!/заморож/i.test(result))result+=' · замороженный';
+ return result;
+}
+
+// Проверенные страницы конкретных продуктов фермы Форель Дана, кибуц Дан.
+// Цены опубликованы на сайте продавца, за килограмм, если unit='кг'.
+const farmTroutProducts=[
+ {id:'white-whole',name:'Форель белая · целая очищенная',price:65,unit:'кг',url:'https://forel-dan.co.il/product/white-trout/',icon:'🐟',imageKey:'white-trout'},
+ {id:'white-fillet',name:'Форель белая · филе',price:95,unit:'кг',url:'https://forel-dan.co.il/product/white-trout/',icon:'🐟',imageKey:'white-fillet'},
+ {id:'pink-whole',name:'Форель розовая · целая очищенная',price:68,unit:'кг',url:'https://forel-dan.co.il/product/pink-trout/',icon:'🐟',imageKey:'pink-trout'},
+ {id:'pink-fillet',name:'Форель розовая · филе',price:97,unit:'кг',url:'https://forel-dan.co.il/product/pink-trout/',icon:'🐟',imageKey:'pink-fillet'},
+ {id:'family-whole',name:'Форель семейная · целая очищенная',price:72,unit:'кг',url:'https://forel-dan.co.il/product/trout-family-clean/',icon:'🐟',imageKey:'family-trout'},
+ {id:'family-fillet',name:'Форель семейная · филе',price:104,unit:'кг',url:'https://forel-dan.co.il/product/trout-family-clean/',icon:'🐟',imageKey:'family-fillet'},
+ {id:'frozen-five',name:'Форель замороженная · набор',price:50,unit:'кг',url:'https://forel-dan.co.il/product/פורל-חמישיות-קפוא/',icon:'🐟',imageKey:'frozen-trout'},
+ {id:'smoked-fillet',name:'Форель · филе горячего копчения',price:160,unit:'кг',url:'https://forel-dan.co.il/product/פילה-פורל-מעושן/',icon:'🐟',imageKey:'smoked-trout'},
+ {id:'cold-smoked',name:'Форель холодного копчения · упаковка около 100 г',price:22,unit:'упаковка',url:'https://forel-dan.co.il/product/פורל-בעישון-קר/',icon:'🐟',imageKey:'cold-smoked-trout'}
+];
+let farmPhotosPromise=null;
+function farmPhotos(){
+ if(!farmPhotosPromise)farmPhotosPromise=fetch('./farm-photos.json',{cache:'no-cache'}).then(r=>r.ok?r.json():{}).catch(()=>({}));
+ return farmPhotosPromise;
+}
+function farmProductCard(p){
+ const card=node('article','grocery-card farm-card'),image=node('div','farm-image');
+ image.append(node('span','',p.icon));card.append(image);
+ farmPhotos().then(photos=>{
+  const src=photos[p.imageKey];
+  if(!image.isConnected||typeof src!=='string'||!/^https:\/\/forel-dan\.co\.il\//.test(src))return;
+  const img=document.createElement('img');img.alt='Фото товара '+p.name+' на сайте Форель Дана';
+  img.onload=()=>image.replaceChildren(img);
+  img.onerror=()=>{};
+  img.loading='lazy';img.src=src;
+ });
+ const info=node('div','farm-info');
+ info.append(node('h3','',p.name));
+ info.append(node('div','grocery-store','Магазин: Форель Дана · кибуц Дан'));
+ info.append(node('div','grocery-price',p.price+' ₪ / '+p.unit));
+ info.append(node('div','farm-price-note','Цена продавца · проверено 15.11.2026'));
+ info.append(action('🛒 Открыть товар в Форель Дана',p.url,true));
+ card.append(info);return card;
+}
+function showFarmTrout(){
+ setText('heading','🐟 Форель из кибуца Дан');
+ setText('subtitle','Товар и цена от самой фермы. Нажми на карточку — откроется товар на сайте продавца, с выбором веса и покупки.');
+ res.replaceChildren();
+ const notice=node('div','message','Цены за килограмм, кроме упаковки холодного копчения. Итоговая сумма рассчитывается после взвешивания. Доставка только в обслуживаемые населённые пункты; на сайте продавца указан минимум заказа, он может меняться.');
+ res.append(notice);
+ const grid=node('div','farm-grid');farmTroutProducts.forEach(p=>grid.append(farmProductCard(p)));res.append(grid);
+ markSearchFound();
+ revealResults();
+}
+function shopChoice(name){
+ const t=String(name||'').toLowerCase();
+ if(/יוחננוף|yochananof/.test(t))return {id:'yoch',label:'Йохананов',site:'https://www.yochananof.co.il/'};
+ if(/שופרסל|יש חסד|shufersal/.test(t))return {id:'shuf',label:'Шуферсаль',site:'https://www.shufersal.co.il/'};
+ if(/רמי לוי|rami/.test(t))return {id:'rami',label:'Рами Леви',site:'https://www.rami-levy.co.il/'};
+ if(/קרפור|carrefour|יינות ביתן/.test(t))return {id:'carrefour',label:'Карфур',site:'https://www.carrefour.co.il/'};
+ if(/מחסני השוק|m-shuk/.test(t))return {id:'mah',label:'Махсаней ха-Шук',site:'https://m-shuk.net/'};
+ if(/ויקטורי|victory/.test(t))return {id:'victory',label:'Виктори',site:'https://www.victoryonline.co.il/'};
+ return null;
+}
+function compactOfferText(offer){
+ const merchant=shopChoice(offer.shop);
+ return merchant?merchant.label+(offer.shop.includes('·')?' · '+offer.shop.split('·').slice(1).join('·').trim():''):offer.shop;
+}
+
+// Each grocery card is a REAL product identified by barcode; we show its
+// distinct retailer offers without redirecting to an unrelated store catalogue.
+// One item per click: its picture, exact product, current published price and seller.
+// Other shop prices are optional and collapsed rather than covering the item itself.
+// One product per card. Never display a category stock photograph as
+// the photograph of an individual SKU: images must be barcode matched.
+// Open-source photos of the appropriate food TYPE, never advertised as
+// pictures of the specific SKU. Every image retains a source/licence link.
+function groceryExampleImage(name){
+ const n=String(name||'').toLowerCase();
+ // Never illustrate a specific chicken cut with a photograph of a different cut.
+ // Barcode-matched product imagery (when available) is handled separately.
+ if(/עוף|עופות|פרגי|כרע|שוק|כנפ|חזה עוף|chicken|куриц|цыпл/.test(n))return null;
+ let file='',credit='';
+ if(/סלמון|salmon|лосос|семг|сёмг/.test(n)){
+  if(/מעושן|smoked|копч/.test(n)){file='Smoked salmon (8333105627).jpg';credit='Ruth Hartnup · CC BY 2.0';}
+  else if(/סטייק|steak|стейк/.test(n)){file='Salmon steaks.JPG';credit='Marlith · CC BY-SA 3.0';}
+  else if(/נתח|פרוס|кусоч|portion/.test(n)){file='Salmon cut 1.jpg';credit='Garitzko · Public domain';}
+  else if(/פילה|פילט|פלט|fillet|filet|филе/.test(n)){file='Raw salmon fillets.jpg';credit='FULVIO_TOGNON · CC0';}
+  else {file='Salmon Fish.JPG';credit='Marlith · CC BY-SA 3.0';}
+ }else if(/עוף|עופות|פרגי|כרע|שוק|כנפ|חזה|chicken|куриц|цыпл/.test(n)){
+  if(/חזה|breast|груд/.test(n)){file='Raw chicken slices.jpg';credit='kakyusei · CC0';}
+  else if(/כרע|ירך|פרגי|thigh|бедр/.test(n)){file='Raw chicken thighs.jpg';credit='Gran · CC BY 3.0';}
+  else if(/שוק|drum|голен/.test(n)){file='Chicken leg.jpg';credit='Karan Jagdale · CC BY-SA 4.0';}
+  else if(/כנפ|wing|крыл/.test(n)){file='Raw chicken.jpg';credit='Bhaskaranaidu · CC BY-SA 3.0';}
+  else {file='Raw broiler chicken.jpg';credit='Obasi Ogbeyialu Precious · CC BY 4.0';}
+ }else if(/עגבני|помидор|tomato/.test(n)){file='Tomatoes.jpg';credit='Wilfredor · CC0';}
+ else if(/לחם|хлеб|bread/.test(n)){file='Simple Bread.jpg';credit='o.tacke · CC0';}
+ else if(/חלב|молок|milk/.test(n)){file='Milk glass.jpg';credit='Stefan Kühn · CC BY-SA 3.0';}
+ if(!file)return null;
+ return {url:'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(file)+'?width=580',source:'https://commons.wikimedia.org/wiki/File:'+encodeURIComponent(file.replace(/ /g,'_')),credit};
+}
+function exactProductImage(code,title,large=false){
+ const box=node('div',large?'food-detail-photo product-focus-photo':'catalog-picture grocery-image');
+ box.dataset.kind='missing';
+ const placeholder=node('div','real-photo-missing');
+ placeholder.append(node('div','real-photo-icon',/סלמון|salmon|лосос/.test(title)?'🐟':/עוף|chicken|куриц/.test(title)?(/שלם|целая|целый|whole/.test(title)?'🐔':'🍗'):'🛒'));
+ placeholder.append(node('span','','Фото пока нет'));
+ box.append(placeholder);
+ const example=groceryExampleImage(title);
+ if(example){
+  const img=document.createElement('img');
+  img.loading=large?'eager':'lazy';
+  img.alt='Иллюстрация вида товара, не фотография упаковки';
+  img.onload=()=>{
+   if(!box.isConnected||box.dataset.kind==='exact')return;
+   box.dataset.kind='example';
+   box.replaceChildren(img,node('span','grocery-photo-hint','Иллюстрация вида товара'));
+  };
+  img.onerror=()=>{};
+  // The widget is created before it is attached; prevent cached-image race.
+  requestAnimationFrame(()=>{if(box.isConnected)img.src=example.url});
+ }
+ realImage(box,code,title);
+ return box;
+}
+
+// Store-specific links. A listed offer must never send shoppers to another chain.
+// Category/website links are not represented as pages of the exact SKU.
+function chickenRetailLink(name,offer){
+ if(!offer||!/(עוף|עופות|פרגי|כרע|שוקיים|כנפיים|חזה עוף|chicken|куриц|цыплен)/i.test(String(name||'')))return null;
+ const store=shopChoice(offer.shop);
+ if(!store)return null;
+ // Only verified category pages. Do not redirect Shufersal/Yochananof buyers
+ // to unrelated branches, third party mixed departments or homepages.
+ if(store.id==='rami')return {url:'https://www.rami-levy.co.il/he/online/market/בשר-ודגים/עוף-טרי',label:'🐔 Открыть отдел свежей курицы · Рами Леви'};
+ return null;
+}
+function appendChickenStoreLink(parent,name,offer){
+ const link=chickenRetailLink(name,offer);
+ if(link)parent.append(action(link.label,link.url,true));
+}
+function showProductPriceDetail(group,meta){
+ const code=String(group.code||''),name=String(group.name||'').trim();
+ const offers=Array.isArray(group.offers)?group.offers:[];
+ const best=offers[0],candidate=actualStorePage(code),known=candidate&&best&&candidate.chain==='Rami Levy'&&shopChoice(best.shop)?.id==='rami'?candidate:null,label=known?known.name:foodRuTitle(name,meta);
+ const dialog=node('dialog','food-detail-dialog product-focus-dialog');
+ dialog.setAttribute('aria-label','Товар: '+label);
+ const body=node('div','food-detail-inner');
+ const top=node('div','food-detail-top');
+ top.append(node('h2','',label));
+ const close=node('button','food-detail-close','✕');close.type='button';close.setAttribute('aria-label','Закрыть');
+ close.addEventListener('click',()=>dialog.close());top.append(close);body.append(top);
+ const original=node('div','food-detail-original',name);original.dir='auto';body.append(original);
+ const image=exactProductImage(code,name,true);body.append(image);
+ // Attribution is provided on the site's Sources and Copyright page.
+ // Confirmed source: matched GTIN or product code only. No random fish illustrations.
+ const section=node('div','product-focus-purchase');
+ if(best){
+  section.append(node('div','product-focus-price',Number(best.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
+  const shop=node('div','product-focus-store','Магазин: '+compactOfferText(best));shop.dir='auto';section.append(shop);
+  if(best.date)section.append(node('div','grocery-date','Цена опубликована '+best.date));
+ }else section.append(node('div','product-focus-price','Цена не получена'));
+ body.append(section);
+ if(known&&best&&known.chain==='Rami Levy'&&shopChoice(best.shop)?.id==='rami')
+  body.append(action('🛒 Открыть этот товар в Рами Леви',known.url,true));
+ else appendChickenStoreLink(body,name,best);
+ if(offers.length>1){
+  const more=node('details','product-focus-other');
+  more.append(node('summary','','Сравнить цены других магазинов · '+(offers.length-1)));
+  for(const offer of offers.slice(1,16)){
+   const line=node('div','grocery-offer');
+   const store=node('span','',compactOfferText(offer));store.dir='auto';line.append(store);
+   line.append(node('strong','',Number(offer.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
+   more.append(line);
+  }
+  body.append(more);
+ }
+ body.append(node('div','food-detail-caption','Иллюстрация показывает вид продукта, не конкретную упаковку. Подлинное фото бывает только при подтверждении штрихкода. Наличие уточняй в магазине.'));
+ dialog.append(body);document.body.append(dialog);
+ dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+ dialog.addEventListener('close',()=>dialog.remove(),{once:true});
+ if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
+}
+function makeCompactFood(group,meta){
+ const code=String(group.code||''),title=String(group.name||'').trim();
+ const offers=Array.isArray(group.offers)?group.offers:[];
+ const best=offers[0],candidate=actualStorePage(code),known=candidate&&best&&candidate.chain==='Rami Levy'&&shopChoice(best.shop)?.id==='rami'?candidate:null;
+ const card=node('article','catalog-card grocery-card');
+ const picture=exactProductImage(code,title,false);
+ picture.setAttribute('role','button');picture.tabIndex=0;
+ picture.setAttribute('aria-label','Открыть товар: '+(known?known.name:foodRuTitle(title,meta)));
+ picture.addEventListener('click',()=>showProductPriceDetail(group,meta));
+ picture.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showProductPriceDetail(group,meta)}});
+ card.append(picture);
+ const info=node('div','catalog-content grocery-info');
+ info.append(node('h3','catalog-title',known?known.name:foodRuTitle(title,meta)));
+ const original=node('div','catalog-sub grocery-original',title);original.dir='auto';info.append(original);
+ if(best){
+  info.append(node('div','grocery-price',Number(best.price).toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
+  const store=node('div','grocery-store','Магазин: '+compactOfferText(best));store.dir='auto';info.append(store);
+  if(best.date)info.append(node('div','grocery-date','Цена от '+best.date));
+ }else info.append(node('div','grocery-price','Цена не получена'));
+ const actions=node('div','catalog-actions grocery-actions');
+ const view=node('button','action primary','📷 Открыть товар');
+ view.type='button';view.addEventListener('click',()=>showProductPriceDetail(group,meta));
+ actions.append(view);
+ if(known&&best&&known.chain==='Rami Levy'&&shopChoice(best.shop)?.id==='rami')
+  actions.append(action('🛒 Открыть этот товар в Рами Леви',known.url,true));
+ else appendChickenStoreLink(actions,title,best);
+ info.append(actions);card.append(info);return card;
+}
+
+function renderMarket(groups,meta,cityText){
+ res.replaceChildren();
+ if(groups.length)markSearchFound();
+ const networks=new Map();
+ let hasOther=false;
+ for(const group of groups)for(const offer of group.offers||[]){
+  const x=shopChoice(offer.shop);
+  if(x)networks.set(x.id,x);else hasOther=true;
+ }
+ res.append(node('p','result-count','Найдено '+groups.length+' конкретных товаров · '+(networks.size+(hasOther?1:0))+' сетей · '+(cityText||'Израиль')));
+ const toolbar=node('div','shop-filter-bar'),root=node('div','catalog-grid grocery-grid');
+ res.append(toolbar,root);
+ const choices=[{id:'all',label:'Все магазины'},...networks.values()];
+ if(hasOther)choices.push({id:'other',label:'Другие магазины'});
+ let selected='all',visible=[],position=0,more=null;
+ function refresh(){
+  const data=groups.map(group=>{
+   const offers=(group.offers||[]).filter(offer=>{
+    const network=shopChoice(offer.shop);
+    return selected==='all'||selected==='other'&&!network||network?.id===selected;
+   });
+   return {...group,offers};
+  }).filter(group=>group.offers.length||selected==='all');
+  visible=data.sort((a,b)=>{
+   const fishRank=g=>meta.salmon?(/פילה|פילט|פלט|fillet|filet/i.test(g.name)?0:/סטייק|steak|נתח|פרוס/i.test(g.name)?1:2):0;
+   return fishRank(a)-fishRank(b)||((a.offers[0]?.price??Infinity)-(b.offers[0]?.price??Infinity));
+  });
+  position=0;root.replaceChildren();if(more){more.remove();more=null}
+  toolbar.replaceChildren();
+  for(const choice of choices){
+   const b=node('button','shop-filter'+(selected===choice.id?' active':''),choice.label);
+   b.type='button';b.addEventListener('click',()=>{selected=choice.id;refresh()});
+   toolbar.append(b);
+  }
+  showMore();
+  if(!visible.length)root.append(node('div','message','Для выбранной сети подходящих товаров пока не найдено.'));
+ }
+ function showMore(){
+  for(const item of visible.slice(position,position+12))root.append(makeCompactFood(item,meta));
+  position=Math.min(visible.length,position+12);
+  if(position<visible.length){
+   if(!more){more=node('button','action primary','Показать ещё товары');more.type='button';more.addEventListener('click',showMore);res.append(more)}
+  }else if(more){more.remove();more=null}
+ }
+ refresh();revealResults();
+}
+
+function previousKnownChicken(meta){
+ if(!meta.chicken||variation==='breast'||variation==='thigh'||variation==='wing'||variation==='drum')return false;
+ if(!/^(тверия|טבריה)$/i.test(city.value.trim()))return false;
+ // Значение из скриншота пользователя, не выдаём за текущую цену.
+ const p={item_name:'עוף טרי ארוז שלם',item_code:'4194529'};
+ const ui=displayGroceryCard(p,meta);ui.prices.replaceChildren();
+ ui.prices.append(node('div','message warn','Последняя известная цена от 14.11.2026 — НЕ проверена сегодня.'));
+ const row=node('div','price-row');
+ row.append(node('div','price-num','23,90 ₪'));
+ row.append(node('div','price-shop','מחסני השוק · Тверия'));
+ ui.prices.append(row);ui.btn&&ui.btn.remove();res.append(ui.item);return true;
+}
+async function loadFood(mySeq,q,translatedTerm){
+ setText('heading','🛒 Продукты и цены');
+ setText('subtitle','Конкретные товары и цены в магазинах. Чужие фотографии вместо товара не показываем.');
+ const isChicken=has(q.toLowerCase(),words.chicken);
+ if(isChicken)setFilters([['all','🍗 Вся курица'],['whole','Целая'],['breast','Грудка'],['thigh','Бёдра'],['drum','Голени'],['wing','Крылья']]);
+ const meta=filteredFood(q);
+ if(translatedTerm&&!meta.chicken&&!meta.salmon)meta.term=translatedTerm;
+ if(/форел|форель|кибуц дан|киббуц дан|forel|trout|פורל|דגי דן|קיבוץ דן/.test(q.toLowerCase())){showFarmTrout();return}
+ res.replaceChildren();
+ message('🔎 Ищу товары и цены…');
+ let terms=[meta.term];
+ if(isChicken&&variation==='all')terms=['עוף טרי','חזה עוף','עוף שלם','פרגיות'];
+ if(meta.salmon)terms=meta.fillet?['פילה סלמון']:['פילה סלמון','סלמון'];
+ let marketError=null;
+ try{
+  const searches=await Promise.allSettled(terms.map(term=>marketSearch(term,cityHe())));
+  if(seq!==mySeq)return;
+  const rows=[];
+  for(const result of searches)if(result.status==='fulfilled')rows.push(...result.value);
+  if(rows.length){
+   const groups=pricedMarketGroups(rows,meta);
+   if(groups.length){renderMarket(groups,meta,city.value);return}
+  }
+ }catch(e){marketError=e}
+ if(seq!==mySeq)return;
+ try{
+  const results=await Promise.allSettled(terms.slice(0,2).map(fetchPriceProducts));
+  if(seq!==mySeq)return;
+  const seen=new Set(),groups=[];
+  for(const batch of results){
+   if(batch.status!=='fulfilled')continue;
+   for(const p of batch.value){
+    const barcode=String(codeOf(p)||'');
+    if(!barcode||seen.has(barcode)||!foodRelevant(p,meta))continue;
+    seen.add(barcode);groups.push({code:barcode,name:titleOf(p),offers:[]});
+   }
+  }
+  if(groups.length){renderMarket(groups.slice(0,35),meta,city.value);res.prepend(node('div','message warn','Названия продуктов есть, но цены магазинов сейчас не загрузились.'));revealResults();return}
+ }catch(e){/* Don’t mistake backend errors for zero products. */}
+ if(seq!==mySeq)return;
+ res.replaceChildren();
+ message('Источник цен сейчас не ответил. Это не значит, что товары отсутствуют в магазинах. Попробуй повторить поиск.',true);
+ revealResults();
+}
+
+function flattenPrices(obj,depth){
+ if(depth>5||!obj||typeof obj!=='object')return [];
+ if(Array.isArray(obj))return obj.flatMap(x=>flattenPrices(x,depth+1));
+ let out=[];
+ if((typeof obj.price==='number'||typeof obj.min_price==='number')&&(obj.chain||obj.chain_name||obj.store||obj.store_name||obj.cheapest_store))out.push(obj);
+ for(const [k,v] of Object.entries(obj))if(typeof v==='object'&&v!==null)out=out.concat(flattenPrices(v,depth+1));
+ return out.slice(0,25);
+}
+
+async function comparePrices(code,item,btn,prices){
+ if(btn){btn.disabled=true;btn.textContent='Проверяю цены…'}
+ prices.replaceChildren();prices.append(node('div','price-loading','Загружаю цены в '+city.value+'…'));
+ try{
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12500);
+  let response;
+  try{response=await fetch('https://www.over.org.il/api/prices/compare?item_code='+encodeURIComponent(code)+(cityHe()?'&city='+encodeURIComponent(cityHe()):'')+'&top=10',{signal:controller.signal,mode:'cors',cache:'no-store'})}
+  finally{clearTimeout(timeout)}
+  if(!response.ok)throw Error('HTTP '+response.status);
+  const data=await response.json();
+  const rows=flattenPrices(data,0).filter(x=>Number.isFinite(Number(x.price??x.min_price))).sort((a,b)=>Number(a.price??a.min_price)-Number(b.price??b.min_price));
+  prices.replaceChildren();
+  if(rows.length){
+    const unique=new Set();
+    for(const x of rows){
+      const amount=Number(x.price??x.min_price);
+      const shop=String(x.store_name||x.chain_name||x.store||x.chain||x.cheapest_store||'Магазин');
+      const key=shop+'|'+amount;
+      if(unique.has(key))continue;unique.add(key);
+      const row=node('div','price-row');
+      const cost=node('div','price-num',amount.toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪');
+      row.append(cost);
+      const right=node('div','price-shop');
+      const shopText=node('div','',shop);shopText.dir='auto';right.append(shopText);
+      const date=x.as_of||x.file_date||x.updated_at||x.last_updated;
+      if(date)right.append(node('div','price-date','Сведения от '+String(date).slice(0,10)));
+      row.append(right);
+      row.append(action('📍 Карта',map(shop)));
+      prices.append(row);
+      if(unique.size>=6)break;
+    }
+  }else prices.append(node('div','message','В '+city.value+' пока нет цен этого товара в базе. Попробуй другой вид продукта.'));
+ }catch(e){
+  prices.replaceChildren();
+  prices.append(node('div','message warn','Не удалось загрузить цены. Попробуй ещё раз. Названия товаров при этом остаются доступны.'));
+ }finally{if(btn){btn.disabled=false;btn.textContent='🔄 Обновить цены'}}
+}
+
+function cleanModel(s){
+ const matches=(s||'').match(/[A-Za-z][A-Za-z0-9.+\/_-]*(?:\s+[A-Z0-9][A-Za-z0-9.+\/_-]*)?/g)||[];
+ return matches.filter(x=>x.length>2&&!/^(type|sale|new|ksp|color|model|home)$/i.test(x)).slice(0,3).join(' ');
+}
+function goodsEmoji(q){
+ const s=q.toLowerCase();
+ if(/рюкзак|сумк|портфел|תיק|backpack|bag/.test(s))return '🎒';
+ if(/дрель|сверл|шурупов|отв[её]рт|מברג|מקדחה|drill|screwdriver/.test(s))return '🔧';
+ if(/плеер|fiio|dm13|диск|cd player|נגן/.test(s))return '🎵';
+ if(/принтер|xerox|מדפסת/.test(s))return '🖨️';
+ if(/кабель|провод|כבל/.test(s))return '🔌';
+ if(/телефон|iphone|טלפון/.test(s))return '📱';
+ if(/ноутбук|лаптоп|מחשב/.test(s))return '💻';
+ if(/монитор|экран|מסך/.test(s))return '🖥️';
+ if(/наушник|אוזניות/.test(s))return '🎧';
+ if(/кресло|כיסא/.test(s))return '🪑';
+ if(/пылесос|שואב/.test(s))return '🧹';
+ if(/обувь|кроссов|נעל/.test(s))return '👟';
+ if(/куртка|одежд|מעיל/.test(s))return '🧥';
+ if(/велосипед|אופניים/.test(s))return '🚲';
+ return '🛍️';
+}
+function inferredCategory(q){
+ let t=q.toLowerCase();
+ if(/рюкзак|тревел|backpack|תיק גב|сумк/.test(t))return 'backpack';
+ if(/fiio|плеер|dm13|cd.player|נגן|аудио/.test(t))return 'audio';
+ if(/дрел|шурупов|сверл|bosch|makita|מקדחה/.test(t))return 'drill';
+ return 'all';
+}
+function searchHebrew(q){
+ const t=q.toLowerCase();
+ const dict=[
+ [/extension cord|power extension|extension cable|כבל מאריך/i,'כבל מאריך'],
+ [/power strip|multi.socket|multi plug|power bar|מפצל חשמל|רב שקע/i,'רב שקע'],
+ [/drill|hammer drill|מקדחה/i,'מקדחה'],
+ [/printer|laser printer|מדפסת/i,'מדפסת'],
+ [/рюкзак|портфел|сумк|ранц|backpack/,'תיק גב'],
+ [/отв[её]рт|screwdriver|מברג/,'מברג'],
+ [/крестов[а-яё]*\s+отв[её]рт|отв[её]рт[а-яё]*\s+крестов/,'מברג פיליפס'],
+ [/плоск[а-яё]*\s+отв[её]рт|отв[её]рт[а-яё]*\s+плоск/,'מברג שטוח'],
+ [/изолирован[а-яё]*\s+отв[её]рт|отв[её]рт[а-яё]*\s+изолирован/,'מברג מבודד'],
+ [/набор.*отв[её]рт|отв[её]рт.*набор/,'סט מברגים'],
+ [/сверл[ао]|св[её]рл[ао]/,'מקדח'],
+ [/дрел|сверлил|сверление/,'מקדחה'],
+ [/шурупов|аккумуляторн.*дрел/,'מברגה'],
+ [/принтер|ксерокс/,'מדפסת'],
+ [/телевизор/,'טלוויזיה'],
+ [/монитор/,'מסך מחשב'],
+ [/ноутбук/,'מחשב נייד'],
+ [/смартфон|телефон/,'טלפון סלולרי'],
+ [/наушник/,'אוזניות'],
+ [/клавиатур/,'מקלדת'],
+ [/мышк.*компьют|компьют.*мыш/,'עכבר למחשב'],
+ [/кабел|провод/,'כבל'],
+ [/зарядк|зарядное/,'מטען'],
+ [/пылесос/,'שואב אבק'],
+ [/велосипед/,'אופניים'],
+ [/самокат/,'קורקינט'],
+ [/обувь|кроссовк/,'נעליים'],
+ [/куртк/,'מעיל'],
+ [/кресл/,'כורסה'],
+ [/мебел/,'רהיטים'],
+ [/холодильник/,'מקרר'],
+ [/стиральн.*машин/,'מכונת כביסה'],
+ [/кофемашин/,'מכונת קפה'],
+ [/камер|фотоаппарат/,'מצלמה'],
+ [/объектив/,'עדשה'],
+ [/фото.*свет|вспышк/,'פלאש'],
+ [/микрофон/,'מיקרופון'],
+ [/колонк|акустик/,'רמקולים'],
+ [/гитар/,'גיטרה'],
+ [/удлинител/,'מפצל חשמל'],
+ [/ламп|светильник|люстра/,'מנורה'],
+ [/фонар/,'פנס'],
+ [/инструмент/,'כלי עבודה'],
+ [/компьютер|настольн.*пк/,'מחשב'],
+ [/насос|помпа/,'משאבה'],
+ [/обогревател/,'תנור חימום'],
+ [/карниз/,'מוט וילון'],
+ [/занавеск|штор/,'וילון'],
+ [/ковёр|ковер|коврик/,'שטיח'],
+ [/подушк/,'כרית'],
+ [/матрас/,'מזרן'],
+ [/одеял/,'שמיכה'],
+ [/полотенц/,'מגבת'],
+ [/мыло/,'סבון'],
+ [/шампун/,'שמפו'],
+ [/щ[её]тк/,'מברשת'],
+ [/швабр/,'מגב'],
+ [/ведро/,'דלי'],
+ [/рюкзак/,'תיק גב']
+ ];
+ for(const [p,he] of dict)if(p.test(t))return he;
+ return q;
+}
+function tokenize(s){return (s||'').toLowerCase().replace(/[^a-zа-яё0-9\u0590-\u05ff]+/gi,' ').trim().split(/\s+/).filter(Boolean)}
+function productRu(p,q){
+ if(typeof p.name_ru==='string'&&p.name_ru.trim())return p.name_ru;
+ const name=p.name||p.name_he||'';
+ const cat=inferredCategory(q+' '+name);
+ const type=cat==='backpack'?'Рюкзак':cat==='drill'?'Дрель':cat==='audio'?'Аудиотехника':q.trim();
+ const brand=p.brand||p.brandName||'';
+ const model=cleanModel(name);
+ const parts=[type,brand,model].filter(Boolean);
+ let title=parts.join(' ').trim();
+ if(!title)title=q;
+ return title.slice(0,145);
+}
+function productPhoto(item,emoji){
+ const wrap=node('div','catalog-picture'),ph=node('div','catalog-placeholder',emoji);wrap.append(ph);
+ let source=item.photo||item.img||item.image;
+ if(typeof source==='object'&&source)source=source.url||source.src||'';
+ if(typeof source!=='string'||!source.trim())return wrap;
+ let src=source.trim();
+ const bases={'KSP':'https://ksp.co.il','Home Center':'https://www.homecenter.co.il','ACE':'https://www.ace.co.il','Ivory':'https://www.ivory.co.il'};
+ const base=bases[item.store];
+ if(src.startsWith('//'))src='https:'+src;
+ else if(src.startsWith('/')&&base)src=base+src;
+ else if(!/^https:\/\//i.test(src)&&base)src=base+'/'+src.replace(/^\/+/,'');
+ else if(!/^https:\/\//i.test(src))return wrap;
+ let u;
+ try{u=new URL(src)}catch(e){return wrap}
+ if(u.protocol!=='https:')return wrap;
+ // Ссылки изображений получаем только из опубликованных карточек самого продавца
+ const img=document.createElement('img');img.loading='lazy';img.alt='Фото товара: '+productRu(item,query.value);
+ img.referrerPolicy='no-referrer';
+ img.onload=()=>{ph.remove()};img.onerror=()=>{img.remove()};
+ img.src=u.href;wrap.append(img);return wrap;
+}
+function catalogCard(p,q){
+ const box=node('article','catalog-card');
+ box.append(productPhoto(p,goodsEmoji(q+' '+(p.name||p.name_he||''))));
+ const content=node('div','catalog-content');
+ const title=productRu(p,q);content.append(node('h3','catalog-title',title));
+ if(p.name_he){let x=node('div','catalog-sub',p.name_he);x.dir='auto';content.append(x)}
+ const amount=Number(p.price);
+ if(Number.isFinite(amount)&&amount>0){
+   const prefix=p.price_is_from?'от ':'';
+   content.append(node('div','catalog-price',prefix+amount.toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₪'));
+ }else content.append(node('div','catalog-price','Цена не получена'));
+ if(p.in_stock===false)content.append(node('div','pill','Сейчас нет в наличии'));
+ else if(p.in_stock===true)content.append(node('div','pill','В наличии у продавца (на дату проверки)'));
+ const source=p.store||'Магазин';const dated=p.as_of?' · данные от '+p.as_of:' · дата не указана';
+ content.append(node('div','catalog-source',source+dated));
+ const bar=node('div','catalog-actions');
+ if(p.url)bar.append(action('🛒 Открыть товар',p.url,true));
+ bar.append(action('📍 На карте',map(source)));
+ content.append(bar);box.append(content);return box;
+}
+function unpackLiveKsp(data){
+ const list=data&&data.result&&data.result.items;
+ if(!Array.isArray(list))return [];
+ return list.filter(p=>p&&p.uin&&p.name).slice(0,36).map(p=>({
+   id:String(p.uin),name:p.name,price:Number(p.price),brand:p.brandName||'',
+   img:p.img||'',store:'KSP',url:'https://ksp.co.il/web/item/'+encodeURIComponent(String(p.uin)),
+   as_of:new Date().toLocaleDateString('ru-RU'),verified:'api'
+ }));
+}
+
+// Единая база товарных карточек: KSP/Ivory/ARKA + публичные товары ACE и Home Center.
+let storeCatalogPromise=null;
+function catalogData(){
+ if(storeCatalogPromise)return storeCatalogPromise;
+ const files=['./catalog.json','./catalog-auto.json'];
+ storeCatalogPromise=Promise.all(files.map(async url=>{
+  try{
+   const r=await fetch(url,{cache:'no-store'});
+   if(!r.ok)return [];
+   const doc=await r.json();
+   return Array.isArray(doc.items)?doc.items:[];
+  }catch(e){return []}
+ })).then(sets=>{
+  const unique=new Map();
+  for(const p of sets.flat()){
+   if(!p||!p.url||typeof p.url!=='string'||!/^https:\/\//.test(p.url))continue;
+   const key=p.store+'|'+(p.id||p.url);
+   unique.set(key,p);
+  }
+  return [...unique.values()];
+ });
+ return storeCatalogPromise;
+}
+function searchVariants(q){
+ const raw=String(q||'').trim();
+ const trans=retailerQuery(raw);
+ const he=searchHebrew(raw);
+ const variants=[raw,trans,he].filter(Boolean);
+ if(/удлинител|extension cord|power strip|multi.socket|power bar|מפצל|רב שקע|כבל מאריך/i.test(raw)){
+  variants.push('רב שקע','כבל מאריך','מפצל חשמל');
+ }
+ const synonyms=[
+  [/screwdriver/i,'מברג'],[/phillips screwdriver/i,'מברג פיליפס'],
+  [/extension cord|power strip|multi.socket|power bar/i,'רב שקע'],
+  [/drill/i,'מקדחה'],[/printer/i,'מדפסת'],[/backpack/i,'תיק גב'],
+  [/молоток|молотки/i,'פטיש'],[/пила|пилы|ножовка/i,'מסור'],
+  [/отв[её]рт/i,'מברג'],[/дюбел/i,'דיבל'],[/шуруп|винт|саморез/i,'בורג'],
+  [/гайка/i,'אום'],[/рулетка/i,'מטר'],[/строительн.*уровень/i,'פלס'],
+  [/стеллаж|полка/i,'מדף'],[/шкаф/i,'ארון'],[/диван/i,'ספה'],
+  [/кровать/i,'מיטה'],[/матрас/i,'מזרן'],[/подушка/i,'כרית'],
+  [/одеяло/i,'שמיכה'],[/стол/i,'שולחן'],[/стул/i,'כיסא'],
+  [/зеркало/i,'מראה'],[/корзина/i,'סל'],[/контейнер/i,'קופסה'],
+  [/кастрюл/i,'סיר'],[/сковород/i,'מחבת'],[/чайник/i,'קומקום'],
+  [/тарелк/i,'צלחת'],[/чашка|кружка/i,'ספל'],[/нож\b|ножи/i,'סכין'],
+  [/ложка/i,'כף'],[/вилка/i,'מזלג'],[/постель|бель[её]/i,'מצעים'],
+  [/ламп|светильник|подсветка|люстра/i,'מנורה'],[/светильник|ламп|подсветка|люстра/i,'גוף תאורה'],[/люстра/i,'נברשת'],
+  [/розетка/i,'שקע'],[/выключател/i,'מפסק'],[/тройник|удлинител/i,'מפצל'],
+  [/кабел/i,'כבל'],[/шланг/i,'צינור'],[/кран/i,'ברז'],
+  [/горшок|кашпо/i,'עציץ'],[/цветок/i,'פרח'],[/растен/i,'צמח'],
+  [/кактус/i,'קקטוס'],[/земля для цвет|грунт/i,'אדמה'],
+  [/дрел|сверлил|сверление/i,'מקדחה'],[/сверл[ао]|св[её]рл[ао]/i,'מקדח'],[/перфоратор/i,'פטישון'],[/лобзик/i,'מסור אנכי'],
+  [/светодиод|led/i,'לד'],[/батарейка/i,'סוללה'],[/блок питания/i,'ספק כוח'],
+  [/телевизор/i,'טלוויזיה'],[/пылесос/i,'שואב אבק'],
+  [/холодильник/i,'מקרר'],[/морозильник/i,'מקפיא'],
+  [/печь|духовка/i,'תנור'],[/плита/i,'כיריים'],
+  [/гриль/i,'גריל'],[/принтер/i,'מדפסת'],[/монитор/i,'מסך'],
+  [/аккумулятор/i,'סוללה'],[/диск/i,'דיסק'],[/наушник/i,'אוזניות'],
+  [/рюкзак/i,'תיק גב'],[/сумка/i,'תיק'],[/чемодан/i,'מזוודה'],
+  [/палатка/i,'אוהל'],[/фонар/i,'פנס'],[/удочка/i,'חכה'],
+  [/кроссовк|обувь/i,'נעליים'],[/перчатк/i,'כפפות'],[/рубашка/i,'חולצה'],
+  [/куртка/i,'מעיל'],[/игрушка/i,'צעצוע'],[/велосипед/i,'אופניים']
+ ];
+ for(const [p,heWord] of synonyms)if(p.test(raw))variants.push(heWord);
+ return [...new Set(variants.map(x=>x.toLowerCase().trim()))];
+}
+function rankCatalog(items,q,translated){
+ const variants=[...searchVariants(q),...(translated&&/[א-ת]/.test(translated)?[translated.toLowerCase().trim()]:[])];
+ const queryLatin=tokenize(q).filter(t=>/[a-z]/i.test(t)&&/\d/.test(t));
+ const queryTerms=tokenize(q).filter(t=>/[a-z0-9]/i.test(t)&&t.length>1);
+ const results=[];
+ for(const p of items){
+   const combined=[p.name_ru,p.name_he,p.name,p.brand,p.id].filter(Boolean).join(' ').toLowerCase();
+   const hay=tokenize(combined);
+   const termExists=t=>hay.some(w=>{
+     if(w===t)return true;
+     if(t.length<3||!w.startsWith(t))return false;
+     if(/\d/.test(t))return false;
+     if(/[א-ת]/.test(t))return ['ים','ות','יים'].includes(w.slice(t.length));
+     return t.length>=4;
+   });
+   // Обязательные номера моделей: DM15 не должен показывать DM13.
+   if(queryLatin.length && !queryLatin.every(termExists))continue;
+   const matches=variants.map(v=>{
+    const words=tokenize(v);
+    if(!words.length)return 0;
+    const count=words.filter(termExists).length;
+    return count===words.length?words.length*10:0;
+   });
+   let score=Math.max(0,...matches);
+   if(score<=0)continue;
+   const exactPhrase=variants.some(v=>v.length>2&&combined.includes(v));
+   if(exactPhrase)score+=8;
+   // Prefer the actual named product over accessories mentioning it.
+   // E.g. שולחן (table) comes before מפת שולחן (tablecloth).
+   const titleTerms=tokenize(p.name_ru||p.name_he||p.name||'');
+   let headingBonus=0;
+   for(const variant of variants){
+     const words=tokenize(variant);
+     if(!words.length||!titleTerms.length)continue;
+     if(words.every((word,i)=>titleTerms[i]===word))headingBonus=Math.max(headingBonus,12+words.length*4);
+     else if(titleTerms[0]===words[0])headingBonus=Math.max(headingBonus,10);
+   }
+   score+=headingBonus;
+   if(p.price!=null&&Number(p.price)>0)score+=1;
+   if(p.img||p.photo)score+=1;
+   results.push({p,score});
+ }
+ results.sort((a,b)=>b.score-a.score||(Number(a.p.price)||Infinity)-(Number(b.p.price)||Infinity));
+ return results.map(x=>x.p);
+}
+function retailerQuery(q){
+ const t=String(q||'').toLowerCase();
+ if(/отв[её]рт|מברג|screwdriver/.test(t)){
+  if(/крестов|филипс|phillips/.test(t))return 'מברג פיליפס';
+  if(/плоск|шлицев/.test(t))return 'מברג שטוח';
+  if(/изолир|диэлектр/.test(t))return 'מברג מבודד';
+  if(/набор|комплект|наборы/.test(t))return 'סט מברגים';
+  return 'מברג';
+ }
+ return searchHebrew(q);
+}
+// Общий механизм для ЛЮБОГО товара. Магазины подключаются как источники,
+// а не как отдельные кнопки под каждую модель или категорию.
+// The local hardware shop is not a live-price catalogue. Keep it separate
+// from product cards so we never attach a made-up price to its inventory.
+function showLocalShoppingHint(q){
+ if(!/^(тверия|טבריה)$/i.test(city.value.trim()))return;
+ if(!/удлинител|розетк|провод|кабел|электр|отв[её]рт|инструмент|дрел|шуруп|сверл|מארי[ךכ]|מברג|שקע|כבל|мики|miki|מיקי|арка|ארכה/i.test(q))return;
+ const info=node('div','local-search-info');
+ info.append(node('strong','','🏪 Местные магазины: Мики и ARKA'));
+ info.append(node('span','','Мики, Ицхак Бен-Цви 13 — без интернет-каталога. Наличие и цену уточни по телефону.'));
+ const actions=node('div','local-shop-actions');
+ const call=node('a','action','📞 Мики: позвонить');call.href='tel:+972505620388';actions.append(call);
+ actions.append(action('📍 Мики на карте',"https://www.google.com/maps/search/?api=1&query=%D7%9E%D7%99%D7%A7%D7%99%20%D7%97%D7%95%D7%9E%D7%A8%D7%99%20%D7%91%D7%A0%D7%99%D7%99%D7%9F%20%D7%99%D7%A6%D7%97%D7%A7%20%D7%91%D7%9F%20%D7%A6%D7%91%D7%99%2013%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C",false));
+ actions.append(action('📍 ARKA на карте',"https://www.google.com/maps/search/?api=1&query=%D7%90%D7%A8%D7%9B%D7%94%20%D7%94%D7%9E%D7%A9%D7%95%D7%A8%2010%20%D7%98%D7%91%D7%A8%D7%99%D7%94%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C",false));
+ if(/отв[её]рт|מברג/.test(q.toLowerCase()))actions.append(action('🔧 Все отвёртки ARKA','https://www.erco.co.il/b2c/work-tools/hand-tools/screwdrivers.html',false));
+ info.append(actions);
+ res.append(info);
+}
+function interleaveStores(items){
+ const priority=['KSP','ARKA (ארכה)','Ivory','ACE','Home Center'];
+ const stores=[...new Set(items.map(p=>p.store||'Другие'))].sort((a,b)=>{
+  const aIndex=priority.indexOf(a),bIndex=priority.indexOf(b);
+  return (aIndex<0?999:aIndex)-(bIndex<0?999:bIndex);
+ });
+ const groups=new Map(stores.map(n=>[n,items.filter(p=>(p.store||'Другие')===n)]));
+ const output=[];let had=true,idx=0;
+ while(had&&idx<items.length){had=false;for(const name of stores){const p=groups.get(name).shift();if(p){output.push(p);had=true;}}idx++}
+ return output;
+}
+function showCatalogResult(products,q,failed){
+ res.replaceChildren();
+ if(!products.length){
+  showLocalShoppingHint(q);
+  message('В нашей базе пока нет подтверждённых карточек по запросу «'+q+'». Это не означает, что магазины не продают товар.',true);
+  revealResults();return;
+ }
+ markSearchFound(q);
+ const stores=[...new Set(products.map(p=>p.store).filter(Boolean))];
+ const header=node('p','result-count','Найдено '+products.length+' товаров в '+stores.length+' магазинах. Все карточки ведут на конкретный товар.');
+ res.append(header);
+ showLocalShoppingHint(q);
+ const toolbar=node('div','shop-filter-bar');
+ const list=node('div','catalog-grid');
+ res.append(toolbar,list);
+ let selected='all',count=0,displayed=[],more=null;
+ function refresh(){
+  displayed=products.filter(p=>selected==='all'||p.store===selected);
+  if(selected==='all')displayed=interleaveStores(displayed);
+  list.replaceChildren();count=0;
+  if(more){more.remove();more=null}
+  toolbar.replaceChildren();
+  for(const option of [{value:'all',label:'Все магазины'},...stores.map(x=>({value:x,label:x}))]){
+   const b=node('button','shop-filter'+(selected===option.value?' active':''),option.label);
+   b.type='button';b.addEventListener('click',()=>{selected=option.value;refresh()});
+   toolbar.append(b);
+  }
+  showMore();
+ }
+ function showMore(){
+  for(const p of displayed.slice(count,count+30))list.append(catalogCard(p,q));
+  count=Math.min(displayed.length,count+30);
+  if(count<displayed.length&&!more){
+   more=node('button','action primary','Показать ещё товары');
+   more.type='button';more.addEventListener('click',()=>{more.remove();more=null;showMore()});
+   res.append(more);
+  }
+ }
+ refresh();
+ const note=node('p','info','Название на иврите, фотографии и ссылки взяты из карточек продавцов. Цена появляется только там, где её подтвердил магазин. Город пока используется для карты: наличие в конкретном филиале не проверяется.');
+ res.append(note);
+ revealResults();
+}
+// Free keyless translation is a FALLBACK for Russian words not covered
+// by the local lexicon. The translated term is checked against actual
+// merchant product titles: a translation alone never creates a product.
+const productTranslations=new Map();
+function translateProductName(q){
+ if(!/[а-яё\u0600-\u06ff]/i.test(q)||q.length>95)return Promise.resolve(null);
+ const input=q.toLowerCase().trim();
+ const commonArabic={'مثقاب':'מקדחה','دريل':'מקדחה','مفك':'מברג','طابعة':'מדפסת','سلك تمديد':'כבל מאריך','حقيبة ظهر':'תיק גב','حاسوب محمول':'מחשב נייד','لابتوب':'מחשב נייד','شاشة':'מסך','مقبس كهربائي':'שקע חשמל'};
+ if(commonArabic[input])return Promise.resolve(commonArabic[input]);
+ if(productTranslations.has(q))return productTranslations.get(q);
+ const promise=(async()=>{
+  const ctrl=new AbortController(),timeout=setTimeout(()=>ctrl.abort(),6500);
+  try{
+   const u=new URL('https://api.mymemory.translated.net/get');
+   u.searchParams.set('q',q);
+   u.searchParams.set('langpair',/[ء-ي]/.test(q)?'ar|he':'ru|he');
+   const r=await fetch(u,{signal:ctrl.signal,mode:'cors'});
+   if(!r.ok)return null;
+   const data=await r.json();
+   const text=String(data?.responseData?.translatedText||'').trim();
+   if(text.length>100||!/[א-ת]/.test(text)||/[<>]/.test(text))return null;
+   return text;
+  }catch(e){return null}
+  finally{clearTimeout(timeout)}
+ })();
+ productTranslations.set(q,promise);
+ return promise;
+}
+async function showTech(q,mySeq){
+ setText('heading','🛍️ Поиск товаров: '+q);
+ setText('subtitle','Один поиск по товарам Израиля. Только конкретные карточки продавцов.');
+ res.replaceChildren();
+ message('🔎 Проверяю названия товаров в магазинах…');
+ const items=await catalogData();
+ if(seq!==mySeq)return;
+ let products=rankCatalog(items,q);
+ if(products.length){showCatalogResult(products,q,false);return}
+ // Universal fallback: use free Russian→Hebrew translation even when
+ // the word has never appeared in our hand-written dictionary.
+ const translated=await translateProductName(q);
+ if(seq!==mySeq)return;
+ if(translated)products=rankCatalog(items,q,translated);
+ if(products.length){showCatalogResult(products,q,false);return}
+ // If no indexed retailer has the item, try the public grocery price
+ // feed too; do not send the user to a generic retailer storefront.
+ if(translated)return loadFood(mySeq,q,translated);
+ showCatalogResult([],q,false);
+}
+
+function showFree(){
+ setText('heading','Отдам даром');setText('subtitle','Настоящие объявления о вещах, которые люди отдают бесплатно.');
+ grid([
+  card('Agora — Агóра','Израильская площадка бесплатных вещей.',['https://www.agora.co.il/'].map(x=>['🎁 Смотреть объявления',x,true]),'Без покупки'),
+  card('LeMesira','Объявления о вещах для передачи другим людям.',[['Открыть объявления','https://lemesira.co.il/',true]],'Бесплатные вещи')
+ ]);
+ message('Сами объявления принадлежат другим сайтам; без открытого интерфейса их нельзя автоматически копировать сюда. Не публикуем вымышленные предложения.');
+}
+function showHelp(){
+ setText('heading','Бесплатная еда и помощь');setText('subtitle','Пункты помощи могут менять расписание и условия выдачи.');
+ grid([
+  card('Меир Паним','Социальная помощь и питание. Уточняй условия и время.',[['📍 На карте',map('מאיר פנים')]],'Помощь'),
+  card('Хабад','Общественные программы помощи, условия надо уточнять.',[['📍 На карте',map('חב"ד')]],'Помощь'),
+  card('Социальные службы','Узнать, какие программы доступны в твоём городе.',[['📍 На карте',map('לשכת רווחה')]],'Помощь')
+ ]);
+}
+function showDating(q){
+ setText('heading','Знакомства · женщины и мужчины');
+ setText('subtitle','Здесь только настоящие сервисы знакомств. Их анкеты нельзя показывать без разрешения и авторизации.');
+ setFilters([['women','👩 Ищу женщину'],['men','👨 Ищу мужчину']]);
+ if(variation==='all')variation=has(q.toLowerCase(),['мужчин'])?'men':'women';
+ grid([
+  card('2Date — знакомства в Израиле','Сервис заявляет, что публичные анкеты можно смотреть без регистрации, а переписываться бесплатно.',[['❤️ Открыть анкеты','https://2date.co.il/',true]],variation==='men'?'Поиск мужчин':'Поиск женщин'),
+  card('OkCupid','Профили и фильтры знакомства доступны по правилам самого сервиса.',[['❤️ Перейти к знакомствам','https://www.okcupid.com/',true]],'Израиль'),
+  card('Bumble','Знакомства и анкеты внутри сервиса после входа.',[['❤️ Перейти к знакомствам','https://bumble.com/',true]],'Израиль')
+ ]);
+ message('Фотографии конкретных людей появятся только там, где сервис разрешает их просмотр. Чужие анкеты без согласия мы не копируем.');
+}
+
+function showPets(){
+ setText('heading','🐾 Найти домашнего питомца');
+ setText('subtitle','Собаки и кошки для пристройства. Выберите регион на сайте организации.');
+ grid([
+  card('Yad4 — животные ищут дом','Израильская база животных на пристройство от приютов и организаций.',[['🐾 Смотреть животных','https://www.yad4.co.il/',true]],'Собаки и кошки'),
+  card('Общество защиты животных Израиля','Анкеты собак и кошек, которых можно взять из приюта.',[['🐶🐱 Посмотреть питомцев','https://spca.co.il/אימוצים/',true]],'Приют и пристройство')
+ ]);
+}
+function showHousing(){
+ setText('heading','🏠 Жильё в Израиле');
+ setText('subtitle','Выберите город, цену и условия на сайте объявлений. Здесь нет вымышленных квартир.');
+ grid([
+  card('Yad2 — аренда жилья','Объявления о квартирах и домах, которые сдают в аренду.',[['🏠 Искать аренду','https://www.yad2.co.il/realestate/rent',true]],'Аренда'),
+  card('Yad2 — покупка жилья','Объявления о квартирах и домах, выставленных на продажу.',[['🔑 Искать покупку','https://www.yad2.co.il/realestate/forsale',true]],'Покупка'),
+  card('Homeless — комнаты и соседи','Раздел объявлений о комнатах и совместной аренде.',[['🚪 Искать комнату','https://www.homeless.co.il/mate/',true]],'Комнаты')
+ ]);
+}
+
+function showOrganic(){
+ setText('heading','🍒 Ницат ха-Дувдеван · органический магазин');
+ setText('subtitle','Настоящий магазин сети в Тверии: Ха-Галиль, 7. Органические и натуральные продукты.');
+ const shopMap='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('ניצת הדובדבן הגליל 7 טבריה');
+ grid([
+  card('ניצת הדובדבן · Тверия','Продукты питания, органические товары и натуральные продукты. Телефон филиала: 04-6720994.',[
+   ['🍒 Открыть каталог','https://www.nizat.com/',true],
+   ['📍 Филиал на карте',shopMap]
+  ],'Ха-Галиль, 7')
+ ]);
+ message('Каталог принадлежит сети магазинов; цены и наличие в филиале Тверии уточняйте у продавца.');
+}
+function showStationery(q){
+ const t=String(q||'').toLowerCase();
+ const isClip=/скрепк|бумажн.{0,10}зажим|paper.?clips?|אטב|מהדק.{0,6}נייר|مشابك/i.test(t);
+ const isStaples=/скоб|staples? for|סיכות לשדכן|دبابيس/i.test(t);
+ const isStapler=/степлер|сшивател|stapler|שדכן|دباسة|5360r/i.test(t);
+ const rotating=/поворотн|вращающ|разворотн|rotat|swivel|מסתובב|5360r/i.test(t);
+ const broad=!(isClip||isStaples||isStapler);
+ const clip="https://www.kravitz.co.il/products/%D7%9E%D7%90%D7%A8%D7%96-70-%D7%99%D7%97-%D7%90%D7%98%D7%91%D7%99%D7%9D-%D7%92%D7%93%D7%95%D7%9C%D7%99%D7%9D-%D7%91%D7%A6%D7%91%D7%A2-%D7%95%D7%A8%D7%95%D7%93";
+ const staples="https://ocn.co.il/products/3297";
+ const arti="https://www.kravitz.co.il/products/%D7%A1%D7%99%D7%9B%D7%95%D7%AA-%D7%97%D7%99%D7%91%D7%95%D7%A8-%D7%9C%D7%A9%D7%93%D7%9B%D7%A0%D7%99%D7%9D-26-6";
+ const swivel="https://www.ocn.co.il/products/4373";
+ const longArm="https://sharpen-il.co.il/product/%D7%A9%D7%93%D7%9B%D7%9F-%D7%96%D7%A8%D7%95%D7%A2-%D7%90%D7%A8%D7%95%D7%9B%D7%94-%D7%A2%D7%93-20-%D7%93%D7%A3-%D7%97%D7%91%D7%A8%D7%AA-%D7%A7%D7%A0%D7%92%D7%A8%D7%95/";
+ const cards=[];
+ if(isClip||broad)cards.push(card('📎 Бумажные скрепки Sketch · 200 шт.','Kravitz (קרביץ). Цена на сайте: 9,90 ₪. Скрепки держат бумагу без прокола, это не скобы для степлера.',[['🔗 Открыть товар',clip,true]],'Канцтовары · Kravitz'));
+ if(isStaples||broad)cards.push(card('📚 Скобы 26/6 Kangaro · 3000 шт.','Office Kal (אופיס כל). Цена с НДС на сайте: 4,60 ₪. Для степлеров под скобы 26/6.',[['🔗 Открыть товар',staples,true]],'Для степлера · Office Kal'));
+ if(isStaples||broad)cards.push(card('📚 Скобы 26/6 Arti · 5000 шт.','Kravitz (קרביץ). Цена на сайте: 7,90 ₪.',[['🔗 Открыть товар',arti,true]],'Для степлера · Kravitz'));
+ if(isStapler||broad)cards.push(card('📖 Поворотный степлер KW-trio 5360R','Office Kal (אופיס כל). Цена с НДС на сайте: 34,22 ₪. Поворотная головка 360°, сшивает до 20 листов скобами 26/6.',[['🔗 Открыть степлер',swivel,true]],'Поворотный · 5360R'));
+ if((isStapler&&!rotating)||broad)cards.push(card('📘 Степлер с длинным рычагом Kangaro DS-45L','Sharpen (שארפן). Цена на сайте: 79 ₪. Для брошюр, скобы 26/6 или 24/6.',[['🔗 Открыть товар',longArm,true]],'Длинный рычаг · Sharpen'));
+ setText('heading','📎 Канцтовары: '+(q||'скрепки, степлеры и скобы'));
+ setText('subtitle','Карточки Kravitz, Office Kal и Sharpen: цены из каталогов, не в реальном времени.');
+ if(cards.length)grid(cards);
+ else message('По этому запросу пока нет подтверждённой карточки.',true);
+ message('Скрепки (אטבים) не прокалывают бумагу. Скобы 26/6 (סיכות לשדכן) вставляют в степлер. Наличие, стоимость и доставка могут измениться.');
+}
+
+function showTuesdayMarket(){
+ setText('heading','🌷 Вторничный рынок · Верхняя Тверия');
+ setText('subtitle','Выездной рынок в Тверии-Илит (טבריה עילית), по вторникам, возле зала «Уламей Хен» (אולמי חן).');
+ grid([
+  card('שוק נודד בטבריה עילית · выездной рынок',
+   'Цветы и растения, одежда, сумки, игрушки, текстиль и товары для дома. Ассортимент меняется.',[
+    ['🌷 Посмотреть наш сайт о рынке','./shuk.html',true]
+   ],'Вторник · возле אולמי חן')
+ ]);
+ message('Открой нашу страницу рынка: фотографии продавцов мы не выдумываем, зато есть карта, описание товаров и подсказки о цветах.');
+}
+
+// Переход к результатам: кнопки быстрого поиска должны вести к найденным
+// карточкам, а не оставлять пользователя вверху у строки ввода.
+function revealResults(){
+ const heading=el('heading');
+ if(!heading)return;
+ requestAnimationFrame(()=>{
+   if(!heading.isConnected)return;
+   const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+   heading.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+ });
+}
+
+// Additional exact-code lookup. Ordinary words still use the existing search.
+function barcodeQuery(text){
+ const value=String(text||'').trim().replace(/[\s-]/g,'');
+ return /^\d{7,14}$/.test(value)?value:'';
+}
+async function searchBarcode(code,mySeq){
+ setText('heading','🔢 Товар по штрихкоду: '+code);
+ setText('subtitle','Поиск точного номера в каталогах и прайс-листах Израиля.');
+ res.replaceChildren();message('🔎 Проверяю штрихкод…');
+ // Product pages for electronics and other goods already have verified URLs.
+ const products=await catalogData();
+ if(seq!==mySeq)return;
+ const matched=products.filter(p=>[p.barcode,p.item_code,p.code,p.id].some(v=>v!=null&&String(v).replace(/\D/g,'')===code));
+ if(matched.length){showCatalogResult(matched,code,false);return}
+ let rows=[],failed=false;
+ try{rows=await marketSearch(code,cityHe())}catch(e){failed=true}
+ if(seq!==mySeq)return;
+ // Market search may return partial or fuzzy matches: never show a different barcode.
+ const exact=rows.filter(p=>String(codeOf(p)).replace(/\D/g,'')===code);
+ if(exact.length){
+  const groups=pricedMarketGroups(exact,{term:'',chicken:false,salmon:false});
+  if(groups.length){renderMarket(groups,{term:'',chicken:false,salmon:false},city.value);return}
+ }
+ // No claimed product match when the source does not actually return this code.
+ res.replaceChildren();
+ message(failed?'Не удалось проверить штрихкод в базе цен. Попробуй ещё раз.':'Товар с таким штрихкодом в выбранном городе пока не найден. Попробуй искать по названию или выбрать «Весь Израиль».',true);
+ revealResults();
+}
+async function search(){
+ updateQueryAppearance();
+ const q=query.value.trim();
+ startHuntProgress(q);
+ const exactCode=barcodeQuery(q);
+ if(exactCode){el('search-results-section').hidden=false;const mySeq=++seq;clear();revealResults();return searchBarcode(exactCode,mySeq)}
+ const browseOnly=['pets','housing','free','help','dating','organicStore','market','stationery'].includes(chosen);
+ if(!q&&!browseOnly){finishHuntProgress();query.focus();return}
+ el('search-results-section').hidden=false;
+ const mySeq=++seq;clear();
+ const type=mode(q);
+ // Сразу перейти к заголовку результата; после загрузки карточек повторим.
+ revealResults();
+ if(type==='food')return loadFood(mySeq,q);
+ if(type==='stationery'){showStationery(q);finishHuntProgress();revealResults();return}
+ if(type==='tech')return showTech(q,mySeq);
+ if(type==='free'){showFree();finishHuntProgress();revealResults();return}
+ if(type==='help'){showHelp();finishHuntProgress();revealResults();return}
+ if(type==='dating'){showDating(q);finishHuntProgress();revealResults();return}
+ if(type==='pets'){showPets();finishHuntProgress();revealResults();return}
+ if(type==='housing'){showHousing();finishHuntProgress();revealResults();return}
+ if(type==='organicStore'){showOrganic();finishHuntProgress();revealResults();return}
+ if(type==='market'){showTuesdayMarket();finishHuntProgress();revealResults();return}
+}
+function updateQueryAppearance(){
+ query.classList.toggle('has-text',Boolean(query.value.trim()));
+ query.classList.remove('is-found');
+ el('search-feedback').textContent='';
+}
+function markSearchFound(value=query.value.trim()){
+ finishHuntProgress();
+ if(!value||query.value.trim()!==value)return;
+ query.classList.add('is-found');
+ const lang=document.documentElement.lang||'ru';
+ const messages={ru:'✅ Охотник нашёл: ',en:'✅ Deal Hunter found: ',he:'✅ צייד המבצעים מצא: ',ar:'✅ صياد التخفيضات وجد: '};
+ el('search-feedback').textContent=(messages[lang]||messages.ru)+value;
+}
+query.addEventListener('input',updateQueryAppearance);
+updateQueryAppearance();
+el('deals-shortcut').addEventListener('click',()=>{window.location.href='./';});
+el('search-form').addEventListener('submit',e=>{e.preventDefault();chosen='food';variation='all';document.querySelectorAll('#top-categories button, #categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='food'));search()});
+city.addEventListener('change',()=>{if(query.value.trim())search()});
+el('examples').addEventListener('click',e=>{const b=e.target.closest('[data-query]');if(!b)return;document.querySelectorAll('#examples .tag').forEach(x=>x.classList.toggle('active',x===b));query.value=b.dataset.query;chosen='food';variation='all';document.querySelectorAll('#top-categories button, #categories button').forEach(x=>x.classList.toggle('active',x.dataset.type==='food'));search()});
+function handleCategoryClick(e){
+ const b=e.target.closest('[data-type]');if(!b)return;
+ chosen=b.dataset.type;
+ document.querySelectorAll('#top-categories button, #categories button').forEach(x=>x.classList.toggle('active',x===b));
+ variation='all';
+ if(query.value.trim()||['pets','housing','free','help','dating','organicStore','market','stationery'].includes(chosen)){search();return}
+ el('search-results-section').hidden=true;clear();
+ if(chosen==='food'||chosen==='tech')query.focus();
+}
+el('top-categories').addEventListener('click',handleCategoryClick);
+el('categories').addEventListener('click',handleCategoryClick);
+const q=new URLSearchParams(location.search).get('q');if(q){query.value=q;search()}
+})();
+</script>
+
+<script>
+/* Independent presentation-only layer. Product feeds, links, search terms and
+ * original Hebrew merchant descriptions are never altered by translation. */
+(function(){
+'use strict';
+const langs={ru:0,en:1,he:2,ar:3};
+const phrases={"Охотник за скидками":["Deal Hunter","צייד המבצעים","صياد التخفيضات"],"Поиск полезного в Израиле":["Find what you need in Israel","חיפוש מוצרים ושירותים בישראל","البحث عما تحتاجه في إسرائيل"],"Один поиск — всё, что нужно":["One search. Everything you need.","חיפוש אחד. כל מה שצריך.","بحث واحد — كل ما تحتاجه"],"Продукты, техника, рюкзаки, бесплатные вещи, помощь и знакомства. Сначала результаты — потом магазин.":["Groceries, electronics, bags, free items, assistance and dating. See results first.","מזון, חשמל, תיקים, דברים בחינם, עזרה והיכרויות. קודם תוצאות, אחר כך החנות.","مواد غذائية وإلكترونيات وحقائب وأشياء مجانية ومساعدة وتعارف. النتائج أولاً ثم المتجر."],"🔎 НАЙТИ":["🔎 SEARCH","🔎 חיפוש","🔎 ابحث"],"НАЙТИ":["SEARCH","חיפוש","ابحث"],"Например: курица, дрель, отдам даром":["E.g. chicken, drill, free items","למשל: עוף, מקדחה, למסירה","مثلاً: دجاج، مثقاب، أشياء مجانية"],"Что ищем":["What are you searching for?","מה מחפשים?","ماذا تبحث عنه؟"],"Город (можно выбрать любой)":["City (choose any)","עיר (אפשר לבחור)","المدينة (يمكنك اختيار أي مدينة)"],"Впиши город или выбери из списка":["Enter a city or choose from the list","הקלידו עיר או בחרו מהרשימה","اكتب المدينة أو اخترها من القائمة"],"Курица":["Chicken","עוף","دجاج"],"Лосось":["Salmon","סלמון","سلمون"],"Форель Дана":["Dan trout","פורל דן","سمك السلمون المرقط من دان"],"Дрель":["Drill","מקדחה","مثقاب"],"Рюкзак":["Backpack","תיק גב","حقيبة ظهر"],"Даром":["Free items","למסירה","مجاناً"],"Помощь":["Assistance","סיוע","مساعدة"],"Знакомства":["Dating","היכרויות","تعارف"],"Охота за скидками KSP":["Hunt KSP deals","ציד מבצעים ב-KSP","البحث عن تخفيضات KSP"],"Одна кнопка — сразу нужный раздел. Картинки и цены там показывает сам магазин.":["One tap opens a section. The retailer displays products and prices.","לחיצה אחת פותחת קטגוריה. המוצרים והמחירים מוצגים באתר החנות.","زر واحد يفتح القسم المطلوب. يعرض المتجر الصور والأسعار بنفسه."],"акции ноября":["November offers","מבצעי נובמבר","عروض نوفمبر"],"Ноябрьские скидки":["November deals","מבצעי נובמבר","تخفيضات نوفمبر"],"товары по акции":["Discounted products","מוצרים במבצע","المنتجات المخفضة"],"Уценка и остатки":["Outlet and clearance","מציאון ועודפים","تصفية المخزون والمنتجات المخفضة"],"Все акции KSP":["All KSP deals","כל מבצעי KSP","جميع عروض KSP"],"Купоны и предложения":["Coupons and offers","קופונים והצעות","قسائم وعروض"],"История цен KSP — бесплатно":["Free KSP price history","היסטוריית מחירים של KSP בחינם","سجل أسعار KSP مجاناً"],"Сравнить цены разных магазинов":["Compare stores' prices","השוואת מחירים בין חנויות","مقارنة الأسعار بين المتاجر"],"Black Friday и ноябрьская распродажа частично пересекаются. Реальность скидки сравнивай с историей цен в PriceDrop; цены и наличие проверяй у продавца.":["Black Friday and November deals may overlap. Check past prices on PriceDrop and confirm availability with the seller.","מבצעי בלאק פריידי ונובמבר עשויים לחפוף. בדקו היסטוריית מחירים ב-PriceDrop ואשרו זמינות מול המוכר.","قد تتداخل عروض الجمعة السوداء وتخفيضات نوفمبر. قارن الأسعار السابقة عبر PriceDrop وتحقق من السعر والتوفر لدى البائع."],"Электрика и инструменты в Тверии":["Electrical supplies and tools in Tiberias","חשמל וכלי עבודה בטבריה","الكهرباء والأدوات في طبريا"],"Мики на Кикаре":["Miki by the square","מיקי בכיכר","ميكي قرب الساحة"],"Ицхак Бен-Цви, 13 · Шикун-Далет":["Yitzhak Ben-Zvi 13 · Shikun Dalet","יצחק בן צבי 13 · שיכון ד׳","يتسحاق بن تسفي 13 · شيكون داليت"],"Местный магазин без интернет-каталога: цены и наличие спрашивать":["Local store without an online catalog; ask about prices and stock.","חנות מקומית בלי קטלוג מקוון; יש לברר מחירים ומלאי","متجر محلي بلا كتالوج إلكتروني؛ اسأل عن الأسعار والمخزون"],"Позвонить":["Call","התקשרו","اتصال"],"Карта":["Map","מפה","الخريطة"],"ARKA · Тверия":["ARKA · Tiberias","ארכה · טבריה","ARKA · طبريا"],"Ха-Масор, 10 · электротовары и инструмент":["HaMasor 10 · electrical supplies and tools","המשור 10 · חשמל וכלי עבודה","همسور 10 · أدوات كهربائية ومعدات"],"Есть цены и отдельные карточки товаров":["Individual product pages with prices are available","יש דפי מוצרים עם מחירים","تتوفر صفحات منفصلة للمنتجات مع الأسعار"],"Удлинители":["Extension cords","כבלים מאריכים","أسلاك تمديد الكهرباء"],"Точное наличие товара в местных филиалах нужно подтвердить перед поездкой.":["Please confirm local stock before visiting.","יש לוודא מלאי בסניף לפני הגעה.","يُرجى التأكد من توفر المنتج في الفرع قبل الذهاب."],"Все разделы":["All categories","כל הקטגוריות","كل الأقسام"],"Еда":["Groceries","מזון","مواد غذائية"],"Товары":["Products","מוצרים","منتجات"],"Бесплатно":["Free","בחינם","مجاناً"],"Что будем искать?":["What shall we find?","מה מחפשים?","ماذا نبحث عنه؟"],"Выбери пример или напиши свой запрос.":["Choose a suggestion or enter a search.","בחרו דוגמה או הקלידו חיפוש.","اختر مثالاً أو اكتب طلبك."],"Начни поиск: название товара, цена и магазин появятся здесь, а не в Google.":["Search to see product names, prices and stores right here.","חפשו כדי לראות כאן שמות מוצרים, מחירים וחנויות.","ابدأ البحث لتظهر هنا أسماء المنتجات والأسعار والمتاجر."],"Создатель — Александр Деревяшкин":["Created by Alexander Derevyashkin","יוצר האתר: אלכסנדר דרוויאשקין","أنشأه ألكسندر ديريفياشكين"],"Новые технологии и искусственный интеллект · Израиль":["New technology and AI · Israel","טכנולוגיה חדשה ובינה מלאכותית · ישראל","تقنيات جديدة وذكاء اصطناعي · إسرائيل"],"Цены и наличие меняются; перед покупкой проверяйте у продавца. Сайт не является магазином.":["Prices and stock change; check with the seller. This is not an online shop.","המחירים והמלאי משתנים; בדקו מול המוכר. האתר אינו חנות.","قد تتغير الأسعار والمخزون؛ تحقق لدى البائع قبل الشراء. هذا الموقع ليس متجراً."],"Все магазины":["All stores","כל החנויות","جميع المتاجر"],"Другие магазины":["Other stores","חנויות אחרות","متاجر أخرى"],"Показать ещё товары":["Show more products","הצג עוד מוצרים","عرض المزيد من المنتجات"],"Открыть товар":["Open product","פתיחת מוצר","فتح المنتج"],"Фото пока нет":["No photo yet","אין תמונה עדיין","لا توجد صورة بعد"],"Фото товара по штрихкоду":["Barcode-matched photo","תמונה לפי ברקוד","صورة المنتج حسب الرمز الشريطي"],"Иллюстрация вида товара":["Illustrative photo","תמונה להמחשה","صورة توضيحية لنوع المنتج"],"Изображение товара":["Product image","תמונת מוצר","صورة المنتج"],"Цена не получена":["Price unavailable","המחיר אינו זמין","السعر غير متوفر"],"Проверяю цены…":["Checking prices…","בודק מחירים…","جاري التحقق من الأسعار…"],"Цены магазинов":["Store prices","מחירי חנויות","أسعار المتاجر"],"Закрыть":["Close","סגירה","إغلاق"],"Подробности":["Details","פרטים","التفاصيل"],"Магазин":["Store","חנות","المتجر"],"Фото · товар · цена":["Photo · product · price","תמונה · מוצר · מחיר","الصورة · المنتج · السعر"],"Сравнить цены других магазинов":["Compare other stores","השוואת מחירים בין חנויות","مقارنة الأسعار في المتاجر الأخرى"],"В наличии у продавца (на дату проверки)":["In stock when checked","במלאי בזמן הבדיקה","متوفر لدى البائع وقت التحقق"],"Сейчас нет в наличии":["Currently out of stock","אזל מהמלאי","غير متوفر حالياً"],"На карте":["On map","במפה","على الخريطة"],"Вся курица":["All chicken","כל סוגי העוף","جميع أنواع الدجاج"],"Целая":["Whole","שלם","كاملة"],"Грудка":["Breast","חזה","صدر"],"Бёдра":["Thighs","ירכיים","أفخاذ"],"Голени":["Drumsticks","שוקיים","سيقان"],"Крылья":["Wings","כנפיים","أجنحة"],"Местные магазины: Мики и ARKA":["Local stores: Miki and ARKA","חנויות מקומיות: מיקי וארכה","متاجر محلية: ميكي وARKA"],"Мики: позвонить":["Call Miki","התקשרו למיקי","الاتصال بميكي"],"Мики на карте":["Miki on map","מיקי במפה","ميكي على الخريطة"],"ARKA на карте":["ARKA on map","ארכה במפה","ARKA على الخريطة"],"Все отвёртки ARKA":["ARKA screwdrivers","מברגים בארכה","جميع مفكات ARKA"],"Сведения от":["Updated","עודכן","بيانات بتاريخ"],"Открыть объявления":["View listings","פתיחת מודעות","فتح الإعلانات"],"Смотреть объявления":["View listings","צפייה במודעות","عرض الإعلانات"],"Без покупки":["No purchase required","ללא רכישה","دون شراء"],"Бесплатные вещи":["Free items","חפצים למסירה","أشياء مجانية"],"Отдам даром":["Free giveaways","למסירה בחינם","للتبرع مجاناً"],"Бесплатная еда и помощь":["Free meals and assistance","מזון בחינם וסיוע","طعام مجاني ومساعدة"],"Пункты помощи могут менять расписание и условия выдачи.":["Aid centers may change schedules and eligibility.","מרכזי הסיוע עשויים לשנות שעות ותנאים.","قد تتغير مواعيد وشروط مراكز المساعدة."],"Поиск мужчин":["Men","גברים","البحث عن رجال"],"Поиск женщин":["Women","נשים","البحث عن نساء"],"Знакомства · женщины и мужчины":["Dating · women and men","היכרויות · נשים וגברים","تعارف · نساء ورجال"],"Ищу женщину":["Looking for a woman","מחפש אישה","أبحث عن امرأة"],"Ищу мужчину":["Looking for a man","מחפש גבר","أبحث عن رجل"],"Открыть анкеты":["View profiles","צפייה בפרופילים","عرض الملفات الشخصية"],"Перейти к знакомствам":["Open dating service","כניסה לאתר היכרויות","الانتقال إلى مواقع التعارف"],"Израиль":["Israel","ישראל","إسرائيل"],"Куриные голени":["Chicken drumsticks","שוקי עוף","سيقان الدجاج"],"Куриная грудка":["Chicken breast","חזה עוף","صدور الدجاج"],"Филе лосося":["Salmon fillet","פילה סלמון","فيليه السلمون"],"Стейк лосося":["Salmon steak","סטייק סלמון","شريحة السلمون"],"Кусочки лосося":["Salmon pieces","נתחי סלמון","قطع السلمون"],"Лосось целиком":["Whole salmon","סלמון שלם","سلمون كامل"],"Продукт питания":["Food product","מוצר מזון","منتج غذائي"],"свежий":["fresh","טרי","طازج"],"замороженный":["frozen","קפוא","مجمد"],"копчёный":["smoked","מעושן","مدخن"],"норвежский":["Norwegian","נורווגי","نرويجي"],"солёный":["salted","מלוח","مملح"],"Найдено":["Found","נמצאו","تم العثور على"],"товаров":["products","מוצרים","منتجات"],"конкретных товаров":["products","מוצרים","منتجات محددة"],"сетей":["retail chains","רשתות","سلاسل تجارية"],"магазинах":["stores","חנויות","متاجر"],"в":["in","ב-","في"],"Поиск товаров":["Product search","חיפוש מוצרים","البحث عن المنتجات"],"Удлинитель":["Extension cord","כבל מאריך","سلك تمديد"],"Отвёртка":["Screwdriver","מברג","مفك"],"Набор отвёрток":["Screwdriver set","סט מברגים","مجموعة مفكات"],"Крестовая отвёртка":["Phillips screwdriver","מברג פיליפס","مفك صليبي"],"Розетка":["Power outlet","שקע חשמל","مقبس كهربائي"],"Шнур":["Cable","כבל","سلك"],"кабель":["cable","כבל","كابل"],"без выключателя":["without switch","ללא מפסק","دون مفتاح تشغيل"],"с выключателем":["with switch","עם מפסק","مع مفتاح تشغيل"],"розеток":["outlets","שקעים","مقابس"],"розетки":["outlets","שקעים","مقابس"],"м":["m","מ׳","م"],"кг":["kg","ק״ג","كغ"],"Результаты":["Results","תוצאות","النتائج"],"Тема":["Theme","ערכת נושא","المظهر"],"Тверия":["Tiberias","טבריה","طبريا"],"Язык и оформление":["Language and appearance","שפה ועיצוב","اللغة والمظهر"],"Язык сайта":["Website language","שפת האתר","لغة الموقع"],"Оформление сайта":["Site appearance","עיצוב האתר","مظهر الموقع"],"Скидки KSP и история цен":["KSP deals and price history","מבצעי KSP והיסטוריית מחירים","تخفيضات KSP وسجل الأسعار"],"Магазины инструментов в Тверии":["Hardware shops in Tiberias","חנויות כלי עבודה בטבריה","متاجر الأدوات في طبريا"],"Нет адреса сайта":["No website available","אין כתובת לאתר","لا يتوفر رابط للموقع"],"Продукт из базы цен":["Product from price database","מוצר ממאגר מחירים","منتج من قاعدة الأسعار"],"Куриные бёдра":["Chicken thighs","ירכי עוף","أفخاذ الدجاج"],"Куриные крылышки":["Chicken wings","כנפי עוף","أجنحة الدجاج"],"Куриное филе (паргит)":["Boneless chicken thigh (pargit)","פרגית עוף","فيليه فخذ الدجاج"],"Целая курица":["Whole chicken","עוף שלם","دجاج كامل"],"Куриное мясо":["Chicken meat","בשר עוף","لحم الدجاج"],"Молоко Yotvata 3,6%":["Yotvata milk 3.6%","חלב יטבתה 3.6%","حليب يوتفاتا 3.6%"],"Хлеб в американском стиле":["American-style bread","לחם בסגנון אמריקאי","خبز على الطريقة الأمريكية"],"Цельнозерновой хлеб":["Whole-grain bread","לחם מחיטה מלאה","خبز من الحبوب الكاملة"],"Яичная лапша":["Egg noodles","אטריות ביצים","معكرونة بالبيض"],"Шоколад с кремом":["Cream-filled chocolate","שוקולד במילוי קרם","شوكولاتة بالكريمة"],"Фото товара":["Product photo","תמונת מוצר","صورة المنتج"],"Иллюстрация":["Illustration","תמונה להמחשה","رسم توضيحي"],"Иллюстрация вида товара, не фотография упаковки":["Illustration of the product type, not this item's packaging","תמונה להמחשה בלבד, לא צילום האריזה הספציפית","صورة توضيحية لنوع المنتج وليست صورة العبوة"],"Иллюстрация показывает вид продукта, не конкретную упаковку. Подлинное фото бывает только при подтверждении штрихкода. Наличие уточняй в магазине.":["Illustrations show the food type, not the exact package. Verified photos require a matching barcode. Confirm stock with the store.","התמונה להמחשה בלבד, לא של האריזה המדויקת. תמונה מקורית מוצגת רק עם ברקוד תואם. יש לוודא מלאי בחנות.","الصورة توضح نوع المنتج وليس العبوة المحددة. تظهر الصورة الأصلية فقط بعد التحقق من الرمز الشريطي. تحقق من توفر المنتج في المتجر."],"Для выбранной сети подходящих товаров пока не найдено.":["No matching products were found for this retailer.","לא נמצאו מוצרים מתאימים ברשת שנבחרה.","لم نعثر على منتجات مناسبة في السلسلة المختارة."],"Последняя известная цена от 14.11.2026 — НЕ проверена сегодня.":["Last known price as of 14 Nov 2026 — NOT verified today.","המחיר האחרון ידוע מ-14.11.2026 — לא נבדק היום.","آخر سعر معروف بتاريخ 14.11.2026 — لم يتم التحقق منه اليوم."],"Продукты и цены":["Groceries and prices","מזון ומחירים","المنتجات والأسعار"],"Конкретные товары и цены в магазинах. Чужие фотографии вместо товара не показываем.":["Real store products and prices. We do not substitute photos of unrelated products.","מוצרים ומחירים אמיתיים בחנויות. לא נציג תמונות של מוצרים אחרים.","منتجات محددة وأسعارها في المتاجر. لا نعرض صور منتجات أخرى بدلاً منها."],"Ищу товары и цены…":["Searching for products and prices…","מחפש מוצרים ומחירים…","جاري البحث عن المنتجات والأسعار…"],"Названия продуктов есть, но цены магазинов сейчас не загрузились.":["Product names are available, but store prices could not be loaded.","שמות המוצרים זמינים אך מחירי החנויות לא נטענו.","أسماء المنتجات متوفرة، لكن تعذر تحميل أسعار المتاجر الآن."],"Источник цен сейчас не ответил. Это не значит, что товары отсутствуют в магазинах. Попробуй повторить поиск.":["The price source is unavailable. This does not mean stores lack the item. Try again.","מקור המחירים אינו זמין כרגע. אין פירוש הדבר שהמוצר חסר בחנויות. נסו שוב.","لم يستجب مصدر الأسعار حالياً. هذا لا يعني عدم وجود المنتجات في المتاجر. حاول إعادة البحث."],"Не удалось загрузить цены. Попробуй ещё раз. Названия товаров при этом остаются доступны.":["Prices could not be loaded. Please try again; product names remain available.","לא ניתן לטעון מחירים. נסו שוב; שמות המוצרים עדיין מוצגים.","تعذر تحميل الأسعار. حاول مرة أخرى. تبقى أسماء المنتجات متاحة."],"Мики, Ицхак Бен-Цви 13 — без интернет-каталога. Наличие и цену уточни по телефону.":["Miki, Yitzhak Ben-Zvi 13 — no online catalog. Check stock and prices by phone.","מיקי, יצחק בן צבי 13 — ללא קטלוג מקוון. בירור מלאי ומחירים בטלפון.","ميكي، يتسحاق بن تسفي 13 — دون كتالوج إلكتروني. تحقق من التوفر والسعر هاتفياً."],"Название на иврите, фотографии и ссылки взяты из карточек продавцов. Цена появляется только там, где её подтвердил магазин. Город пока используется для карты: наличие в конкретном филиале не проверяется.":["Hebrew titles, images and links come from sellers. Prices appear only when verified. City is used for mapping; local stock is unconfirmed.","שמות בעברית, תמונות וקישורים נלקחו מדפי המוכרים. המחיר מוצג רק כאשר אומת. העיר משמשת למפה; אין אישור למלאי בסניף.","الأسماء بالعبرية والصور والروابط مأخوذة من صفحات البائعين. يظهر السعر فقط حين يؤكده المتجر. تُستخدم المدينة حالياً للخريطة، ولا نتحقق من المخزون في الفرع المحدد."],"Один поиск по товарам Израиля. Только конкретные карточки продавцов.":["Search Israeli products. Only actual retailer product pages.","חיפוש מוצרים בישראל. רק דפי מוצר של חנויות.","بحث واحد بين منتجات إسرائيل. صفحات محددة للمنتجات فقط."],"Проверяю названия товаров в магазинах…":["Checking store product listings…","בודק מוצרים בחנויות…","جاري التحقق من أسماء المنتجات في المتاجر…"],"Настоящие объявления о вещах, которые люди отдают бесплатно.":["Real listings from people giving items away.","מודעות אמיתיות של אנשים שמוסרים חפצים בחינם.","إعلانات حقيقية لأشياء يقدمها أصحابها مجاناً."],"Израильская площадка бесплатных вещей.":["Israeli free-giveaway marketplace.","אתר ישראלי למסירת חפצים בחינם.","منصة إسرائيلية للأشياء المجانية."],"Объявления о вещах для передачи другим людям.":["Listings for items offered to others.","מודעות למסירת חפצים לאחרים.","إعلانات لأشياء يرغب أصحابها في منحها للآخرين."],"Сами объявления принадлежат другим сайтам; без открытого интерфейса их нельзя автоматически копировать сюда. Не публикуем вымышленные предложения.":["Listings belong to other sites and cannot be copied without permission. No fabricated offers are shown.","המודעות שייכות לאתרים אחרים ואינן מועתקות ללא אישור. לא מוצגות הצעות מומצאות.","الإعلانات ملك لمواقع أخرى ولا يمكن نسخها آلياً دون واجهة متاحة. لا ننشر عروضاً مختلقة."],"Социальная помощь и питание. Уточняй условия и время.":["Food and social aid. Confirm requirements and hours.","סיוע חברתי ומזון. יש לברר תנאים ושעות.","مساعدات اجتماعية ووجبات. تحقق من الشروط والمواعيد."],"Общественные программы помощи, условия надо уточнять.":["Community assistance programs; confirm eligibility.","תוכניות סיוע קהילתיות; יש לברר זכאות.","برامج دعم مجتمعي؛ تحقق من شروط الاستفادة."],"Социальные службы":["Social services","שירותי הרווחה","الخدمات الاجتماعية"],"Узнать, какие программы доступны в твоём городе.":["Find available local support programs.","מידע על תוכניות הסיוע בעיר.","اعرف البرامج المتاحة في مدينتك."],"Здесь только настоящие сервисы знакомств. Их анкеты нельзя показывать без разрешения и авторизации.":["Only genuine dating services. Profiles cannot be displayed without authorization.","רק שירותי היכרויות אמיתיים. לא ניתן להציג פרופילים ללא הרשאה.","نعرض خدمات تعارف حقيقية فقط. لا يمكن عرض ملفات المستخدمين دون تصريح وتسجيل دخول."],"2Date — знакомства в Израиле":["2Date — dating in Israel","2Date — היכרויות בישראל","2Date — تعارف في إسرائيل"],"Сервис заявляет, что публичные анкеты можно смотреть без регистрации, а переписываться бесплатно.":["The service says public profiles are viewable without registration and messaging is free.","לפי האתר, ניתן לצפות בפרופילים ציבוריים ללא הרשמה ולהתכתב בחינם.","يذكر الموقع أن الملفات العامة متاحة دون تسجيل، وأن المراسلة مجانية."],"Профили и фильтры знакомства доступны по правилам самого сервиса.":["Profiles and filters follow the service's rules.","פרופילים ומסננים זמינים לפי כללי השירות.","الملفات الشخصية ومرشحات التعارف متاحة وفق قواعد الخدمة."],"Знакомства и анкеты внутри сервиса после входа.":["Dating profiles available after sign-in.","פרופילים זמינים לאחר התחברות.","التعارف والملفات الشخصية داخل الخدمة بعد تسجيل الدخول."],"Фотографии конкретных людей появятся только там, где сервис разрешает их просмотр. Чужие анкеты без согласия мы не копируем.":["Photos are displayed only where the service permits. We do not copy profiles without consent.","תמונות מוצגות רק באישור השירות. איננו מעתיקים פרופילים ללא הסכמה.","تُعرض صور الأشخاص فقط حيث يسمح الموقع بذلك. لا ننسخ الملفات الشخصية دون موافقة أصحابها."],"Форель белая · целая очищенная":["White trout · whole, cleaned","פורל לבן · שלם ונקי","سلمون مرقط أبيض · كامل ومنظف"],"Форель белая · филе":["White trout · fillet","פילה פורל לבן","فيليه السلمون المرقط الأبيض"],"Форель розовая · целая очищенная":["Pink trout · whole, cleaned","פורל ורוד · שלם ונקי","سلمون مرقط وردي · كامل ومنظف"],"Форель розовая · филе":["Pink trout · fillet","פילה פורל ורוד","فيليه السلمون المرقط الوردي"],"Форель семейная · целая очищенная":["Family-size trout · whole, cleaned","פורל משפחתי · שלם ונקי","سلمون مرقط عائلي · كامل ومنظف"],"Форель семейная · филе":["Family-size trout · fillet","פילה פורל משפחתי","فيليه السلمون المرقط العائلي"],"Форель замороженная · набор":["Frozen trout selection","מבחר פורל קפוא","سلمون مرقط مجمد · تشكيلة"],"Форель · филе горячего копчения":["Hot-smoked trout fillet","פילה פורל בעישון חם","فيليه سلمون مرقط مدخن ساخن"],"Форель холодного копчения · упаковка около 100 г":["Cold-smoked trout · about 100 g","פורל בעישון קר · כ-100 גרם","سلمون مرقط مدخن على البارد · عبوة نحو 100 غ"],"Магазин: Форель Дана · кибуц Дан":["Store: Dan Trout · Kibbutz Dan","חנות: דגי דן · קיבוץ דן","المتجر: سمك دان · كيبوتس دان"],"Источник иллюстрации и лицензия":["Image source and license","מקור התמונה והרישיון","مصدر الصورة التوضيحية والترخيص"],"В прайс-листе супермаркета часто есть только штрихкод, цена и адрес магазина. Ссылки на покупку именно этого товара в нём нет.":["Store price lists often contain only a barcode, price and location, without direct checkout links.","קובצי המחירים לרוב כוללים ברקוד, מחיר וכתובת בלבד, ללא קישור לקנייה.","تتضمن قائمة أسعار السوبرماركت غالباً الرمز الشريطي والسعر وعنوان المتجر فقط، دون رابط مباشر لشراء المنتج."],"Нет цены":["No price","אין מחיר","لا يوجد سعر"],"Товар отсутствует":["Product unavailable","המוצר אינו זמין","المنتج غير متوفر"],"Источники и авторские права":["Sources & copyright","מקורות מידע וזכויות יוצרים","مصادر المعلومات وحقوق النشر"],"Бета-версия · Сайт открыт для тестирования. Мы улучшаем поиск и проверяем данные.":["Beta · Open testing. We are improving search and checking product data.","גרסת בטא · האתר פתוח לבדיקה. אנו משפרים את החיפוש ובודקים את נתוני המוצרים.","نسخة تجريبية · الموقع مفتوح للاختبار. نعمل على تحسين البحث والتحقق من البيانات."],"Питомцы":["Pets","חיות מחמד","حيوانات أليفة"],"Жильё":["Housing","דיור","السكن"],"Найти домашнего питомца":["Find a pet","מציאת חיית מחמד","العثور على حيوان أليف"],"Собаки и кошки для пристройства. Выберите регион на сайте организации.":["Dogs and cats available for adoption. Choose a region on the organization’s website.","כלבים וחתולים לאימוץ. בחרו אזור באתר העמותה.","كلاب وقطط للتبني. اختر المنطقة على موقع المؤسسة."],"Yad4 — животные ищут дом":["Yad4 — pets looking for homes","יד4 — בעלי חיים מחפשים בית","Yad4 — حيوانات تبحث عن منزل"],"Израильская база животных на пристройство от приютов и организаций.":["Israeli pet-adoption listings from shelters and organizations.","מאגר ישראלי של בעלי חיים לאימוץ מעמותות וכלביות.","قاعدة إسرائيلية لحيوانات التبني من الملاجئ والمؤسسات."],"Смотреть животных":["View adoptable pets","צפייה בבעלי חיים","عرض الحيوانات"],"Собаки и кошки":["Dogs and cats","כלבים וחתולים","كلاب وقطط"],"Общество защиты животных Израиля":["Society for Prevention of Cruelty to Animals in Israel","אגודת צער בעלי חיים בישראל","جمعية الرفق بالحيوان في إسرائيل"],"Анкеты собак и кошек, которых можно взять из приюта.":["Dogs and cats available for adoption from the shelter.","כלבים וחתולים המחפשים בית מאמץ דרך האגודה.","كلاب وقطط يمكن تبنيها من الملجأ."],"Посмотреть питомцев":["View animals","צפייה בבעלי חיים","عرض الحيوانات الأليفة"],"Приют и пристройство":["Shelter and adoption","כלבייה ואימוץ","ملجأ وتبني"],"Жильё в Израиле":["Housing in Israel","דיור בישראל","السكن في إسرائيل"],"Выберите город, цену и условия на сайте объявлений. Здесь нет вымышленных квартир.":["Choose a city, price and terms on the listing website. We do not invent apartments.","בחרו עיר, מחיר ותנאים באתר המודעות. איננו מפרסמים דירות מומצאות.","اختر المدينة والسعر والشروط في موقع الإعلانات. لا ننشر شققاً وهمية."],"Yad2 — аренда жилья":["Yad2 — rentals","יד2 — דירות להשכרה","Yad2 — شقق للإيجار"],"Объявления о квартирах и домах, которые сдают в аренду.":["Listings of apartments and houses for rent.","מודעות על דירות ובתים להשכרה.","إعلانات عن شقق ومنازل للإيجار."],"Искать аренду":["Find rentals","חיפוש להשכרה","البحث عن إيجار"],"Аренда":["Rent","השכרה","إيجار"],"Yad2 — покупка жилья":["Yad2 — homes for sale","יד2 — דירות למכירה","Yad2 — عقارات للبيع"],"Объявления о квартирах и домах, выставленных на продажу.":["Listings of apartments and houses for sale.","מודעות על דירות ובתים למכירה.","إعلانات عن شقق ومنازل للبيع."],"Искать покупку":["Find properties for sale","חיפוש לקנייה","البحث عن عقارات للبيع"],"Покупка":["Buy","קנייה","شراء"],"Homeless — комнаты и соседи":["Homeless — rooms and roommates","הומלס — חדרים ושותפים","Homeless — غرف وشركاء سكن"],"Раздел объявлений о комнатах и совместной аренде.":["Room and shared-apartment listings.","מודעות על חדרים ודירות שותפים.","إعلانات عن غرف وسكن مشترك."],"Искать комнату":["Find a room","חיפוש חדר","البحث عن غرفة"],"Комнаты":["Rooms","חדרים","غرف"],"Органик · Ницат":["Organic · Nizat","אורגני · ניצת","منتجات عضوية · نيتسات"],"Ницат ха-Дувдеван · органический магазин":["Nizat HaDuvdevan · organic store","ניצת הדובדבן · חנות טבע","نيتسات هَدوفدفان · متجر منتجات عضوية"],"Настоящий магазин сети в Тверии: Ха-Галиль, 7. Органические и натуральные продукты.":["A real branch in Tiberias, HaGalil 7. Organic and natural food.","סניף רשת בטבריה, הגליל 7. מזון טבעי ואורגני.","فرع في طبريا، شارع هجليل 7. أغذية عضوية وطبيعية."],"Продукты питания, органические товары и натуральные продукты. Телефон филиала: 04-6720994.":["Groceries, organic goods and natural products. Branch phone: 04-6720994.","מזון, מוצרים אורגניים וטבעיים. טלפון הסניף: 04-6720994.","مواد غذائية ومنتجات عضوية وطبيعية. هاتف الفرع: 04-6720994."],"Открыть каталог":["Open online catalog","פתיחת הקטלוג","فتح الكتالوج"],"Филиал на карте":["Branch on the map","הסניף במפה","الفرع على الخريطة"],"Ха-Галиль, 7":["HaGalil 7","הגליל 7","هجليل 7"],"Каталог принадлежит сети магазинов; цены и наличие в филиале Тверии уточняйте у продавца.":["The catalog belongs to the retail chain. Confirm prices and stock at the Tiberias branch.","הקטלוג שייך לרשת. יש לוודא מחירים ומלאי בסניף טבריה.","الكتالوج تابع للسلسلة. تحقق من الأسعار والمخزون في فرع طبريا لدى البائع."],"Вторничный рынок":["Tuesday market","שוק יום שלישי","سوق الثلاثاء"],"Вторничный рынок · Верхняя Тверия":["Tuesday market · Upper Tiberias","שוק נודד · טבריה עילית","سوق الثلاثاء · طبريا العليا"],"Выездной рынок в Тверии-Илит (טבריה עילית), по вторникам, возле зала «Уламей Хен» (אולמי חן).":["Travelling market in Upper Tiberias, on Tuesdays near the Hen event hall.","שוק נודד בטבריה עילית בימי שלישי, סמוך לאולמי חן.","سوق متنقل في طبريا العليا كل يوم ثلاثاء قرب قاعة أولامي حِن (אולמי חן)."],"שוק נודד בטבריה עילית · выездной рынок":["Upper Tiberias · travelling market","שוק נודד בטבריה עילית","السوق المتنقل في طبريا العليا"],"Цветы и растения, одежда, сумки, игрушки, текстиль и товары для дома. Ассортимент меняется.":["Flowers and plants, clothing, bags, toys, textiles and household goods. The selection varies.","פרחים ועציצים, בגדים, תיקים, צעצועים, מוצרי טקסטיל וכלי בית. המלאי משתנה.","زهور ونباتات وملابس وحقائب وألعاب ومنسوجات وأدوات منزلية. تتغير البضائع المعروضة."],"Найти на карте":["See on map","מיקום במפה","الموقع على الخريطة"],"Описание рынка":["Market information","מידע על השוק","معلومات عن السوق"],"Вторник · возле אולמי חן":["Tuesday · near Hen Hall","יום שלישי · ליד אולמי חן","الثلاثاء · قرب قاعة أولامي حِن"],"Рынок проводится по вторникам. Время работы отдельных торговцев и ассортимент лучше уточнять перед поездкой.":["Held on Tuesdays. Stall hours and goods may vary; confirm before visiting.","השוק מתקיים בימי שלישי. שעות הדוכנים והמבחר עשויים להשתנות; מומלץ לוודא לפני ההגעה.","يُقام السوق أيام الثلاثاء. قد تختلف ساعات الباعة والبضائع، لذا يُستحسن التحقق قبل الزيارة."],"Посмотреть наш сайт о рынке":["Explore our market page","לעמוד השוק שלנו","زيارة صفحتنا عن السوق"],"Открой нашу страницу рынка: фотографии продавцов мы не выдумываем, зато есть карта, описание товаров и подсказки о цветах.":["Open our market guide for a map, stall categories and flower tips. We do not invent vendor photos.","במדריך השוק שלנו יש מפה, קטגוריות של דוכנים וטיפים לפרחים. איננו ממציאים תמונות של מוכרים.","افتح دليلنا للسوق: خريطة وفئات البضائع ونصائح للزهور، دون صور مختلقة للباعة."],"🔥 СКИДКИ":["🔥 DEALS","🔥 מבצעים","🔥 تخفيضات"],"Открыть раздел акций":["Open current deal links","פתיחת מבצעים","فتح قسم التخفيضات"],"Канцтовары":["Stationery","ציוד משרדי","أدوات مكتبية"],"Скрепки":["Paper clips","אטבים","مشابك ورق"],"Поворотный степлер":["Rotating stapler","שדכן מסתובב","دباسة دوارة"],"Бумажные скрепки Sketch · 200 шт.":["Sketch paper clips · 200 pcs","אטבי נייר Sketch · 200 יחידות","مشابك ورق Sketch · 200 قطعة"],"Скобы 26/6 Kangaro · 3000 шт.":["Kangaro staples 26/6 · 3000 pcs","סיכות Kangaro 26/6 · 3000 יחידות","دبابيس Kangaro 26/6 · 3000 قطعة"],"Скобы 26/6 Arti · 5000 шт.":["Arti staples 26/6 · 5000 pcs","סיכות Arti 26/6 · 5000 יחידות","دبابيس Arti 26/6 · 5000 قطعة"],"Поворотный степлер KW-trio 5360R":["KW-trio 5360R rotating stapler","שדכן מסתובב KW-trio 5360R","دباسة دوارة KW-trio 5360R"],"Степлер с длинным рычагом Kangaro DS-45L":["Kangaro DS-45L long-arm stapler","שדכן זרוע ארוכה Kangaro DS-45L","دباسة طويلة الذراع Kangaro DS-45L"],"Открыть степлер":["Open stapler","פתיחת השדכן","فتح الدباسة"],"Поворотный":["Rotating","מסתובב","دوارة"],"Для степлера":["For staplers","לשדכן","للدباسة"],"Длинный рычаг":["Long arm","זרוע ארוכה","ذراع طويلة"],"Карточки Kravitz, Office Kal и Sharpen: цены из каталогов, не в реальном времени.":["Verified Kravitz, Office Kal and Sharpen product pages. Prices are not live.","כרטיסי מוצר מקרביץ, אופיס כל ושארפן. המחירים אינם בזמן אמת.","منتجات من Kravitz وOffice Kal وSharpen. الأسعار ليست لحظية."],"Скрепки (אטבים) не прокалывают бумагу. Скобы 26/6 (סיכות לשדכן) вставляют в степлер. Наличие, стоимость и доставка могут измениться.":["Paper clips hold paper without holes. 26/6 staples go inside staplers. Prices and availability may change.","אטבים אינם מחוררים נייר. סיכות 26/6 מיועדות לשדכנים. מחירים ומלאי עשויים להשתנות.","مشابك الورق لا تثقب الأوراق. دبابيس 26/6 مخصصة للدباسة. قد تتغير الأسعار والمخزون."],"Бета · сайт тестируется":["Beta · site under testing","בטא · האתר בבדיקה","تجريبي · الموقع قيد الاختبار"]};
+const themeLabels={
+ ru:['🌙 Авто: день / ночь','☀️ Светлая','🏖️ Нежно-бежевая','🌌 Тёмно-синяя','🌲 Тёмно-зелёная'],
+ en:['🌙 Auto: day / night','☀️ Light','🏖️ Soft beige','🌌 Dark blue','🌲 Dark green'],
+ he:['🌙 אוטומטי: יום / לילה','☀️ בהירה','🏖️ בז׳ עדין','🌌 כחול כהה','🌲 ירוק כהה'],
+ ar:['🌙 تلقائي: نهار / ليل','☀️ فاتح','🏖️ بيج ناعم','🌌 أزرق داكن','🌲 أخضر داكن']
+};
+const saved=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const save=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let currentLang=Object.hasOwn(langs,saved('ohotnik-lang'))?saved('ohotnik-lang'):'ru';
+let themeChoice=['auto','light','beige','navy','forest'].includes(saved('ohotnik-theme'))?saved('ohotnik-theme'):'auto';
+const origin=new WeakMap();
+const attributes=new WeakMap();
+const dictionaryParts=[["Удлинитель","Extension cord","כבל מאריך","سلك تمديد"],["Набор изолированных отвёрток","Insulated screwdriver set","סט מברגים מבודדים","مجموعة مفكات معزولة"],["Крестовая отвёртка","Phillips screwdriver","מברג פיליפס","مفك صليبي"],["Набор отвёрток","Screwdriver set","סט מברגים","مجموعة مفكات"],["Отвёртка","Screwdriver","מברג","مفك"],["Ударная дрель","Hammer drill","מקדחה רוטטת","مثقاب طرقي"],["Дрель","Drill","מקדחה","مثقاب"],["Рюкзак","Backpack","תיק גב","حقيبة ظهر"],["Филе лосося","Salmon fillet","פילה סלמון","فيليه السلمون"],["Стейк лосося","Salmon steak","סטייק סלמון","شريحة السلمون"],["Кусочки лосося","Salmon pieces","נתחי סלמון","قطع السلمون"],["Лосось целиком","Whole salmon","סלמון שלם","سلمون كامل"],["Лосось","Salmon","סלמון","سلمون"],["Куриные голени","Chicken drumsticks","שוקי עוף","سيقان الدجاج"],["Тверия","Tiberias","טבריה","طبريا"],["Ицхак Бен-Цви","Yitzhak Ben-Zvi","יצחק בן צבי","يتسحاق بن تسفي"],[" · данные от"," · data from"," · נתונים מתאריך"," · بيانات من"],[" · дата не указана"," · date not available"," · ללא תאריך"," · التاريخ غير متوفر"],["от ","from ","החל מ-","من "],["Магазин:","Store:","חנות:","المتجر:"],["Цена от","Price as of","מחיר מתאריך","السعر بتاريخ"],["Цены от","Prices as of","מחירים מתאריך","الأسعار بتاريخ"],["Сведения от","Updated","עודכן","بيانات بتاريخ"],["Данные от","Data from","נתונים מתאריך","بيانات بتاريخ"],["Фото","Photo","תמונה","صورة"],["Товар","Product","מוצר","منتج"],["Цена","Price","מחיר","سعر"],["Открыть","Open","פתיחה","فتح"],["Обновить цены","Refresh prices","רענון מחירים","تحديث الأسعار"],["с выключателем","with switch","עם מפסק","مع مفتاح تشغيل"],["без выключателя","without switch","ללא מפסק","بدون مفتاح تشغيل"],["розеток","outlets","שקעים","مقابس"],["розетки","outlets","שקעים","مقابس"],["В наличии","In stock","במלאי","متوفر"],["Магазины","Stores","חנויות","متاجر"]];
+function translateText(originalText){
+ if(currentLang==='ru')return originalText;
+ const langIndex=currentLang==='en'?0:currentLang==='he'?1:2;
+ const text=String(originalText);
+ const match=text.match(/^(\s*)(.*?)(\s*)$/s);if(!match)return text;
+ const lead=match[1],raw=match[2],trail=match[3];
+ if(!/[а-яё]/i.test(raw))return text;
+ const trimEmoji=raw.match(/^([^А-Яа-яЁёA-Za-z\u0590-\u05ff]*)(.*)$/s);
+ const head=trimEmoji?trimEmoji[1]:'',plain=trimEmoji?trimEmoji[2]:raw;
+ const exact=phrases[plain]||phrases[raw];
+ if(exact)return lead+(exact===phrases[plain]?head:'')+exact[langIndex]+trail;
+ const versionMatch=plain.match(/^Поиск полезного в Израиле · версия (\d+)$/);
+ if(versionMatch)return lead+head+(currentLang==='en'?'Find what you need in Israel · version '+versionMatch[1]:currentLang==='he'?'חיפוש מוצרים ושירותים בישראל · גרסה '+versionMatch[1]:'البحث عما تحتاجه في إسرائيل · الإصدار '+versionMatch[1])+trail;
+ const emptyMatch=plain.match(/^В нашей базе пока нет подтверждённых карточек по запросу «(.+)». Это не означает, что магазины не продают товар\.$/);
+ if(emptyMatch)return lead+head+(currentLang==='en'?'No verified product pages for “'+emptyMatch[1]+'” yet. Stores may still carry it.':currentLang==='he'?'עדיין לא נמצאו דפי מוצר מאומתים עבור ״'+emptyMatch[1]+'״. ייתכן שהמוצר נמכר בחנויות.':'لم نعثر بعد على صفحات منتجات مؤكدة لطلب «'+emptyMatch[1]+'». قد يكون المنتج متوفراً في المتاجر.')+trail;
+ const searching=plain.match(/^Поиск товаров:\s*(.+)$/);
+ if(searching)return lead+head+(currentLang==='en'?'Product search: ':currentLang==='he'?'חיפוש מוצרים: ':'البحث عن المنتجات: ')+searching[1]+trail;
+ const resultMatch=plain.match(/^Найдено\s+(\d+)\s+товаров\s+в\s+(\d+)\s+магазинах/);
+ if(resultMatch)return lead+head+(currentLang==='en'?'Found '+resultMatch[1]+' products in '+resultMatch[2]+' stores.':currentLang==='he'?'נמצאו '+resultMatch[1]+' מוצרים ב-'+resultMatch[2]+' חנויות.':'تم العثور على '+resultMatch[1]+' منتجات في '+resultMatch[2]+' متاجر.')+trail;
+ const foodMatch=plain.match(/^Найдено\s+(\d+)\s+конкретных товаров\s+·\s+(\d+)\s+сетей\s+·\s+(.+)$/);
+ if(foodMatch)return lead+head+(currentLang==='en'?'Found '+foodMatch[1]+' products · '+foodMatch[2]+' retail chains · '+foodMatch[3]:currentLang==='he'?'נמצאו '+foodMatch[1]+' מוצרים · '+foodMatch[2]+' רשתות · '+foodMatch[3]:'تم العثور على '+foodMatch[1]+' منتجات · '+foodMatch[2]+' سلاسل تجارية · '+foodMatch[3])+trail;
+ let result=plain;
+ for(const [ru,en,he,ar] of dictionaryParts){
+  if(result.includes(ru))result=result.replaceAll(ru,[en,he,ar][langIndex]);
+ }
+ return lead+head+result+trail;
+}
+function translateNode(node){
+ const parent=node.parentElement;
+ if(!parent||parent.closest('script,style,noscript,[data-no-translate],.grocery-original,.food-detail-original,.catalog-sub,.original'))return;
+ const text=node.nodeValue;
+ let entry=origin.get(node);
+ if(!entry||entry.displayed!==text){entry={ru:text,displayed:text};origin.set(node,entry)}
+ const converted=translateText(entry.ru);
+ if(text!==converted)node.nodeValue=converted;
+ entry.displayed=converted;
+}
+function translateAttributes(el){
+ if(el.closest('[data-no-translate]'))return;
+ let orig=attributes.get(el);
+ if(!orig){orig={};for(const key of ['placeholder','aria-label','title'])if(el.hasAttribute(key))orig[key]=el.getAttribute(key);attributes.set(el,orig);}
+ for(const key of Object.keys(orig)){
+  const converted=translateText(orig[key]);
+  if(el.getAttribute(key)!==converted)el.setAttribute(key,converted);
+ }
+}
+function translateVisible(){
+ const root=document.body;
+ const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+ let n;while((n=walker.nextNode()))translateNode(n);
+ for(const el of root.querySelectorAll('[placeholder],[aria-label],[title]'))translateAttributes(el);
+ document.documentElement.lang=currentLang;
+ document.documentElement.dir=['he','ar'].includes(currentLang)?'rtl':'ltr';
+ for(const button of document.querySelectorAll('.lang-switch button')){
+  const active=button.dataset.lang===currentLang;
+  button.setAttribute('aria-pressed',String(active));
+ }
+ const label=document.getElementById('theme-label');
+ const labelText=currentLang==='en'?'🎨 Theme':currentLang==='he'?'🎨 ערכת נושא':currentLang==='ar'?'🎨 المظهر':'🎨 Тема';
+ if(label.textContent!==labelText)label.textContent=labelText;
+ for(const [i,option] of [...document.querySelectorAll('#site-theme option')].entries()){
+  const desired=themeLabels[currentLang][i];
+  if(option.textContent!==desired)option.textContent=desired;
+ }
+}
+let scheduled=false;
+function scheduleTranslation(){
+ if(scheduled)return;scheduled=true;
+ requestAnimationFrame(()=>{scheduled=false;translateVisible()});
+}
+const nav=document.querySelector('.lang-switch');
+nav.addEventListener('click',event=>{
+ const button=event.target.closest('button[data-lang]');
+ if(!button)return;
+ currentLang=button.dataset.lang;
+ save('ohotnik-lang',currentLang);
+ translateVisible();
+});
+function israelHour(){
+ try{return Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jerusalem',hour:'2-digit',hourCycle:'h23'}).format(new Date()))}
+ catch(e){return new Date().getHours()}
+}
+function setAppearance(){
+ // Night mode starts at 19:00, ends at 07:00 (Israel time).
+ const hour=israelHour(),theme=themeChoice==='auto'?(hour>=19||hour<7?'navy':'beige'):themeChoice;
+ document.documentElement.dataset.theme=theme;
+ document.documentElement.dataset.themePreference=themeChoice;
+ document.getElementById('site-theme').value=themeChoice;
+}
+document.getElementById('site-theme').addEventListener('change',event=>{
+ themeChoice=event.target.value;
+ save('ohotnik-theme',themeChoice);
+ setAppearance();
+});
+setAppearance();
+setInterval(()=>{if(themeChoice==='auto')setAppearance()},60000);
+translateVisible();
+new MutationObserver(scheduleTranslation).observe(document.body,{subtree:true,childList:true,characterData:true});
+})();
+</script>
+
+<script type="module">
+/* Photo recognition runs locally in the visitor's browser. No uploaded photos
+   or API secrets: lazily download a public CLIP model only on photo selection. */
+const open=document.getElementById('photo-search-open');
+const fileInput=document.getElementById('photo-search-file');
+const panel=document.getElementById('photo-search-panel');
+const preview=document.getElementById('photo-search-preview');
+const status=document.getElementById('photo-search-status');
+const picks=document.getElementById('photo-search-picks');
+const close=document.getElementById('photo-search-close');
+const queryInput=document.getElementById('query');
+const searchForm=document.getElementById('search-form');
+let classifierPromise=null;
+let selectionId=0;
+const choices=[
+ ['whole chicken','курица'],['chicken breast','куриная грудка'],['salmon fillet','филе лосося'],
+ ['fish','рыба'],['trout','форель'],['milk carton','молоко'],['cheese','сыр'],
+ ['eggs','яйца'],['bread','хлеб'],['tomatoes','помидоры'],['potatoes','картофель'],
+ ['apples','яблоки'],['bananas','бананы'],['coffee','кофе'],['rice','рис'],
+ ['chocolate','шоколад'],['bottled water','вода'],['cooking oil','масло'],
+ ['electric drill','дрель'],['screwdriver','отвёртка'],['stapler','степлер'],
+ ['paper clips','скрепки'],['printer','принтер'],['computer monitor','монитор'],
+ ['laptop','ноутбук'],['smartphone','смартфон'],['headphones','наушники'],
+ ['computer keyboard','клавиатура'],['computer mouse','мышь'],
+ ['electrical power strip','удлинитель'],['power cable','кабель'],
+ ['backpack','рюкзак'],['handbag','сумка'],['shoes','обувь'],
+ ['shirt','рубашка'],['jacket','куртка'],['pants','брюки'],
+ ['chair','стул'],['table','стол'],['lamp','лампа'],
+ ['sofa','диван'],['vacuum cleaner','пылесос'],['electric heater','обогреватель'],
+ ['houseplant','растение'],['cactus','кактус'],['flower pot','горшок'],
+ ['cat','кошка'],['dog','собака'],['pet food','корм для животных'],
+ ['bicycle','велосипед'],['toy','игрушка'],['book','книга']
+];
+const dropZone=document.getElementById('photo-drop-zone');
+const dropTargets=[document.getElementById('search-form'),panel,dropZone];
+function revealPhotoPanel(){panel.hidden=false;panel.scrollIntoView({behavior:'smooth',block:'nearest'});}
+open.addEventListener('click',()=>{revealPhotoPanel();dropZone.focus({preventScroll:true});});
+dropZone.addEventListener('click',()=>fileInput.click());
+dropZone.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click()}});
+function firstImage(files){return Array.from(files||[]).find(f=>f.type&&f.type.startsWith('image/'));}
+document.addEventListener('paste',e=>{
+ const img=firstImage(e.clipboardData?.files)||Array.from(e.clipboardData?.items||[]).filter(i=>i.type.startsWith('image/')).map(i=>i.getAsFile()).find(Boolean);
+ if(!img)return;
+ e.preventDefault();handlePhoto(img);
+});
+dropTargets.forEach(target=>{
+ target.addEventListener('dragover',e=>{if(!Array.from(e.dataTransfer?.types||[]).includes('Files'))return;e.preventDefault();e.dataTransfer.dropEffect='copy';target.classList.add('drag-over')});
+ target.addEventListener('dragleave',e=>{if(!target.contains(e.relatedTarget))target.classList.remove('drag-over')});
+ target.addEventListener('drop',e=>{
+  const img=firstImage(e.dataTransfer?.files);
+  if(!img)return;
+  e.preventDefault();e.stopPropagation();dropTargets.forEach(x=>x.classList.remove('drag-over'));handlePhoto(img);
+ });
+});
+close.addEventListener('click',()=>{selectionId++;panel.hidden=true;picks.replaceChildren();fileInput.value='';preview.removeAttribute('src');preview.hidden=true});
+function setStatus(message){status.textContent=message}
+function addChoice(label,searchTerm){
+ const b=document.createElement('button');
+ b.type='button';b.textContent='🔎 '+label;
+ b.addEventListener('click',()=>{
+  queryInput.value=searchTerm;
+  queryInput.dispatchEvent(new Event('input',{bubbles:true}));
+  // The existing search engine decides whether the term is food or goods.
+  searchForm.requestSubmit();
+  panel.hidden=true;
+ });
+ picks.append(b);
+}
+async function photoData(file){
+ const bitmap=await createImageBitmap(file);
+ const scale=Math.min(1,512/Math.max(bitmap.width,bitmap.height));
+ const canvas=document.createElement('canvas');
+ canvas.width=Math.max(1,Math.round(bitmap.width*scale));
+ canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+ canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);
+ bitmap.close?.();
+ return canvas.toDataURL('image/jpeg',0.85);
+}
+fileInput.addEventListener('change',()=>{const file=fileInput.files?.[0];if(file)handlePhoto(file)});
+async function handlePhoto(file){
+ const runId=++selectionId;
+ panel.hidden=false;picks.replaceChildren();preview.hidden=true;
+ if(!file.type.startsWith('image/')){setStatus('Нужна фотография JPG, PNG или HEIC, которую браузер умеет открыть.');return}
+ if(file.size>15*1024*1024){setStatus('Фотография слишком большая: выбери файл до 15 МБ.');return}
+ setStatus('Готовлю фотографию…');
+ try{
+  const data=await photoData(file);
+  if(runId!==selectionId)return;
+  preview.src=data;preview.hidden=false;
+  // Decode retail barcodes/QR locally when supported; fall back to image AI.
+  if('BarcodeDetector' in window){
+   try{
+    const supported=await BarcodeDetector.getSupportedFormats();
+    const formats=['ean_13','ean_8','upc_a','upc_e','qr_code'].filter(x=>supported.includes(x));
+    if(formats.length){
+     const detector=new BarcodeDetector({formats});
+     await preview.decode();
+     if(runId!==selectionId)return;
+     const codes=await detector.detect(preview);
+     if(runId!==selectionId)return;
+     const found=(codes||[]).map(x=>String(x.rawValue||'').trim()).find(Boolean);
+     if(found){
+      picks.replaceChildren();
+      if(/^\d{7,14}$/.test(found)){
+       setStatus('Найден штрихкод: '+found+'. Нажми, чтобы найти точный товар.');
+       addChoice('Найти по коду '+found,found);return;
+      }
+      if(/^https?:\/\//i.test(found)){
+       setStatus('Обнаружен QR-код с веб-ссылкой. Для безопасности он не открывается автоматически. Для поиска товара используй его название или фотографию.');
+      }else{
+       setStatus('Распознан QR-код. Можно попробовать поиск по его содержимому.');
+       addChoice(found.slice(0,48),found);
+       return;
+      }
+     }
+    }
+   }catch(e){/* QR scanning unsupported; continue with image recognition */}
+  }
+  setStatus('Загружаю бесплатную модель ИИ в браузер. Первый запуск может занять время и потребовать загрузки большого файла…');
+  if(!classifierPromise)classifierPromise=import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/+esm')
+   .then(({pipeline})=>pipeline('zero-shot-image-classification','Xenova/clip-vit-base-patch32',{device:'wasm',dtype:'q8'}))
+   .catch(e=>{classifierPromise=null;throw e});
+  const classifier=await classifierPromise;
+  if(runId!==selectionId)return;
+  setStatus('Распознаю предмет на фотографии…');
+  const labels=choices.map(([english])=>'a photo of '+english);
+  const results=await classifier(data,labels);
+  if(runId!==selectionId)return;
+  const best=(Array.isArray(results)?results:[]).slice(0,3).filter(r=>r&&Number.isFinite(r.score));
+  if(!best.length){setStatus('Не удалось распознать товар. Попробуй написать название.');return}
+  setStatus('Возможно, это один из этих товаров. Нажми подходящий вариант — поиск начнётся по названию. Модель может ошибаться: точная марка и штрихкод не определяются.');
+  for(const hit of best){
+   const idx=labels.indexOf(hit.label);
+   if(idx<0)continue;
+   const term=choices[idx][1];
+   addChoice(term.charAt(0).toUpperCase()+term.slice(1),term);
+  }
+ }catch(err){
+  if(runId!==selectionId)return;
+  setStatus('ИИ не загрузился или формат фото не поддерживается. Попробуй JPG/PNG в Chrome или Safari либо введи название товара вручную.');
+  picks.replaceChildren();
+ }finally{fileInput.value=''}
+}
+</script>
+<script src="./community-config.js"></script>
+<script type="module" src="./community.js"></script>
+</body></html>
