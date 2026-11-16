@@ -141,10 +141,6 @@ footer{margin:35px auto 0;text-align:center;padding:30px 20px;background:#113c48
 <p>— А кормить чем?!</p>
 <p>— Купим рыбы. Хотя, пожалуй, пусть сами ловят. Мы же не ресторан для дельфинов!</p>
 <h2>Бедный спасатель</h2>
-<figure class="story-picture" id="zhuzha-story-photo" hidden>
-<img loading="lazy" decoding="async" id="zhuzha-story-photo-image" alt="Лиза, собачка Жужа на пальме и три дельфина на тропическом пляже">
-<figcaption>Лиза, Жужа и три дельфина</figcaption>
-</figure>
 
 <p>Прошёл год. В ноябре в Питере шли дожди, а Лиза загорала на тёплом белом песке. В одной руке — кокос с трубочкой, в другой — огромный очищенный банан. Вокруг — манго, гранаты, ананасы, апельсины. Жужа спала под пальмой.</p>
 <p>— Наконец-то никто не кричит, не увольняет и не заставляет мыть туалеты! Можно просто лежать и кушать фрукты!</p>
@@ -363,31 +359,12 @@ footer{margin:35px auto 0;text-align:center;padding:30px 20px;background:#113c48
 <p>Все расхохотались. Фёдор Иванович посмотрел на авианосец под ногами, потом на своего невероятного зятя и покачал головой.</p>
 <p>— Знаете что? — произнёс он. — Со слонами пока не спешите. А то ведь этот человек возьмёт и <em>сделает</em>!</p>
 <p>И все снова засмеялись. Потому что теперь никто уже не сомневался: Леон действительно способен устроить почти что угодно.</p></div><div id="finale" class="end"><p>Александр Деревяшкин</p><div class="tiny">Конец рассказа</div></div></article>
+<figure class="story-picture" id="zhuzha-story-photo" aria-label="Иллюстрация с Жужей">
+  <img src="zhuzha-final.avif" loading="lazy" decoding="async" width="1000" height="750" alt="Лиза улыбается на песчаном берегу, Жужа лежит на пальме, а в море играют три дельфина">
+  <figcaption>Лиза, Жужа и три дельфина — счастье на Сейшелах</figcaption>
+</figure>
 <p class="tip" id="message">Пусть эта история подарит читателю немного доброты и улыбку.</p></main>
 <footer>© Александр Деревяшкин · <a href="https://derev-studio.github.io/">Вернуться на главный сайт</a></footer>
-<script>
-(async()=>{
-  // Подтягиваем именно опубликованную картину «Приключения Золушки» из галереи.
-  // Если галерея недоступна, ничего не показываем и не мешаем чтению рассказа.
-  try {
-    const url='https://photo-gallery-18193-default-rtdb.firebaseio.com/photos.json?orderBy=%22%24key%22&limitToLast=80';
-    const res=await fetch(url,{mode:'cors',cache:'no-store'});
-    if(!res.ok) return;
-    const data=await res.json();
-    const matches=Object.values(data||{}).filter(p=>
-      p && p.mediaType!=='video' && String(p.title||'').trim().toLocaleLowerCase('ru')==='приключения золушки'
-      && /^https:\/\//.test(String(p.img||'')));
-    matches.sort((a,b)=>Number(b.id||0)-Number(a.id||0));
-    const photo=matches[0];
-    if(!photo) return;
-    const holder=document.getElementById('zhuzha-story-photo');
-    const picture=document.getElementById('zhuzha-story-photo-image');
-    if(!holder||!picture)return;
-    picture.onload=()=>{holder.hidden=false;};
-    picture.src=photo.img;
-  }catch(e){ /* Основной текст доступен и без галереи. */ }
-})();
-</script>
 <script>
 (()=>{let size=20;const root=document.documentElement;const adjust=delta=>{size=Math.min(28,Math.max(16,size+delta));root.style.setProperty('--size',size+'px')};
 document.querySelector('#smaller').addEventListener('click',()=>adjust(-2));
