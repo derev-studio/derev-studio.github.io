@@ -24,7 +24,7 @@ article{max-width:790px;margin:0 auto;background:var(--paper);padding:30px clamp
 footer{margin:35px auto 0;text-align:center;padding:30px 20px;background:#113c48;color:#f5f5e8;font:14px/1.8 system-ui,sans-serif}footer a{text-decoration:underline}.tip{font:12px system-ui,sans-serif;color:#758689;text-align:center;margin:12px 20px 35px}
 @media(max-width:660px){header{padding:12px 16px}nav{gap:11px}.cover{border-radius:0 0 16px 16px}.intro{padding-top:28px}.subtitle{font-size:17px}article{border-left:0;border-right:0;border-radius:0;padding:22px 20px 45px}.story{line-height:1.72}.story h2{margin-top:41px}.toolbar button{flex:0 0 auto}}
 @media print{header,.toolbar,footer,.tip{display:none}body{background:#fff}.cover img{max-height:120mm}article{border:0;box-shadow:none;padding:0 5mm}.story{font-size:12pt;line-height:1.5}.story h2{page-break-after:avoid}h1{font-size:28pt}.intro{padding:12mm 0 5mm}}
-.scene-break{text-align:center;color:#bb915d;font-size:19px;letter-spacing:.35em;padding:10px 0 22px}</style></head><body>
+.scene-break{text-align:center;color:#bb915d;font-size:19px;letter-spacing:.35em;padding:10px 0 22px}.story-picture{margin:28px auto 36px;max-width:100%;text-align:center}.story-picture[hidden]{display:none!important}.story-picture img{width:100%;height:auto;border-radius:15px;box-shadow:0 8px 27px #19494a24}.story-picture figcaption{font:italic 14px Georgia,serif;color:#597981;padding-top:8px}</style></head><body>
 <header><a class="brand" href="https://derev-studio.github.io/">АЛЕКСАНДР ДЕРЕВЯШКИН · ПРОЗА</a><nav><a href="#read">Читать</a><a href="#finale">Финал</a><a href="https://derev-studio.github.io/">Все проекты</a></nav></header>
 <main><figure class="cover"><img src="cover-final.avif" alt="Тропический берег, пальма, девушка, собачка Жужа и три дельфина"></figure>
 <section class="intro"><div class="eyebrow">Приключенческий рассказ</div><h1>Золушка, Жужа<br>и три дельфина</h1><div class="subtitle">О последней булочке и самом неожиданном счастье</div><div class="author">Александр Деревяшкин</div><div class="decor"></div></section>
@@ -141,6 +141,11 @@ footer{margin:35px auto 0;text-align:center;padding:30px 20px;background:#113c48
 <p>— А кормить чем?!</p>
 <p>— Купим рыбы. Хотя, пожалуй, пусть сами ловят. Мы же не ресторан для дельфинов!</p>
 <h2>Бедный спасатель</h2>
+<figure class="story-picture" id="zhuzha-story-photo" hidden>
+<img loading="lazy" decoding="async" id="zhuzha-story-photo-image" alt="Лиза, собачка Жужа на пальме и три дельфина на тропическом пляже">
+<figcaption>Лиза, Жужа и три дельфина</figcaption>
+</figure>
+
 <p>Прошёл год. В ноябре в Питере шли дожди, а Лиза загорала на тёплом белом песке. В одной руке — кокос с трубочкой, в другой — огромный очищенный банан. Вокруг — манго, гранаты, ананасы, апельсины. Жужа спала под пальмой.</p>
 <p>— Наконец-то никто не кричит, не увольняет и не заставляет мыть туалеты! Можно просто лежать и кушать фрукты!</p>
 <p>Но тут из моря показались три дельфина. Они пищали, плескались и так задорно выпрыгивали из воды, что Лизу обдало брызгами.</p>
@@ -301,7 +306,7 @@ footer{margin:35px auto 0;text-align:center;padding:30px 20px;background:#113c48
 <p>— Джеймс? Уже близко? Отлично! Залетай к нам на завтрак!</p>
 <p>— Кто залетит? — переспросил Фёдор Иванович.</p>
 <p>— Старый товарищ.</p>
-<p>— На чайку, значит?</p>
+<p>— На чай, значит?</p>
 <p>— Можно и так сказать.</p>
 <p>Через четверть часа над морем послышался тяжёлый рокот. К яхте приближался большой транспортный вертолёт.</p>
 <p>Матросы быстро убрали стол и освободили посадочную площадку. Ветер от винтов растрепал Кларе Петровне причёску, а Фёдор Иванович вцепился в поручень.</p>
@@ -360,6 +365,29 @@ footer{margin:35px auto 0;text-align:center;padding:30px 20px;background:#113c48
 <p>И все снова засмеялись. Потому что теперь никто уже не сомневался: Леон действительно способен устроить почти что угодно.</p></div><div id="finale" class="end"><p>Александр Деревяшкин</p><div class="tiny">Конец рассказа</div></div></article>
 <p class="tip" id="message">Пусть эта история подарит читателю немного доброты и улыбку.</p></main>
 <footer>© Александр Деревяшкин · <a href="https://derev-studio.github.io/">Вернуться на главный сайт</a></footer>
+<script>
+(async()=>{
+  // Подтягиваем именно опубликованную картину «Приключения Золушки» из галереи.
+  // Если галерея недоступна, ничего не показываем и не мешаем чтению рассказа.
+  try {
+    const url='https://photo-gallery-18193-default-rtdb.firebaseio.com/photos.json?orderBy=%22%24key%22&limitToLast=80';
+    const res=await fetch(url,{mode:'cors',cache:'no-store'});
+    if(!res.ok) return;
+    const data=await res.json();
+    const matches=Object.values(data||{}).filter(p=>
+      p && p.mediaType!=='video' && String(p.title||'').trim().toLocaleLowerCase('ru')==='приключения золушки'
+      && /^https:\/\//.test(String(p.img||'')));
+    matches.sort((a,b)=>Number(b.id||0)-Number(a.id||0));
+    const photo=matches[0];
+    if(!photo) return;
+    const holder=document.getElementById('zhuzha-story-photo');
+    const picture=document.getElementById('zhuzha-story-photo-image');
+    if(!holder||!picture)return;
+    picture.onload=()=>{holder.hidden=false;};
+    picture.src=photo.img;
+  }catch(e){ /* Основной текст доступен и без галереи. */ }
+})();
+</script>
 <script>
 (()=>{let size=20;const root=document.documentElement;const adjust=delta=>{size=Math.min(28,Math.max(16,size+delta));root.style.setProperty('--size',size+'px')};
 document.querySelector('#smaller').addEventListener('click',()=>adjust(-2));
