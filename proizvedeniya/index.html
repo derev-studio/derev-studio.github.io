@@ -62,7 +62,12 @@ function render(){
  byId('summary').textContent='Найдено: '+found.length+' из '+WORKS.length+' записей. Нажмите на название — откроется произведение.';
  if(!found.length){byId('results').innerHTML='<div class="empty">Ничего не найдено. Попробуйте другое слово или выберите «Все».</div>';return}
  const dated=found.filter(x=>x.date),older=found.filter(x=>!x.date);
- byId('results').innerHTML=(dated.length?section(sorting==='name'?'Произведения с датой':'Новые произведения — по датам',dated):'')+(older.length?section(sorting==='name'?'Книги и тексты без даты':'Библиотека и архив — по алфавиту',older):'')
+ const stories=dated.filter(x=>x.kind==='Повести и рассказы');
+ const publications=dated.filter(x=>x.kind!=='Повести и рассказы');
+ byId('results').innerHTML=
+ (stories.length?section(sorting==='name'?'Художественные произведения':'Рассказы и повести — по датам',stories):'')+
+ (publications.length?section('Статьи и другие публикации — по датам',publications):'')+
+ (older.length?section(sorting==='name'?'Книги и тексты без даты':'Библиотека и архив — по алфавиту',older):'')
 }
 search.addEventListener('input',()=>{query=search.value;render()});
 try{const q=new URLSearchParams(location.search).get('q')||'';search.value=q;query=q}catch(e){}
