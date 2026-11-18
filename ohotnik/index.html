@@ -447,6 +447,15 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 .community-list{display:grid;gap:8px;margin-top:12px}
 .community-comment{border:1px solid var(--line);border-radius:12px;padding:11px;overflow-wrap:anywhere}
 .community-comment p{margin:6px 0 0;white-space:pre-wrap}
+
+/* 2026-11-18 — open-ended search when our small product index has no result */
+.retail-discovery{margin-top:16px;border:1px solid var(--line);border-radius:17px;background:var(--white);padding:16px}
+.retail-discovery h3{font-size:18px;line-height:1.3;margin:0 0 8px;color:var(--text)}
+.retail-discovery .info{line-height:1.55;margin:0 0 10px}
+.retail-discovery-term{font-size:16px;font-weight:800;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:8px 10px;color:var(--text);margin-bottom:12px}
+.retail-discovery-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.retail-discovery-links .action{display:grid;place-items:center;text-align:center;min-height:48px;white-space:normal}
+@media(max-width:550px){.retail-discovery{padding:12px}.retail-discovery-links{grid-template-columns:repeat(2,minmax(0,1fr))}.retail-discovery-links .action{font-size:12px;padding:10px 6px}}
 </style>
 </head>
 <body>
@@ -632,6 +641,8 @@ function mode(q){
  if(has(t,words.help))return 'help';
  if(has(t,words.dating))return 'dating';
  if(has(t,words.organicStore))return 'organicStore';
+ // Товары для очистки воды — НЕ продукты питания, даже при слове «вода».
+ if(/фильтр|картридж|очистител.{0,15}вод|очистк.{0,15}вод|систем.{0,15}фильтрац|кувшин.{0,15}вод|brita|maxtra|aquaphor|water filter|פילטר|מסנן|בריטה|אקווהפור/i.test(t))return 'tech';
  if(has(t,words.market))return 'market';
  if(has(t,words.stationery)||/(?:поворотн|вращающ|разворотн).{0,20}степлер|степлер.{0,20}(?:поворотн|вращающ|разворотн)/i.test(t))return 'stationery';
  if(has(t,words.housing))return 'housing';
@@ -1502,6 +1513,9 @@ function inferredCategory(q){
 function searchHebrew(q){
  const t=q.toLowerCase();
  const dict=[
+ // Слова относятся к реальному предмету, а не к ограниченному каталогу.
+ [/фильтр.{0,28}(?:вод|кувшин)|(?:вод|кувшин).{0,28}фильтр|картридж.{0,28}(?:вод|кувшин)|(?:water filter|brita|maxtra|aquaphor|בריטה|פילטר מים|מסנן מים)/i,'מסנן מים'],
+ [/фильтр|фильтр[а-яё]*|картридж|filter|פילטר|מסנן/i,'מסנן'],
  [/extension cord|power extension|extension cable|כבל מאריך/i,'כבל מאריך'],
  [/power strip|multi.socket|multi plug|power bar|מפצל חשמל|רב שקע/i,'רב שקע'],
  [/drill|hammer drill|מקדחה/i,'מקדחה'],
@@ -1779,11 +1793,58 @@ function interleaveStores(items){
  while(had&&idx<items.length){had=false;for(const name of stores){const p=groups.get(name).shift();if(p){output.push(p);had=true;}}idx++}
  return output;
 }
-function showCatalogResult(products,q,failed){
+
+/* Open-ended retail discovery. Product cards are only shown for indexed,
+   verified products. Unknown queries go to fresh, store-scoped web search
+   instead of falsely claiming the goods do not exist. No secret API keys. */
+function externalStoreSearchUrl(term,domain){
+ const u=new URL('https://www.google.com/search');
+ u.searchParams.set('q',String(term||'').slice(0,120)+' site:'+domain);
+ u.searchParams.set('gl','il');
+ u.searchParams.set('hl','he');
+ return u.href;
+}
+function appendExternalStoreSearch(q,translated,hasLocal){
+ const locale=(document.documentElement.lang||'ru').slice(0,2);
+ const ui={
+  ru:{title:'🌐 Поиск новых товаров в магазинах',intro:'Ищем не только среди наших готовых карточек. Кнопки откроют свежий поиск Google по страницам выбранного магазина. Товар, наличие и цену нужно проверить у продавца.',all:'🔎 Во всех магазинах',button:'🔍 Найти в'},
+  en:{title:'🌐 Find new products in stores',intro:'Search beyond our saved product cards. Each button opens a fresh Google search limited to the selected store. Check price and stock with the seller.',all:'🔎 Across Israeli stores',button:'🔍 Search'},
+  he:{title:'🌐 חיפוש מוצרים חדשים בחנויות',intro:'חיפוש מעבר לכרטיסים השמורים באתר. הכפתורים פותחים חיפוש Google באתר החנות. יש לאמת מחיר ומלאי אצל המוכר.',all:'🔎 בכל החנויות',button:'🔍 חיפוש'},
+  ar:{title:'🌐 البحث عن منتجات جديدة',intro:'ابحث خارج فهرسنا الصغير. تفتح الأزرار بحث Google في موقع كل متجر. يرجى التحقق من السعر والتوفر لدى البائع.',all:'🔎 جميع المتاجر',button:'🔍 ابحث في'}
+ }[locale]||null;
+ const t=ui||{title:'🌐 Поиск новых товаров в магазинах',intro:'Поиск по сайтам магазинов через Google, цены и наличие проверяй у продавца.',all:'🔎 Все магазины',button:'🔍 Найти в'};
+ const term=String(translated||retailerQuery(q)||q).trim().slice(0,120);
+ const wrapper=node('section','retail-discovery');
+ wrapper.append(node('h3','',t.title),node('p','info',t.intro));
+ const goodTerm=node('div','retail-discovery-term',term);
+ goodTerm.dir='auto';
+ wrapper.append(goodTerm);
+ const stores=[
+  ['KSP','ksp.co.il'],['Ivory','ivory.co.il'],
+  ['ARKA','erco.co.il'],['Home Center','homecenter.co.il'],
+  ['ACE','ace.co.il'],['Kravitz','kravitz.co.il'],
+  ['Zap','zap.co.il'],['Rami Levy','rami-levy.co.il'],
+  ['Yohananof','yochananof.co.il']
+ ];
+ const links=node('div','retail-discovery-links');
+ for(const [name,domain] of stores){
+  links.append(action(t.button+' '+name,externalStoreSearchUrl(term,domain),false));
+ }
+ const allUrl=new URL('https://www.google.com/search');
+ allUrl.searchParams.set('q',term+' купить Израиль');
+ allUrl.searchParams.set('gl','il');
+ allUrl.searchParams.set('hl','he');
+ links.append(action(t.all,allUrl.href,true));
+ wrapper.append(links);
+ res.append(wrapper);
+}
+
+function showCatalogResult(products,q,failed,translated){
  res.replaceChildren();
  if(!products.length){
   showLocalShoppingHint(q);
-  message('В нашей базе пока нет подтверждённых карточек по запросу «'+q+'». Это не означает, что магазины не продают товар.',true);
+  message('В нашей маленькой базе нет карточек по запросу «'+q+'». Продолжи поиск по страницам магазинов ниже.',true);
+  appendExternalStoreSearch(q,translated,false);
   revealResults();return;
  }
  markSearchFound(q);
@@ -1820,6 +1881,7 @@ function showCatalogResult(products,q,failed){
  refresh();
  const note=node('p','info','Название на иврите, фотографии и ссылки взяты из карточек продавцов. Цена появляется только там, где её подтвердил магазин. Город пока используется для карты: наличие в конкретном филиале не проверяется.');
  res.append(note);
+ appendExternalStoreSearch(q,translated,true);
  revealResults();
 }
 // Free keyless translation is a FALLBACK for Russian words not covered
@@ -1864,11 +1926,11 @@ async function showTech(q,mySeq){
  const translated=await translateProductName(q);
  if(seq!==mySeq)return;
  if(translated)products=rankCatalog(items,q,translated);
- if(products.length){showCatalogResult(products,q,false);return}
+ if(products.length){showCatalogResult(products,q,false,translated);return}
  // If no indexed retailer has the item, try the public grocery price
  // feed too; do not send the user to a generic retailer storefront.
  // Grocery price feeds belong only to the independent food page.
- showCatalogResult([],q,false);
+ showCatalogResult([],q,false,translated);
 }
 
 function showFree(){
