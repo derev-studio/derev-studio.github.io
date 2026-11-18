@@ -456,6 +456,13 @@ html:is([data-theme="navy"],[data-theme="forest"]) #examples .tag.active{backgro
 .retail-discovery-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
 .retail-discovery-links .action{display:grid;place-items:center;text-align:center;min-height:48px;white-space:normal}
 @media(max-width:550px){.retail-discovery{padding:12px}.retail-discovery-links{grid-template-columns:repeat(2,minmax(0,1fr))}.retail-discovery-links .action{font-size:12px;padding:10px 6px}}
+
+.live-ai-panel{margin:15px 0;padding:16px;border:1px solid var(--line);background:var(--white);border-radius:17px}
+.live-ai-panel h3{font-size:18px;margin:0 0 8px;color:var(--text)}
+.live-ai-panel .info{margin:0 0 12px}
+.live-ai-panel .grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.live-ai-panel .card{min-height:180px}
+@media(max-width:550px){.live-ai-panel{padding:12px}.live-ai-panel .grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1839,6 +1846,61 @@ function appendExternalStoreSearch(q,translated,hasLocal){
  res.append(wrapper);
 }
 
+
+/* Optional actual AI + live merchant web search. The separate Cloudflare Worker
+   has to be deployed and configured first. A missing Worker never blocks search. */
+let storeAIUnavailable=false;
+async function addStoreAIResults(q,mySeq){
+ if(storeAIUnavailable)return;
+ const control=new AbortController();
+ const timeout=setTimeout(()=>control.abort(),8500);
+ try{
+  const url=new URL('https://ohotnik-ai.qerevv.workers.dev/search');
+  url.searchParams.set('q',q);
+  const response=await fetch(url.href,{signal:control.signal,mode:'cors',cache:'no-store'});
+  if(!response.ok){if(response.status===404||response.status===503)storeAIUnavailable=true;return;}
+  const payload=await response.json();
+  if(mySeq!==seq||query.value.trim()!==q)return;
+  const raw=Array.isArray(payload.items)?payload.items:[];
+  const whitelist=['ksp.co.il','ivory.co.il','erco.co.il','homecenter.co.il','ace.co.il','kravitz.co.il','zap.co.il','rami-levy.co.il','yochananof.co.il'];
+  const valid=raw.filter(item=>{
+   if(!item||typeof item.url!=='string'||typeof item.title!=='string')return false;
+   try{
+    const u=new URL(item.url),host=u.hostname.toLowerCase();
+    return u.protocol==='https:'&&whitelist.some(h=>host===h||host.endsWith('.'+h));
+   }catch(e){return false}
+  }).slice(0,16);
+  if(!valid.length)return;
+  res.querySelectorAll('.live-ai-panel').forEach(x=>x.remove());
+  const language=(document.documentElement.lang||'ru').slice(0,2);
+  const t={
+   ru:['🤖 ИИ нашёл страницы магазинов','Результаты настоящего интернет-поиска. Цены и наличие проверяй на странице продавца.','🛍️ Смотреть страницу'],
+   en:['🤖 AI found store pages','Results from a real web search. Check prices and availability at the retailer.','🛍️ Open store page'],
+   he:['🤖 AI מצא דפי חנויות','תוצאות מחיפוש אינטרנט אמיתי. יש לבדוק מחירים ומלאי אצל המוכר.','🛍️ פתיחת דף'],
+   ar:['🤖 الذكاء الاصطناعي وجد صفحات متاجر','نتائج بحث حقيقية. تحقق من الأسعار والتوفر لدى البائع.','🛍️ فتح الصفحة']
+  }[language]||['🤖 ИИ нашёл страницы магазинов','Проверяй цену у продавца.','🛍️ Смотреть'];
+  const block=node('section','live-ai-panel');
+  block.append(node('h3','',t[0]),node('p','info',t[1]));
+  if(payload.hebrew_query&&payload.hebrew_query!==q){
+   const he=node('div','retail-discovery-term',String(payload.hebrew_query).slice(0,110));
+   he.dir='auto';block.append(he);
+  }
+  const results=node('div','grid');
+  for(const item of valid){
+   results.append(card(String(item.title).slice(0,190),
+    String(item.snippet||'').slice(0,245)||'Страница интернет-магазина',
+    [[t[2],item.url,true]],String(item.store||'Магазин')));
+  }
+  block.append(results);
+  const fallback=res.querySelector('.retail-discovery');
+  if(fallback)res.insertBefore(block,fallback);
+  else res.append(block);
+  markSearchFound(q);
+ }catch(e){
+  // The API is optional. Local catalogue and store search links remain usable.
+ }finally{clearTimeout(timeout)}
+}
+
 function showCatalogResult(products,q,failed,translated){
  res.replaceChildren();
  if(!products.length){
@@ -1920,17 +1982,18 @@ async function showTech(q,mySeq){
  const items=await catalogData();
  if(seq!==mySeq)return;
  let products=rankCatalog(items,q);
- if(products.length){showCatalogResult(products,q,false);return}
+ if(products.length){showCatalogResult(products,q,false);addStoreAIResults(q,mySeq);return}
  // Universal fallback: use free Russian→Hebrew translation even when
  // the word has never appeared in our hand-written dictionary.
  const translated=await translateProductName(q);
  if(seq!==mySeq)return;
  if(translated)products=rankCatalog(items,q,translated);
- if(products.length){showCatalogResult(products,q,false,translated);return}
+ if(products.length){showCatalogResult(products,q,false,translated);addStoreAIResults(q,mySeq);return}
  // If no indexed retailer has the item, try the public grocery price
  // feed too; do not send the user to a generic retailer storefront.
  // Grocery price feeds belong only to the independent food page.
  showCatalogResult([],q,false,translated);
+ addStoreAIResults(q,mySeq);
 }
 
 function showFree(){
