@@ -1,90 +1,47 @@
 <!doctype html>
-<html lang="ru" dir="ltr">
+<html lang="ru" dir="ltr" data-theme="beige">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#18241e">
-<meta name="description" content="Щедрость, доброта и уважение. Личная благодарность Александра Деревяшкина ресторану Маадан Цион в Тверии. Четыре языка: русский, иврит, английский, арабский.">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f6f1e6">
+<meta name="description" content="Благодарность ресторану Маадан Цион — история Александра Деревяшкина. На русском, иврите, английском и арабском.">
 <link rel="canonical" href="https://derev-studio.github.io/toda-maadan-zion/">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
-<title>Щедрость, доброта и уважение — Маадан Цион</title>
 <script src="content.js" defer></script>
+<title>Маадан Цион — Щедрость, доброта и уважение</title>
 </head>
 <body>
-<a class="skip" href="#story" id="skip">К рассказу</a>
-<header class="topbar">
-  <a class="brand" href="#top" aria-label="Maadan Zion"><span class="brand-mark">✦</span><span>מעדן ציון</span></a>
-  <nav class="language-switch" aria-label="Language / Язык">
-    <a href="?lang=ru" lang="ru" data-language="ru">Русский</a>
-    <a href="?lang=en" lang="en" data-language="en">English</a>
-    <a href="?lang=ar" lang="ar" data-language="ar">العربية</a>
-    <a href="?lang=he" lang="he" data-language="he">עברית</a>
-  </nav>
-  <div class="theme-switcher" role="group" aria-label="Цветовая тема" id="theme-switcher">
-    <button type="button" data-theme-choice="navy" class="theme-swatch swatch-navy" aria-label="Тёмно-синяя" title="Тёмно-синяя" aria-pressed="false"></button>
-    <button type="button" data-theme-choice="green" class="theme-swatch swatch-green" aria-label="Тёмно-зелёная" title="Тёмно-зелёная" aria-pressed="false"></button>
-    <button type="button" data-theme-choice="beige" class="theme-swatch swatch-beige" aria-label="Бежевая" title="Бежевая" aria-pressed="false"></button>
-    <button type="button" data-theme-choice="light" class="theme-swatch swatch-light" aria-label="Белая" title="Белая" aria-pressed="false"></button>
+<header class="header">
+  <span class="restaurant-name" lang="he" dir="rtl">מעדן ציון</span>
+  <div class="settings">
+    <div class="themes" id="theme-switcher" role="group" aria-label="Темы">
+      <button type="button" data-theme-choice="navy" class="swatch navy" aria-label="Тёмно-синяя" title="Тёмно-синяя" aria-pressed="false"></button>
+      <button type="button" data-theme-choice="green" class="swatch green" aria-label="Тёмно-зелёная" title="Тёмно-зелёная" aria-pressed="false"></button>
+      <button type="button" data-theme-choice="beige" class="swatch beige" aria-label="Бежевая" title="Бежевая" aria-pressed="true"></button>
+      <button type="button" data-theme-choice="light" class="swatch light" aria-label="Белая" title="Белая" aria-pressed="false"></button>
+    </div>
+    <nav class="languages" aria-label="Язык">
+      <a href="?lang=ru" lang="ru" data-language="ru">Русский</a>
+      <a href="?lang=en" lang="en" data-language="en">English</a>
+      <a href="?lang=ar" lang="ar" data-language="ar">العربية</a>
+      <a href="?lang=he" lang="he" data-language="he">עברית</a>
+    </nav>
   </div>
 </header>
-<main id="top">
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-glow hero-glow-one" aria-hidden="true"></div><div class="hero-glow hero-glow-two" aria-hidden="true"></div>
-    <div class="hero-layout">
-      <div class="hero-copy">
-        <p class="eyebrow"><span class="tiny-star">✦</span> <span id="eyebrow">Авторская благодарность · Тверия, Израиль</span></p>
-        <p class="venue-title" id="venue-hero">Благодарность ресторану «Маадан Цион»</p>
-        <h1 id="hero-title">Щедрость.<br>Доброта.<br><em>Уважение.</em></h1>
-        <div class="fine-line" aria-hidden="true"></div>
-        <p class="hero-sub" id="hero-sub">От Ялты до Тверии. История одного неожиданного знакомства.</p>
-        <div class="hero-actions"><a class="read-btn" href="#story"><span id="read-label">Читать историю</span><span aria-hidden="true">↓</span></a><button class="hero-print-btn" type="button" id="print-btn">Распечатать</button></div>
-      </div>
-      <div class="hero-art" role="img" aria-label="Decorative illustration of a meal">
-        <div class="art-inner">
-          <span class="art-script">מעדן ציון</span>
-          <svg viewBox="0 0 380 350" aria-hidden="true" class="plate-illustration">
-            <defs><radialGradient id="p" cx="46%" cy="37%"><stop offset="0%" stop-color="#fff8e5"/><stop offset="80%" stop-color="#eddfc5"/><stop offset="100%" stop-color="#ccbfa4"/></radialGradient><linearGradient id="t" x1="0" x2="1"><stop stop-color="#ca4a38"/><stop offset="1" stop-color="#8c2d23"/></linearGradient></defs>
-            <ellipse cx="185" cy="185" rx="150" ry="124" fill="#000" opacity=".16"/>
-            <ellipse cx="185" cy="178" rx="145" ry="117" fill="url(#p)"/>
-            <ellipse cx="185" cy="178" rx="113" ry="91" fill="#f8f2e4" stroke="#d2c8ac" stroke-width="3"/>
-            <path d="M101 193 C124 118 189 124 212 164 S276 230 232 239 S129 246 101 193Z" fill="url(#t)"/>
-            <path d="M147 150 C167 114 210 112 240 139 S279 201 256 207 C227 216 218 190 193 193 S127 193 147 150Z" fill="#d0a657"/>
-            <path d="M123 173 C146 151 160 155 177 176 S193 207 166 216 S113 207 123 173Z" fill="#a9382e"/>
-            <g fill="#5b773e"><ellipse cx="126" cy="138" rx="18" ry="7" transform="rotate(-30 126 138)"/><ellipse cx="234" cy="217" rx="20" ry="8" transform="rotate(35 234 217)"/><ellipse cx="213" cy="122" rx="14" ry="6" transform="rotate(64 213 122)"/><ellipse cx="157" cy="229" rx="18" ry="7" transform="rotate(-7 157 229)"/></g>
-            <g fill="#d4b957"><circle cx="174" cy="144" r="5"/><circle cx="204" cy="228" r="6"/><circle cx="243" cy="177" r="4"/><circle cx="130" cy="204" r="5"/></g>
-            <path d="M45 94 Q29 179 57 259" stroke="#c6ae80" stroke-width="5" fill="none"/><path d="M325 93 Q341 174 320 260" stroke="#c6ae80" stroke-width="5" fill="none"/>
-          </svg>
-          <span class="art-foot" id="art-foot">Вкус, который запоминается</span>
-        </div>
-      </div>
-    </div>
-    <div class="hero-bottom"><span id="hero-location">Тверия · берег Кинерета</span><span class="hero-number">01 / 04 <span aria-hidden="true">✦</span></span></div>
-  </section>
-  <section class="intro-band" aria-label="Key values">
-    <span id="value-one">Щедрость</span><span class="diamond">✦</span>
-    <span id="value-two">Доброта</span><span class="diamond">✦</span>
-    <span id="value-three">Уважение</span>
-  </section>
-  <div class="content-shell">
-    <aside class="story-aside" aria-label="Table of contents"><div class="aside-stick">
-      <p class="aside-tag" id="toc-tag">В рассказе</p><nav id="toc"></nav>
-      <div class="aside-signature"><span class="signature-line">✦</span><span id="aside-author">Александр Деревяшкин</span></div>
-    </div></aside>
-    <article class="story" id="story"><header class="print-heading"><p class="print-venue" id="print-venue">Благодарность ресторану «Маадан Цион»</p><h1 id="print-title">Щедрость, доброта и уважение</h1><p class="print-subtitle" id="print-subtitle">От Ялты до Тверии. История одного неожиданного знакомства.</p><p class="print-byline" id="print-byline">Александр Деревяшкин · Тверия, Израиль</p></header></article>
-  </div>
-  <section class="finale">
-    <span class="finale-star" aria-hidden="true">✶</span>
-    <p id="finale-quote">Щедрость. Доброта. Уважение.</p>
-    <div class="finale-rule"></div>
-    <p id="finale-credit">С искренней благодарностью, Александр Деревяшкин</p>
-    <p class="author-caption" id="author-caption">Писатель, фотограф · Тверия, Израиль</p>
-    <div class="finale-actions">
-      <a class="visit-link" id="map-link" href="https://www.google.com/maps/search/?api=1&query=%D7%9E%D7%A2%D7%93%D7%9F+%D7%A6%D7%99%D7%95%D7%9F+%D7%98%D7%91%D7%A8%D7%99%D7%94" target="_blank" rel="noopener">Найти ресторан ↗</a>
-      <button type="button" id="share-btn">Поделиться ↗</button>
-    </div>
-  </section>
+<main class="page">
+  <header class="article-head">
+    <p class="venue" id="venue-hero">Благодарность ресторану «Маадан Цион»</p>
+    <h1 id="hero-title">Щедрость, доброта и уважение</h1>
+    <p class="subtitle" id="hero-sub">От Ялты до Тверии. История одного неожиданного знакомства.</p>
+  </header>
+  <figure class="cover">
+    <img id="cover-image" src="https://images.unsplash.com/photo-1786174045057-89e6449f47d9?auto=format&amp;fit=crop&amp;w=1600&amp;q=84" alt="Иллюстративная фотография средиземноморских блюд, не фотография ресторана" width="1600" height="1000" fetchpriority="high">
+  </figure>
+  <article class="story" id="story"></article>
+  <footer class="article-footer">
+    <p id="credit">С искренней благодарностью, Александр Деревяшкин</p>
+    <p class="author-role" id="author-caption">Писатель, фотограф · Тверия, Израиль</p>
+  </footer>
 </main>
-<footer class="site-footer"><span>© <span id="year">2026</span> Alexander Derevyashkin</span><span id="footnote">Личная авторская благодарность. Неофициальный сайт ресторана.</span></footer>
 </body>
 </html>
