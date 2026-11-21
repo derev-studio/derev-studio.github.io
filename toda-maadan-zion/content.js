@@ -4,6 +4,29 @@ const STORIES={"ru":{"title":"Щедрость, доброта и уважени
 const $=id=>document.getElementById(id);
 const lang=new URLSearchParams(location.search).get("lang");
 const code=Object.prototype.hasOwnProperty.call(STORIES,lang)?lang:"ru",t=STORIES[code];
+const themeNames={
+ru:["Тёмно-синяя","Тёмно-зелёная","Бежевая","Белая"],
+he:["כחול כהה","ירוק כהה","בז׳","לבן"],
+en:["Dark blue","Dark green","Beige","White"],
+ar:["أزرق داكن","أخضر داكن","بيج","أبيض"]
+};
+const themeKeys=["navy","green","beige","light"];
+function applyTheme(theme){
+ if(!themeKeys.includes(theme))theme="beige";
+ document.documentElement.dataset.theme=theme;
+ document.querySelectorAll("[data-theme-choice]").forEach((btn,i)=>{
+  const active=btn.dataset.themeChoice===theme;
+  btn.setAttribute("aria-pressed",String(active));
+  btn.title=themeNames[code][i];
+  btn.setAttribute("aria-label",themeNames[code][i]);
+ });
+ try{localStorage.setItem("derev-theme",theme)}catch(e){}
+}
+let storedTheme="beige";try{storedTheme=localStorage.getItem("derev-theme")||"beige"}catch(e){}
+applyTheme(storedTheme);
+document.querySelectorAll("[data-theme-choice]").forEach(btn=>btn.addEventListener("click",()=>applyTheme(btn.dataset.themeChoice)));
+const themeSwitcher=document.getElementById("theme-switcher");
+themeSwitcher.setAttribute("aria-label",({ru:"Цветовая тема",he:"ערכת צבעים",en:"Color theme",ar:"سمة الألوان"})[code]);
 document.documentElement.lang=code;document.documentElement.dir=(code==="he"||code==="ar")?"rtl":"ltr";
 document.body.dir=document.documentElement.dir;
 document.title=t.title+" — Maadan Zion";
