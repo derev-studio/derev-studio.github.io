@@ -100,3 +100,50 @@ html[data-theme="light"] .read-btn{color:#223a4c}
  html[data-theme] .story p,html[data-theme] .story h2,html[data-theme] .story blockquote,html[data-theme] .story p.dialog{color:#111!important}
  html[data-theme] .story blockquote{background:#fff!important;border-color:#666!important}
 }
+
+
+/* Editorial refinement: personal memories should read as ordinary prose, not as advertisements. */
+.story h2{font-size:clamp(25px,2.15vw,32px);line-height:1.35;font-weight:600;margin-bottom:22px}
+.story-section{margin-bottom:46px}
+.story .section-kicker{display:none}
+.story p.dialog{font-style:normal;margin-inline-start:18px}
+.story .story-lead:first-letter{float:none;font-size:inherit;line-height:inherit;font-family:inherit;margin:0;color:inherit}
+.story blockquote,
+html[data-theme] .story blockquote{
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  padding:0;
+  margin:0 0 16px;
+  color:var(--page-ink,#3a4039);
+  font-family:var(--body,"Noto Sans",Arial,sans-serif);
+  font-size:clamp(16px,1.16vw,18px);
+  font-weight:400;
+  font-style:normal;
+  line-height:1.97;
+  letter-spacing:normal;
+  text-align:start;
+}
+html[lang="he"] .story blockquote{font-family:"Heebo",sans-serif}
+html[lang="ar"] .story blockquote{font-family:"Noto Naskh Arabic",serif;font-size:21px;line-height:1.9}
+@media(max-width:610px){
+ .story blockquote,html[data-theme] .story blockquote{font-size:16px;line-height:1.83}
+ html[lang="ar"] .story blockquote{font-size:20px;line-height:1.8}
+}
+@media print{
+ .story blockquote,html[data-theme] .story blockquote{
+  font-family:inherit!important;
+  font-size:11pt!important;
+  font-weight:400!important;
+  font-style:normal!important;
+  line-height:1.52!important;
+  background:#fff!important;
+  border:0!important;
+  padding:0!important;
+  margin:0 0 2.5mm!important;
+  color:#111!important;
+  break-inside:auto!important;
+ }
+ .story p.dialog{margin-inline-start:4mm!important}
+ html[lang="ar"] .story blockquote{font-size:12pt!important;line-height:1.6!important}
+}
