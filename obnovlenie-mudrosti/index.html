@@ -1998,4 +1998,37 @@ const hash=location.hash.match(/^#glava-(\d)$/);
 openChapter(sceneChapter!==null?sceneChapter:(hash?Number(hash[1])-1:Number(stored.chapter)||0),false);
 if(sceneChapter!==null){requestAnimationFrame(()=>{const target=el(initialScene);if(target){window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+window.scrollY-105)});history.replaceState(null,'','#'+initialScene);}});}
 </script>
+
+<script id="mudrost-illustrations-v1">
+(function(){
+ const groups=[[["01-01-newlyweds","^","Оля и Агам — молодожёны"],["01-02-shower","^","Оля и Агам под душем"],["01-03-planet-catalog","увлечённо листала каталог недвижимости","Выбор планеты"],["01-04-planet-purchase","В просторном зале светились голограммы","У продавца планет"],["01-05-spaceport-gifts","Молодожёны вышли на широкую улицу космопорта","Свадебные подарки"]],[["02-01-old-robot","За его спиной, в полумраке лавки","Знакомство с Тупым"],["02-02-shmulik-repair","Мастерская Шмулика пахла","Ремонт в мастерской Шмулика"],["02-03-new-arm","Установка новой руки заняла","Новая серебристая рука"],["02-04-departure-preparations","Когда молодожёны вернулись к космолёту","Подготовка к отлёту"]],[["03-01-arrival","Планета оказалась даже красивее","Прибытие на Лирею"],["03-02-first-house","Тупой выгрузил вещи","Строительство дома"],["03-03-tomatoes","Тупой уже выкопал несколько длинных грядок","Тупой на огороде"],["03-04-burned-village","молодожёны обнаружили сгоревшую деревню","Разрушенное поселение"],["03-05-lumi-flowers","Старая железная ладонь раскрылась","Подарок Луми"],["03-06-rebuild-village","Тупой расчистил завалы","Восстановление деревни"],["03-07-children-ride","Тупой охотно катал детей","Тупой и дети"],["03-08-lumi-father","Когда отец Луми вернулся","Отец Луми"],["03-09-peaceful-days","Между тем жизнь на планете понемногу налаживалась","Мирные дни"],["03-10-torn-certificate","Он выхватил документ из рук Оли","Кривоклык разрывает документ"]],[["04-01-defensive-earthworks","огромные траншеи","Защита поселения"],["04-02-lumi-trust","Луми обняла его старую ржавую руку","Луми и Тупой"]],[["05-01-siege","Первый пушечный снаряд разорвался","Начало осады"],["05-02-enemy-army","верховный вождь Головач","Вражеское войско"],["05-03-ambush","Это была Луми","Засада"],["05-04-lumi-rescue","Новая рука мгновенно превратилась","Тупой защищает Луми"],["05-05-last-stand","Головач собрал оставшиеся силы","Последний рубеж"]],[["06-01-olya-stops-armies","она уже шагнула вперёд","Оля останавливает армии"],["06-02-speech","Любить, растить детей, выращивать цветы","Речь Оли","scene-olya"],["06-03-reconciliation","Навстречу ему вышел вождь коанов","Примирение"],["06-04-arrow","И маленькая стрела полетела к Оле","Стрела"]],[["07-01-golden-heart","Тупой осторожно извлёк его новой рукой","Золотое сердце","scene-heart"],["07-02-heart-transplant","Под защитным куполом вспыхнули голубые огоньки","Операция"],["07-03-crystal-gift","Агам осторожно принял кристалл","Последний подарок Тупого"],["07-04-lumi-farewell","Луми осторожно положила цветы","Прощание Луми"],["07-05-robot-memorial","На холме над океаном наконец появился небольшой красивый дом","Семья рядом со старым Тупым"]],[["08-01-scientists","К сожалению, невозможно","Учёные изучают кристалл"],["08-02-professor","Оставьте его мне","Профессор"],["08-03-return-to-lirea","Они вернулись на Лирею","Возвращение на Лирею"],["08-04-garden-without-robot","Теперь сам буду","Агам в огороде"],["08-05-advertising-robot","На ней сидел великолепный серебристый робот","Рекламный подарок"],["08-06-rejecting-robot","ЗАБИРАЙТЕ ЕГО К ЧЁРТОВОЙ МАТЕРИ","Оля и Агам отвергают подарок"],["08-07-lumi-recognizes","И протянул ей маленький букетик голубых цветов","Луми узнаёт Тупого"],["08-08-robot-returns","На пороге стояла сияющая Луми","Возвращение Тупого"],["08-09-family-reunion","Агам тоже обнял робота","Воссоединение семьи"],["08-10-wisdom-update","А впереди у них была целая жизнь","Финал"]]];
+ const loaded=new Set();
+ function prepare(ch,index){
+  if(ch.hidden||loaded.has(index))return;
+  loaded.add(index);
+  const story=ch.querySelector('.story');
+  if(!story)return;
+  const paragraphs=Array.from(story.querySelectorAll('p'));
+  const lead=story.firstChild;
+  const tails=new Map();
+  groups[index].forEach(([name,anchor,alt,existing])=>{
+    const target=anchor==='^'?null:paragraphs.find(p=>p.textContent.includes(anchor));
+    if(anchor!=='^'&&!target)return;
+    const placeholder=document.createComment('illustration '+name);
+    if(anchor==='^')story.insertBefore(placeholder,lead);
+    else {const after=tails.get(target)||target;after.after(placeholder);tails.set(target,placeholder);}
+    const img=new Image();img.alt=alt;img.decoding='async';
+    img.onload=()=>{
+      let fig=existing?document.getElementById(existing):null;
+      if(fig){const old=fig.querySelector('img');if(old)old.replaceWith(img);const cap=fig.querySelector('figcaption');if(cap)cap.remove();}
+      else {fig=document.createElement('figure');fig.className='story-illustration';fig.appendChild(img);}
+      fig.dataset.illustration=name;placeholder.replaceWith(fig);
+    };
+    img.onerror=()=>placeholder.remove();
+    img.src='images/'+name+'.webp';
+  });
+ }
+ groups.forEach((g,i)=>{const ch=document.getElementById('glava-'+(i+1));if(!ch)return;prepare(ch,i);new MutationObserver(()=>prepare(ch,i)).observe(ch,{attributes:true,attributeFilter:['hidden']});});
+})();
+</script>
 </body></html>
