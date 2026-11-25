@@ -1,15 +1,544 @@
 {
   "version": 2,
   "images": {
-    "01-05-spaceport-gifts": {
-      "width": 640,
-      "height": 360,
-      "original": false,
+    "01-01-newlyweds": {
+      "width": 2000,
+      "height": 1126,
+      "originalWidth": 5016,
+      "originalHeight": 2823,
+      "sha256": "2326033b64f5c96def5fdf1ba0bbfd76be824f343eac7cde14497e1f599642c2",
+      "originalBytes": 20180360,
       "variants": [
-        640,
-        960,
-        1440,
-        2048
+        800,
+        2000
+      ]
+    },
+    "01-02-shower": {
+      "width": 2000,
+      "height": 1155,
+      "originalWidth": 5016,
+      "originalHeight": 2896,
+      "sha256": "1c9c976f14c174820d4269d08a59afa89b3ac96a5ca3f00105d8eeabc81d156d",
+      "originalBytes": 24074268,
+      "variants": [
+        800,
+        2000
+      ]
+    },
+    "01-03-planet-catalog": {
+      "width": 2000,
+      "height": 1126,
+      "originalWidth": 5016,
+      "originalHeight": 2823,
+      "sha256": "8f6073ba5abce137e4b4a5757e044a30fbd6fc342ab2fd9689d0b3b28f3ef0bf",
+      "originalBytes": 21452322,
+      "variants": [
+        800,
+        2000
+      ]
+    },
+    "01-04-planet-purchase": {
+      "width": 2000,
+      "height": 1126,
+      "originalWidth": 5016,
+      "originalHeight": 2823,
+      "sha256": "5416240f65d5a300794105ddc806f168bd9405a84092f22790bb7f29653abc8e",
+      "originalBytes": 22857325,
+      "variants": [
+        800,
+        2000
+      ]
+    },
+    "01-05-spaceport-gifts": {
+      "width": 2000,
+      "height": 1126,
+      "originalWidth": 10032,
+      "originalHeight": 5646,
+      "sha256": "ecc4e313591a8a709d60ea9eeeb92901930034006fb4489e9512051f26b918ea",
+      "originalBytes": 80494138,
+      "variants": [
+        800,
+        2000
+      ]
+    },
+    "02-01-old-robot": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "be2af1b63550f29a09a589b10eee932527004d4c4aae2c237d53acc75ae5f019",
+      "originalBytes": 3406326,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "02-02-shmulik-repair": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "954135c5be1e43c7e0d4b22940a12ba0679371bb4ed57e1dc1b23150acbf26e8",
+      "originalBytes": 3229381,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "02-03-new-arm": {
+      "width": 1670,
+      "height": 942,
+      "originalWidth": 1670,
+      "originalHeight": 942,
+      "sha256": "658d42a45a7f91ca434faabcd49f1e07d049f6213abe6053a2de40ceee76c62d",
+      "originalBytes": 3185504,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "02-04-departure-preparations": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "8361d9cba581883b265f932d2bada19db46e05dc5d554d3689a176b9046b35c9",
+      "originalBytes": 3413246,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "03-01-arrival": {
+      "width": 1671,
+      "height": 941,
+      "originalWidth": 1671,
+      "originalHeight": 941,
+      "sha256": "8054338b5b82fd8f5c736e057c245676844dabf5e059d175abd994a82179fd4f",
+      "originalBytes": 3327701,
+      "variants": [
+        800,
+        1671
+      ]
+    },
+    "03-02-first-house": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "512402cdf47e7d71f15d745644c64dc5389e84a521e33fafe69584a07733cf3a",
+      "originalBytes": 3669853,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "03-03-tomatoes": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "8eb18c3d5f0a083cbe85747bbfd67e358dbaa28b9565bf86a8009629a6d2c973",
+      "originalBytes": 3829887,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "03-04-burned-village": {
+      "width": 1671,
+      "height": 941,
+      "originalWidth": 1671,
+      "originalHeight": 941,
+      "sha256": "1c0aa9ec94728054d1067f11ccad9b3e9ec037d8876a8f08fc9cd92751261b6d",
+      "originalBytes": 3228779,
+      "variants": [
+        800,
+        1671
+      ]
+    },
+    "03-05-lumi-flowers": {
+      "width": 1671,
+      "height": 941,
+      "originalWidth": 1671,
+      "originalHeight": 941,
+      "sha256": "4e78e30524b89e15f6719f70f120bcfb3d4a24705143a831b20386dd6fc54962",
+      "originalBytes": 3251268,
+      "variants": [
+        800,
+        1671
+      ]
+    },
+    "03-06-rebuild-village": {
+      "width": 1670,
+      "height": 941,
+      "originalWidth": 1670,
+      "originalHeight": 941,
+      "sha256": "090102a54cd8123cc0baef97b8188dfc68d754dcbd55066fdeec7f7bd622c618",
+      "originalBytes": 3256342,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "03-07-children-ride": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "ae01b45d16675d25b4dfeae696fc75ecea81f7abef0ab9702431aa63b3d15fc0",
+      "originalBytes": 3009680,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "03-08-lumi-father": {
+      "width": 1670,
+      "height": 941,
+      "originalWidth": 1670,
+      "originalHeight": 941,
+      "sha256": "ec7ae7a91157f720911ab283e06362da43284d2c57e7e5ef31af5711c2e6f774",
+      "originalBytes": 3137587,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "03-09-peaceful-days": {
+      "width": 1670,
+      "height": 941,
+      "originalWidth": 1670,
+      "originalHeight": 941,
+      "sha256": "b02e1a7cb50a2d498efe2aae346d29dd2e253427a261a8b60d6166167332cb8d",
+      "originalBytes": 3307661,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "03-10-torn-certificate": {
+      "width": 1670,
+      "height": 942,
+      "originalWidth": 1670,
+      "originalHeight": 942,
+      "sha256": "3cee5d45fc456a8165405385fdc32b40e5f44af6d55b47a0dafff3673b270fae",
+      "originalBytes": 3334563,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "04-01-defensive-earthworks": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "368790a3167742e5be9deb5af95ce8efa1fde291b0a7d25ebe71008f775564a0",
+      "originalBytes": 3898787,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "04-02-lumi-trust": {
+      "width": 1671,
+      "height": 941,
+      "originalWidth": 1671,
+      "originalHeight": 941,
+      "sha256": "1c9de0fcb57284a224aaae6b146cbb21fd0fd3e0607d4385c118cabc9ae63287",
+      "originalBytes": 3223842,
+      "variants": [
+        800,
+        1671
+      ]
+    },
+    "05-01-siege": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "18feeb02d63a79a0f6d7a533d97b6fe26f4a81af996b197f97ef7844b376b2f6",
+      "originalBytes": 3281370,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "05-02-enemy-army": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "36d56567a19e9a7c9264a755126d0f6a63688038ea30d1b9a3cab63e35fa30b7",
+      "originalBytes": 3280948,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "05-03-ambush": {
+      "width": 1670,
+      "height": 941,
+      "originalWidth": 1670,
+      "originalHeight": 941,
+      "sha256": "11619a16702d75fd87c7615bc126b1a3304f4864c044339809f9b5754487cba2",
+      "originalBytes": 3478520,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "05-04-lumi-rescue": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "f53c4175c3e1f8378ac071917bf1c33b7f566a96368f1303fc0b37a3f9d9335b",
+      "originalBytes": 3430384,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "05-05-last-stand": {
+      "width": 1668,
+      "height": 943,
+      "originalWidth": 1668,
+      "originalHeight": 943,
+      "sha256": "c975147104c07bb9b8ed9d1ff35c59f5daf6fce12870afb3ddc88877bdaeff55",
+      "originalBytes": 3483967,
+      "variants": [
+        800,
+        1668
+      ]
+    },
+    "06-01-olya-stops-armies": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "21d4ed5d6dd20a5f9c9c23436c2f7d60635b5380e57c2c7ab13ffcce7bd653ba",
+      "originalBytes": 3208639,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "06-02-speech": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "2a29cc448f9582a9efee6f26dfe75709d8279538d99fd5712eb8e0a170762d46",
+      "originalBytes": 3385457,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "06-03-reconciliation": {
+      "width": 1670,
+      "height": 942,
+      "originalWidth": 1670,
+      "originalHeight": 942,
+      "sha256": "4b20bde407bfc80614c497f82fac8b225ba384bcf0bba8b444e1345e3c02b44a",
+      "originalBytes": 3358152,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "06-04-arrow": {
+      "width": 1670,
+      "height": 942,
+      "originalWidth": 1670,
+      "originalHeight": 942,
+      "sha256": "82e3e172037db46bbeedc0e80273d350849f1b083bc5465d4a11a468f6315244",
+      "originalBytes": 3149257,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "07-01-golden-heart": {
+      "width": 1435,
+      "height": 1096,
+      "originalWidth": 1435,
+      "originalHeight": 1096,
+      "sha256": "66c3ee291b3c628b4d612b868c5260c25110fd22a94cb5645ab42aec1312a980",
+      "originalBytes": 3314790,
+      "variants": [
+        800,
+        1435
+      ]
+    },
+    "07-02-heart-transplant": {
+      "width": 1671,
+      "height": 941,
+      "originalWidth": 1671,
+      "originalHeight": 941,
+      "sha256": "1866c13977d873f902eb40861f11963f1b9124500aa3af41720577fe6c7cdbe0",
+      "originalBytes": 2851009,
+      "variants": [
+        800,
+        1671
+      ]
+    },
+    "07-03-crystal-gift": {
+      "width": 1671,
+      "height": 941,
+      "originalWidth": 1671,
+      "originalHeight": 941,
+      "sha256": "31cc25b2afcec1a8b2e23aa93c1475caf4ea8fc56d7d09d63e6ec2af445b4a50",
+      "originalBytes": 2969144,
+      "variants": [
+        800,
+        1671
+      ]
+    },
+    "07-04-lumi-farewell": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "d2de1c06fae84d2bcbc132b9e183ccee6c24a0af4b47fa80ef849e79b149932f",
+      "originalBytes": 3178858,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "07-05-robot-memorial": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "a4ebe3db52b2bd59d932c0b83fef0a2492ba41d5c3125e62ce7dd2f4c903831f",
+      "originalBytes": 3326070,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "08-01-scientists": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "f7535f419d5a320aeabc8ee88a1c125179d7d7bcf3e8e6a261a6197b605bb405",
+      "originalBytes": 2697320,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "08-02-professor": {
+      "width": 1671,
+      "height": 941,
+      "originalWidth": 1671,
+      "originalHeight": 941,
+      "sha256": "2d05c896033f392b921cee4f47cc0296fa082ac0fbb6c6eb9bf53e7d3a7d7076",
+      "originalBytes": 2713334,
+      "variants": [
+        800,
+        1671
+      ]
+    },
+    "08-03-return-to-lirea": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "f74b8d5253a9f41dce0fab55adc233d0365106bb3d2f8e903fab86773e0fa792",
+      "originalBytes": 2680802,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "08-04-garden-without-robot": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "7268adf6b75647433aa070cb86f78ba158a0c6de93eba8b2209fc99b892b2d69",
+      "originalBytes": 3462482,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "08-05-advertising-robot": {
+      "width": 1671,
+      "height": 941,
+      "originalWidth": 1671,
+      "originalHeight": 941,
+      "sha256": "09a467e93763a3d63dcbe3e363460542ba30506b6ed3aeedac5d611b791e9d3f",
+      "originalBytes": 3527729,
+      "variants": [
+        800,
+        1671
+      ]
+    },
+    "08-06-rejecting-robot": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "eb75d55a265bdd4e453e58fe14b51dd7dc7d8d513ac5c04cbe0f7c5783c14b9b",
+      "originalBytes": 3151574,
+      "variants": [
+        800,
+        1672
+      ]
+    },
+    "08-07-lumi-recognizes": {
+      "width": 1670,
+      "height": 941,
+      "originalWidth": 1670,
+      "originalHeight": 941,
+      "sha256": "76e46f3c74d7bdbdbc5f9d7dac7370b0cb59d36c6f9485048fdc8518fd3bb98f",
+      "originalBytes": 3038073,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "08-08-robot-returns": {
+      "width": 1670,
+      "height": 942,
+      "originalWidth": 1670,
+      "originalHeight": 942,
+      "sha256": "55a62ebfd8c2996ab4cc1adcbcb0b6a1aeeb23f783e5446f50d9b5404d397693",
+      "originalBytes": 3057668,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "08-09-family-reunion": {
+      "width": 1670,
+      "height": 941,
+      "originalWidth": 1670,
+      "originalHeight": 941,
+      "sha256": "65ec92da48f10352b82006585eb63744c1ac7eb188349945807ba1e395ed5067",
+      "originalBytes": 3021049,
+      "variants": [
+        800,
+        1670
+      ]
+    },
+    "08-10-wisdom-update": {
+      "width": 1672,
+      "height": 941,
+      "originalWidth": 1672,
+      "originalHeight": 941,
+      "sha256": "c896acce587bd1f2a805650abced8534c0a1948dd9f1f1c166db20a2c43ce2c3",
+      "originalBytes": 3024917,
+      "variants": [
+        800,
+        1672
       ]
     }
   }
