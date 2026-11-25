@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "images": {
+    "01-05-spaceport-gifts": {
+      "width": 640,
+      "height": 360,
+      "original": false,
+      "variants": [
+        640,
+        960,
+        1440,
+        2048
+      ]
+    }
+  }
+}
