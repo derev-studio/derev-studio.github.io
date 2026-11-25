@@ -47,7 +47,16 @@ html[data-theme=light]{--bg:#f7f5ed;--surface:#fffef8;--surface-2:#e7eee9;--text
 </style>
 <script defer src="https://derev-studio.github.io/photo-gallery/analytics-client.js"></script>
 <style id="mudrost-illustration-style">.story-illustration a{display:block;cursor:zoom-in}.illustration-original-hint{text-align:center;color:var(--muted);font:13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:8px 0 0}.story-illustration [hidden]{display:none!important}@media print{.illustration-original-hint{display:none}}</style>
-</head>
+<style>
+.gallery-chapter{border-bottom:1px solid var(--line)}
+.gallery-chapter summary{cursor:pointer;padding:12px 4px;color:var(--text);font-size:14px}
+.gallery-scene{margin:0 0 17px}
+.gallery-scene .scene-link{margin:0 0 3px}
+.gallery-scene img{aspect-ratio:auto}
+.gallery-caption,.gallery-read{display:block;padding:7px 10px 0}
+.gallery-read{color:var(--aqua);padding-bottom:8px;font-size:12px}
+.gallery-scene>a{display:inline-block;padding:5px 10px;color:var(--muted);font-size:13px}
+</style></head>
 <body>
 <div class="topline"></div>
 <header class="site-header"><a href="#top" class="brand" aria-label="На начало книги"><span class="brand-mark" aria-hidden="true"></span><span>ОБНОВЛЕНИЕ МУДРОСТИ<small>Александр Деревяшкин</small></span></a><div class="header-tools"><button class="mini-btn mobile-toc" id="menuBtn" aria-label="Открыть оглавление">☰ Главы</button><button class="mini-btn" id="searchBtn" title="Поиск по книге">⌕ Поиск</button><button class="mini-btn" id="themeBtn" title="Сменить тему">☀︎</button></div></header>
@@ -2065,6 +2074,63 @@ if(sceneChapter!==null){requestAnimationFrame(()=>{const target=el(initialScene)
     }
    });
   }
+  const panel=document.querySelector('.scene-peeks');
+  const chapters=document.createDocumentFragment();
+  groups.forEach((scenes,index)=>{
+   const chapter=document.getElementById('glava-'+(index+1));
+   const group=document.createElement('details');
+   group.className='gallery-chapter';
+   group.open=!chapter.hidden;
+   const title=document.createElement('summary');
+   title.textContent='Глава '+(index+1)+' · '+chapter.querySelector('h2').textContent;
+   group.append(title);
+   for(const [name,,caption] of scenes){
+    const meta=manifest.images[name];
+    if(!meta)continue;
+    const card=document.createElement('div');
+    card.className='gallery-scene';
+    const read=document.createElement('button');
+    read.type='button';
+    read.className='scene-link';
+    read.setAttribute('aria-label','Перейти к эпизоду «'+caption+'»');
+    const thumb=document.createElement('img');
+    thumb.alt='';
+    thumb.width=meta.width;
+    thumb.height=meta.height;
+    thumb.loading='lazy';
+    thumb.decoding='async';
+    const suffix=meta.variants?.length?'-'+meta.variants[0]:'';
+    thumb.src='images/preview/'+name+suffix+'.webp';
+    const label=document.createElement('span');
+    label.className='gallery-caption';
+    label.textContent=caption;
+    const action=document.createElement('span');
+    action.className='gallery-read';
+    action.textContent='К эпизоду ›';
+    read.append(thumb,label,action);
+    read.addEventListener('click',()=>{
+     openChapter(index,false);
+     prepare(chapter,index);
+     const figure=chapter.querySelector('[data-illustration="'+name+'"]');
+     if(figure)requestAnimationFrame(()=>{
+      figure.tabIndex=-1;
+      figure.focus({preventScroll:true});
+      figure.scrollIntoView({block:'start'});
+     });
+    });
+    const full=document.createElement('a');
+    full.href=meta.original===false?'images/preview/'+name+'-2048.webp':'images/original/'+name+'.png';
+    full.target='_blank';
+    full.rel='noopener';
+    full.textContent=meta.original===false?'Открыть крупнее':'Открыть оригинал';
+    full.setAttribute('aria-label',full.textContent+' — '+caption);
+    card.append(read,full);
+    group.append(card);
+   }
+   chapters.append(group);
+   new MutationObserver(()=>{if(!chapter.hidden)group.open=true;}).observe(chapter,{attributes:true,attributeFilter:['hidden']});
+  });
+  panel.replaceChildren(panel.querySelector('.side-title'),chapters);
   groups.forEach((g,i)=>{const ch=document.getElementById('glava-'+(i+1));if(!ch)return;prepare(ch,i);new MutationObserver(()=>prepare(ch,i)).observe(ch,{attributes:true,attributeFilter:['hidden']});});
  }).catch(()=>{});
 })();
