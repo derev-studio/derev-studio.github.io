@@ -2025,7 +2025,7 @@ if(sceneChapter!==null){requestAnimationFrame(()=>{const target=el(initialScene)
       fig.dataset.illustration=name;placeholder.replaceWith(fig);
     };
     img.onerror=()=>placeholder.remove();
-    img.src='images/'+name+'.webp';
+    img.src='images/'+name+'.png';
   });
  }
  groups.forEach((g,i)=>{const ch=document.getElementById('glava-'+(i+1));if(!ch)return;prepare(ch,i);new MutationObserver(()=>prepare(ch,i)).observe(ch,{attributes:true,attributeFilter:['hidden']});});
