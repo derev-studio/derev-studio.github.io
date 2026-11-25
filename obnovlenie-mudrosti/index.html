@@ -1931,23 +1931,23 @@ function persist(obj){Object.assign(stored,obj);try{localStorage.setItem(KEY,JSO
 function setFont(n){fontSize=Math.max(16,Math.min(28,n));document.documentElement.style.setProperty('--rsize',fontSize+'px');persist({fontSize});el('status').textContent='Шрифт: '+fontSize+' пикс.';}
 function setTheme(t){theme=t;document.documentElement.dataset.theme=t;el('themeBtn').textContent=t==='dark'?'☀︎':'☾';persist({theme:t});}
 function hideMenu(){el('sidebar').classList.remove('show');el('overlay').classList.remove('visible');}
-function openChapter(n,scroll=true,offset=0){
+function openChapter(n,scroll=true,resumePercent=0,remember=true){
  n=Math.max(0,Math.min(7,n));stopAudio();current=n;
  sections.forEach((s,i)=>s.hidden=i!==n);
  navBtns.forEach(btn=>btn.setAttribute('aria-current',Number(btn.dataset.chapter)===n?'true':'false'));
  el('readLocation').textContent='Глава '+(n+1)+' из 8';
  el('prevTop').disabled=n===0;el('nextTop').disabled=n===7;
- persist({chapter:n});hideMenu();
- history.replaceState(null,'','#glava-'+(n+1));
- if(scroll){requestAnimationFrame(()=>{const top=sections[n].getBoundingClientRect().top+window.scrollY-105;window.scrollTo({top:Math.max(0,top+offset),behavior:'smooth'});});}
- updateProgress();
+ if(remember)persist({chapter:n,percent:resumePercent});hideMenu();
+ if(remember)history.replaceState(null,'','#glava-'+(n+1));
+ if(scroll){requestAnimationFrame(()=>{const top=sections[n].getBoundingClientRect().top+window.scrollY-105;window.scrollTo({top:Math.max(0,top+Math.round(resumePercent*Math.max(1,sections[n].offsetHeight-window.innerHeight+170)/100)),behavior:'smooth'});});}
+ updateProgress(false);
 }
-function updateProgress(){
+function updateProgress(save=true){
  const ch=sections[current],start=ch.getBoundingClientRect().top+window.scrollY-125;
  const total=Math.max(1,ch.offsetHeight-window.innerHeight+170);
  const y=Math.max(0,window.scrollY-start);const pct=Math.min(100,Math.max(0,Math.round(y/total*100)));
  el('progressBar').style.width=pct+'%';
- if(y>50)persist({chapter:current,percent:pct});
+ if(save&&y>50)persist({chapter:current,percent:pct});
 }
 function openSearch(){el('searchPanel').classList.add('open');el('searchInput').focus();searchBook();}
 function closeSearch(){el('searchPanel').classList.remove('open');}
@@ -1987,7 +1987,7 @@ function openScene(id){
 document.querySelectorAll('.scene-link').forEach(b=>b.addEventListener('click',()=>openScene(b.dataset.scene)));
 
 el('startBtn').addEventListener('click',()=>openChapter(0));
-el('resumeBtn').addEventListener('click',()=>{const n=Number(stored.chapter)||0;openChapter(n,true,Math.round((Number(stored.percent)||0)*sections[n].offsetHeight/100))});
+el('resumeBtn').addEventListener('click',()=>{const n=Number(stored.chapter)||0;openChapter(n,true,Number(stored.percent)||0)});
 el('prevTop').addEventListener('click',()=>openChapter(current-1));el('nextTop').addEventListener('click',()=>openChapter(current+1));
 document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>openChapter(Number(b.dataset.next))));
 el('menuBtn').addEventListener('click',()=>{el('sidebar').classList.toggle('show');el('overlay').classList.toggle('visible')});el('overlay').addEventListener('click',hideMenu);
@@ -2005,7 +2005,7 @@ setFont(fontSize);setTheme(theme);
 const initialScene=location.hash.slice(1);
 const sceneChapter=initialScene==='scene-olya'?5:initialScene==='scene-heart'?6:null;
 const hash=location.hash.match(/^#glava-(\d)$/);
-openChapter(sceneChapter!==null?sceneChapter:(hash?Number(hash[1])-1:Number(stored.chapter)||0),false);
+openChapter(sceneChapter!==null?sceneChapter:(hash?Number(hash[1])-1:0),false,0,Boolean(sceneChapter!==null||hash));
 if(sceneChapter!==null){requestAnimationFrame(()=>{const target=el(initialScene);if(target){window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+window.scrollY-105)});history.replaceState(null,'','#'+initialScene);}});}
 </script>
 
